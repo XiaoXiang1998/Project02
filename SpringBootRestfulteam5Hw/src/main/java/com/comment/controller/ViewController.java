@@ -2,36 +2,28 @@ package com.comment.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 public class ViewController {
 	
-	@RequestMapping("/index")
-	public String processAction() {
-		return "comment/index";
+	@GetMapping("/hello")
+	@ResponseBody
+	public String action() {
+		return "java dog";
 	}
 	
-	@RequestMapping("index.controller")
+	
+	@GetMapping("/indexcomment")
 	public String indexAction() {
-		return "redirect:index";
+		return "comment/indexcomment";
 	}
 	
-	@RequestMapping("/insertcomment")
-	public String insertAction() {
+	@GetMapping("/insert")
+	public String insert() {
 		return "comment/insert";
+	}
 	
-	}
-	@RequestMapping("/get")
-	public String getAction() {
-		return "comment/get";
-	}
-	@RequestMapping("/userInput")
-	public String userInputAction() {
-		return "comment/userInput";
-	}
-	@RequestMapping("/GoControlUI")
-	public String goCotrolUIAction() {
-		return "ControlUI";
-	}
+	
+	
 }

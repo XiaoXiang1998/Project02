@@ -45,23 +45,16 @@ button {
 </style>
 </head>
 <body>
-
-	<button onclick="redirectToHomepage()">返回首頁</button>
-	<form action="comment" method="post" class="basic-grey"
+	<%@ include file="indexcomment.jsp" %>
+	
+		<form action="post" method="post" class="basic-grey"
 		id="commentForm" enctype="multipart/form-data">
 		<h1 id="alter">
 			評論區<span>請發表友善評論!</span>
 		</h1>
-		 <label> <span>名字 :</span> <input id="name" type="text"
-			name="userName" placeholder="Your Full Name" required />
-
-		</label> <label for="userType"><span>身分類別：</span></label> <select
-			id="UserType" name="userType">
-			<option value="買家" selected>買家</option>
-			<option value="賣家">賣家</option>
-		</select> <label> <span>要給的評論 :</span> <textarea id="CommentContent"
+		 <label> <span>要給的評論 :</span> <textarea id="CommentContent"
 				name="commentContent" rows="10" cols="30" maxlength="100"
-				placeholder="Your Message to Us" required></textarea>
+				placeholder="請寫下您的評論"></textarea>
 		</label> <span id="charCount" class="charCount">輸入的字數:0/100</span><br /> <label>
 			<span id="image">圖片:</span> <input id="file" type="file"
 			name="productimage" />
@@ -77,9 +70,6 @@ button {
 	</form>
 
 	<script>
-		function redirectToHomepage() {
-			window.location.href = 'index.controller';
-		}
 
 		$(document).ready(function() {
 			var rating = 0;

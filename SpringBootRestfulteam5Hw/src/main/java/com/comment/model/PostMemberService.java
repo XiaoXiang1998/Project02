@@ -10,10 +10,10 @@ import jakarta.transaction.Transactional;
 
 @Service
 @Transactional
-public class MemberService {
+public class PostMemberService {
 	
 	@Autowired
-	private MemberRepository mRepository;
+	private PostMemberRepository mRepository;
 
 	public Optional<Member> findById(Integer id) {
 		return mRepository.findById(id);

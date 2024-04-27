@@ -19,7 +19,7 @@
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav">
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="/insert">評論</a>
+          <a class="nav-link active" aria-current="page" href="insertPost">評論</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="userComments">查看我的評論</a>

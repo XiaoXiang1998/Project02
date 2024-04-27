@@ -19,7 +19,7 @@ public class ViewController {
 		return "comment/indexcomment";
 	}
 	
-	@GetMapping("/insert")
+	@GetMapping("/insertPost")
 	public String insert() {
 		return "comment/insert";
 	}

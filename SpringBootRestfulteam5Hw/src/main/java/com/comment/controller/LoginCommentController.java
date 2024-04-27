@@ -12,14 +12,14 @@ import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.comment.model.Member;
-import com.comment.model.MemberService;
+import com.comment.model.PostMemberService;
 
 import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class LoginCommentController {
 	 @Autowired
-	    private MemberService memberService;
+	    private PostMemberService memberService;
 
 	    @GetMapping("/login")
 	    public String showLoginForm() {

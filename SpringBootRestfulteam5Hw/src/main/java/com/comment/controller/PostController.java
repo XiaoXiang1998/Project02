@@ -27,7 +27,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.comment.model.Member;
-import com.comment.model.MemberService;
+import com.comment.model.PostMemberService;
 import com.comment.model.Post;
 import com.comment.model.PostService;
 
@@ -39,7 +39,7 @@ public class PostController {
 	private PostService pService;
 	
 	@Autowired
-	private MemberService mService;
+	private PostMemberService mService;
 	
 	@PostMapping("/post")
 	public String postAction(@RequestParam(value = "commentContent", required = false) String commentContent,@RequestParam("productimage")  MultipartFile mf,@RequestParam("rate") int rate,

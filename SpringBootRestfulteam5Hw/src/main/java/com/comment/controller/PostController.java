@@ -51,7 +51,7 @@ public class PostController {
 		if (mf != null && !mf.isEmpty()) { // 檢查圖片是否不為空
 			 String fileName = UUID.randomUUID().toString(); // 生成唯一的文件名
 
-			String fileDir = "D:/Action/workspace/TestProject/src/main\\webapp\\WEB-INF\\commentPicture";
+			String fileDir = "D:/Action/workspace/team5project/SpringBootRestfulteam5Hw/src/main\\webapp\\WEB-INF\\commentPicture";
 
 			File fileDirPath = new File(fileDir);
 			if (!fileDirPath.exists()) {
@@ -93,8 +93,25 @@ public class PostController {
 	 
 	 @DeleteMapping("/post/{pid}")
 	 public ResponseEntity<String> deleteAction(@PathVariable("pid") Integer id) {
-	     pService.deleteById(id);
-	     return new ResponseEntity<>("評論已成功刪除", HttpStatus.OK);
+		    Post post = pService.getById(id);
+		    
+		    if (post == null) {
+		        return new ResponseEntity<>("評論不存在", HttpStatus.NOT_FOUND);
+		    }
+
+		    String imagePath = post.getProductphoto();
+
+		    if (imagePath != null && !imagePath.isEmpty()) {
+		        String fileDir = "D:/Action/workspace/team5project/SpringBootRestfulteam5Hw/src/main/webapp/WEB-INF/" + imagePath;
+		        File imageFile = new File(fileDir);
+		        if (imageFile.exists()) {
+		            imageFile.delete(); 
+		        }
+		    }
+
+		    pService.deleteById(id);
+		    
+		    return new ResponseEntity<>("評論已成功刪除", HttpStatus.OK);
 	 }
 	 
 	 @PutMapping("/post/{pid}")

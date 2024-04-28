@@ -56,7 +56,7 @@ public class GoodImageBean {
 		return goodImageID;
 	}
 
-	public void setGoodImageID(int goodImageID) {
+	public void setGoodImageID(Integer goodImageID) {
 		this.goodImageID = goodImageID;
 	}
 
@@ -64,7 +64,7 @@ public class GoodImageBean {
 		return goodsID;
 	}
 
-	public void setGoodID(int goodID) {
+	public void setGoodID(Integer goodID) {
 		this.goodsID = goodID;
 	}
 

@@ -6,12 +6,15 @@ package com.comment.model;
 
 import org.springframework.stereotype.Component;
 
+import com.sean.model.Orders;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity @Table(name="post")
@@ -34,10 +37,10 @@ public class Post {
 	@JoinColumn(name="fk_userid")
 	private Member member;
 	
+	@OneToOne
+	@JoinColumn(name="orderid")
+	private Orders orders;
 	
-	
-	
-
 	public Post() {
 		
 	}
@@ -180,6 +183,18 @@ public class Post {
 
 	public void setRepliedcommentid(Integer repliedcommentid) {
 		this.repliedcommentid = repliedcommentid;
+	}
+
+
+
+	public Orders getOrders() {
+		return orders;
+	}
+
+
+
+	public void setOrders(Orders orders) {
+		this.orders = orders;
 	}
 
 

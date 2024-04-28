@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.good.model.GoodImageBean;
 import com.good.model.GoodsBean2;
+import com.member.model.MemberBean;
+import com.member.model.MemberService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -37,13 +40,16 @@ import jakarta.servlet.http.HttpSession;
  */
 //主頁:/good/goodqueryallpage.controller
 @Controller
-@RequestMapping("/good")
 public class GoodController2 {
 	
 	@Autowired
 	private GoodService gService;
 	@Autowired
 	private GoodImageService giService;
+	@Autowired
+	private HttpSession session;
+	@Autowired
+	private MemberService mService;
 //在跳脫視窗(商品圖片表)點擊新增圖片
 			//	   goodImageinsert.controller
 	@PostMapping("/goodImageinsert.controller")
@@ -101,8 +107,8 @@ public class GoodController2 {
 	public String processInsertAction2(@RequestParam MultiValueMap<String, MultipartFile> files,
 			@RequestParam("GoodsName") String goodsName, @RequestParam("GoodsDirection") String goodsDirection,
 			@RequestParam("GoodsType") String goodsType, @RequestParam("LaunchDate") String date,
-			@RequestParam("Brand") String brand, @RequestParam("ShipmentPlace") String shipmentPlace,
-			@RequestParam("GoodsSellerID") Integer goodSellerID) {
+			@RequestParam("Brand") String brand, @RequestParam("ShipmentPlace") String shipmentPlace
+			) {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		Date launchDate = null;
 		try {
@@ -124,10 +130,14 @@ public class GoodController2 {
 // insertGood.setImages(Set<GoodImageBean> images)
 		int titlephotocheck = 1;
 		//將值帶入insertGood類別
+		MemberBean member =(MemberBean)session.getAttribute("member");
+		Integer goodSellerId = member.getSid();
+		Optional<MemberBean> members = mService.findById(goodSellerId);
+		MemberBean seller = members.get();
 		insertGood.setBrand(brand);
 		insertGood.setGoodsDirection(goodsDirection);
 		insertGood.setGoodsName(goodsName);
-		insertGood.setGoodsSellerID(goodSellerID);
+		insertGood.setGoodsSellerID(seller);
 		insertGood.setGoodsType(goodsType);
 		insertGood.setLaunchDate(launchDate);
 		insertGood.setShipmentPlace(shipmentPlace);

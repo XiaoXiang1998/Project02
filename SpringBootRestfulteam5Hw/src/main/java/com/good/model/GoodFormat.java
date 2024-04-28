@@ -35,8 +35,8 @@ public class GoodFormat {
 	@Column(name="GOODIMAGEPATH")
 	private String goodImagePath;
 	
-	@Column(name="GOODSTOCK")
-	private int goodStock;
+	@Column(name="GOODSSTOCK")
+	private int goodsStock;
 
 	@JsonBackReference
 	@ManyToOne(fetch = FetchType.EAGER)

@@ -58,7 +58,7 @@ public class GoodController2 {
 		需要商品編號*/
 		//建立命名方式和圖片路徑
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMddHHmmssSSS");
-		String patternPath = "C:/team5Project/workspace/team5Project/src/main/webapp/WEB-INF/goodImage/";		//透過商品編號取得基本商品資訊 然後透過get取得編號對應的圖片集合
+		String patternPath = "C:/Users/88691/Documents/team5project/SpringBootRestfulteam5Hw/src/main/webapp/WEB-INF/goodImage/";		//透過商品編號取得基本商品資訊 然後透過get取得編號對應的圖片集合
 		GoodsBean2 insertGood = gService.getById(goodsID);
 		Set<GoodImageBean> Imageset = insertGood.getImages();
 		GoodImageBean goodImage = null;
@@ -76,7 +76,7 @@ public class GoodController2 {
 				String timeStamp = simpleDateFormat.format(new Date());
 				String ImgRoot = timeStamp + "" + patternFormat;
 //3.將圖片上傳
-				File file = new File(patternPath, ImgRoot);
+				File file = new File("../../goodImage/", ImgRoot);
 				try {
 					multipartFile.transferTo(file);
 				} catch (IllegalStateException e) {
@@ -89,6 +89,7 @@ public class GoodController2 {
 //4.把相對路徑丟進GoodImageBean
 				String goodsImg = "../../goodImage/" + ImgRoot;
 				goodImage = new GoodImageBean();
+				
 				goodImage.setImagePath(goodsImg);
 				goodImage.setGood(insertGood);// 將圖片表連結商品基本資訊表
 				giService.insert(goodImage);// 將圖片塞入圖片資料表
@@ -97,7 +98,7 @@ public class GoodController2 {
 			}
 		}
 		//
-		return "redirect:/good/goodqueryallpage.controller";
+		return "redirect:/goodqueryallpage.controller";
 	}
 	/**/
 	
@@ -123,17 +124,19 @@ public class GoodController2 {
 //1.加入商品基本資訊 和 想放進去的圖片
 //2.規格表資訊
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMddHHmmssSSS");
-		String patternPath = "C:/team5Project/workspace/team5Project/src/main/webapp/WEB-INF/goodImage/";
+//		String patternPath = "C:/Users/88691/Documents/team5project/SpringBootRestfulteam5Hw/src/main/webapp/WEB-INF/goodImage/";		//透過商品編號取得基本商品資訊 然後透過get取得編號對應的圖片集合
+		String patternPath = "../../goodImage/";		//透過商品編號取得基本商品資訊 然後透過get取得編號對應的圖片集合
 		GoodImageBean goodImage = null;
 		Set<GoodImageBean> Imageset = new LinkedHashSet<>();
 // Set Imageset = new HashSet<GoodImageBean>();
 // insertGood.setImages(Set<GoodImageBean> images)
 		int titlephotocheck = 1;
-		//將值帶入insertGood類別
+		//將值帶入insertGood類別 連線用的
 		MemberBean member =(MemberBean)session.getAttribute("member");
 		Integer goodSellerId = member.getSid();
 		Optional<MemberBean> members = mService.findById(goodSellerId);
 		MemberBean seller = members.get();
+		//
 		insertGood.setBrand(brand);
 		insertGood.setGoodsDirection(goodsDirection);
 		insertGood.setGoodsName(goodsName);
@@ -172,6 +175,7 @@ public class GoodController2 {
 //4.把相對路徑丟進GoodImageBean
 					String goodsImg = "../../goodImage/" + ImgRoot;//
 					if(titlephotocheck==1) {//第一張照片當作封面
+						
 						insertGood.setTitleImage(goodsImg);
 //						GoodsBean2 good = new GoodsBean2(goodsName, goodsDirection, goodsType, launchDate, brand, shipmentPlace, goodSellerID, goodsImg);
 						insertGood = gService.insert(insertGood);
@@ -188,7 +192,7 @@ public class GoodController2 {
 			gService.insert(insertGood);//將商品基本資訊寫入資料庫
 		}
 // 將圖片上傳至指定位置後 將goodsImg改成相對路徑
-		return "redirect:/good/goodqueryallpage.controller";
+		return "redirect:/goodqueryallpage.controller";
 	}
 
 //有三種刪除。1.刪除商品基本資訊(連帶刪掉其他兩張表的資訊)
@@ -197,7 +201,7 @@ public class GoodController2 {
 	//1.刪除商品基本資訊(連帶刪掉其他兩張表的資訊)
 	@PostMapping("/gooddelete.controller")
 	public String processDeleteGoodAction(@RequestParam("GoodsID") Integer goodsID) {
-		String patternPath = "C:/team5Project/workspace/team5Project/src/main/webapp/WEB-INF/goodImage/";		
+		String patternPath = "C:/Users/88691/Documents/team5project/SpringBootRestfulteam5Hw/src/main/webapp/WEB-INF/goodImage/";		//透過商品編號取得基本商品資訊 然後透過get取得編號對應的圖片集合
 		/* 新寫的code */
 		GoodsBean2 good = gService.getById(goodsID);// 透過ID找出商品基本資訊
 		Set<GoodImageBean> images = good.getImages();// 找到連結的圖片,假如商品編號為1的圖片有三張,就會有3個images類別
@@ -216,7 +220,7 @@ public class GoodController2 {
 	//2.單純刪掉圖片
 	@PostMapping("/goodImagedelete.controller")
 	public String processDeleteGoodImageAction1(@RequestParam("GoodImageID") List<String> goodImageID,@RequestParam("GoodsID") String goodID) {
-		String patternPath = "C:/team5Project/workspace/team5Project/src/main/webapp/WEB-INF/goodImage/";		
+		String patternPath = "C:/Users/88691/Documents/team5project/SpringBootRestfulteam5Hw/src/main/webapp/WEB-INF/goodImage/";		//透過商品編號取得基本商品資訊 然後透過get取得編號對應的圖片集合
 		for(String item:goodImageID) {
 			//將檔案刪掉
 			GoodImageBean imageBean = giService.getByID(Integer.parseInt(item));
@@ -249,7 +253,7 @@ public class GoodController2 {
 			gService.update(good);//把資料寫進資料庫
 		}
 		//
-		return "redirect:/good/goodqueryallpage.controller";
+		return "redirect:/goodqueryallpage.controller";
 	}
 	
 
@@ -260,9 +264,9 @@ public class GoodController2 {
 			@RequestParam("GoodsDirection") String goodsDirection,
 			@RequestParam("GoodsType") String goodsType, @RequestParam("LaunchDate") String date,
 			@RequestParam("Brand") String brand, @RequestParam("ShipmentPlace") String shipmentPlace,
-			@RequestParam("GoodSellerID") Integer goodSellerID,@RequestParam(name = "TitleImage",required = false) MultipartFile mf) {
+			@RequestParam(name = "TitleImage",required = false) MultipartFile mf) {
 		//封面照允許空值
-		String patternPath = "C:/team5Project/workspace/team5Project/src/main/webapp/WEB-INF/goodImage/";		
+		String patternPath = "C:/Users/88691/Documents/team5project/SpringBootRestfulteam5Hw/src/main/webapp/WEB-INF/goodImage/";		//透過商品編號取得基本商品資訊 然後透過get取得編號對應的圖片集合
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMddHHmmssSSS");
 		String uploadfilename = mf.getOriginalFilename();
 		GoodsBean2 good = gService.getById(goodsID);
@@ -276,7 +280,6 @@ public class GoodController2 {
 			good.setLaunchDate(launchDate);
 			good.setBrand(brand);
 			good.setShipmentPlace(shipmentPlace);
-			good.setGoodsSellerID(goodSellerID);
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -302,7 +305,7 @@ public class GoodController2 {
 			good.setTitleImage(goodsImg);
 		}
 		gService.update(good);
-		return "redirect:/good/goodqueryallpage.controller";
+		return "redirect:/goodqueryallpage.controller";
 	}
 	
 	//在跳脫視窗(商品圖片表)修改多張圖片
@@ -312,7 +315,7 @@ public class GoodController2 {
 		/*商品基本資訊資料表多了(封面照片) 移除(庫存量)
 		 ControllerData = (goodID/goodImageID/uploadfilename)*/
 		/**/
-		String patternPath = "C:/team5Project/workspace/team5Project/src/main/webapp/WEB-INF/goodImage/";
+		String patternPath = "C:/Users/88691/Documents/team5project/SpringBootRestfulteam5Hw/src/main/webapp/WEB-INF/goodImage/";		//透過商品編號取得基本商品資訊 然後透過get取得編號對應的圖片集合
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMddHHmmssSSS");
 		System.out.println("files.size()="+files.size());
 			
@@ -394,7 +397,7 @@ public class GoodController2 {
 				}
 			}
 		}
-		return "redirect:/good/goodqueryallpage.controller";
+		return "redirect:/goodqueryallpage.controller";
 	}
 	
 	// /good/goodqueryallpage.controller
@@ -402,23 +405,31 @@ public class GoodController2 {
 	public String processQueryAllPageAction() {
 		return "good/jsp/goodQueryAll2";
 	}
+
 	//分頁查詢
-	@GetMapping("/queryByPage/{pageNo}")
+//	@GetMapping("/queryByPage/{pageNo}")
+//	@ResponseBody
+//	public List<GoodsBean2> processQueryAllByPage(@PathVariable("pageNo") int pageNo, Model m,
+//			HttpServletRequest request) {
+//		int pageSize = 3;
+//		Pageable p1 = PageRequest.of(pageNo - 1, pageSize);
+//		Page<GoodsBean2> page = gService.findAllByPage(p1);
+//
+//		int totalPages = page.getTotalPages();
+//		long totalElement = page.getTotalElements();
+//
+//		HttpSession session = request.getSession();
+//		session.setAttribute("totalPages", totalPages);
+//		session.setAttribute("totalElements", totalElement);
+//
+//		return page.getContent();
+//	}
+	@GetMapping("/getallgood.controller")
 	@ResponseBody
-	public List<GoodsBean2> processQueryAllByPage(@PathVariable("pageNo") int pageNo, Model m,
-			HttpServletRequest request) {
-		int pageSize = 3;
-		Pageable p1 = PageRequest.of(pageNo - 1, pageSize);
-		Page<GoodsBean2> page = gService.findAllByPage(p1);
-
-		int totalPages = page.getTotalPages();
-		long totalElement = page.getTotalElements();
-
-		HttpSession session = request.getSession();
-		session.setAttribute("totalPages", totalPages);
-		session.setAttribute("totalElements", totalElement);
-
-		return page.getContent();
+	public List<GoodsBean2> processQueryAll() {
+		List<GoodsBean2> goods = gService.getAll();
+		
+		return goods;
 	}
 	//在跳脫視窗為了顯示圖片 需要這個function
 	@GetMapping("/goodImage/{goodID}")
@@ -435,7 +446,7 @@ public class GoodController2 {
 			@RequestParam("GoodPrice") Integer goodPrice,
 			@RequestParam("GoodImagePath") MultipartFile mf,
 			@RequestParam("GoodsStock") Integer goodStock) {
-		String patternPath = "C:/team5Project/workspace/team5Project/src/main/webapp/WEB-INF/goodImage/";		
+		String patternPath = "C:/Users/88691/Documents/team5project/SpringBootRestfulteam5Hw/src/main/webapp/WEB-INF/goodImage/";		//透過商品編號取得基本商品資訊 然後透過get取得編號對應的圖片集合
 		/* 新寫的code */
 		GoodsBean2 good = gService.getById(goodsID);// 透過ID找出商品基本資訊
 		Set<GoodImageBean> images = good.getImages();// 找到連結的圖片,假如商品編號為1的圖片有三張,就會有3個images類別

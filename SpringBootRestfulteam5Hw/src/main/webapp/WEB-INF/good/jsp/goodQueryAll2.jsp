@@ -44,7 +44,7 @@
 
                         type: 'get',
 
-                        url: '/good/queryByPage/' + indexPage,
+                        url: '/getallgood.controller',
 
                         contentType: 'application/json',
 
@@ -95,8 +95,10 @@
                                     "<tbody>");
 
                                 $.each(data, function (i, n) {
-
-                                    var tr = "<tr><td>" + n.goodsID + "</td><td>" + n.goodsName + "</td><td><img src=\"" + n.titleImage + "\" alt=\"" + n.titleImage + "\"></td><td>" + n.goodsDirection + "</td><td>" + n.goodsType + "</td><td>" + n.launchDate + "</td><td>" + n.brand + "</td><td>" + n.shipmentPlace + "</td><td>" + n.goodsSellerID + "</td><td>" +
+                                    // String(n.goodsName)
+                                    // console.log("n.titleImage = "+n.titleImage);
+                                    // console.log(typeof String(n.goodsName));
+                                    var tr = "<tr><td>" + n.goodsID + "</td><td>" + n.goodsName + "</td><td><img src=\"" + n.titleImage + "\" alt=\"" + n.titleImage + "\"></td><td>" + n.goodsDirection + "</td><td>" + n.goodsType + "</td><td>" + n.launchDate + "</td><td>" + n.brand + "</td><td>" + n.shipmentPlace + "</td><td>" + n.goodsSellerID.sid + "</td><td>" +
 
                                         "<button onclick=\"Modify(" + n.goodsID + ")\" id=\"Modify" + n.goodsID + "\" class = \"btn btn-primary btn-block\">修改基本商品資訊</button> " +
 
@@ -134,7 +136,7 @@
 
                         type: 'get',
 
-                        url: '/good/goodImage/' + ID,//回傳取得所有圖片的路徑
+                        url: '/goodImage/' + ID,//回傳取得所有圖片的路徑
 
                         contentType: 'application/json',
 
@@ -561,10 +563,6 @@
                             '<td>出發地</td>' +
                             '<td><input type="text" name="ShipmentPlace" form="field" value="' + shipmentPlace + '"/></td>' +
                             '</tr>' +
-                            '<tr>' +
-                            '<td>賣家編號</td>' +
-                            '<td><input type="text" name="GoodSellerID" form="field" value="' + goodsSellerID + '" /></td>' +
-                            '</tr>' +
                             '</tbody>' +
                             '</table>' +
                             '</form>',
@@ -772,6 +770,7 @@
                     </td>
                 </tr>
             </table> -->
+            <img src="../../goodImage/20240419135850997.jpg" alt="">
         </body>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
@@ -814,10 +813,6 @@
                         '<tr>' +
                         '<td>出發地</td>' +
                         '<td><input type="text" name="ShipmentPlace" form="field"></td>' +
-                        '</tr>' +
-                        '<tr>' +
-                        '<td>賣家編號</td>' +
-                        '<td><input type="text" name="GoodsSellerID" form="field"/></td>' +
                         '</tr>' +
                         '</tbody>' +
                         '</table>' +
@@ -880,6 +875,8 @@
                     input.setAttribute("type", "file");
                     input.setAttribute("name", Name);
                     input.setAttribute("required", true);
+                    input.setAttribute("form", "field");
+                    
                     //
                     let item = $('#field').find(`input[type="file"]`);
                     console.log(item.length);

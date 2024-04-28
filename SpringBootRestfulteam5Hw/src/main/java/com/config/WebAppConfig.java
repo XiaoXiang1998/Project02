@@ -9,7 +9,7 @@ public class WebAppConfig implements WebMvcConfigurer {
 
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
-		  registry.addResourceHandler("/goodImages/**").addResourceLocations("/WEB-INF/goodImages/");
+		  registry.addResourceHandler("/goodImage/**").addResourceLocations("/WEB-INF/goodImage/");
 			registry.addResourceHandler("/commentPicture/**").addResourceLocations("/WEB-INF/commentPicture/");
 			registry.addResourceHandler("/commentcss/**").addResourceLocations("/WEB-INF/commentcss/");
 	 

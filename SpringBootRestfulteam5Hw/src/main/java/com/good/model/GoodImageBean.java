@@ -22,11 +22,11 @@ public class GoodImageBean {
 	@Id 
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="GOODIMAGEID")
-	private int goodImageID;//自動建立ID
+	private Integer goodImageID;//自動建立ID
 	
 	@Column(name="GOODSID")
 	@Transient
-	private int goodsID;//外來鍵不用給值
+	private Integer goodsID;//外來鍵不用給值
 
 	@Column(name="IMAGEPATH")
 	private String imagePath;//路徑名稱需要給值
@@ -36,7 +36,7 @@ public class GoodImageBean {
 	@JsonBackReference
 	private GoodsBean2 good;
 	//
-	public GoodImageBean(int goodImageID, int goodID, String imagePath) {
+	public GoodImageBean(Integer goodImageID, Integer goodID, String imagePath) {
 		this.goodImageID = goodImageID;
 		this.goodsID = goodID;
 		this.imagePath = imagePath;
@@ -46,13 +46,13 @@ public class GoodImageBean {
 
 	}
 
-	public GoodImageBean(int goodID, String imagePath) {
+	public GoodImageBean(Integer goodID, String imagePath) {
 		this.goodsID = goodID;
 		this.imagePath = imagePath;
 	}
 	//
 
-	public int getGoodImageID() {
+	public Integer getGoodImageID() {
 		return goodImageID;
 	}
 
@@ -60,7 +60,7 @@ public class GoodImageBean {
 		this.goodImageID = goodImageID;
 	}
 
-	public int getGoodID() {
+	public Integer getGoodID() {
 		return goodsID;
 	}
 

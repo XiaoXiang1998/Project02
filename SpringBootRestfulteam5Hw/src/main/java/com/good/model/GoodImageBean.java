@@ -24,20 +24,21 @@ public class GoodImageBean {
 	@Column(name="GOODIMAGEID")
 	private int goodImageID;//自動建立ID
 	
-//	@Column(name="GOODSID")
-//	@Transient
-//	private int goodsID;//外來鍵不用給值
+	@Column(name="GOODSID")
+	@Transient
+	private int goodsID;//外來鍵不用給值
 
 	@Column(name="IMAGEPATH")
 	private String imagePath;//路徑名稱需要給值
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "GOODSID")
 	@JsonBackReference
 	private GoodsBean2 good;
 	//
-	public GoodImageBean(int goodImageID, String imagePath) {
+	public GoodImageBean(int goodImageID, int goodID, String imagePath) {
 		this.goodImageID = goodImageID;
+		this.goodsID = goodID;
 		this.imagePath = imagePath;
 	}
 	
@@ -45,7 +46,8 @@ public class GoodImageBean {
 
 	}
 
-	public GoodImageBean(String imagePath) {
+	public GoodImageBean(int goodID, String imagePath) {
+		this.goodsID = goodID;
 		this.imagePath = imagePath;
 	}
 	//
@@ -58,7 +60,13 @@ public class GoodImageBean {
 		this.goodImageID = goodImageID;
 	}
 
+	public int getGoodID() {
+		return goodsID;
+	}
 
+	public void setGoodID(int goodID) {
+		this.goodsID = goodID;
+	}
 
 	public String getImagePath() {
 		return imagePath;

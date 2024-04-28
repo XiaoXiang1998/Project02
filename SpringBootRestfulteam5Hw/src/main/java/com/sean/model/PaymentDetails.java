@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
+import com.member.model.MemberBean;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -27,7 +29,7 @@ public class PaymentDetails {
 
 	@ManyToOne
 	@JoinColumn(name = "FK_PAYUSERID")
-	private Member2 payUserId;
+	private MemberBean payUserId;
 
 	@Column(name = "PAYMENT_METHOD")
 	private short paymentMethod;
@@ -67,11 +69,11 @@ public class PaymentDetails {
 		this.paymentMethod = paymentMethod;
 	}
 
-	public Member2 getPayUserId() {
+	public MemberBean getPayUserId() {
 		return payUserId;
 	}
 
-	public void setPayUserId(Member2 payUserId) {
+	public void setPayUserId(MemberBean payUserId) {
 		this.payUserId = payUserId;
 	}
 
@@ -115,7 +117,7 @@ public class PaymentDetails {
 		this.totalPrice = totalPrice;
 	}
 
-	public PaymentDetails(int paymentDetailsId, Member2 payUserId, short paymentMethod, String creditCardNumber,
+	public PaymentDetails(int paymentDetailsId, MemberBean payUserId, short paymentMethod, String creditCardNumber,
 			Date createdAt, Date modifiedAt, List<Orders> orders) {
 		super();
 		this.paymentDetailsId = paymentDetailsId;
@@ -127,7 +129,7 @@ public class PaymentDetails {
 		this.orders = orders;
 	}
 
-	public PaymentDetails(Member2 payUserId, short paymentMethod, String creditCardNumber, Date createdAt,
+	public PaymentDetails(MemberBean payUserId, short paymentMethod, String creditCardNumber, Date createdAt,
 			Date modifiedAt, Integer totalPrice) {
 		super();
 		this.payUserId = payUserId;

@@ -4,6 +4,9 @@ import java.util.Date;
 
 import org.springframework.stereotype.Component;
 
+import com.good.model.GoodFormat;
+import com.member.model.MemberBean;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -24,14 +27,14 @@ public class Orders {
 
 	@ManyToOne
 	@JoinColumn(name = "FK_BUYERID")
-	private Member2 buyerId;
+	private MemberBean buyerId;
 
 	@ManyToOne
-	@JoinColumn(name = "FK_SELLER_ID")
-	private Member2 sellerId;
+	@JoinColumn(name = "FK_SELLERID")
+	private MemberBean sellerId;
 	@ManyToOne
 	@JoinColumn(name = "FK_FORMATGOODID")
-	private Goods2 formatgoodId;
+	private GoodFormat formatgoodId;
 
 	@Column(name = "QUANTITY")
 	private Integer quantity;
@@ -192,27 +195,27 @@ public class Orders {
 		this.modifiedAt = modifiedAt;
 	}
 
-	public Member2 getBuyerId() {
+	public MemberBean getBuyerId() {
 		return buyerId;
 	}
 
-	public void setBuyerId(Member2 buyerId) {
+	public void setBuyerId(MemberBean buyerId) {
 		this.buyerId = buyerId;
 	}
 
-	public Member2 getSellerId() {
+	public MemberBean getSellerId() {
 		return sellerId;
 	}
 
-	public void setSellerId(Member2 sellerId) {
+	public void setSellerId(MemberBean sellerId) {
 		this.sellerId = sellerId;
 	}
 
-	public Goods2 getFormatgoodId() {
+	public GoodFormat getFormatgoodId() {
 		return formatgoodId;
 	}
 
-	public void setFormatgoodId(Goods2 formatgoodId) {
+	public void setFormatgoodId(GoodFormat formatgoodId) {
 		this.formatgoodId = formatgoodId;
 	}
 
@@ -224,7 +227,7 @@ public class Orders {
 		this.paymentId = paymentId;
 	}
 
-	public Orders(Integer orderId, Member2 buyerId, Member2 sellerId, Goods2 formatgoodId, Integer quantity,
+	public Orders(Integer orderId, MemberBean buyerId, MemberBean sellerId, GoodFormat formatgoodId, Integer quantity,
 			String name, String address, String tel, short shippingMethod, Integer shippingFee, Integer originalPrice,
 			Integer discountPrice, Integer totalPrice, PaymentDetails paymentId, short payStatus, short orderStatus,
 			Date createdAt, Date modifiedAt) {
@@ -249,7 +252,7 @@ public class Orders {
 		this.modifiedAt = modifiedAt;
 	}
 
-	public Orders(Member2 buyerId, Member2 sellerId, Goods2 formatgoodId, Integer quantity, String name, String address,
+	public Orders(MemberBean buyerId, MemberBean sellerId, GoodFormat formatgoodId, Integer quantity, String name, String address,
 			String tel, short shippingMethod, Integer shippingFee, Integer originalPrice, Integer discountPrice,
 			Integer totalPrice, PaymentDetails paymentId, short payStatus, short orderStatus, Date createdAt,
 			Date modifiedAt) {
@@ -273,7 +276,7 @@ public class Orders {
 		this.modifiedAt = modifiedAt;
 	}
 
-	public Orders(Integer orderId, Member2 buyerId, Member2 sellerId, Goods2 formatgoodId, Integer quantity,
+	public Orders(Integer orderId, MemberBean buyerId, MemberBean sellerId, GoodFormat formatgoodId, Integer quantity,
 			String name, String address, String tel, short shippingMethod, Integer shippingFee, Integer originalPrice,
 			Integer totalPrice, PaymentDetails paymentId, short payStatus, short orderStatus, Date createdAt,
 			Date modifiedAt) {
@@ -297,7 +300,7 @@ public class Orders {
 		this.modifiedAt = modifiedAt;
 	}
 
-	public Orders(Member2 buyerId, Member2 sellerId, Goods2 formatgoodId, Integer quantity, String name, String address,
+	public Orders(MemberBean buyerId, MemberBean sellerId, GoodFormat formatgoodId, Integer quantity, String name, String address,
 			String tel, short shippingMethod, Integer shippingFee, Integer originalPrice, Integer totalPrice,
 			PaymentDetails paymentId, short payStatus, short orderStatus, Date createdAt, Date modifiedAt) {
 		super();

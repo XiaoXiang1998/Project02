@@ -178,5 +178,6 @@ public class GoodsBean2 implements java.io.Serializable {
 	public void setTitleImage(String titleImage) {
 		this.titleImage = titleImage;
 	}
+	
 
 }

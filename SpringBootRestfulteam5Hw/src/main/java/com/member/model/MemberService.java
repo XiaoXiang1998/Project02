@@ -4,9 +4,8 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
+
 
 import jakarta.transaction.Transactional;
 
@@ -76,5 +75,8 @@ public class MemberService {
 		return memRepos.adminCheck(account);
 	}
 	
-	
+	public Optional<MemberBean> findById(Integer memberId) {
+		
+		return memRepos.findById(memberId);
+	}
 }

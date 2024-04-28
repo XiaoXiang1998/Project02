@@ -2,6 +2,9 @@ package com.sean.model;
 
 import org.springframework.stereotype.Component;
 
+import com.good.model.GoodFormat;
+import com.member.model.MemberBean;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -25,11 +28,11 @@ public class CarItem {
 
 	@ManyToOne
 	@JoinColumn(name = "FK_FORMATGOODID")
-	private Goods2 good;
+	private GoodFormat good;
 
 	@OneToOne(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	@JoinColumn(name = "FK_MEMBERID")
-	private Member2 member;
+	private MemberBean member;
 
 	@Column(name = "QUANTITY")
 	private Integer quantity;
@@ -55,22 +58,22 @@ public class CarItem {
 	
 
 
-	public Goods2 getGood() {
+	public GoodFormat getGood() {
 		return good;
 	}
 
 
-	public void setGood(Goods2 good) {
+	public void setGood(GoodFormat good) {
 		this.good = good;
 	}
 
 
-	public Member2 getMember() {
+	public MemberBean getMember() {
 		return member;
 	}
 
 
-	public void setMember(Member2 member) {
+	public void setMember(MemberBean member) {
 		this.member = member;
 	}
 

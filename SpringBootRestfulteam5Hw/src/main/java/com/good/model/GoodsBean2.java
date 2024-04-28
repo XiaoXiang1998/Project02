@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.member.model.MemberBean;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -16,6 +17,8 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
@@ -42,8 +45,9 @@ public class GoodsBean2 implements java.io.Serializable {
 	private String brand;
 	@Column(name = "SHIPMENTPLACE")
 	private String shipmentPlace;
-	@Column(name = "GOODSSELLERID")
-	private int goodsSellerID;
+	@ManyToOne
+	@JoinColumn(name = "GOODSSELLERID")
+	private MemberBean goodsSellerID;
 	//
 	@Column(name="TITLEIMAGE")
 	private String titleImage;
@@ -62,7 +66,7 @@ public class GoodsBean2 implements java.io.Serializable {
 	}
 
 	public GoodsBean2(Integer goodsID, String goodsName, String goodsDirection, String goodsType,
-			Date launchDate, String brand, String shipmentPlace, int goodsSellerID,String titleImage) {
+			Date launchDate, String brand, String shipmentPlace, MemberBean goodsSellerID,String titleImage) {
 		this.goodsID = goodsID;
 		this.goodsName = goodsName;
 		this.goodsDirection = goodsDirection;
@@ -75,7 +79,7 @@ public class GoodsBean2 implements java.io.Serializable {
 	}
 
 	public GoodsBean2(String goodsName, String goodsDirection, String goodsType, Date launchDate,
-			String brand, String shipmentPlace, int goodsSellerID,String titleImage) {
+			String brand, String shipmentPlace, MemberBean goodsSellerID,String titleImage) {
 		this.goodsName = goodsName;
 		this.goodsDirection = goodsDirection;
 		this.goodsType = goodsType;
@@ -87,11 +91,11 @@ public class GoodsBean2 implements java.io.Serializable {
 	}
 
 //
-	public int getGoodsSellerID() {
+	public MemberBean getGoodsSellerID() {
 		return goodsSellerID;
 	}
 
-	public void setGoodsSellerID(int goodsSellerID) {
+	public void setGoodsSellerID(MemberBean goodsSellerID) {
 		this.goodsSellerID = goodsSellerID;
 	}
 

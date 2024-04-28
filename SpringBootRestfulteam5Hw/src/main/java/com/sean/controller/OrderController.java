@@ -13,23 +13,21 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.good.controller.GoodFormatService;
+import com.good.controller.GoodService;
+import com.good.model.GoodFormat;
+import com.good.model.GoodsBean2;
 import com.member.model.MemberBean;
+import com.member.model.MemberService;
 import com.sean.model.CarItem;
 import com.sean.model.CarItemService;
-import com.sean.model.Goods2;
-import com.sean.model.Goods2Service;
-import com.sean.model.Member2;
-import com.sean.model.Member2Service;
 import com.sean.model.Orders;
 import com.sean.model.OrdersService;
 import com.sean.model.PaymentDetails;
 import com.sean.model.PaymentDetailsService;
 
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
 @Controller
@@ -38,10 +36,11 @@ public class OrderController {
 	private CarItemService cService;
 
 	@Autowired
-	private Goods2Service gService;
-
+	private GoodFormatService gService;
 	@Autowired
-	private Member2Service mService;
+	private GoodService gdService;
+	@Autowired
+	private MemberService mService;
 
 	@Autowired
 	private PaymentDetailsService pService;
@@ -80,7 +79,7 @@ public class OrderController {
 
 	@GetMapping("product.controller")
 	public String Product(Model m) {
-		List<Goods2> products = gService.findAllProduct();
+		List<GoodsBean2> products = gdService.getAll();
 		m.addAttribute("products", products);
 		m.addAttribute("page","product");
 		return "Order/jsp/Product";
@@ -91,10 +90,10 @@ public class OrderController {
 			@RequestParam("quantity") Integer quantity, @RequestParam("productPrice") Integer productPrice) {
 		MemberBean memberb =(MemberBean)session.getAttribute("member");
 		Integer memberId = memberb.getSid();
-		Optional<Member2> members = mService.findById(memberId);
-		Member2 member = members.get();
-		Optional<Goods2> goods = gService.findById(productId);
-		Goods2 good = goods.get();
+		Optional<MemberBean> members = mService.findById(memberId);
+		MemberBean member = members.get();
+		Optional<GoodFormat> goods = gService.findById(productId);
+		GoodFormat good = goods.get();
 		CarItem carItem = new CarItem();
 		carItem.setMember(member);
 		carItem.setGood(good);
@@ -149,8 +148,8 @@ public class OrderController {
 		
 		System.out.println(memberId.getClass());
 		Date currentDate = new Date();
-		Optional<Member2> members = mService.findById(memberId);
-		Member2 member = members.get();
+		Optional<MemberBean> members = mService.findById(memberId);
+		MemberBean member = members.get();
 		PaymentDetails p = new PaymentDetails();
 		p.setPayUserId(member);
 		p.setPaymentMethod(paymentMethod);
@@ -162,10 +161,10 @@ public class OrderController {
 		for (int i = 0; i < itemIds.length; i++) {
 
 			
-			Optional<Member2> sellerId = mService.findById(sellerIds[i]);
-			Member2 seller = sellerId.get();
-			Optional<Goods2> products = gService.findById(productIds[i]);
-			Goods2 product = products.get();
+			Optional<MemberBean> sellerId = mService.findById(sellerIds[i]);
+			MemberBean seller = sellerId.get();
+			Optional<GoodFormat> products = gService.findById(productIds[i]);
+			GoodFormat product = products.get();
 			Orders order = new Orders();
 			order.setBuyerId(member);
 			order.setSellerId(seller);

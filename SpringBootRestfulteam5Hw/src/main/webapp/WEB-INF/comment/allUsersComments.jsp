@@ -232,7 +232,7 @@ body {
 										<c:if test="${not empty post.productphoto}">
 											<a
 												href="${pageContext.request.contextPath}/${post.productphoto}"
-												data-lightbox="product-images"> <img
+												data-lightbox="imagea-${post.commentid}"> <img
 												class="product-photo"
 												src="${pageContext.request.contextPath}/${post.productphoto}"
 												alt="產品圖片">
@@ -334,7 +334,7 @@ body {
 										<c:if test="${not empty post.productphoto}">
 											<a
 												href="${pageContext.request.contextPath}/${post.productphoto}"
-												data-lightbox="product-images"> <img
+												data-lightbox="imageb-${post.commentid}"> <img
 												class="product-photo"
 												src="${pageContext.request.contextPath}/${post.productphoto}"
 												alt="產品圖片">
@@ -400,7 +400,7 @@ body {
 										<c:if test="${not empty post.productphoto}">
 											<a
 												href="${pageContext.request.contextPath}/${post.productphoto}"
-												data-lightbox="product-images"> <img
+												data-lightbox="imagec-${post.commentid}"> <img
 												class="product-photo"
 												src="${pageContext.request.contextPath}/${post.productphoto}"
 												alt="產品圖片">
@@ -466,7 +466,7 @@ body {
 										<c:if test="${not empty post.productphoto}">
 											<a
 												href="${pageContext.request.contextPath}/${post.productphoto}"
-												data-lightbox="product-images"> <img
+												data-lightbox="imaged-${post.commentid}"> <img
 												class="product-photo"
 												src="${pageContext.request.contextPath}/${post.productphoto}"
 												alt="產品圖片">
@@ -533,7 +533,7 @@ body {
 										<c:if test="${not empty post.productphoto}">
 											<a
 												href="${pageContext.request.contextPath}/${post.productphoto}"
-												data-lightbox="product-images"> <img
+												data-lightbox="imagee-${post.commentid}"> <img
 												class="product-photo"
 												src="${pageContext.request.contextPath}/${post.productphoto}"
 												alt="產品圖片">
@@ -599,7 +599,7 @@ body {
 										<c:if test="${not empty post.productphoto}">
 											<a
 												href="${pageContext.request.contextPath}/${post.productphoto}"
-												data-lightbox="product-images"> <img
+												data-lightbox="imagef-${post.commentid}"> <img
 												class="product-photo"
 												src="${pageContext.request.contextPath}/${post.productphoto}"
 												alt="產品圖片">
@@ -665,7 +665,7 @@ body {
 										<c:if test="${not empty post.productphoto}">
 											<a
 												href="${pageContext.request.contextPath}/${post.productphoto}"
-												data-lightbox="product-images"> <img
+												data-lightbox="imageg-${post.commentid}"> <img
 												class="product-photo"
 												src="${pageContext.request.contextPath}/${post.productphoto}"
 												alt="產品圖片">
@@ -707,7 +707,6 @@ body {
 	<div id="media" class="tabcontent">
 		<c:forEach items="${allMembers}" var="member">
 			<c:forEach items="${member.posts}" var="post">
-				<!-- 添加检查是否有照片的条件 -->
 				<c:if test="${not empty post.productphoto}">
 					<div class="container">
 						<c:if test="${post.member.seller != true}">
@@ -730,7 +729,7 @@ body {
 											</c:if>
 											<a
 												href="${pageContext.request.contextPath}/${post.productphoto}"
-												data-lightbox="product-images"> <img
+												data-lightbox="imageh-${post.commentid}"> <img
 												class="product-photo"
 												src="${pageContext.request.contextPath}/${post.productphoto}"
 												alt="產品圖片">

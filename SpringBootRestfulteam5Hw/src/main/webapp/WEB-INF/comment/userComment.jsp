@@ -187,7 +187,7 @@ body {
 	                </c:if>
 	                <c:choose>
 	                    <c:when test="${not empty comment.productphoto}">
-	                         <a href="${pageContext.request.contextPath}/${comment.productphoto}" data-lightbox="product-images">
+	                         <a href="${pageContext.request.contextPath}/${comment.productphoto}" data-lightbox="product-images-${comment.commentid}">
 	                        <img class="product-photo" src="${pageContext.request.contextPath}/${comment.productphoto}" alt="產品圖片">
 	                        </a>
 	                    </c:when>

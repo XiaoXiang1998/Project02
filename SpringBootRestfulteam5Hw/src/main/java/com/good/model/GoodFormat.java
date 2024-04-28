@@ -22,28 +22,28 @@ public class GoodFormat {
 	@Id 
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="FORMATID")
-	private int formatID;
+	private Integer formatID;
 	@Column(name="GOODSID")
 	@Transient
-	private int goodsID;
+	private Integer goodsID;
 	@Column(name="GOODSIZE")
 	private String goodSize;
 	
 	@Column(name="GOODPRICE")
-	private int goodPrice;
+	private Integer goodPrice;
 	
 	@Column(name="GOODIMAGEPATH")
 	private String goodImagePath;
 	
 	@Column(name="GOODSSTOCK")
-	private int goodsStock;
+	private Integer goodsStock;
 
 	@JsonBackReference
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "GOODSID")
 	private GoodsBean2 good;
 	//
-	public GoodFormat(int formatID, int goodsID, String goodSize, int goodPrice, String goodImagePath) {
+	public GoodFormat(Integer formatID, Integer goodsID, String goodSize, Integer goodPrice, String goodImagePath) {
 		this.formatID = formatID;
 		this.goodsID = goodsID;
 		this.goodSize = goodSize;
@@ -66,7 +66,7 @@ public class GoodFormat {
 	}
 
 
-	public void setFormatID(int formatID) {
+	public void setFormatID(Integer formatID) {
 		this.formatID = formatID;
 	}
 
@@ -74,7 +74,7 @@ public class GoodFormat {
 		return goodsID;
 	}
 
-	public void setGoodsID(int goodsID) {
+	public void setGoodsID(Integer goodsID) {
 		this.goodsID = goodsID;
 	}
 
@@ -90,7 +90,7 @@ public class GoodFormat {
 		return goodPrice;
 	}
 
-	public void setGoodPrice(int goodPrice) {
+	public void setGoodPrice(Integer goodPrice) {
 		this.goodPrice = goodPrice;
 	}
 
@@ -100,6 +100,12 @@ public class GoodFormat {
 
 	public void setGoodImagePath(String goodImagePath) {
 		this.goodImagePath = goodImagePath;
+	}
+	public int getGoodsStock() {
+		return goodsStock;
+	}
+	public void setGoodsStock(Integer goodsStock) {
+		this.goodsStock = goodsStock;
 	}
 	
 	

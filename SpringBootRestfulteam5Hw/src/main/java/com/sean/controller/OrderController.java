@@ -79,7 +79,7 @@ public class OrderController {
 
 	@GetMapping("product.controller")
 	public String Product(Model m) {
-		List<GoodsBean2> products = gdService.getAll();
+		List<GoodFormat> products = gService.getAll();
 		m.addAttribute("products", products);
 		m.addAttribute("page","product");
 		return "Order/jsp/Product";

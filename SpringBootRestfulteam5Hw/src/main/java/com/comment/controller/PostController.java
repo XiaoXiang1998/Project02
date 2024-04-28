@@ -225,8 +225,8 @@ public class PostController {
 	        Member member = mService.findById(memberId).orElse(null);
 	        if (member != null) {
 	            // 更新评论次数和累积分数
-	            member.setReviewcount(member.getReviewcount() + 1);
-	            member.setCumulativescore(member.getCumulativescore() + sellerRate);
+	            member.setReviewCount(member.getReviewCount() + 1);
+	            member.setCumulativeScore(member.getTotalSalesAmount() + sellerRate);
 	            mService.insertMember(member);
 	        }
 

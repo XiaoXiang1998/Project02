@@ -69,7 +69,7 @@
 <div class="side-menu">
         <nav>
             <a href="goToAdminUI"><i class="fa fa-solid fa-users"></i>會員管理</a>
-            <a href="good/goodindex.controller"><i class="fa fa-solid fa-cart-shopping"></i>商品管理</a>
+            <a href="goodqueryallpage.controller"><i class="fa fa-solid fa-cart-shopping"></i>商品管理</a>
             <a href="goindex.controller"><i class="fa fa-solid fa-clipboard"></i>訂單管理</a>
             <a href="index.controller"><i class="fa fa-regular fa-comments"></i>評論管理</a>
             <a href="#"><i class="fa fa-solid fa-chart-line"></i>活動管理</a>

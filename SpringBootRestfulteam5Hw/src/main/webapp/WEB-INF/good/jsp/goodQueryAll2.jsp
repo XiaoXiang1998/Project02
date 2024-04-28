@@ -98,7 +98,7 @@
                                     // String(n.goodsName)
                                     // console.log("n.titleImage = "+n.titleImage);
                                     // console.log(typeof String(n.goodsName));
-                                    var tr = "<tr><td>" + n.goodsID + "</td><td>" + n.goodsName + "</td><td><img src=\"" + n.titleImage + "\" alt=\"" + n.titleImage + "\"></td><td>" + n.goodsDirection + "</td><td>" + n.goodsType + "</td><td>" + n.launchDate + "</td><td>" + n.brand + "</td><td>" + n.shipmentPlace + "</td><td>" + n.goodsSellerID.sid + "</td><td>" +
+                                    var tr = "<tr><td>" + n.goodsID + "</td><td>" + n.goodsName + "</td><td><img src=" + n.titleImage + " alt=" + n.titleImage + "></td><td>" + n.goodsDirection + "</td><td>" + n.goodsType + "</td><td>" + n.launchDate + "</td><td>" + n.brand + "</td><td>" + n.shipmentPlace + "</td><td>" + n.goodsSellerID.sid + "</td><td>" +
 
                                         "<button onclick=\"Modify(" + n.goodsID + ")\" id=\"Modify" + n.goodsID + "\" class = \"btn btn-primary btn-block\">修改基本商品資訊</button> " +
 

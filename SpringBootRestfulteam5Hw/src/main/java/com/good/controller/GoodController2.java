@@ -51,17 +51,20 @@ public class GoodController2 {
 	@Autowired
 	private MemberService mService;
 //在跳脫視窗(商品圖片表)點擊新增圖片
-			//	   goodImageinsert.controller
+
 	@PostMapping("/goodImageinsert.controller")
 	public String processImageInsertAction(@RequestParam MultiValueMap<String, MultipartFile> files,@RequestParam("GoodsID") Integer goodsID) {
 		/*插入多張圖片 並且為上船的圖片重新命名
 		需要商品編號*/
 		//建立命名方式和圖片路徑
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMddHHmmssSSS");
-		String patternPath = "../../goodImage/";		//透過商品編號取得基本商品資訊 然後透過get取得編號對應的圖片集合
+//		String patternPath = "../../goodImages/";		//透過商品編號取得基本商品資訊 然後透過get取得編號對應的圖片集合
+		String patternPath = "C:/Users/88691/Documents/team5project/SpringBootRestfulteam5Hw/src/main/webapp/WEB-INF/goodImages/";		//透過商品編號取得基本商品資訊 然後透過get取得編號對應的圖片集合
+
 		GoodsBean2 insertGood = gService.getById(goodsID);
 		Set<GoodImageBean> Imageset = insertGood.getImages();
 		GoodImageBean goodImage = null;
+		System.out.println("files.size() = "+files.size() + "??AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 		//取得圖片的格式 並且換上新的名字
 		for (Map.Entry<String, List<MultipartFile>> entry : files.entrySet()) {
 			List<MultipartFile> fileList = entry.getValue();
@@ -76,7 +79,7 @@ public class GoodController2 {
 				String timeStamp = simpleDateFormat.format(new Date());
 				String ImgRoot = timeStamp + "" + patternFormat;
 //3.將圖片上傳
-				File file = new File("../../goodImage/", ImgRoot);
+				File file = new File(patternPath, ImgRoot);
 				try {
 					multipartFile.transferTo(file);
 				} catch (IllegalStateException e) {
@@ -87,7 +90,7 @@ public class GoodController2 {
 					e.printStackTrace();
 				}
 //4.把相對路徑丟進GoodImageBean
-				String goodsImg = "../../goodImage/" + ImgRoot;
+				String goodsImg = "../../goodImages/" + ImgRoot;
 				goodImage = new GoodImageBean();
 				
 				goodImage.setImagePath(goodsImg);
@@ -124,8 +127,8 @@ public class GoodController2 {
 //1.加入商品基本資訊 和 想放進去的圖片
 //2.規格表資訊
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMddHHmmssSSS");
-//		String patternPath = "C:/Users/88691/Documents/team5project/SpringBootRestfulteam5Hw/src/main/webapp/WEB-INF/goodImage/";		//透過商品編號取得基本商品資訊 然後透過get取得編號對應的圖片集合
-		String patternPath = "../../goodImage/";		//透過商品編號取得基本商品資訊 然後透過get取得編號對應的圖片集合
+		String patternPath = "C:/Users/88691/Documents/team5project/SpringBootRestfulteam5Hw/src/main/webapp/WEB-INF/goodImages/";		//透過商品編號取得基本商品資訊 然後透過get取得編號對應的圖片集合
+//		String patternPath = "../../goodImages/";		//透過商品編號取得基本商品資訊 然後透過get取得編號對應的圖片集合
 		GoodImageBean goodImage = null;
 		Set<GoodImageBean> Imageset = new LinkedHashSet<>();
 // Set Imageset = new HashSet<GoodImageBean>();
@@ -173,7 +176,7 @@ public class GoodController2 {
 						e.printStackTrace();
 					}
 //4.把相對路徑丟進GoodImageBean
-					String goodsImg = "../../goodImage/" + ImgRoot;//
+					String goodsImg = "../../goodImages/" + ImgRoot;//
 					if(titlephotocheck==1) {//第一張照片當作封面
 						
 						insertGood.setTitleImage(goodsImg);
@@ -201,7 +204,9 @@ public class GoodController2 {
 	//1.刪除商品基本資訊(連帶刪掉其他兩張表的資訊)
 	@PostMapping("/gooddelete.controller")
 	public String processDeleteGoodAction(@RequestParam("GoodsID") Integer goodsID) {
-		String patternPath = "../../goodImage/";		//透過商品編號取得基本商品資訊 然後透過get取得編號對應的圖片集合
+				//透過商品編號取得基本商品資訊 然後透過get取得編號對應的圖片集合
+		String patternPath = "C:/Users/88691/Documents/team5project/SpringBootRestfulteam5Hw/src/main/webapp/WEB-INF/goodImages/";		//透過商品編號取得基本商品資訊 然後透過get取得編號對應的圖片集合
+
 		/* 新寫的code */
 		GoodsBean2 good = gService.getById(goodsID);// 透過ID找出商品基本資訊
 		Set<GoodImageBean> images = good.getImages();// 找到連結的圖片,假如商品編號為1的圖片有三張,就會有3個images類別
@@ -220,7 +225,9 @@ public class GoodController2 {
 	//2.單純刪掉圖片
 	@PostMapping("/goodImagedelete.controller")
 	public String processDeleteGoodImageAction1(@RequestParam("GoodImageID") List<String> goodImageID,@RequestParam("GoodsID") String goodID) {
-		String patternPath = "../../goodImage/";		//透過商品編號取得基本商品資訊 然後透過get取得編號對應的圖片集合
+				//透過商品編號取得基本商品資訊 然後透過get取得編號對應的圖片集合
+		String patternPath = "C:/Users/88691/Documents/team5project/SpringBootRestfulteam5Hw/src/main/webapp/WEB-INF/goodImages/";		//透過商品編號取得基本商品資訊 然後透過get取得編號對應的圖片集合
+
 		for(String item:goodImageID) {
 			//將檔案刪掉
 			GoodImageBean imageBean = giService.getByID(Integer.parseInt(item));
@@ -266,7 +273,9 @@ public class GoodController2 {
 			@RequestParam("Brand") String brand, @RequestParam("ShipmentPlace") String shipmentPlace,
 			@RequestParam(name = "TitleImage",required = false) MultipartFile mf) {
 		//封面照允許空值
-		String patternPath = "../../goodImage/";		//透過商品編號取得基本商品資訊 然後透過get取得編號對應的圖片集合
+				//透過商品編號取得基本商品資訊 然後透過get取得編號對應的圖片集合
+		String patternPath = "C:/Users/88691/Documents/team5project/SpringBootRestfulteam5Hw/src/main/webapp/WEB-INF/goodImages/";		//透過商品編號取得基本商品資訊 然後透過get取得編號對應的圖片集合
+
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMddHHmmssSSS");
 		String uploadfilename = mf.getOriginalFilename();
 		GoodsBean2 good = gService.getById(goodsID);
@@ -301,7 +310,7 @@ public class GoodController2 {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			String goodsImg = "../../goodImage/" + ImgRoot;
+			String goodsImg = "../../goodImages/" + ImgRoot;
 			good.setTitleImage(goodsImg);
 		}
 		gService.update(good);
@@ -315,7 +324,9 @@ public class GoodController2 {
 		/*商品基本資訊資料表多了(封面照片) 移除(庫存量)
 		 ControllerData = (goodID/goodImageID/uploadfilename)*/
 		/**/
-		String patternPath = "../../goodImage/";		//透過商品編號取得基本商品資訊 然後透過get取得編號對應的圖片集合
+				//透過商品編號取得基本商品資訊 然後透過get取得編號對應的圖片集合
+		String patternPath = "C:/Users/88691/Documents/team5project/SpringBootRestfulteam5Hw/src/main/webapp/WEB-INF/goodImages/";		//透過商品編號取得基本商品資訊 然後透過get取得編號對應的圖片集合
+
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMddHHmmssSSS");
 		System.out.println("files.size()="+files.size());
 			
@@ -374,7 +385,7 @@ public class GoodController2 {
 								e.printStackTrace();
 							}
 							//將圖片路徑寫進資料庫
-							String goodsImg = "../../goodImage/" + ImageFilename;
+							String goodsImg = "../../goodImages/" + ImageFilename;
 							System.out.println("goodsImg = "+ goodsImg);
 							imageBean.setImagePath(goodsImg);
 							giService.update(imageBean);
@@ -439,6 +450,8 @@ public class GoodController2 {
 		Set<GoodImageBean> images = good.getImages();
 		return images;
 	}
+
+	
 	/** 處理規格表*/
 	@PostMapping("/goodformatdelete.controller")
 	public String processInsertGoodForamtAction(@RequestParam("GoodsID") Integer goodsID,
@@ -446,7 +459,7 @@ public class GoodController2 {
 			@RequestParam("GoodPrice") Integer goodPrice,
 			@RequestParam("GoodImagePath") MultipartFile mf,
 			@RequestParam("GoodsStock") Integer goodStock) {
-		String patternPath = "../../goodImage/";		//透過商品編號取得基本商品資訊 然後透過get取得編號對應的圖片集合
+		String patternPath = "../../goodImags/";		//透過商品編號取得基本商品資訊 然後透過get取得編號對應的圖片集合
 		/* 新寫的code */
 		GoodsBean2 good = gService.getById(goodsID);// 透過ID找出商品基本資訊
 		Set<GoodImageBean> images = good.getImages();// 找到連結的圖片,假如商品編號為1的圖片有三張,就會有3個images類別

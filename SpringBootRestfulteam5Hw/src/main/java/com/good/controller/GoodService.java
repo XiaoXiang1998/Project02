@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.good.model.GoodRepository;
-import com.good.model.GoodsBean;
+import com.good.model.GoodsBean2;
 
 @Service
 @Transactional
@@ -18,32 +18,32 @@ public class GoodService{
 	@Autowired
 	private GoodRepository goodRepos;
 	
-	public GoodsBean insert(GoodsBean good) {
+	public GoodsBean2 insert(GoodsBean2 good) {
 		return goodRepos.save(good);
 	}
-	public GoodsBean update(GoodsBean good) {
+	public GoodsBean2 update(GoodsBean2 good) {
 		return goodRepos.save(good);
 	}
 	public void deleteById(Integer id) {
 		goodRepos.deleteById(id);
 	}
-	public GoodsBean getById(Integer id) {
-		 Optional<GoodsBean> op1 = goodRepos.findById(id);
+	public GoodsBean2 getById(Integer id) {
+		 Optional<GoodsBean2> op1 = goodRepos.findById(id);
 		 if(op1.isPresent()) {
 			 return op1.get();
 		 }
 		 return null;
 	}
-	public List<GoodsBean> getAll() {
+	public List<GoodsBean2> getAll() {
 		return goodRepos.findAll();
 	}
-	public List<GoodsBean> findGoods(String goodsName){
+	public List<GoodsBean2> findGoods(String goodsName){
 		return goodRepos.findGoods(goodsName);
 	}
 //	public List<GoodsBean> findByNameLike(String goodsName){
 //		return goodRepos.findByNameLike(goodsName);
 //	}
-	public Page<GoodsBean> findAllByPage(Pageable pageable){
+	public Page<GoodsBean2> findAllByPage(Pageable pageable){
 		return goodRepos.findAll(pageable);
 	}
 	

@@ -10,7 +10,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "member")
+@Table(name = "members")
 @Component
 public class MemberBean {
 
@@ -46,9 +46,6 @@ public class MemberBean {
 	@Column(name = "seller")
 	private boolean seller;
 
-	@Column(name = "admin")
-	private boolean admin;
-
 	@Column(name = "reviewcount")
 	private int reviewCount;
 
@@ -57,13 +54,16 @@ public class MemberBean {
 
 	@Column(name = "totalsalesamount")
 	private int totalSalesAmount;
-
+	
+	@Column(name="level")
+	private Integer level;
+	
 	public MemberBean() {
 	}
 
 	/* 新增用不需要id */
 	public MemberBean(String account, String password, String email, String phone, String name, String gender,
-			String address, String photoSticker, boolean seller, boolean admin) {
+			String address, String photoSticker, boolean seller) {
 		this.account = account;
 		this.password = password;
 		this.email = email;
@@ -73,12 +73,11 @@ public class MemberBean {
 		this.address = address;
 		this.photoSticker = photoSticker;
 		this.seller = seller;
-		this.admin = admin;
 	}
 
 	/* 新增時沒有頭貼用 */
 	public MemberBean(String account, String password, String email, String phone, String name, String gender,
-			String address, boolean seller, boolean admin) {
+			String address, boolean seller) {
 		this.account = account;
 		this.password = password;
 		this.email = email;
@@ -87,12 +86,11 @@ public class MemberBean {
 		this.gender = gender;
 		this.address = address;
 		this.seller = seller;
-		this.admin = admin;
 	}
 
 	/* 修改時用 */
 	public MemberBean(Integer sid, String account, String password, String email, String phone, String name,
-			String gender, String address, String photoSticker, boolean seller, boolean admin, int reviewCount,
+			String gender, String address, String photoSticker, boolean seller, int reviewCount,
 			int cumulativeScore, int totalSalesAmount) {
 		this.sid = sid;
 		this.account = account;
@@ -104,7 +102,6 @@ public class MemberBean {
 		this.address = address;
 		this.photoSticker = photoSticker;
 		this.seller = seller;
-		this.admin = admin;
 		this.reviewCount = reviewCount;
 		this.cumulativeScore = cumulativeScore;
 		this.totalSalesAmount = totalSalesAmount;
@@ -190,14 +187,6 @@ public class MemberBean {
 		this.seller = seller;
 	}
 
-	public boolean isAdmin() {
-		return admin;
-	}
-
-	public void setAdmin(boolean admin) {
-		this.admin = admin;
-	}
-
 	public int getReviewCount() {
 		return reviewCount;
 	}
@@ -222,4 +211,13 @@ public class MemberBean {
 		this.totalSalesAmount = totalSalesAmount;
 	}
 
+	public Integer getLevel() {
+		return level;
+	}
+
+	public void setLevel(Integer level) {
+		this.level = level;
+	}
+	
+	
 }

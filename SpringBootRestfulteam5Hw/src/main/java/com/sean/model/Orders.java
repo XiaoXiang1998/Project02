@@ -30,7 +30,7 @@ public class Orders {
 	private MemberBean buyerId;
 
 	@ManyToOne
-	@JoinColumn(name = "FK_SELLER_ID")
+	@JoinColumn(name = "FK_SELLERID")
 	private MemberBean sellerId;
 	@ManyToOne
 	@JoinColumn(name = "FK_FORMATGOODID")

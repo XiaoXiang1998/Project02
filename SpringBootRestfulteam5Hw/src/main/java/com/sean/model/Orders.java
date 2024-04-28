@@ -4,6 +4,7 @@ import java.util.Date;
 
 import org.springframework.stereotype.Component;
 
+import com.comment.model.Post;
 import com.good.model.GoodFormat;
 import com.member.model.MemberBean;
 
@@ -14,6 +15,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -35,6 +37,9 @@ public class Orders {
 	@ManyToOne
 	@JoinColumn(name = "FK_FORMATGOODID")
 	private GoodFormat formatgoodId;
+	
+	@OneToOne(mappedBy = "orders")
+	private Post posts;
 
 	@Column(name = "QUANTITY")
 	private Integer quantity;
@@ -225,6 +230,16 @@ public class Orders {
 
 	public void setPaymentId(PaymentDetails paymentId) {
 		this.paymentId = paymentId;
+	}
+	
+	
+
+	public Post getPosts() {
+		return posts;
+	}
+
+	public void setPosts(Post posts) {
+		this.posts = posts;
 	}
 
 	public Orders(Integer orderId, MemberBean buyerId, MemberBean sellerId, GoodFormat formatgoodId, Integer quantity,

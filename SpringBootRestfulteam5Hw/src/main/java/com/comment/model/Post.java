@@ -40,7 +40,7 @@ public class Post {
 	@OneToOne
 	@JoinColumn(name="orderid")
 	private Orders orders;
-
+	
 	public Post() {
 		
 	}

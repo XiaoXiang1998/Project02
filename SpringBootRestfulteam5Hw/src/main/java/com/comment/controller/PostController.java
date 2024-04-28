@@ -232,5 +232,16 @@ public class PostController {
 
 	        return "redirect:allUsersComments";
 	    }
+	 
+		@GetMapping("/sellerComments")
+	    public String getsellerComments(Model model, HttpSession session) {
+	        Member loggedInMember = (Member) session.getAttribute("loggedInMember");
+	        
+	       List<Post> userComments = pService.findByMemberOrderByCommenttimeDesc(loggedInMember);
+	        
+	        model.addAttribute("post", userComments);
+	        
+	        return "comment/sellerReplay"; 
+	    }
 	
 }

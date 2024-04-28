@@ -41,14 +41,17 @@ public class LoginCommentController {
 	            Member loggedInMember = optionalMember.get();
 	            session.setAttribute("loggedInMember", loggedInMember);
 	            model.addAttribute("loggedInMember", loggedInMember); 
-	            return "comment/indexcomment";
+	            if (loggedInMember.getSeller()) {
+	                return "comment/sellercomment";
+	            } else {
+	                return "comment/indexcomment";
+	            }
 	        } else {
 	            // 登入失敗
 	            redirectAttributes.addFlashAttribute("error", "帳號或密碼錯誤");
 	            return "redirect:/login";
 	        }
 	    }
-
 	    @GetMapping("/logout")
 	    public String logout(SessionStatus sessionStatus, HttpSession session) {
 	        session.removeAttribute("loggedInMember");

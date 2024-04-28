@@ -24,6 +24,9 @@ public class ViewController {
 		return "comment/insert";
 	}
 	
-	
+	@GetMapping("/sellerComment")
+	public String sellerComment() {
+		return "comment/sellercomment";
+	}
 	
 }

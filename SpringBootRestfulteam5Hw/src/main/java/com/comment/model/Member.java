@@ -48,16 +48,16 @@ public class Member {
 	private String photoSticker;
 
 	@Column(name = "seller")
-	private Integer seller;
+	private Boolean seller;
 
 	@Column(name = "reviewcount")
-	private int reviewCount;
+	private Integer reviewCount;
 
 	@Column(name = "cumulativescore")
-	private int cumulativeScore;
+	private Integer cumulativeScore;
 
 	@Column(name = "totalsalesamount")
-	private int totalSalesAmount;
+	private Integer totalSalesAmount;
 	
 	@Column(name="level")
 	private Integer level;
@@ -161,45 +161,42 @@ public class Member {
 	}
 
 
-	
-
-
-	public Integer getSeller() {
+	public Boolean getSeller() {
 		return seller;
 	}
 
 
-	public void setSeller(Integer seller) {
+	public void setSeller(Boolean seller) {
 		this.seller = seller;
 	}
 
 
-	public int getReviewCount() {
+	public Integer getReviewCount() {
 		return reviewCount;
 	}
 
 
-	public void setReviewCount(int reviewCount) {
+	public void setReviewCount(Integer reviewCount) {
 		this.reviewCount = reviewCount;
 	}
 
 
-	public int getCumulativeScore() {
+	public Integer getCumulativeScore() {
 		return cumulativeScore;
 	}
 
 
-	public void setCumulativeScore(int cumulativeScore) {
+	public void setCumulativeScore(Integer cumulativeScore) {
 		this.cumulativeScore = cumulativeScore;
 	}
 
 
-	public int getTotalSalesAmount() {
+	public Integer getTotalSalesAmount() {
 		return totalSalesAmount;
 	}
 
 
-	public void setTotalSalesAmount(int totalSalesAmount) {
+	public void setTotalSalesAmount(Integer totalSalesAmount) {
 		this.totalSalesAmount = totalSalesAmount;
 	}
 
@@ -232,6 +229,7 @@ public class Member {
 	public void setResults(List<Result> results) {
 		Results = results;
 	}
+
     
 
     

@@ -206,7 +206,7 @@ body {
   <c:forEach items="${allMembers}" var="member">
     <div class="container">
       <c:forEach items="${member.posts}" var="post">
-        <c:if test="${post.member.seller != 1}">
+        <c:if test="${post.member.seller != true}">
           <div class="item">
             <i class="avatar"></i>
             <div class="info">
@@ -227,7 +227,7 @@ body {
                   </c:if>
                   <p class="text">${post.commentcontent}</p>
                 </div>
-                <c:if test="${loggedInMember.seller == 1 and not empty post.buyerrate}">
+                <c:if test="${loggedInMember.seller == true and not empty post.buyerrate}">
                   <p>
                     <a href="#" class="replyLink" data-target="replyFormContainer${post.commentid}" data-commentid="${post.commentid}">回覆買家</a>
                   </p>
@@ -282,7 +282,7 @@ body {
   <c:forEach items="${allMembers}" var="member">
     <div class="container">
       <c:forEach items="${member.posts}" var="post">
-        <c:if test="${post.member.seller != 1 and post.buyerrate == 5}">
+        <c:if test="${post.member.seller != true and post.buyerrate == 5}">
           <div class="item">
             <i class="avatar"></i>
             <div class="info">
@@ -337,7 +337,7 @@ body {
   <c:forEach items="${allMembers}" var="member">
     <div class="container">
       <c:forEach items="${member.posts}" var="post">
-        <c:if test="${post.member.seller != 1 and post.buyerrate == 4}">
+        <c:if test="${post.member.seller != true and post.buyerrate == 4}">
           <div class="item">
             <i class="avatar"></i>
             <div class="info">
@@ -392,7 +392,7 @@ body {
   <c:forEach items="${allMembers}" var="member">
     <div class="container">
       <c:forEach items="${member.posts}" var="post">
-        <c:if test="${post.member.seller != 1 and post.buyerrate == 3}">
+        <c:if test="${post.member.seller != true and post.buyerrate == 3}">
           <div class="item">
             <i class="avatar"></i>
             <div class="info">
@@ -448,7 +448,7 @@ body {
   <c:forEach items="${allMembers}" var="member">
     <div class="container">
       <c:forEach items="${member.posts}" var="post">
-        <c:if test="${post.member.seller != 1 and post.buyerrate == 2}">
+        <c:if test="${post.member.seller != true and post.buyerrate == 2}">
           <div class="item">
             <i class="avatar"></i>
             <div class="info">
@@ -503,7 +503,7 @@ body {
   <c:forEach items="${allMembers}" var="member">
     <div class="container">
       <c:forEach items="${member.posts}" var="post">
-        <c:if test="${post.member.seller != 1 and post.buyerrate == 1}">
+        <c:if test="${post.member.seller != true and post.buyerrate == 1}">
           <div class="item">
             <i class="avatar"></i>
             <div class="info">
@@ -557,7 +557,7 @@ body {
   <c:forEach items="${allMembers}" var="member">
     <div class="container">
       <c:forEach items="${member.posts}" var="post">
-<c:if test="${post.member.seller != 1 and not empty post.commentcontent and post.commentcontent ne ''}">
+<c:if test="${post.member.seller != true and not empty post.commentcontent and post.commentcontent ne ''}">
           <div class="item">
             <i class="avatar"></i>
             <div class="info">
@@ -612,7 +612,7 @@ body {
     <!-- 添加检查是否有照片的条件 -->
     <c:if test="${not empty post.productphoto}">
       <div class="container">
-        <c:if test="${post.member.seller != 1}">
+        <c:if test="${post.member.seller != true}">
           <div class="item">
             <i class="avatar"></i>
             <div class="info">

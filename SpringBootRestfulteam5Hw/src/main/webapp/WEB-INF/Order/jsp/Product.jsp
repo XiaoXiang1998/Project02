@@ -31,10 +31,10 @@
             <tbody>
                 <c:forEach items="${products}" var="product">
                     <tr>
-                        <td>${product.goodsId}</td>
+                        <td>${product}</td>
                         <td>${product.goodsSellerID.name}</td>
                         <td>${product.goodsName}</td>
-                        <td>${product.goodsPrice}</td>
+                        <td>${product}</td>
                         <td>
                             <button class="btn btn-primary" onclick="confirmAddToCart(${product.goodsId}, '${product.goodsName}',${product.goodsPrice})">增加到購物車</button>
                         </td>

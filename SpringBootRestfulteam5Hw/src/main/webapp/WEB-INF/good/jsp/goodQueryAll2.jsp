@@ -679,7 +679,7 @@
 
                         type: 'get',
 
-                        url: '/good/goodImage/' + ID,//回傳取得所有圖片的路徑
+                        url: '/goodImage/' + ID,//回傳取得所有圖片的路徑
 
                         contentType: 'application/json',
 

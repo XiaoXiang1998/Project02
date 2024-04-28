@@ -37,7 +37,6 @@ import jakarta.servlet.http.HttpSession;
  */
 //主頁:/good/goodqueryallpage.controller
 @Controller
-@RequestMapping("/good")
 public class GoodController2 {
 	
 	@Autowired

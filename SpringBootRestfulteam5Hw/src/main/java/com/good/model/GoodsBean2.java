@@ -59,6 +59,9 @@ public class GoodsBean2 implements java.io.Serializable {
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "good", cascade = CascadeType.ALL)
 	@JsonManagedReference
 	private Set<GoodFormat> format = new LinkedHashSet<GoodFormat>();
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	private MemberBean member;
 
 //
 	public GoodsBean2() {

@@ -13,7 +13,8 @@
 <title>評論資料</title>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/css/lightbox.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/js/lightbox.min.js"></script>
 <style>
 body {
 	font-family: Arial, sans-serif;
@@ -186,7 +187,9 @@ body {
 	                </c:if>
 	                <c:choose>
 	                    <c:when test="${not empty comment.productphoto}">
+	                         <a href="${pageContext.request.contextPath}/${comment.productphoto}" data-lightbox="product-images">
 	                        <img class="product-photo" src="${pageContext.request.contextPath}/${comment.productphoto}" alt="產品圖片">
+	                        </a>
 	                    </c:when>
 	                    <c:otherwise>
 	                        <div class="no-image"></div>

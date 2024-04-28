@@ -1,6 +1,7 @@
 package com.good.controller;
 
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.good.model.GoodFormat;
 import com.good.model.GoodFormatRepository;
+import com.good.model.GoodsBean2;
 @Service
 @Transactional
 public class GoodFormatService {
@@ -31,6 +33,9 @@ public class GoodFormatService {
 	}
 	public Optional<GoodFormat> findById(Integer goodFormatId) {
 		return goodformatRepos.findById(goodFormatId); 
+	}
+	public List<GoodFormat> getAll() {
+		return goodformatRepos.findAll();
 	}
 	
 }

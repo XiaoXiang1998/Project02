@@ -26,7 +26,7 @@
                     <a class="nav-link" href="/sellerComments">查看我的回覆</a>
                 </li>
                  <li class="nav-item">
-                    <a class="nav-link" href="/logout">登出</a>
+                    <a class="nav-link" href="returnToControlUI">返回管理介面</a>
                 </li>
                  <li class="nav-item">
                     <a class="nav-link" href="#">Welcome,${loggedInMember.name}</a>

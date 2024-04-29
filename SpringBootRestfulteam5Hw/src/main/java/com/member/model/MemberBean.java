@@ -213,6 +213,8 @@ public class MemberBean {
 	public boolean isSeller() {
 		return seller;
 	}
+	
+	
 
 	public void setSeller(boolean seller) {
 		this.seller = seller;

@@ -29,7 +29,7 @@
                     <a class="nav-link" href="returnToControlUI">返回管理介面</a>
                 </li>
                  <li class="nav-item">
-                    <a class="nav-link" href="#">Welcome,${loggedInMember.name}</a>
+                    <a class="nav-link" href="#">Welcome,${member.name}</a>
                 </li>
             </ul>
         </div>

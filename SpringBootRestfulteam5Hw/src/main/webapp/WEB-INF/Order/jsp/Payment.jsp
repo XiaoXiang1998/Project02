@@ -22,9 +22,9 @@
         <table class="table table-bordered text-center align-middle">
             <c:forEach items="${cartItems}" var="item">
                 <input type="hidden" name="itemId" value="${item.carItemId}">
-				<input type="hidden" name="productId" value="${item.good.goodsId}">
-				<input type="hidden" name="sellerId" value="${item.good.goodsSellerID.sid}">
-				<input type="hidden" name="originalPrices" value="${item.good.goodsPrice}">
+				<input type="hidden" name="productId" value="${item.good.good.goodsID}">
+				<input type="hidden" name="sellerId" value="${item.good.good.goodsSellerID.sid}">
+				<input type="hidden" name="originalPrices" value="${item.price}">
 				<input type="hidden" name="totalPrices" value="${item.price * item.quantity + shippingFee}">
             <thead class="thead-dark">
                 <tr>
@@ -42,7 +42,7 @@
             <tbody>
                 
                     <tr>
-                        <td>${item.good.goodsName}</td>
+                        <td>${item.good.good.goodsName}</td>
                         <td>${item.price}</td>
                         <td><input type="hidden" name="quantity" value="${item.quantity}">${item.quantity}</td>
                         <td class="total-price">${item.quantity * item.price}</td>

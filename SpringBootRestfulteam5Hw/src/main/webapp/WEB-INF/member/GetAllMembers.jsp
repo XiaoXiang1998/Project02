@@ -97,7 +97,6 @@ tr:nth-child(even) td {
                         <th>地址</th>
                         <th>大頭貼</th>
                         <th>賣家身分</th>
-                        <th>管理者身分</th>
                         <th>總評分數</th>
                         <th>被評次數</th>
                         <th>累計金額</th>
@@ -123,7 +122,6 @@ tr:nth-child(even) td {
                             </div>
                         </td>
                         <td><%=member.isSeller()%></td>
-                        <td><%=member.isAdmin()%></td>
                         <td><%=member.getReviewCount()%></td>
                         <td><%=member.getCumulativeScore()%></td>
                         <td><%=member.getTotalSalesAmount()%></td>
@@ -133,7 +131,7 @@ tr:nth-child(even) td {
                             </form>
                         </td>
                         <td class="button-cell">
-                            <button class="button" onclick="showEditForm('<%=member.getSid()%>', '<%=member.getAccount()%>', '<%=member.getPassword()%>', '<%=member.getEmail()%>', '<%=member.getPhone()%>', '<%=member.getName()%>', '<%=member.getGender()%>', '<%=member.getAddress()%>', '<%=member.getPhotoSticker()%>', '<%=member.isSeller()%>', '<%=member.isAdmin()%>','<%=member.getReviewCount()%>','<%=member.getCumulativeScore()%>','<%=member.getTotalSalesAmount()%>')">修改</button>
+                            <button class="button" onclick="showEditForm('<%=member.getSid()%>', '<%=member.getAccount()%>', '<%=member.getPassword()%>', '<%=member.getEmail()%>', '<%=member.getPhone()%>', '<%=member.getName()%>', '<%=member.getGender()%>', '<%=member.getAddress()%>', '<%=member.getPhotoSticker()%>', '<%=member.isSeller()%>','<%=member.getReviewCount()%>','<%=member.getCumulativeScore()%>','<%=member.getTotalSalesAmount()%>')">修改</button>
                         </td>
                     </tr>
                     <% } %>
@@ -172,7 +170,7 @@ tr:nth-child(even) td {
 		    });
 		}
     
-    function showEditForm(SID,Account,Password,Email,Phone,Name,Gender,Address,Photo_Sticker,Seller,Administrator,reviewCount,cumulativeScore,totalSalesAmount) {
+    function showEditForm(SID,Account,Password,Email,Phone,Name,Gender,Address,Photo_Sticker,Seller,reviewCount,cumulativeScore,totalSalesAmount) {
         console.log("SID:", SID); 
         console.log("Account:", Account); 
         console.log("Password:", Password); 
@@ -183,7 +181,6 @@ tr:nth-child(even) td {
         console.log("Address:", Address); 
         console.log("Photo_Sticker:", Photo_Sticker); 
         console.log("Seller:", Seller); 
-        console.log("Administrator:", Administrator); 
         console.log("reviewCount:", reviewCount); 
         console.log("cumulativeScore:", cumulativeScore); 
         console.log("totalSalesAmount:", totalSalesAmount); 
@@ -207,9 +204,6 @@ tr:nth-child(even) td {
                 '<tr><td style="text-align: right; min-width: 110px;"><label>賣家身分：</label></td>' +
                 '<td><input type="radio" name="Seller" value="true"' + (Seller === "true" ? ' checked' : '') + '> 是' +
                 '<input type="radio" name="Seller" value="false"' + (Seller === "false" ? ' checked' : '') + '> 否</td></tr>' +
-                '<tr><td style="text-align: right; min-width: 110px;"><label>管理者身分：</label></td>' +
-                '<td><input type="radio" name="Administrator" value="true"' + (Administrator === "true" ? ' checked' : '') + '> 是' +
-                '<input type="radio" name="Administrator" value="false"' + (Administrator === "false" ? ' checked' : '') + '> 否</td></tr>' +
                 '<input id="oldPath" class="swal2-input" name="oldPath" value="' + Photo_Sticker + '" style="display: none;">' + 
                 '<input id="reviewCount" class="swal2-input" name="reviewCount" value="' + reviewCount + '" style="display: none;">' + 
                 '<input id="cumulativeScore" class="swal2-input" name="cumulativeScore" value="' + cumulativeScore + '" style="display: none;">' + 

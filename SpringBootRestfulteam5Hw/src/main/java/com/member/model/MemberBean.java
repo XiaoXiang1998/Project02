@@ -1,10 +1,14 @@
 package com.member.model;
 
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.springframework.stereotype.Component;
 
+import com.comment.model.Post;
+import com.comment.model.Result;
 import com.good.model.GoodsBean2;
 import com.sean.model.Orders;
 import com.sean.model.PaymentDetails;
@@ -79,6 +83,15 @@ public class MemberBean {
 
 	@OneToMany(mappedBy = "sellerId", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private Set<Orders> sellers = new LinkedHashSet<>();
+	
+	
+	  @OneToMany(fetch = FetchType.LAZY,mappedBy = "member",cascade = CascadeType.ALL)
+		private List<Post> posts=new ArrayList<Post>();
+	    
+	    
+	    @OneToMany(fetch = FetchType.LAZY,mappedBy = "memberResult",cascade = CascadeType.ALL)
+		private List<Result> Results=new ArrayList<Result>();
+	
 	public MemberBean() {
 	}
 
@@ -238,6 +251,22 @@ public class MemberBean {
 
 	public void setLevel(Integer level) {
 		this.level = level;
+	}
+
+	public List<Post> getPosts() {
+		return posts;
+	}
+
+	public void setPosts(List<Post> posts) {
+		this.posts = posts;
+	}
+
+	public List<Result> getResults() {
+		return Results;
+	}
+
+	public void setResults(List<Result> results) {
+		Results = results;
 	}
 	
 	

@@ -6,6 +6,7 @@ package com.comment.model;
 
 import org.springframework.stereotype.Component;
 
+import com.member.model.MemberBean;
 import com.sean.model.Orders;
 
 import jakarta.persistence.Entity;
@@ -35,7 +36,7 @@ public class Post {
 	
 	@ManyToOne
 	@JoinColumn(name="fk_userid")
-	private Member member;
+	private MemberBean member;
 	
 	@OneToOne
 	@JoinColumn(name="orderid")
@@ -163,13 +164,17 @@ public class Post {
 
 
 
-	public Member getMember() {
+	
+
+
+
+	public MemberBean getMember() {
 		return member;
 	}
 
 
 
-	public void setMember(Member member) {
+	public void setMember(MemberBean member) {
 		this.member = member;
 	}
 

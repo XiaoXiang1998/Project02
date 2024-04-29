@@ -8,10 +8,10 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.comment.model.Member;
 import com.comment.model.Result;
 import com.comment.model.ResultService;
 import com.config.GetHttpSessionConfig;
+import com.member.model.MemberBean;
 
 import jakarta.servlet.http.HttpSession;
 import jakarta.websocket.EndpointConfig;
@@ -29,7 +29,7 @@ public class MyWebSocket {
 	@Autowired
 	private ResultService rService;
 	
-	private static final Map<Member,Session> onLineUsers=new ConcurrentHashMap<>();
+	private static final Map<MemberBean,Session> onLineUsers=new ConcurrentHashMap<>();
 	
 	private HttpSession httpSession;
   
@@ -37,9 +37,9 @@ public class MyWebSocket {
 	@OnOpen
 	public void onOpen(Session session,EndpointConfig config) throws IOException {
 		this.httpSession = (HttpSession) config.getUserProperties().get(HttpSession.class.getName());
-	    Member loggedInMember = (Member) httpSession.getAttribute("loggedInMember");
+		MemberBean member = (MemberBean) httpSession.getAttribute("member");
 		//1.將session進行保存
-		onLineUsers.put(loggedInMember, session);
+		onLineUsers.put(member, session);
 		
 	}
 	
@@ -59,9 +59,9 @@ public class MyWebSocket {
 	@OnMessage
 	public void onMessage(String message, Session session) throws IOException {
 	    if (session.isOpen()) {
-	        Member sender = null;
+	    	MemberBean sender = null;
 	        // 遍历在线用户列表，找到发送消息的用户
-	        for (Entry<Member, Session> entry : onLineUsers.entrySet()) {
+	        for (Entry<MemberBean, Session> entry : onLineUsers.entrySet()) {
 	            if (entry.getValue().equals(session)) {
 	                sender = entry.getKey();
 	                break;

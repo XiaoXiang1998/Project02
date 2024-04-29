@@ -25,8 +25,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-
-import com.comment.model.Member;
+import com.member.model.MemberBean;
 import com.comment.model.PostMemberService;
 import com.comment.model.Post;
 import com.comment.model.PostService;
@@ -44,7 +43,7 @@ public class PostController {
 	@PostMapping("/post")
 	public String postAction(@RequestParam(value = "commentContent", required = false) String commentContent,@RequestParam("productimage")  MultipartFile mf,@RequestParam("rate") int rate,
             HttpSession session) throws IllegalStateException, IOException {
-		Member loggedInMember = (Member) session.getAttribute("loggedInMember");
+		MemberBean member = (MemberBean) session.getAttribute("member");
 		
 		Post post =new Post();
 		
@@ -74,7 +73,7 @@ public class PostController {
 		post.setBuyerrate(rate);
 		post.setCommenttime(currentTimestamp);
 		post.setLastmodifiedtime(currentTimestamp);
-		post.setMember(loggedInMember);
+		post.setMember(member);
 		pService.insert(post);
 		
 		return "redirect:indexcomment";
@@ -82,9 +81,9 @@ public class PostController {
 	
 	@GetMapping("/userComments")
     public String getUserComments(Model model, HttpSession session) {
-        Member loggedInMember = (Member) session.getAttribute("loggedInMember");
+		MemberBean member = (MemberBean) session.getAttribute("member");
         
-       List<Post> userComments = pService.findByMemberOrderByCommenttimeDesc(loggedInMember);
+       List<Post> userComments = pService.findByMemberOrderByCommenttimeDesc(member);
         
         model.addAttribute("post", userComments);
         
@@ -126,7 +125,7 @@ public class PostController {
 	 
 	 @GetMapping("/allUsersComments")
 	 public String viewAllUsersComments(Model model) {
-	     List<Member> allMembersWithPosts = mService.getAllMembersWithPosts();
+	     List<MemberBean> allMembersWithPosts = mService.getAllMembersWithPosts();
 	     
 	     // 统计不同评分条件下的数据数量
 	     int fiveStarsCount = 0;
@@ -138,7 +137,7 @@ public class PostController {
 	     int commentedPostsCount = 0;
 	     int postsWithImagesCount = 0; // 统计帖子中包含图片的数量
 
-	     for (Member member : allMembersWithPosts) {
+	     for (MemberBean member : allMembersWithPosts) {
 	         for (Post post : member.getPosts()) {
 	             // 进行空值检查
 	             Integer buyerrate = post.getBuyerrate();
@@ -201,7 +200,7 @@ public class PostController {
 	                              @RequestParam("rate") Integer sellerRate,
 	                              @RequestParam("commentId") Integer commentId, 
 	                              HttpSession session) {
-			Member loggedInMember = (Member) session.getAttribute("loggedInMember");
+			MemberBean member = (MemberBean) session.getAttribute("member");
 
 	        // 保存回复内容
 	        Post reply = new Post();
@@ -212,7 +211,7 @@ public class PostController {
 			String formattedDateTime = sdf.format(currentTimestamp);
 	        reply.setReplaytime(currentTimestamp);
 	        reply.setSellerrate(sellerRate);
-	        reply.setMember(loggedInMember);
+	        reply.setMember(member);
 	        
 	        
 	        reply.setRepliedcommentid(commentId);
@@ -222,8 +221,8 @@ public class PostController {
 	        
 
 	        // 更新会员信息
-	        Member member = mService.findById(memberId).orElse(null);
-	        if (member != null) {
+	        MemberBean memberBean = mService.findById(memberId).orElse(null);
+	        if (memberBean != null) {
 	            // 更新评论次数和累积分数
 	            member.setReviewCount(member.getReviewCount() + 1);
 	            member.setCumulativeScore(member.getTotalSalesAmount() + sellerRate);
@@ -235,9 +234,9 @@ public class PostController {
 	 
 		@GetMapping("/sellerComments")
 	    public String getsellerComments(Model model, HttpSession session) {
-	        Member loggedInMember = (Member) session.getAttribute("loggedInMember");
+			MemberBean member = (MemberBean) session.getAttribute("member");
 	        
-	       List<Post> userComments = pService.findByMemberOrderByCommenttimeDesc(loggedInMember);
+	       List<Post> userComments = pService.findByMemberOrderByCommenttimeDesc(member);
 	        
 	        model.addAttribute("post", userComments);
 	        

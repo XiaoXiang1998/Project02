@@ -28,10 +28,10 @@
           <a class="nav-link" href="allUsersComments">查看其他人評論</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="logout">登出</a>
+          <a class="nav-link" href="returnToControlUI">返回管理介面</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">歡迎 ${loggedInMember.name}</a> <!-- 在這裡顯示使用者名稱 -->
+          <a class="nav-link" href="#">歡迎 ${member.name}</a> <!-- 在這裡顯示使用者名稱 -->
         </li>
       </ul>
     </div>

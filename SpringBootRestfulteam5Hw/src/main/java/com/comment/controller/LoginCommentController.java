@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.comment.model.Member;
 import com.comment.model.PostMemberService;
 
 import jakarta.servlet.http.HttpSession;
@@ -29,33 +28,33 @@ public class LoginCommentController {
 	  
 	    
 	    
-	    @PostMapping("/login")
-	    public String processLoginForm(@RequestParam("username") String username,
-	                                   @RequestParam("pwd") String password,
-	                                   Model model,
-	                                   RedirectAttributes redirectAttributes,
-	                                   HttpSession session) {
-	        Optional<Member> optionalMember = memberService.findByAccountAndPassword(username, password);
-	        if (optionalMember.isPresent()) {
-	            // 登入成功
-	            Member loggedInMember = optionalMember.get();
-	            session.setAttribute("loggedInMember", loggedInMember);
-	            model.addAttribute("loggedInMember", loggedInMember); 
-	            if (loggedInMember.getSeller()) {
-	                return "comment/sellercomment";
-	            } else {
-	                return "comment/indexcomment";
-	            }
-	        } else {
-	            // 登入失敗
-	            redirectAttributes.addFlashAttribute("error", "帳號或密碼錯誤");
-	            return "redirect:/login";
-	        }
-	    }
-	    @GetMapping("/logout")
-	    public String logout(SessionStatus sessionStatus, HttpSession session) {
-	        session.removeAttribute("loggedInMember");
-	        sessionStatus.setComplete();
-	        return "redirect:/login";
-	    }
+//	    @PostMapping("/login")
+//	    public String processLoginForm(@RequestParam("username") String username,
+//	                                   @RequestParam("pwd") String password,
+//	                                   Model model,
+//	                                   RedirectAttributes redirectAttributes,
+//	                                   HttpSession session) {
+//	        Optional<Member> optionalMember = memberService.findByAccountAndPassword(username, password);
+//	        if (optionalMember.isPresent()) {
+//	            // 登入成功
+//	            Member loggedInMember = optionalMember.get();
+//	            session.setAttribute("loggedInMember", loggedInMember);
+//	            model.addAttribute("loggedInMember", loggedInMember); 
+//	            if (loggedInMember.getSeller()) {
+//	                return "comment/sellercomment";
+//	            } else {
+//	                return "comment/indexcomment";
+//	            }
+//	        } else {
+//	            // 登入失敗
+//	            redirectAttributes.addFlashAttribute("error", "帳號或密碼錯誤");
+//	            return "redirect:/login";
+//	        }
+//	    }
+//	    @GetMapping("/logout")
+//	    public String logout(SessionStatus sessionStatus, HttpSession session) {
+//	        session.removeAttribute("loggedInMember");
+//	        sessionStatus.setComplete();
+//	        return "redirect:/login";
+//	    }
 }

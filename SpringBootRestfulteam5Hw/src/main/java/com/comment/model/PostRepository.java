@@ -6,6 +6,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import com.member.model.MemberBean;
+
 public interface PostRepository extends JpaRepository<Post, Integer> {
-	List<Post> findByMemberOrderByCommenttimeDescReplaytimeDesc(Member member);
+	List<Post> findByMemberOrderByCommenttimeDescReplaytimeDesc(MemberBean member);
 }

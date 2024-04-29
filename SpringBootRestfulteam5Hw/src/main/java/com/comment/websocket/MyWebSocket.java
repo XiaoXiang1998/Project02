@@ -72,7 +72,7 @@ public class MyWebSocket {
 	            // 处理消息
 	            Result result = new Result();
 	            result.setMessage(message);
-	            result.setMemberResult(sender);
+//	            result.setMemberResult(sender);
 
 	            // 将 Result 对象保存到数据库中
 	            rService.insert(result);

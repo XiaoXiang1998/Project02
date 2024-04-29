@@ -88,9 +88,6 @@ public class MemberBean {
 	  @OneToMany(fetch = FetchType.LAZY,mappedBy = "member",cascade = CascadeType.ALL)
 		private List<Post> posts=new ArrayList<Post>();
 	    
-	    
-	    @OneToMany(fetch = FetchType.LAZY,mappedBy = "memberResult",cascade = CascadeType.ALL)
-		private List<Result> Results=new ArrayList<Result>();
 	
 	public MemberBean() {
 	}
@@ -261,13 +258,7 @@ public class MemberBean {
 		this.posts = posts;
 	}
 
-	public List<Result> getResults() {
-		return Results;
-	}
-
-	public void setResults(List<Result> results) {
-		Results = results;
-	}
+	
 	
 	
 }

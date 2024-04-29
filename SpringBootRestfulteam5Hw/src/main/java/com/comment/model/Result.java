@@ -23,9 +23,9 @@ public class Result {
 	
 	private String message;
 	
-	@ManyToOne
-	@JoinColumn(name="fk_userid")
-	private MemberBean memberResult;
+//	@ManyToOne
+//	@JoinColumn(name="fk_userid")
+//	private MemberBean memberResult;
 
 	public Integer getRid() {
 		return rid;
@@ -49,14 +49,6 @@ public class Result {
 
 	public void setMessage(String message) {
 		this.message = message;
-	}
-
-	public MemberBean getMemberResult() {
-		return memberResult;
-	}
-
-	public void setMemberResult(MemberBean memberResult) {
-		this.memberResult = memberResult;
 	}
 
 	

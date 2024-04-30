@@ -1,6 +1,9 @@
 package com.comment.websocket;
 
 import org.slf4j.LoggerFactory;
+
+import com.member.model.MemberBean;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
  
@@ -51,10 +54,15 @@ public class ChatUtils {
      * 发送消息给所有人
      * @param message
      */
-    public static void sendMessageAll(String message) {
-        CLIENTS.forEach((sessionId,session) -> sendMessage(session,message));
+    public static void sendMessageToUser(String sender, String receiver, String message) {
+        Session receiverSession = CLIENTS.get(receiver);
+        if (receiverSession != null) {
+            sendMessage(receiverSession, message);
+        } else {
+            // 如果接收者不在線上，可以添加相應的處理邏輯，例如發送提示消息給發送者
+            logger.warn("User " + receiver + " is not online.");
+        }
     }
- 
     /**
      * 获取所有的在线用户
      */

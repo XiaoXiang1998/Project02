@@ -165,45 +165,91 @@ body {
     right: 5px;
     cursor: pointer;
 }
+
+.page-separator {
+    margin: 0 5px; /* 調整分頁連結之間的間距 */
+}
+
+.pagination {
+    margin-top: 20px;
+    padding-left: 0;
+    list-style: none;
+    text-align: center;
+}
+
+.pagination strong,
+.pagination a {
+    color: #007bff;
+    text-decoration: none;
+    padding: 8px 12px;
+    border: 1px solid #007bff;
+    border-radius: 5px;
+}
+
+.pagination strong:hover,
+.pagination a:hover {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.pagination strong,
+.pagination a {
+    margin-right: 5px;
+}
+
+.pagination .active a {
+    background-color: #007bff;
+    color: #fff;
+    pointer-events: none;
+    cursor: default;
+}
+
+.pagination .disabled a {
+    color: #6c757d;
+    background-color: #fff;
+    border-color: #6c757d;
+    pointer-events: none;
+    cursor: default;
+}
 </style>
 </head>
 <body>
 	<%@ include file="indexcomment.jsp" %>
 
 		<div class="container">
-	    <c:forEach items="${post}" var="comment">
-	        <div class="item" data-comment-id=${comment.commentid}>
-	            <i class="avatar"></i>
-	            <div class="info">
-	                <p class="name">${comment.member.name}</p>
-	                <p>
-	                    <c:forEach begin="1" end="${comment.buyerrate}">
-	                        <img src="commentPicture/output.png" alt="star" width="20" height="20">
-	                    </c:forEach>
-	                </p>
-	                <c:if test="${not empty comment.commenttime}">
-	                    <fmt:formatDate value="${comment.commenttime}" pattern="yyyy-MM-dd HH:mm" var="formattedCommentTime" />
-	                    <p class="time">${formattedCommentTime}</p>
-	                </c:if>
-	                <c:choose>
-	                    <c:when test="${not empty comment.productphoto}">
-	                         <a href="${pageContext.request.contextPath}/${comment.productphoto}" data-lightbox="product-images-${comment.commentid}">
-	                        <img class="product-photo" src="${pageContext.request.contextPath}/${comment.productphoto}" alt="產品圖片">
-	                        </a>
-	                    </c:when>
-	                    <c:otherwise>
-	                        <div class="no-image"></div>
-	                    </c:otherwise>
-	                </c:choose>
-	                <p class="text">${comment.commentcontent}</p>
-	                <div class="dropdown">
-	                    <button class="dropbtn">&#8942;</button>
-	                    <div class="dropdown-content">
-	                        <a href="#" onclick="showEditForm(${comment.commentid}, '${comment.commentcontent}');" >編輯</a>
-	                        <a href="#" onclick="deleteComment(${comment.commentid}); return false;">刪除</a>
-	                    </div>
-	                </div>
-	                <div id="editForm${comment.commentid}" style="display: none;" class="edit-window">
+    <c:forEach items="${comments}" var="comment">
+        <div class="item" data-comment-id="${comment.commentid}">
+            <i class="avatar"></i>
+            <div class="info">
+                <p class="name">${comment.member.name}</p>
+                <p>
+                    <c:forEach begin="1" end="${comment.buyerrate}">
+                        <img src="commentPicture/output.png" alt="star" width="20" height="20">
+                    </c:forEach>
+                </p>
+                <c:if test="${not empty comment.commenttime}">
+                    <fmt:formatDate value="${comment.commenttime}" pattern="yyyy-MM-dd HH:mm" var="formattedCommentTime" />
+                    <p class="time">${formattedCommentTime}</p>
+                </c:if>
+                <c:choose>
+                    <c:when test="${not empty comment.productphoto}">
+                        <a href="${pageContext.request.contextPath}/${comment.productphoto}" data-lightbox="product-images-${comment.commentid}">
+                            <img class="product-photo" src="${pageContext.request.contextPath}/${comment.productphoto}" alt="產品圖片">
+                        </a>
+                    </c:when>
+                    <c:otherwise>
+                        <div class="no-image"></div>
+                    </c:otherwise>
+                </c:choose>
+                <p class="text">${comment.commentcontent}</p>
+                <div class="dropdown">
+                    <button class="dropbtn">&#8942;</button>
+                    <div class="dropdown-content">
+                        <a href="#" onclick="showEditForm(${comment.commentid}, '${comment.commentcontent}');" >編輯</a>
+                        <a href="#" onclick="deleteComment(${comment.commentid}); return false;">刪除</a>
+                    </div>
+                </div>
+                <div id="editForm${comment.commentid}" style="display: none;" class="edit-window">
                     <!-- 編輯表單 -->
                     <span class="close-btn" onclick="closeEditWindow(${comment.commentid})">×</span>
                     <form id="commentForm${comment.commentid}" action="post/${comment.commentid}" method="post">
@@ -212,10 +258,26 @@ body {
                         <button type="button" onclick="updateComment(${comment.commentid});">提交</button>
                     </form>
                 </div>
-	            </div>
-	        </div>
-	    </c:forEach>
-	</div>
+            </div>
+        </div>
+    </c:forEach>
+</div>
+
+<c:if test="${totalPages > 1}">
+    <div class="pagination">
+        <c:forEach begin="0" end="${totalPages - 1}" var="pageNumber">
+            <c:url value="?page=${pageNumber}" var="pageUrl"/>
+            <c:if test="${pageNumber == currentPage}">
+                <strong>${pageNumber + 1}</strong>
+            </c:if>
+            <c:if test="${pageNumber != currentPage}">
+                <a href="${pageUrl}">${pageNumber + 1}</a>
+            </c:if>
+            <!-- 添加分页链接之间的间隔 -->
+            <span class="page-separator">&nbsp;</span>
+        </c:forEach>
+    </div>
+</c:if>
 		
 	
 	<script>

@@ -9,5 +9,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.member.model.MemberBean;
 
 public interface PostRepository extends JpaRepository<Post, Integer> {
-	List<Post> findByMemberOrderByCommenttimeDescReplaytimeDesc(MemberBean member);
+	Page<Post> findByMemberOrderByCommenttimeDesc(MemberBean member, Pageable pageable);
 }

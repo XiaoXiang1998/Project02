@@ -61,8 +61,8 @@ public class PostService {
 		return pRepository.findAll();
 	}
 
-	public List<Post> findByMemberOrderByCommenttimeDesc(MemberBean member) {
-        return pRepository.findByMemberOrderByCommenttimeDescReplaytimeDesc(member);
+	public Page<Post> findByMemberOrderByCommenttimeDesc(MemberBean member,Pageable pageable) {
+        return pRepository.findByMemberOrderByCommenttimeDesc(member, pageable);
     }
 	
 	

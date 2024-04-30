@@ -13,6 +13,7 @@ import org.hibernate.sql.Insert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -29,6 +30,7 @@ import com.member.model.MemberBean;
 import com.comment.model.PostMemberService;
 import com.comment.model.Post;
 import com.comment.model.PostService;
+import org.springframework.data.domain.Pageable;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -80,12 +82,15 @@ public class PostController {
 	}
 	
 	@GetMapping("/userComments")
-    public String getUserComments(Model model, HttpSession session) {
+    public String getUserComments(Model model, HttpSession session,@RequestParam(defaultValue = "0") int page) {
 		MemberBean member = (MemberBean) session.getAttribute("member");
+	    Pageable pageable = PageRequest.of(page, 5); 
+
+        Page<Post> userComments = pService.findByMemberOrderByCommenttimeDesc(member, pageable);
         
-       List<Post> userComments = pService.findByMemberOrderByCommenttimeDesc(member);
-        
-        model.addAttribute("post", userComments);
+        model.addAttribute("comments", userComments.getContent()); // 当前页的评论列表
+        model.addAttribute("currentPage", page); // 当前页码
+        model.addAttribute("totalPages", userComments.getTotalPages()); // 总页数
         
         return "comment/userComment"; 
     }
@@ -224,15 +229,15 @@ public class PostController {
 	        return "redirect:allUsersComments";
 	    }
 	 
-		@GetMapping("/sellerComments")
-	    public String getsellerComments(Model model, HttpSession session) {
-			MemberBean member = (MemberBean) session.getAttribute("member");
-	        
-	       List<Post> userComments = pService.findByMemberOrderByCommenttimeDesc(member);
-	        
-	        model.addAttribute("post", userComments);
-	        
-	        return "comment/sellerReplay"; 
-	    }
+//		@GetMapping("/sellerComments")
+//	    public String getsellerComments(Model model, HttpSession session) {
+//			MemberBean member = (MemberBean) session.getAttribute("member");
+//	        
+//	       List<Post> userComments = pService.f(member);
+//	        
+//	        model.addAttribute("post", userComments);
+//	        
+//	        return "comment/sellerReplay"; 
+//	    }
 	
 }

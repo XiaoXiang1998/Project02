@@ -127,27 +127,23 @@ public class PostController {
 	 public String viewAllUsersComments(Model model) {
 	     List<MemberBean> allMembersWithPosts = mService.getAllMembersWithPosts();
 	     
-	     // 统计不同评分条件下的数据数量
 	     int fiveStarsCount = 0;
 	     int fourStarsCount = 0;
 	     int threeStarsCount = 0;
 	     int twoStarsCount = 0;
 	     int oneStarCount = 0;
-	     int totalPosts = 0; // 添加总数统计
+	     int totalPosts = 0; 
 	     int commentedPostsCount = 0;
-	     int postsWithImagesCount = 0; // 统计帖子中包含图片的数量
+	     int postsWithImagesCount = 0; 
 
 	     for (MemberBean member : allMembersWithPosts) {
 	         for (Post post : member.getPosts()) {
-	             // 进行空值检查
 	             Integer buyerrate = post.getBuyerrate();
 	             if (buyerrate != null) {
 	                 String commentContent = post.getCommentcontent();
 	                 if (!commentContent.isEmpty()) {
-	                     // 统计已留言的帖子数量
 	                     commentedPostsCount++;
 	                 }
-	                     // 统计各个评分条件下的数据数量
 	                     switch (buyerrate) {
 	                         case 5:
 	                             fiveStarsCount++;
@@ -168,28 +164,24 @@ public class PostController {
 	                             break;
 	                     }
 	                     
-	                  // 检查帖子中是否包含图片
 	                     if (post.getProductphoto() != null && !post.getProductphoto().isEmpty()) {
 	                         postsWithImagesCount++;
 	                     }
 	                 
-	                 // 增加总数统计
 	                 totalPosts++;
 	             }
 	         }
 	     }
 
-	     // 将统计结果传递到前端页面
 	     model.addAttribute("allMembers", allMembersWithPosts);
 	     model.addAttribute("fiveStarsCount", fiveStarsCount);
 	     model.addAttribute("fourStarsCount", fourStarsCount);
 	     model.addAttribute("threeStarsCount", threeStarsCount);
 	     model.addAttribute("twoStarsCount", twoStarsCount);
 	     model.addAttribute("oneStarCount", oneStarCount);
-	     model.addAttribute("totalPosts", totalPosts); // 添加总数传递
+	     model.addAttribute("totalPosts", totalPosts); 
 	     model.addAttribute("commentedPostsCount", commentedPostsCount);
-	     model.addAttribute("postsWithImagesCount", postsWithImagesCount); // 添加帖子中包含图片的数量传递
-
+	     model.addAttribute("postsWithImagesCount", postsWithImagesCount);
 	     return "comment/allUsersComments";
 	 }
 	     
@@ -220,10 +212,10 @@ public class PostController {
 	       
 	        
 
-	        // 更新会员信息
+	        // 更新會員信息
 	        MemberBean memberBean = mService.findById(memberId).orElse(null);
 	        if (memberBean != null) {
-	            // 更新评论次数和累积分数
+	            // 更新被評論分數和累積次數
 	            member.setReviewCount(member.getReviewCount() + 1);
 	            member.setCumulativeScore(member.getTotalSalesAmount() + sellerRate);
 	            mService.insertMember(member);

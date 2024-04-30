@@ -16,73 +16,77 @@ import com.member.model.MemberBean;
 import jakarta.servlet.http.HttpSession;
 import jakarta.websocket.EndpointConfig;
 import jakarta.websocket.OnClose;
+import jakarta.websocket.OnError;
 import jakarta.websocket.OnMessage;
 import jakarta.websocket.OnOpen;
 import jakarta.websocket.Session;
+import jakarta.websocket.server.PathParam;
 import jakarta.websocket.server.ServerEndpoint;
 
 
 @Component
-@ServerEndpoint(value = "/chat",configurator = GetHttpSessionConfig.class)
+@ServerEndpoint("/websocket/{username}")
 public class MyWebSocket {
 		
-	@Autowired
-	private ResultService rService;
-	
-	private static final Map<MemberBean,Session> onLineUsers=new ConcurrentHashMap<>();
-	
-	private HttpSession httpSession;
-  
-	
-	@OnOpen
-	public void onOpen(Session session,EndpointConfig config) throws IOException {
-		this.httpSession = (HttpSession) config.getUserProperties().get(HttpSession.class.getName());
-		MemberBean member = (MemberBean) httpSession.getAttribute("member");
-		//1.將session進行保存
-		onLineUsers.put(member, session);
-		
-	}
-	
-	
-	
-	
-	@OnClose
-	public void onClose(Session session) {
-		
-		// 从在线用户列表中移除该会话
-	    onLineUsers.values().removeIf(s -> s.equals(session));
-		
-		
-		
-	}
-	
-	@OnMessage
-	public void onMessage(String message, Session session) throws IOException {
-	    if (session.isOpen()) {
-	    	MemberBean sender = null;
-	        // 遍历在线用户列表，找到发送消息的用户
-	        for (Entry<MemberBean, Session> entry : onLineUsers.entrySet()) {
-	            if (entry.getValue().equals(session)) {
-	                sender = entry.getKey();
-	                break;
-	            }
-	        }
-	        
-	        if (sender != null) {
-	            // 处理消息
-	            Result result = new Result();
-	            result.setMessage(message);
-//	            result.setMemberResult(sender);
+	 /**
+     * 连接建立时触发
+     */
+    @OnOpen
+    public void onOpen(@PathParam("username") String username, Session session) {
+        String message= "用户[" + username + "]已进入聊天室！";
+ 
+        //将该用户登录的消息发送给其他人
+        ChatUtils.sendMessageAll(message);
+ 
+        //将自己的信息添加到map集合中
+        ChatUtils.CLIENTS.put(username,session);
+ 
+        //获取当前的在线人数，发给自己查看
+        String onlineInfo=ChatUtils.getOnlineInfo();
+        ChatUtils.sendMessage(session,onlineInfo);
+    }
+ 
+    /**
+     * 客户端接收服务端发来的数据时触发
+     */
+    @OnMessage
+    public void onMessage(@PathParam("username") String username,String message) {
+        //广播，把消息同步给其他客户端
+        ChatUtils.sendMessageAll("[" + username + "]: " + message);
+    }
+ 
+    /**
+     * 连接关闭时触发
+     */
+    @OnClose
+    public void onClose(@PathParam("username") String username,Session session) {
+        //从当前的map集合中移除该用户
+        ChatUtils.CLIENTS.remove(username);
+ 
+        //将该用户离线的消息通知给其他人
+        ChatUtils.sendMessageAll("[" + username + "]已离线！");
+ 
+        try {
+            //关闭WebSocket下的该Seesion会话
+            session.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+ 
+    /**
+     * 聊天通信发生错误时触发
+     */
+    @OnError
+    public void onError(Session session,Throwable throwable) {
+        try {
+            //关闭WebSocket下的该Seesion会话
+            session.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
-	            // 将 Result 对象保存到数据库中
-	            rService.insert(result);
-	        }
-	    } else {
-	        System.err.println("WebSocket connection is not open.");
-	    }
-	}
-	
-	
-	
+
 	
 }

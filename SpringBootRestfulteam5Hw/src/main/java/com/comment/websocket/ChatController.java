@@ -24,13 +24,17 @@ public class ChatController {
     public String chat(Model model) {
         MemberBean member = (MemberBean) httpSession.getAttribute("member");
 
-        if (member != null && member.isSeller()) {
-            model.addAttribute("username", "seller" + atomicInteger.getAndIncrement());
-            return "comment/sellercomment";
+        if (member != null) {
+            String username = member.getName(); 
+            model.addAttribute("username", username);
+            if (member.isSeller()) {
+                return "comment/sellercomment"; 
+            } else {
+                return "comment/indexcomment";
+            }
         }
         
-        model.addAttribute("username", "user" + atomicInteger.getAndIncrement());
-        return "comment/indexcomment";
+        return "redirect:/login"; 
     }
     
 }

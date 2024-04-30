@@ -20,58 +20,48 @@ import java.util.concurrent.ConcurrentHashMap;
 
                         
 public class ChatUtils {
-	 //定义日志对象
-    private static final Logger logger= LoggerFactory.getLogger(ChatUtils.class);
- 
-    //定义map集合，确保数据共享和安全，这里使用ConcurrentHashMap
-    //用户名为key，session信息为value
-    public static final Map<String, Session> CLIENTS=new ConcurrentHashMap<>();
- 
-    /**
-     * 使用连接发送消息
-     * @param session 用户的session
-     * @param message 发送的消息内容
-     */
-    public static void sendMessage(Session session,String message) {
+    private static final Logger logger = LoggerFactory.getLogger(ChatUtils.class);
+
+    public static final Map<String, Session> CLIENTS = new ConcurrentHashMap<>();
+
+    public static void sendMessage(Session session, String message) {
         if (session == null) {
             return;
         }
- 
-        final RemoteEndpoint.Basic basic=session.getBasicRemote();
+
+        final RemoteEndpoint.Basic basic = session.getBasicRemote();
         if (basic == null) {
             return;
         }
- 
+
         try {
             basic.sendText(message);
         } catch (IOException e) {
-            e.printStackTrace();
-            logger.error("sendMessage IOException",e);
+            logger.error("Error sending message", e);
         }
     }
- 
-    /**
-     * 发送消息给所有人
-     * @param message
-     */
+
     public static void sendMessageToUser(String sender, String receiver, String message) {
         Session receiverSession = CLIENTS.get(receiver);
         if (receiverSession != null) {
             sendMessage(receiverSession, message);
         } else {
-            // 如果接收者不在線上，可以添加相應的處理邏輯，例如發送提示消息給發送者
-            logger.warn("User " + receiver + " is not online.");
+            sendMessageToSender(sender, "User " + receiver + " is not online.");
         }
-    }
-    /**
-     * 获取所有的在线用户
-     */
-    public static String getOnlineInfo() {
-        Set<String> userNames=CLIENTS.keySet();
-        if (userNames.size() == 0) {
-            return "当前无人在线......";
-        }
-        return userNames.toString() + "在线";
     }
 
+    public static void sendMessageToSender(String sender, String message) {
+        Session senderSession = CLIENTS.get(sender);
+        if (senderSession != null) {
+            sendMessage(senderSession, message);
+        }
+    }
+
+    public static String getOnlineInfo() {
+        Set<String> userNames = CLIENTS.keySet();
+        if (userNames.size() == 0) {
+            return "No users online.";
+        }
+        return "Online users: " + userNames.toString();
+    }
 }

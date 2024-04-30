@@ -53,7 +53,8 @@ public class OrdersService {
 		obj.setTotalAmount("50");
 		obj.setTradeDesc("test Description");
 		obj.setItemName("TestItem");
-		obj.setReturnURL("<http://localhost:8081/goindex.controller>");
+		obj.setReturnURL("http://localhost:8081/goindex.controller");
+		obj.setClientBackURL("http://localhost:8081/goindex.controller");
 		obj.setNeedExtraPaidInfo("N");
 		String form = all.aioCheckOut(obj, null);
 

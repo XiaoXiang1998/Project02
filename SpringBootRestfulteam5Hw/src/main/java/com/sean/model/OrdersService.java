@@ -41,7 +41,7 @@ public class OrdersService {
 	public void updateOrderById(String name , String address , String tel , Integer orderStatus , Integer orderId) {
 		oRops.updateOrderById(name, address, tel, orderStatus, orderId);
 	}
-	public String ecpayCheckout() {
+	public String ecpayCheckout(String totalAmount,String merchantTradeDate, String itemName) {
 
 		String uuId = UUID.randomUUID().toString().replaceAll("-", "").substring(0, 20);
 
@@ -49,10 +49,10 @@ public class OrdersService {
 
 		AioCheckOutALL obj = new AioCheckOutALL();
 		obj.setMerchantTradeNo(uuId);
-		obj.setMerchantTradeDate("2017/01/01 08:05:23");
-		obj.setTotalAmount("50");
+		obj.setMerchantTradeDate(merchantTradeDate);
+		obj.setTotalAmount(totalAmount);
 		obj.setTradeDesc("test Description");
-		obj.setItemName("TestItem");
+		obj.setItemName(itemName);
 		obj.setReturnURL("http://localhost:8081/goindex.controller");
 		obj.setClientBackURL("http://localhost:8081/goindex.controller");
 		obj.setNeedExtraPaidInfo("N");

@@ -1,5 +1,6 @@
 package com.sean.controller;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -137,13 +138,14 @@ public class OrderController {
 		m.addAttribute("page","shopcar");
 		return "Order/jsp/Payment";
 	}
-	@PostMapping("/ecpayCheckout")
-	@ResponseBody
-	public String ecpayCheckout() {
-		String aioCheckOutALLForm = oService.ecpayCheckout();
-		return aioCheckOutALLForm;
-	}
+//	@PostMapping("/ecpayCheckout")
+//	@ResponseBody
+//	public String ecpayCheckout() {
+//		String aioCheckOutALLForm = oService.ecpayCheckout();
+//		return aioCheckOutALLForm;
+//	}
 	@PostMapping("order.controller")
+	@ResponseBody
 	public String Order(@RequestParam("memberId") Integer memberId, @RequestParam("sellerId") Integer[] sellerIds,
 			@RequestParam("productId") Integer[] productIds, @RequestParam("quantity") Integer[] quantities,
 			@RequestParam("name") String[] names, @RequestParam("address") String[] addresses,
@@ -193,8 +195,14 @@ public class OrderController {
 			oService.insertToOrder(order);
 		}
 			cService.clearShopCarByMemberId(memberId);
-
-		return "redirect:/goindex.controller";
+			Optional<GoodFormat> products = gService.findById(productIds[0]);
+			GoodFormat product = products.get();
+			String goodsName = product.getGood().getGoodsName();
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+			String StringDate = sdf.format(currentDate);
+			String StringTotalAmount = String.valueOf(AlltotalPrice);
+			String aioCheckOutALLForm = oService.ecpayCheckout(StringTotalAmount,StringDate,goodsName);
+			return aioCheckOutALLForm;
 	}
 	
 	@GetMapping("queryOrder.controller")

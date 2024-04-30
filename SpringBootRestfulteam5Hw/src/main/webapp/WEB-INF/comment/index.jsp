@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+    <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+    
 <!DOCTYPE html>
 <html>
 <head>
@@ -11,19 +13,20 @@
 
 </head>
 <body style="margin: 45px">
-    <h4>${member.name}在線聊天室</h4>
-    <div class="form-group">
-        <label for="content"></label>
-        <textarea id="content" readonly="readonly" cols="80" rows="15"></textarea>
-    </div>
-    <div class="form-group" style="margin-top: 8px">
-        <textarea id="message" cols="80" rows="5" placeholder="请输入消息"></textarea>
-        <div style="margin-top: 10px">
-            <button id="toSend" class="btn btn-info">發送</button>
-            <button id="toExit" class="btn btn-danger">離線</button>
-            <input id="username" value="${member.name}" style="display: none">
-        </div>
-    </div>
+  <h4>${member.name}在線聊天室</h4>
+<div class="form-group">
+    <label for="content">聊天内容：</label>
+    <textarea id="content" readonly="readonly" class="form-control" rows="15"></textarea>
+</div>
+<div class="form-group">
+    <label for="message">输入消息：</label>
+    <textarea id="message" class="form-control" rows="5" placeholder="请输入消息"></textarea>
+</div>
+<div class="form-group" style="margin-top: 10px">
+    <button id="toSend" class="btn btn-info">发送</button>
+    <button id="toExit" class="btn btn-danger">离线</button>
+    <input id="username" value="${member.name}" style="display: none">
+</div>
  
     <script>
     $(function () {

@@ -38,7 +38,7 @@
         </div>
     </nav>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-    	<%@ include file="index.jsp"%>
+    	<c:import url="index.jsp" />
     
 </body>
 </html>

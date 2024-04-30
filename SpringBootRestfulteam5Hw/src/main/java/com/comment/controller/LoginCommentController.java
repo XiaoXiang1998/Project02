@@ -12,6 +12,7 @@ import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.comment.model.PostMemberService;
+import com.member.model.MemberBean;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -20,32 +21,28 @@ public class LoginCommentController {
 	 @Autowired
 	    private PostMemberService memberService;
 
-	    @GetMapping("/login")
-	    public String showLoginForm() {
-	        return "comment/logintest";
-	    }
+//	    @GetMapping("/login")
+//	    public String showLoginForm() {
+//	        return "comment/logintest";
+//	    }
 	    
 	  
 	    
 	    
-//	    @PostMapping("/login")
+//    @PostMapping("/login")
 //	    public String processLoginForm(@RequestParam("username") String username,
 //	                                   @RequestParam("pwd") String password,
 //	                                   Model model,
 //	                                   RedirectAttributes redirectAttributes,
 //	                                   HttpSession session) {
-//	        Optional<Member> optionalMember = memberService.findByAccountAndPassword(username, password);
+//	        Optional<MemberBean> optionalMember = memberService.findByAccountAndPassword(username, password);
 //	        if (optionalMember.isPresent()) {
 //	            // 登入成功
-//	            Member loggedInMember = optionalMember.get();
-//	            session.setAttribute("loggedInMember", loggedInMember);
-//	            model.addAttribute("loggedInMember", loggedInMember); 
-//	            if (loggedInMember.getSeller()) {
-//	                return "comment/sellercomment";
-//	            } else {
-//	                return "comment/indexcomment";
-//	            }
-//	        } else {
+//	            MemberBean loggedInMember = optionalMember.get();
+//            session.setAttribute("member", loggedInMember);
+//          model.addAttribute("member", loggedInMember); 
+//	            return "/comment/index";
+//        } else {
 //	            // 登入失敗
 //	            redirectAttributes.addFlashAttribute("error", "帳號或密碼錯誤");
 //	            return "redirect:/login";

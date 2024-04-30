@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.good.controller.GoodFormatService;
 import com.good.controller.GoodService;
@@ -55,6 +56,13 @@ public class OrderController {
 	public String GoIndex(Model m) {
 		m.addAttribute("page","index");
 		return "Order/jsp/Index";
+	}
+	
+	@PostMapping("/ecpayCheckout")
+	public String ecpayCheckout() {
+		String aioCheckOutALLForm = oService.ecpayCheckout();
+
+		return aioCheckOutALLForm;
 	}
 	
 	@GetMapping("goquery.controller")

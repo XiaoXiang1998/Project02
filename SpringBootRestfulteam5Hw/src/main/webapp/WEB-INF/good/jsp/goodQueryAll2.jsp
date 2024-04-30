@@ -757,6 +757,10 @@
 
         <body>
             <button id="InsertGoodData">新增</button>
+            <form action="InsertGood.controller" method="post">
+                <button id="InsertGoodPPage">進入新增頁面</button>
+            </form>
+            
             <div id="productListTitle">Product Query All</div>
             <table id="showproduct" class="table table-bordered" style="width:100%"></table>
             <!-- <table id="showpage">
@@ -776,7 +780,11 @@
             integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
             crossorigin="anonymous"></script>
         <script>
-
+            let insertPage = document.getElementById("InsertGoodPPage");
+            insertPage.onclick = function(){
+                // location.href = "http://localhost:8081/InsertGood.controller";
+                location.href = "/InsertGood.controller";
+            }
             let insert = document.getElementById("InsertGoodData");
             // let mod = document.getElementById("Modify3");
             insert.onclick = function () {

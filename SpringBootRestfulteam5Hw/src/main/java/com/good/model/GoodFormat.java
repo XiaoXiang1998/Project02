@@ -101,6 +101,12 @@ public class GoodFormat {
 	public void setGoodImagePath(String goodImagePath) {
 		this.goodImagePath = goodImagePath;
 	}
+	public int getGoodsStock() {
+		return goodsStock;
+	}
+	public void setGoodsStock(int goodsStock) {
+		this.goodsStock = goodsStock;
+	}
 	
 	
 	

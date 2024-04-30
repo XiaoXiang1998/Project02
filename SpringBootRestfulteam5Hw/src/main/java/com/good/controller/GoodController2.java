@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.good.model.GoodFormat;
 import com.good.model.GoodImageBean;
 import com.good.model.GoodsBean2;
 import com.member.model.MemberBean;
@@ -50,6 +51,8 @@ public class GoodController2 {
 	private HttpSession session;
 	@Autowired
 	private MemberService mService;
+	@Autowired
+	private GoodFormatService gfService;
 //在跳脫視窗(商品圖片表)點擊新增圖片
 
 	@PostMapping("/goodImageinsert.controller")
@@ -497,4 +500,8 @@ public class GoodController2 {
 //		return "redirect:/good/goodqueryallpage.controller";
 		return "good/jsp/goodQueryAll2";
 	}
+	
+	
+	
+	
 }

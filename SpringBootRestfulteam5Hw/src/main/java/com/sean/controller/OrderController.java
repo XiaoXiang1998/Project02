@@ -58,12 +58,7 @@ public class OrderController {
 		return "Order/jsp/Index";
 	}
 	
-	@PostMapping("/ecpayCheckout")
-	public String ecpayCheckout() {
-		String aioCheckOutALLForm = oService.ecpayCheckout();
-
-		return aioCheckOutALLForm;
-	}
+	
 	
 	@GetMapping("goquery.controller")
 	public String GoQuery(Model m) {
@@ -142,7 +137,12 @@ public class OrderController {
 		m.addAttribute("page","shopcar");
 		return "Order/jsp/Payment";
 	}
-
+	@PostMapping("/ecpayCheckout")
+	@ResponseBody
+	public String ecpayCheckout() {
+		String aioCheckOutALLForm = oService.ecpayCheckout();
+		return aioCheckOutALLForm;
+	}
 	@PostMapping("order.controller")
 	public String Order(@RequestParam("memberId") Integer memberId, @RequestParam("sellerId") Integer[] sellerIds,
 			@RequestParam("productId") Integer[] productIds, @RequestParam("quantity") Integer[] quantities,

@@ -93,7 +93,10 @@
             <button type="submit" class="btn btn-primary m-3" id="placeOrderButton">下訂單</button>
         </div>
     </div>
-</form>		
+</form>
+	<form method="post" action="ecpayCheckout">
+		<button type="submit">付款</button>
+	</form>
 	<script>
 	function calculateShippingFee(selectElement) {
 	    let itemRow = selectElement.closest('tr');

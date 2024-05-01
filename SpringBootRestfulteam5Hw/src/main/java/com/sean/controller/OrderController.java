@@ -188,7 +188,11 @@ public class OrderController {
 			order.setOriginalPrice(oringinalPrices[i]);
 			order.setTotalPrice(totalPrices[i]+shippingFees[i]);
 			order.setPaymentId(pBean);
-			order.setPayStatus(statusValue);
+			if(paymentMethod == 1) {
+				order.setPayStatus((short)1);				
+			}else {
+				order.setPayStatus(statusValue);
+			}
 			order.setOrderStatus((short) 0);
 			order.setCreatedAt(currentDate);
 			order.setModifiedAt(currentDate);

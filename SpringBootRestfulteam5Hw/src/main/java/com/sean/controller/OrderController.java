@@ -1,5 +1,6 @@
 package com.sean.controller;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.good.controller.GoodFormatService;
 import com.good.controller.GoodService;
@@ -57,6 +59,8 @@ public class OrderController {
 		return "Order/jsp/Index";
 	}
 	
+	
+	
 	@GetMapping("goquery.controller")
 	public String GoQuery(Model m) {
 		m.addAttribute("page","query");
@@ -79,7 +83,7 @@ public class OrderController {
 
 	@GetMapping("product.controller")
 	public String Product(Model m) {
-		List<GoodsBean2> products = gdService.getAll();
+		List<GoodFormat> products = gService.getAll();
 		m.addAttribute("products", products);
 		m.addAttribute("page","product");
 		return "Order/jsp/Product";
@@ -134,8 +138,14 @@ public class OrderController {
 		m.addAttribute("page","shopcar");
 		return "Order/jsp/Payment";
 	}
-
+//	@PostMapping("/ecpayCheckout")
+//	@ResponseBody
+//	public String ecpayCheckout() {
+//		String aioCheckOutALLForm = oService.ecpayCheckout();
+//		return aioCheckOutALLForm;
+//	}
 	@PostMapping("order.controller")
+	@ResponseBody
 	public String Order(@RequestParam("memberId") Integer memberId, @RequestParam("sellerId") Integer[] sellerIds,
 			@RequestParam("productId") Integer[] productIds, @RequestParam("quantity") Integer[] quantities,
 			@RequestParam("name") String[] names, @RequestParam("address") String[] addresses,
@@ -185,8 +195,14 @@ public class OrderController {
 			oService.insertToOrder(order);
 		}
 			cService.clearShopCarByMemberId(memberId);
-
-		return "redirect:/goindex.controller";
+			Optional<GoodFormat> products = gService.findById(productIds[0]);
+			GoodFormat product = products.get();
+			String goodsName = product.getGood().getGoodsName();
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+			String StringDate = sdf.format(currentDate);
+			String StringTotalAmount = String.valueOf(AlltotalPrice);
+			String aioCheckOutALLForm = oService.ecpayCheckout(StringTotalAmount,StringDate,goodsName);
+			return aioCheckOutALLForm;
 	}
 	
 	@GetMapping("queryOrder.controller")

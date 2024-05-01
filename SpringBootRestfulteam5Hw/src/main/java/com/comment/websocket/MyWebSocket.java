@@ -2,87 +2,76 @@ package com.comment.websocket;
 
 import java.io.IOException;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.concurrent.ConcurrentHashMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.comment.model.Member;
-import com.comment.model.Result;
-import com.comment.model.ResultService;
-import com.config.GetHttpSessionConfig;
+import com.config.MyEndpointConfigurator;
+import com.member.model.MemberBean;
 
 import jakarta.servlet.http.HttpSession;
 import jakarta.websocket.EndpointConfig;
 import jakarta.websocket.OnClose;
+import jakarta.websocket.OnError;
 import jakarta.websocket.OnMessage;
 import jakarta.websocket.OnOpen;
 import jakarta.websocket.Session;
+import jakarta.websocket.server.PathParam;
 import jakarta.websocket.server.ServerEndpoint;
 
 
 @Component
-@ServerEndpoint(value = "/chat",configurator = GetHttpSessionConfig.class)
+@ServerEndpoint(value = "/websocket/{username}", configurator = MyEndpointConfigurator.class)
 public class MyWebSocket {
-		
-	@Autowired
-	private ResultService rService;
-	
-	private static final Map<Member,Session> onLineUsers=new ConcurrentHashMap<>();
-	
-	private HttpSession httpSession;
-  
-	
-	@OnOpen
-	public void onOpen(Session session,EndpointConfig config) throws IOException {
-		this.httpSession = (HttpSession) config.getUserProperties().get(HttpSession.class.getName());
-	    Member loggedInMember = (Member) httpSession.getAttribute("loggedInMember");
-		//1.將session進行保存
-		onLineUsers.put(loggedInMember, session);
-		
-	}
-	
-	
-	
-	
-	@OnClose
-	public void onClose(Session session) {
-		
-		// 从在线用户列表中移除该会话
-	    onLineUsers.values().removeIf(s -> s.equals(session));
-		
-		
-		
-	}
-	
-	@OnMessage
-	public void onMessage(String message, Session session) throws IOException {
-	    if (session.isOpen()) {
-	        Member sender = null;
-	        // 遍历在线用户列表，找到发送消息的用户
-	        for (Entry<Member, Session> entry : onLineUsers.entrySet()) {
-	            if (entry.getValue().equals(session)) {
-	                sender = entry.getKey();
-	                break;
-	            }
-	        }
-	        
-	        if (sender != null) {
-	            // 处理消息
-	            Result result = new Result();
-	            result.setMessage(message);
-	            result.setMemberResult(sender);
 
-	            // 将 Result 对象保存到数据库中
-	            rService.insert(result);
-	        }
-	    } else {
-	        System.err.println("WebSocket connection is not open.");
-	    }
-	}
-	
-	
-	
+    @Autowired
+    private HttpSession httpSession;
+	 /**
+     * 连接建立时触发
+     */
+    @OnOpen
+    public void onOpen(@PathParam("username") String username, Session session, EndpointConfig config) {
+        Map<String, Object> userProperties = config.getUserProperties();
+        HttpSession httpSession = (HttpSession) userProperties.get(HttpSession.class.getName());
+        
+        // 在这里使用 HttpSession
+        MemberBean member = (MemberBean) httpSession.getAttribute("member");
+        if (member != null) {
+            String roleName = member.isSeller() ? "seller" : "buyer";
+            String message = "Welcome to the chat room! You can start chatting now.";
+            ChatUtils.sendMessage(session, message);
+            ChatUtils.CLIENTS.put(roleName + "-" + username, session);
+        }
+    }
+
+    @OnMessage
+    public void onMessage(@PathParam("username") String sender, String message) {
+        String[] parts = message.split(":");
+        String receiver = parts[0];
+        String content = parts[1];
+        ChatUtils.sendMessageToUser(sender, receiver, content);
+    }
+
+    @OnClose
+    public void onClose(@PathParam("username") String username, Session session) {
+        // 在这里使用 HttpSession
+        HttpSession httpSession = (HttpSession) session.getUserProperties().get(HttpSession.class.getName());
+        MemberBean member = (MemberBean) httpSession.getAttribute("member");
+        
+        if (member != null) {
+            String roleName = member.isSeller() ? "seller" : "buyer";
+            ChatUtils.CLIENTS.remove(roleName + "-" + username);
+        }
+    }
+
+    @OnError
+    public void onError(Session session, Throwable throwable) {
+        try {
+            session.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 	
 }

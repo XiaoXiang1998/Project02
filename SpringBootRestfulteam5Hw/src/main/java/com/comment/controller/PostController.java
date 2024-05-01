@@ -13,6 +13,7 @@ import org.hibernate.sql.Insert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -25,11 +26,11 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-
-import com.comment.model.Member;
+import com.member.model.MemberBean;
 import com.comment.model.PostMemberService;
 import com.comment.model.Post;
 import com.comment.model.PostService;
+import org.springframework.data.domain.Pageable;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -44,7 +45,7 @@ public class PostController {
 	@PostMapping("/post")
 	public String postAction(@RequestParam(value = "commentContent", required = false) String commentContent,@RequestParam("productimage")  MultipartFile mf,@RequestParam("rate") int rate,
             HttpSession session) throws IllegalStateException, IOException {
-		Member loggedInMember = (Member) session.getAttribute("loggedInMember");
+		MemberBean member = (MemberBean) session.getAttribute("member");
 		
 		Post post =new Post();
 		
@@ -74,19 +75,22 @@ public class PostController {
 		post.setBuyerrate(rate);
 		post.setCommenttime(currentTimestamp);
 		post.setLastmodifiedtime(currentTimestamp);
-		post.setMember(loggedInMember);
+		post.setMember(member);
 		pService.insert(post);
 		
 		return "redirect:indexcomment";
 	}
 	
 	@GetMapping("/userComments")
-    public String getUserComments(Model model, HttpSession session) {
-        Member loggedInMember = (Member) session.getAttribute("loggedInMember");
+    public String getUserComments(Model model, HttpSession session,@RequestParam(defaultValue = "0") int page) {
+		MemberBean member = (MemberBean) session.getAttribute("member");
+	    Pageable pageable = PageRequest.of(page, 5); 
+
+        Page<Post> userComments = pService.findByMemberOrderByCommenttimeDesc(member, pageable);
         
-       List<Post> userComments = pService.findByMemberOrderByCommenttimeDesc(loggedInMember);
-        
-        model.addAttribute("post", userComments);
+        model.addAttribute("comments", userComments.getContent()); // 当前页的评论列表
+        model.addAttribute("currentPage", page); // 当前页码
+        model.addAttribute("totalPages", userComments.getTotalPages()); // 总页数
         
         return "comment/userComment"; 
     }
@@ -126,29 +130,25 @@ public class PostController {
 	 
 	 @GetMapping("/allUsersComments")
 	 public String viewAllUsersComments(Model model) {
-	     List<Member> allMembersWithPosts = mService.getAllMembersWithPosts();
+	     List<MemberBean> allMembersWithPosts = mService.getAllMembersWithPosts();
 	     
-	     // 统计不同评分条件下的数据数量
 	     int fiveStarsCount = 0;
 	     int fourStarsCount = 0;
 	     int threeStarsCount = 0;
 	     int twoStarsCount = 0;
 	     int oneStarCount = 0;
-	     int totalPosts = 0; // 添加总数统计
+	     int totalPosts = 0; 
 	     int commentedPostsCount = 0;
-	     int postsWithImagesCount = 0; // 统计帖子中包含图片的数量
+	     int postsWithImagesCount = 0; 
 
-	     for (Member member : allMembersWithPosts) {
+	     for (MemberBean member : allMembersWithPosts) {
 	         for (Post post : member.getPosts()) {
-	             // 进行空值检查
 	             Integer buyerrate = post.getBuyerrate();
 	             if (buyerrate != null) {
 	                 String commentContent = post.getCommentcontent();
 	                 if (!commentContent.isEmpty()) {
-	                     // 统计已留言的帖子数量
 	                     commentedPostsCount++;
 	                 }
-	                     // 统计各个评分条件下的数据数量
 	                     switch (buyerrate) {
 	                         case 5:
 	                             fiveStarsCount++;
@@ -169,28 +169,24 @@ public class PostController {
 	                             break;
 	                     }
 	                     
-	                  // 检查帖子中是否包含图片
 	                     if (post.getProductphoto() != null && !post.getProductphoto().isEmpty()) {
 	                         postsWithImagesCount++;
 	                     }
 	                 
-	                 // 增加总数统计
 	                 totalPosts++;
 	             }
 	         }
 	     }
 
-	     // 将统计结果传递到前端页面
 	     model.addAttribute("allMembers", allMembersWithPosts);
 	     model.addAttribute("fiveStarsCount", fiveStarsCount);
 	     model.addAttribute("fourStarsCount", fourStarsCount);
 	     model.addAttribute("threeStarsCount", threeStarsCount);
 	     model.addAttribute("twoStarsCount", twoStarsCount);
 	     model.addAttribute("oneStarCount", oneStarCount);
-	     model.addAttribute("totalPosts", totalPosts); // 添加总数传递
+	     model.addAttribute("totalPosts", totalPosts); 
 	     model.addAttribute("commentedPostsCount", commentedPostsCount);
-	     model.addAttribute("postsWithImagesCount", postsWithImagesCount); // 添加帖子中包含图片的数量传递
-
+	     model.addAttribute("postsWithImagesCount", postsWithImagesCount);
 	     return "comment/allUsersComments";
 	 }
 	     
@@ -201,7 +197,7 @@ public class PostController {
 	                              @RequestParam("rate") Integer sellerRate,
 	                              @RequestParam("commentId") Integer commentId, 
 	                              HttpSession session) {
-			Member loggedInMember = (Member) session.getAttribute("loggedInMember");
+			MemberBean member = (MemberBean) session.getAttribute("member");
 
 	        // 保存回复内容
 	        Post reply = new Post();
@@ -212,7 +208,7 @@ public class PostController {
 			String formattedDateTime = sdf.format(currentTimestamp);
 	        reply.setReplaytime(currentTimestamp);
 	        reply.setSellerrate(sellerRate);
-	        reply.setMember(loggedInMember);
+	        reply.setMember(member);
 	        
 	        
 	        reply.setRepliedcommentid(commentId);
@@ -221,10 +217,10 @@ public class PostController {
 	       
 	        
 
-	        // 更新会员信息
-	        Member member = mService.findById(memberId).orElse(null);
-	        if (member != null) {
-	            // 更新评论次数和累积分数
+	        // 更新會員信息
+	        MemberBean memberBean = mService.findById(memberId).orElse(null);
+	        if (memberBean != null) {
+	            // 更新被評論分數和累積次數
 	            member.setReviewCount(member.getReviewCount() + 1);
 	            member.setCumulativeScore(member.getTotalSalesAmount() + sellerRate);
 	            mService.insertMember(member);
@@ -233,15 +229,15 @@ public class PostController {
 	        return "redirect:allUsersComments";
 	    }
 	 
-		@GetMapping("/sellerComments")
-	    public String getsellerComments(Model model, HttpSession session) {
-	        Member loggedInMember = (Member) session.getAttribute("loggedInMember");
-	        
-	       List<Post> userComments = pService.findByMemberOrderByCommenttimeDesc(loggedInMember);
-	        
-	        model.addAttribute("post", userComments);
-	        
-	        return "comment/sellerReplay"; 
-	    }
+//		@GetMapping("/sellerComments")
+//	    public String getsellerComments(Model model, HttpSession session) {
+//			MemberBean member = (MemberBean) session.getAttribute("member");
+//	        
+//	       List<Post> userComments = pService.f(member);
+//	        
+//	        model.addAttribute("post", userComments);
+//	        
+//	        return "comment/sellerReplay"; 
+//	    }
 	
 }

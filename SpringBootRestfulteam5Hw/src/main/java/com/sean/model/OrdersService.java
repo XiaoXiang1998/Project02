@@ -2,10 +2,13 @@ package com.sean.model;
 
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import ecpay.payment.integration.AllInOne;
+import ecpay.payment.integration.domain.AioCheckOutALL;
 import jakarta.transaction.Transactional;
 
 @Service
@@ -38,5 +41,23 @@ public class OrdersService {
 	public void updateOrderById(String name , String address , String tel , Integer orderStatus , Integer orderId) {
 		oRops.updateOrderById(name, address, tel, orderStatus, orderId);
 	}
+	public String ecpayCheckout(String totalAmount,String merchantTradeDate, String itemName) {
 
+		String uuId = UUID.randomUUID().toString().replaceAll("-", "").substring(0, 20);
+
+		AllInOne all = new AllInOne("");
+
+		AioCheckOutALL obj = new AioCheckOutALL();
+		obj.setMerchantTradeNo(uuId);
+		obj.setMerchantTradeDate(merchantTradeDate);
+		obj.setTotalAmount(totalAmount);
+		obj.setTradeDesc("test Description");
+		obj.setItemName(itemName);
+		obj.setReturnURL("http://localhost:8081/goindex.controller");
+		obj.setClientBackURL("http://localhost:8081/goindex.controller");
+		obj.setNeedExtraPaidInfo("N");
+		String form = all.aioCheckOut(obj, null);
+
+		return form;
+	}
 }

@@ -31,6 +31,7 @@
                     <th>運費</th>
                     <th>支付金額</th>
                     <th>訂單狀態</th>
+                    <th>付款狀態</th>
                     <th>創建時間</th>
                     <th>操作</th>
                     <th>操作</th>
@@ -46,12 +47,13 @@
                         <td>${order.name}</td>
                         <td>${order.address}</td>
                         <td>${order.tel}</td>
-                        <td>${order.formatgoodId.goodsName}</td>
+                        <td>${order.formatgoodId.good.goodsName}</td>
                         <td>${order.originalPrice}</td>
                         <td>${order.quantity}</td>
                         <td>${order.shippingFee}</td>
                         <td>${order.totalPrice}</td>
                         <td>${order.orderStatus == 0 ? '已成立' : order.orderStatus == 1 ? '已出貨' : order.orderStatus == 2 ? '已完成' : ''}</td>
+                        <td>${order.payStatus == 0 ? '未付款' : '已付款'}</td>
                         <td><fmt:formatDate value="${order.createdAt}" pattern="yyyy-MM-dd HH:mm:ss" /></td>
                         <c:set var="queryType" value="${param.queryType}" />
                         <td>

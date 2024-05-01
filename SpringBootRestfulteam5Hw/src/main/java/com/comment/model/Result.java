@@ -2,6 +2,8 @@ package com.comment.model;
 
 import org.springframework.stereotype.Component;
 
+import com.member.model.MemberBean;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -21,9 +23,9 @@ public class Result {
 	
 	private String message;
 	
-	@ManyToOne
-	@JoinColumn(name="fk_userid")
-	private Member memberResult;
+//	@ManyToOne
+//	@JoinColumn(name="fk_userid")
+//	private MemberBean memberResult;
 
 	public Integer getRid() {
 		return rid;
@@ -49,13 +51,7 @@ public class Result {
 		this.message = message;
 	}
 
-	public Member getMemberResult() {
-		return memberResult;
-	}
-
-	public void setMemberResult(Member memberResult) {
-		this.memberResult = memberResult;
-	}
+	
 	
 	
 	

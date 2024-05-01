@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import com.member.model.MemberBean;
 
 import jakarta.transaction.Transactional;
 
@@ -60,8 +61,8 @@ public class PostService {
 		return pRepository.findAll();
 	}
 
-	public List<Post> findByMemberOrderByCommenttimeDesc(Member member) {
-        return pRepository.findByMemberOrderByCommenttimeDescReplaytimeDesc(member);
+	public Page<Post> findByMemberOrderByCommenttimeDesc(MemberBean member,Pageable pageable) {
+        return pRepository.findByMemberOrderByCommenttimeDesc(member, pageable);
     }
 	
 	

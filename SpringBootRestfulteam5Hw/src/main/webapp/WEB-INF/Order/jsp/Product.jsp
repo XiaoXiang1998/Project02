@@ -31,12 +31,12 @@
             <tbody>
                 <c:forEach items="${products}" var="product">
                     <tr>
-                        <td>${product}</td>
-                        <td>${product.goodsSellerID.name}</td>
-                        <td>${product.goodsName}</td>
-                        <td>${product}</td>
+                        <td>${product.formatID}</td>
+                        <td>${product.good.goodsSellerID.name}</td>
+                        <td>${product.good.goodsName}</td>
+                        <td>${product.goodPrice}</td>
                         <td>
-                            <button class="btn btn-primary" onclick="confirmAddToCart(${product.goodsId}, '${product.goodsName}',${product.goodsPrice})">增加到購物車</button>
+                            <button class="btn btn-primary" onclick="confirmAddToCart(${product.formatID}, '${product.good.goodsName}',${product.goodPrice})">增加到購物車</button>
                         </td>
                     </tr>
                 </c:forEach>

@@ -43,8 +43,8 @@
 							<tbody>
 								<c:forEach items="${carItems}" var="item">
 									<tr>
-										<td>${item.good.goodsName}</td>
-										<td>${item.price}</td>
+										<td>${item.good.good.goodsName}</td>
+										<td>${item.good.goodPrice}</td>
 										<td class="quantity-adjust">
 											<form id="updateForm_${item.carItemId}" action="updateQuantity.controller" method="post">
 												<input type="hidden" name="_method" value="PUT">
@@ -56,7 +56,7 @@
 												</div>
 											</form>
 										</td>
-										<td>${item.quantity * item.price}</td>
+										<td>${item.quantity * item.good.goodPrice}</td>
 										<td>
 											<button type="button" class="btn btn-danger delete" data-id="${item.carItemId}">删除</button>
 										</td>
@@ -66,7 +66,7 @@
 						</table>
 						<c:set var="totalPrice" value="0" />
 						<c:forEach items="${carItems}" var="item">
-							<c:set var="subtotal" value="${item.quantity * item.price}" />
+							<c:set var="subtotal" value="${item.quantity * item.good.goodPrice}" />
 							<c:set var="totalPrice" value="${totalPrice + subtotal}" />
 						</c:forEach>
 						<div class="cart-summary mt-3 text-center">

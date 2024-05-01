@@ -30,9 +30,24 @@
               <a class="nav-link ${page eq 'admin' ? 'active' : ''}" href="goui.controller">管理系統</a>
             </li>
           </ul>
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <span class="nav-link">${member.name}</span>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="ezbuy.com" id="log">登出</a>
+            </li>
+          </ul>
         </div>
       </div>
     </nav>
+    <script>
+    let errorMessage = document.querySelector('span.nav-link');
+    let log = document.querySelector('#log');
+    if (errorMessage.innerHTML.trim() === "") {
+      log.innerHTML = "登入";
+    }
+    </script>
   </body>
 
   </html>

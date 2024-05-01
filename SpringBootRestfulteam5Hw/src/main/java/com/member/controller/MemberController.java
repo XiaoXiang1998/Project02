@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.member.model.MemberBean;
 import com.member.model.MemberService;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
 @Controller
@@ -180,14 +181,16 @@ public class MemberController {
 	@PostMapping("/MemberLogin.controller")
 	public String LoginReponse(@RequestParam("username") String account, @RequestParam("password") String userPwd) {
 		if (mService.checkLogin(account, userPwd)) {
-			System.out.println("登入成功");
+		System.out.println("登入成功");
 			System.out.println(mService.selectByAccountBean(account));
-			httpSession.setAttribute("member",mService.selectByAccountBean(account));
+		httpSession.setAttribute("member",mService.selectByAccountBean(account));
 			System.out.println("session設定成功");
 			return "ControlUI";
 		}
 		return null;
 	}
+	
+	
 
 	@GetMapping("/returnToControlUI")
 	public String returnToControlUI() {

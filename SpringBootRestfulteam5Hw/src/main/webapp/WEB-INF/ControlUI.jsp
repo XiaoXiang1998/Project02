@@ -1,7 +1,16 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8" import="com.member.model.MemberBean"  %>
     <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+
     
+    <%
+    HttpSession httpSession = request.getSession(false);
+    MemberBean member = (MemberBean) httpSession.getAttribute("member");
+    boolean isSeller = false;
+    if (member != null) {
+        isSeller = member.isSeller();
+    }
+	%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -74,7 +83,7 @@
             <a href="goodqueryallpage.controller"><i class="fa fa-solid fa-cart-shopping"></i>商品管理</a>
             
             <a href="goindex.controller"><i class="fa fa-solid fa-clipboard"></i>訂單管理</a>
-			<a href="#" onclick="handleCommentManagement()"><i class="fa fa-regular fa-comments"></i>評論管理</a>
+			<a href="#" onclick="handleCommentManagement(event)"><i class="fa fa-regular fa-comments"></i>評論管理</a>
             <a href="#"><i class="fa fa-solid fa-chart-line"></i>活動管理</a>
             <a href="Crudindex"><i class="fa fa-solid fa-user-xmark"></i>申訴管理</a>
             <a href="logOut"><i class="fa fa-solid fa-right-from-bracket"></i>登出</a>
@@ -82,11 +91,13 @@
     </div>
     
     <script>
-    var isSeller = <%= session.getAttribute("member") != null && ((MemberBean)session.getAttribute("member")).isSeller() %>;
-    
-    function handleCommentManagement() {
+    var isSeller = <%= isSeller %>;
+
+    function handleCommentManagement(event) {
+        event.preventDefault(); 
+    	
         if (isSeller) {
-            window.location.href = "sellerComments";
+            window.location.href = "sellercomment";
         } else {
             window.location.href = "indexcomment";
         }

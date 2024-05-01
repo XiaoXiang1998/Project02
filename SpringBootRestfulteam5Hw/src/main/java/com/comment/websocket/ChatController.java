@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.member.model.MemberBean;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
 @Controller
@@ -17,21 +18,17 @@ public class ChatController {
 	@Autowired
     private HttpSession httpSession;
 	
-	 //声明原子变量类，确保服务端和客户端之间操作的原子性和可见性
     private AtomicInteger atomicInteger=new AtomicInteger();
  
     @RequestMapping("/chat")
-    public String chat(Model model) {
+    public String chat(Model model, HttpServletRequest request) {
+        HttpSession httpSession = request.getSession();
         MemberBean member = (MemberBean) httpSession.getAttribute("member");
 
         if (member != null) {
             String username = member.getName(); 
             model.addAttribute("username", username);
-            if (member.isSeller()) {
-                return "comment/sellercomment"; 
-            } else {
-                return "comment/indexcomment";
-            }
+            return "comment/index"; 
         }
         
         return "redirect:/login"; 

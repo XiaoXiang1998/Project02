@@ -6,7 +6,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.config.MyEndpointConfigurator;
+import com.config.Configurator;
 import com.member.model.MemberBean;
 
 import jakarta.servlet.http.HttpSession;
@@ -21,7 +21,7 @@ import jakarta.websocket.server.ServerEndpoint;
 
 
 @Component
-@ServerEndpoint(value = "/websocket/{username}", configurator = MyEndpointConfigurator.class)
+@ServerEndpoint(value = "/websocket/{username}", configurator = Configurator.class)
 public class MyWebSocket {
 
     @Autowired
@@ -29,33 +29,42 @@ public class MyWebSocket {
 	 /**
      * 连接建立时触发
      */
+    /**
+     * 连接建立时触发
+     */
     @OnOpen
     public void onOpen(@PathParam("username") String username, Session session, EndpointConfig config) {
         Map<String, Object> userProperties = config.getUserProperties();
         HttpSession httpSession = (HttpSession) userProperties.get(HttpSession.class.getName());
         
-        // 在这里使用 HttpSession
         MemberBean member = (MemberBean) httpSession.getAttribute("member");
         if (member != null) {
-            String roleName = member.isSeller() ? "seller" : "buyer";
             String message = "Welcome to the chat room! You can start chatting now.";
             ChatUtils.sendMessage(session, message);
-            ChatUtils.CLIENTS.put(roleName + "-" + username, session);
+            ChatUtils.CLIENTS.put(username, session);
         }
     }
 
     @OnMessage
-    public void onMessage(@PathParam("username") String sender, String message) {
-        String[] parts = message.split(":");
-        String receiver = parts[0];
-        String content = parts[1];
-        ChatUtils.sendMessageToUser(sender, receiver, content);
+    public void onMessage(String message, Session session) {
+        String sender = (String) session.getUserProperties().get("username"); // 获取当前登录用户作为发送者
+        String[] parts = message.split(":", 2); // 分割接收者和消息内容
+        if (parts.length == 2) { // 检查消息格式是否正确
+            String receiver = parts[0];  // 接收者
+            String content = parts[1];  // 消息内容
+            
+            ChatUtils.sendMessageToUser(sender, receiver, content); // 传递发送者、接收者和消息内容
+        } else {
+            // 处理消息格式错误的情况
+            String errorMessage = "Invalid message format: " + message;
+            ChatUtils.sendMessageToSender("System", errorMessage);
+        }
     }
 
     @OnClose
     public void onClose(@PathParam("username") String username, Session session) {
-        // 在这里使用 HttpSession
-        HttpSession httpSession = (HttpSession) session.getUserProperties().get(HttpSession.class.getName());
+        Map<String, Object> userProperties = session.getUserProperties();
+        HttpSession httpSession = (HttpSession) userProperties.get(HttpSession.class.getName());
         MemberBean member = (MemberBean) httpSession.getAttribute("member");
         
         if (member != null) {

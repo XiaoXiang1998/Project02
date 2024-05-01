@@ -34,13 +34,15 @@
         <li class="nav-item">
           <a class="nav-link" href="#">歡迎 ${member.name}</a> <!-- 在這裡顯示使用者名稱 -->
         </li>
+         <li class="nav-item">
+          <a class="nav-link" href="chat">聊聊</a>
+        </li>
       </ul>
     </div>
   </div>
 </nav>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
-	<c:import url="index.jsp" />
 	
 </body>
 </html>

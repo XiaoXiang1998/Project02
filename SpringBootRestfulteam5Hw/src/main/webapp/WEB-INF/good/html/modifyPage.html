@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <style>
+        #container {
+            width: 1000px;
+            margin: 20px auto;
+        }
+
+        .ck-editor__editable[role="textbox"] {
+            /* Editing area */
+            min-height: 200px;
+        }
+
+        .ck-content .image {
+            /* Block images */
+            max-width: 80%;
+            margin: 20px auto;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="GoodsID">${goodID}</div> <!-- 裡面放的是商品編號 -->
+    <form id="GoodData" action="InsertPage.controller" method="post">
+        <fieldset class="border p-2 mb-3">
+            <legend class="float-none w-auto">商品圖片</legend>
+            <div class="form-group" id="GoodPhoto">
+                <button type="button" class="btn btn-primary" id="insertPhoto">新增圖片</button>
+                <div id="photoData">
+                </div>
+                <div id="photoPreviewList">
+                </div>
+            </div>
+        </fieldset>
+        <fieldset class="border p-2 mb-3">
+            <legend class="float-none w-auto">商品基本資訊</legend>
+            <div class="form-group" id="GoodBasic">
+            </div>
+        </fieldset>
+        <fieldset class="border p-2">
+            <legend class="float-none w-auto">商品規格表</legend>
+            <div class="form-group" id="GoodFormat">
+                <button type="button" class="btn btn-primary mb-3" id="insertFormatImage">新增規格圖片</button>
+                <!-- <input type="file">放在這邊 -->
+                <div class="row row-col-2" id="tranferToFormatTable">
+                    <!-- 裡面放圖片 -->
+                </div>
+                <table class="table table-bordered mt-3" id="FormatTable">
+                    <thead>
+                        <th>規格圖片</th>
+                        <th>商品大小</th>
+                        <th>商品價格</th>
+                        <th>商品庫存數</th>
+                        <th>刪除規格</th>
+                        <th>新增規格</th>
+                        <th>隱藏資料</th>
+                    </thead>
+                    <tbody id="formatdata">
+
+                    </tbody>
+                </table>
+            </div>
+        </fieldset>
+
+        <button type="button" class="btn btn-primary" id="outputGoodData">Submit</button>
+    </form>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.ckeditor.com/ckeditor5/41.3.1/super-build/ckeditor.js"></script>
+    <script>
+        let GoodID = $('#GoodsID').html().trim();
+        $.ajax({
+            type: "get",
+            url: "/goodImage/" + GoodID,//透過商品編號取得所有圖片
+            contentType: 'application/json',
+            success: function (data) {
+                $.each(data, function (i, n) {//將所有input標籤塞入
+                    let nameField = "GoodImages" + i;
+                    let content = `<input type="file" name="` + nameField + `" class="NO">`;//input標籤置入
+                    let previewContent = `<img src="` + n.imagePath + `" alt="` + n.imagePath + `" data-index="` + i + `">`;//img標籤置入
+                    $('#photoData').append(content);
+                    $('#photoPreviewList').append(previewContent);
+                })
+            }
+        })
+        $.ajax({
+            type: "get",
+            url: "/good/" + GoodID,//透過商品編號取得商品基本資訊
+            contentType: 'application/json',
+            success: function (data) {
+
+                let content = `<div class="form-floating mb-3">
+                                    <input type="text" name="GoodsName" class="NO" id="GoodsName" value="`+ data.goodsName + `">
+                                    <label for="GoodsName">商品名稱</label>
+                                </div>
+                                <div class="form-floating mb-3">
+                                    <input type="text" name="GoodsType" class="NO" id="GoodsType value="`+ data.goodsType + `">
+                                    <label for="GoodsType">商品種類</label>
+                                </div>
+                                <div class="form-floating mb-3">
+                                    <input type="date" name="LaunchDate" class="NO" id="LaunchDate value="`+ data.launchDate + `">
+                                    <label for="LaunchDate">上架日期</label>
+                                </div>
+                                <div class="form-floating mb-3">
+                                    <input type="text" name="Brand" class="NO" id="Brand value="`+ data.brand + `">
+                                    <label for="Brand">品牌</label>
+                                </div>
+                                <div class="form-floating mb-3">
+                                    <input type="text" name="ShipmentPlace" class="NO" id="ShipmentPlace value="`+ data.shipmentPlace + `">
+                                    <label for="ShipmentPlace">出貨地</label>
+                                </div>
+                                <div class="form-floating mb-3">`+
+                    `<img src="` + data.titleImage + `" alt="` + data.titleImage + `" data-name="titleImagetarget">` +
+                    `<input type="file" name="TitleImage" class="NO" id="TitleImage value="">` +
+                    `<label for="TitleImage">商品封面</label>
+                                </div>
+                                <div id="container" class="form-floating mb-3">
+                                    <div id="editor">`+
+                    data.goodsDirection +
+                    `</div>
+                                </div>
+                                    <input type="text" name="GoodDirection" class="NO" id="GoodDirection" value="" hidden>`;
+
+                $('#GoodBasic').append(content);
+            }
+        })
+        $.ajax({
+            type: "get",
+            url: "/goodformat/" + GoodID,//透過商品編號取得商品規格表
+            contentType: 'application/json',
+            success: function (data) {
+                //處理規格表資訊
+                var check = "";
+                var index = 1; record = {};
+                var NumFormat = 0;
+                var boundLengthData = data.length;
+                $.each(data, function (i, n) {
+                    if (check != n.goodImagePath) {//處理規格表內的資料
+                        if (i == 1) {//第一筆資料需要做BC處理
+                            let content = `<tr>
+                                                <td rowspan="1"><img src="`+ n.goodImagePath + `" alt="` + n.goodImagePath + `" data-index="` + index + ` data-name="` + n.goodImagePath + `">
+                                                <td><input type="text" name="GoodSize" value="`+ n.goodSize + `" class="NO"></td>
+                                                <td><input type="text" name="GoodPrice" value="`+ n.goodPrice + `" class="NO"></td>
+                                                <td><input type="text" name="GoodsStock" value="`+ n.goodsStock + `" class="NO"></td>
+                                                <td><button type="button" class="btn btn-primary deleteformatbtn">刪除</button></td>
+                                                <td rowspan="1"><button type="button" class="btn btn-primary insertformatbtn">新增</button></td>
+                                                <td><input type="text" name="hiddenValue" value="" class="NO"></td>
+                                            </tr>`;
+                            NumFormat++;
+                            check = n.goodImagePath;
+                            record[index - 1] = { imageName: check, Num: "" };
+                            $('#formatdata').append(content);
+
+                            let inputcontent = `<div class="col-6"><input type="file" name="GoodFormatImages` + index + `" class="NO InsertPhotoData"></div>`;
+                            $('#tranferToFormatTable').append(inputcontent);
+                        }
+                        else {//當圖片從aaa.jpg變成bbb.jpg時 紀錄該圖片有幾筆規格
+                            index++;//當圖片更改時 圖片索引值+1
+                            let content = `<tr>`
+                                `<td rowspan="1"><img src="` + n.goodImagePath + `" alt="` + n.goodImagePath + `" data-index="` + index + `">` +
+                                `<td><input type="text" name="GoodSize" value="` + n.goodSize + `" class="NO"></td>` +
+                                `<td><input type="text" name="GoodPrice" value="` + n.goodPrice + `" class="NO"></td>` +
+                                `<td><input type="text" name="GoodsStock" value="` + n.goodsStock + `" class="NO"></td>` +
+                                `<td><button type="button" class="btn btn-primary deleteformatbtn">刪除</button></td>` +
+                                `<td rowspan="1"><button type="button" class="btn btn-primary insertformatbtn">新增</button></td>` +
+                                `<td><input type="text" name="hiddenValue" value="" class="NO"></td>` +
+                                `</tr>`;
+                            $('#formatdata').append(content);
+                            record[index - 2] = { imageName: check, Num: NumFormat };//紀錄aaa.jpg對應的規格數量
+                            NumFormat = 1;//bbb.jpg至少有一張圖片
+                            check = n.goodImagePath;
+                            //input標籤插入 $('#tranferToFormatTable')
+                            let inputcontent = `<div class="col-6"><input type="file" name="GoodFormatImages` + index + `" class="NO InsertPhotoData"></div>`;
+                            $('#tranferToFormatTable').append(inputcontent);
+                        }
+                    }
+                    else {//當得到的圖片和上一張一樣時
+                        let content = `<tr>`
+                            // `<td><img src="` + n.goodImagePath + `" alt="` + n.goodImagePath + `" data-index="` + index + `">` +
+                            `<td><input type="text" name="GoodSize" value="` + n.goodSize + `" class="NO"></td>` +
+                            `<td><input type="text" name="GoodPrice" value="` + n.goodPrice + `" class="NO"></td>` +
+                            `<td><input type="text" name="GoodsStock" value="` + n.goodsStock + `" class="NO"></td>` +
+                            `<td><button type="button" class="btn btn-primary deleteformatbtn">刪除</button></td>` +
+                            // `<td><button type="button" class="btn btn-primary insertformatbtn">新增</button></td>` +
+                            `<td><input type="text" name="hiddenValue" value="" class="NO"></td>` +
+                            `</tr>`;
+                        $('#formatdata').append(content);
+                        if (i == boundLengthData - 1) {//當i = boundLengthData-1;代表取完所有資料 假若ddd.jpg是最後一張圖片 記錄下其對應的規格數量
+                            record[index - 1] = { imageName: check, Num: NumFormat };//紀錄ddd.jpg對應的規格數量
+                        }
+                        else {//數量+1
+                            NumFormat++;
+                        }
+                    }
+                })
+                //找到img標籤以上的td標籤
+                let targetimg = $(document).find('img[data-name]');
+                let arrtargetimg = [...targetimg];
+                arrtargetimg.forEach(function (elem, index) {//elem是img標籤
+                    for (item in record) {
+                        let check = elem.getAttribute("data-name");
+                        if (record[item].imageName == check) {
+                            let targetTd = elem.closest('td');
+                            targetTd.setAttribute("rowspan", record[item].Num);
+                            break;
+                        }
+                    }
+                })
+            }
+        })
+        //新增 規格表圖片增加的事件
+        $(document).on('change', '.InsertPhotoData', function () {
+            //取得上傳檔案的檔案名稱
+            //將檔案名稱移入隱藏input標籤中
+            let UploadRootFileName = $(this).prop("value");//取得絕對路徑
+            let ps = UploadRootFileName.lastIndexOf('\\');
+            let filename = UploadRootFileName.substring(ps + 1, UploadRootFileName.length);
+            console.log(filename);
+            //
+            let fieldName = $(this).prop("name");//取得input標籤的name屬性
+            let index = $(this).prop("name").substring(16);//ex:GoodFormatImages1 取得 1
+            let formattr = $('#formatdata').children();//$('#formatdata')指的是tbody標籤 formattr裡面都是tr標籤
+            let count = 0;
+            let arrformattr = [...formattr];
+            var i = 0;
+            //
+            let check = -1;
+            console.log(index);
+            console.log(arrformattr);
+            while (check != index) {//去尋找img標籤的自訂義index屬性 找到與index變數相同的img標籤
+                // console.log(arrformattr[i].children[0].children[0]);
+                check = arrformattr[i].children[0].children[0].getAttribute("data-index");
+                // console.log(arrformattr[i].children[0].children[0].getAttribute("data-index"));
+                i++;
+            }
+            i--;
+            console.log(i);
+            //取得對應的資料列
+            let connectdata = arrformattr[i];
+            console.log(connectdata);
+            let preview = connectdata.children[0].children[0]//取得img標籤
+            //取得隱藏的input標籤 並且將檔案名稱丟入input標籤中(假若隱藏欄的數量在2以上)
+            i++; let boundLength = arrformattr.length;
+            console.log(boundLength);
+            connectdata.children[6].children[0].setAttribute("value", filename);
+            if (boundLength == i) {//上船圖片的欄位只有一個
+            }
+            else {//如果上傳圖片時隱藏欄位不只一個
+                while (arrformattr[i].children.length != 7 && (i <= boundLength)) {
+                    console.log(arrformattr[i].children[4].children[0]);
+                    arrformattr[i].children[4].children[0].setAttribute("value", filename);
+                    // arrformattr[i].children[4].children[0].setAttribute("value", filename);
+                    i++;
+                    if (i == boundLength) {
+                        break;
+                    }
+                }
+            }
+            // let preview = $(this).closest('td').prev().children(0);//預覽圖片欄位
+            console.log(preview);
+            const reader = new FileReader();
+            let file = $(this).prop("files");//取得input[type="file"]的files屬性
+            console.log(file);
+            if (file) {
+                reader.readAsDataURL(file[0]);
+            }
+            reader.addEventListener('load', function () {
+                preview.setAttribute('src', reader.result);
+            })
+        })
+
+
+        //處理input[class="NO"]
+        //有圖片需要預覽的案例()
+        //處理商品圖片表的案例
+        $(document).on('change', 'input[class="NO"][type="file"][name^="GoodImages"]', function () {
+            $(this).removeClass("NO");
+            $(this).addClass("form-control");
+            //尋找對應的img標籤
+            let propName = $(this).prop("name");//得到 GoodImages1 
+            let indexVal = propName.substring(10);//取得索引值
+            let preview = $('#photoPreviewList').find('img[data-index="' + indexVal + '"]');//找到相對應的img標籤
+            // connectdata.children[6].children[0].setAttribute("value", filename);
+            // let preview = $(this).closest('td').prev().children(0);//預覽圖片欄位
+            console.log(preview);
+            //預覽圖片
+            const reader = new FileReader();
+            let file = $(this).prop("files");//取得input[type="file"]的files屬性
+            console.log(file);
+            if (file) {
+                reader.readAsDataURL(file[0]);
+            }
+            reader.addEventListener('load', function () {
+                preview.setAttribute('src', reader.result);
+            })
+        })
+        //處理商品基本資訊表的封面照案例
+        $(document).on('change', 'input[id="TitleImage"]', function () {
+            $(this).removeClass("NO");
+            $(this).addClass("form-control");
+            //尋找對應的img標籤(在input標籤的旁邊)
+            let preview = $(this).prev();
+            console.log(preview);
+            //預覽圖片
+            const reader = new FileReader();
+            let file = $(this).prop("files");//取得input[type="file"]的files屬性
+            console.log(file);
+            if (file) {
+                reader.readAsDataURL(file[0]);
+            }
+            reader.addEventListener('load', function () {
+                preview.setAttribute('src', reader.result);
+            })
+        })
+        //處理商品規格表圖片的案例
+
+        $(document).on('change', '.InsertPhotoData', function () {
+            //取得上傳檔案的檔案名稱
+            //將檔案名稱移入隱藏input標籤中
+            let UploadRootFileName = $(this).prop("value");//取得絕對路徑
+            let ps = UploadRootFileName.lastIndexOf('\\');
+            let filename = UploadRootFileName.substring(ps + 1, UploadRootFileName.length);
+            console.log(filename);
+            //
+            let fieldName = $(this).prop("name");//取得input標籤的name屬性
+            let index = $(this).prop("name").substring(16);//ex:GoodFormatImages1 取得 1
+            let formattr = $('#formatdata').children();//$('#formatdata')指的是tbody標籤 formattr裡面都是tr標籤
+            let count = 0;
+            let arrformattr = [...formattr];
+            var i = 0;
+            //
+            let check = -1;
+            console.log(index);
+            console.log(arrformattr);
+            while (check != index) {//去尋找img標籤的自訂義index屬性 找到與index變數相同的img標籤
+                // console.log(arrformattr[i].children[0].children[0]);
+                check = arrformattr[i].children[0].children[0].getAttribute("data-index");
+                // console.log(arrformattr[i].children[0].children[0].getAttribute("data-index"));
+                i++;
+            }
+            i--;
+            console.log(i);
+            //取得對應的資料列
+            let connectdata = arrformattr[i];
+            console.log(connectdata);
+            let preview = connectdata.children[0].children[0]//取得img標籤
+            //取得隱藏的input標籤 並且將檔案名稱丟入input標籤中(假若隱藏欄的數量在2以上)
+            i++; let boundLength = arrformattr.length;
+            console.log(boundLength);
+            connectdata.children[6].children[0].setAttribute("value", filename);
+            if (boundLength == i) {//上船圖片的欄位只有一個
+            }
+            else {//如果上傳圖片時隱藏欄位不只一個
+                while (arrformattr[i].children.length != 7 && (i <= boundLength)) {
+                    console.log(arrformattr[i].children[4].children[0]);
+                    arrformattr[i].children[4].children[0].setAttribute("value", filename);
+                    // arrformattr[i].children[4].children[0].setAttribute("value", filename);
+                    i++;
+                    if (i == boundLength) {
+                        break;
+                    }
+                }
+            }
+            // let preview = $(this).closest('td').prev().children(0);//預覽圖片欄位
+            console.log(preview);
+            const reader = new FileReader();
+            let file = $(this).prop("files");//取得input[type="file"]的files屬性
+            console.log(file);
+            if (file) {
+                reader.readAsDataURL(file[0]);
+            }
+            reader.addEventListener('load', function () {
+                preview.setAttribute('src', reader.result);
+            })
+        })
+
+        //單純字串的案例
+        //處理(商品基本資訊+商品規格表)的純字串格式
+        $(document).on('change', 'input[class="NO"][type="text"]', function () {
+            $(this).removeClass("NO")
+            $(this).addClass("form-control");
+        })
+        //處理商品基本資訊表中的上架日期屬性
+        $(document).on('change', 'input[class="NO"][type="date"]', function () {
+            $(this).removeClass("NO")
+            $(this).addClass("form-control");
+        })
+        $(document).on('click', '#outputGoodData', function () {
+            //將input標籤中的name屬性統一
+            let target = $('#tranferToFormatTable').find('input');
+            let arrtarget = [...target];
+            arrtarget.forEach(function (elem, index) {
+                elem.setAttribute("name", "GoodFormatImages");
+            })
+            //將CKeditor的內容填入 input標籤
+            let editorData = editor.getData();
+            $('#GoodDirection').attr("value", editorData);
+            // 將隱藏欄位填入單一規格資料的(商品大小、商品價格、商品庫存、上傳圖片名稱)
+            let hiddentarget = $('.hiddenData');
+
+            [...hiddentarget].forEach(function (elem, index) {
+                let tr = elem.closest('tr');
+                if (tr.children.length == 7) {
+                    let size = tr.children[1].children; let sizedata = [...size][0].getAttribute("value"); console.log(sizedata);
+                    let price = tr.children[2].children; let pricedata = [...price][0].getAttribute("value"); console.log(pricedata);
+                    let stock = tr.children[3].children; let stockdata = [...stock][0].getAttribute("value"); console.log(stockdata);
+                    let hiddenVal = tr.children[6].children; let hiddenValdata = [...hiddenVal][0].getAttribute("value"); console.log(hiddenValdata);
+                    let keydata = sizedata + "/" + pricedata + "/" + stockdata + "/" + hiddenValdata; console.log(keydata);
+                    [...hiddenVal][0].setAttribute("value", keydata);
+                }
+                else {
+                    if (tr.children.length == 5) {
+                        let size = tr.children[0].children; let sizedata = [...size][0].getAttribute("value"); console.log(sizedata);
+                        let price = tr.children[1].children; let pricedata = [...price][0].getAttribute("value"); console.log(pricedata);
+                        let stock = tr.children[2].children; let stockdata = [...stock][0].getAttribute("value"); console.log(stockdata);
+                        let hiddenVal = tr.children[4].children; let hiddenValdata = [...hiddenVal][0].getAttribute("value"); console.log(hiddenValdata);
+                        let keydata = sizedata + "/" + pricedata + "/" + stockdata + "/" + hiddenValdata; console.log(keydata);
+                        [...hiddenVal][0].setAttribute("value", keydata);
+                    }
+                }
+            })
+            // console.log(form);
+            //用form傳即可
+            let form = document.getElementById("GoodData");
+            form.submit();
+            // let formData = new FormData(form);
+        })
+    </script>
+</body>
+
+</html>

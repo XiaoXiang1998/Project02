@@ -467,15 +467,6 @@ public class GoodController2 {
 		
 		return goods;
 	}
-	//在跳脫視窗為了顯示圖片 需要這個function
-	@GetMapping("/goodImage/{goodID}")
-	@ResponseBody
-	public Set<GoodImageBean> processGetImageByID(@PathVariable("goodID") int goodID) {// 取得對應商品ID的所有圖片路徑
-		GoodsBean2 good = gService.getById(goodID);
-		Set<GoodImageBean> images = good.getImages();
-		return images;
-	}
-
 	
 	/** 處理規格表*/
 	@PostMapping("/goodformatdelete.controller")

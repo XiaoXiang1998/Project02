@@ -270,8 +270,8 @@
                                     $.each(data, function (i, n) {
                                         content = content + `<tr><td colspan="3"><img src=\"` + n.imagePath + `\" alt=\"` + n.imagePath + `\" style="height: 250px;width: 500px;"></td></tr>`;
                                     })
-                                  
-                                    content = content + '<tr hidden><td><input type="text" name="GoodsID" form="photo" value="'+ ID +'"> </td></tr></tbody>' +
+
+                                    content = content + '<tr hidden><td><input type="text" name="GoodsID" form="photo" value="' + ID + '"> </td></tr></tbody>' +
                                         '</table>' +
                                         '</form>';
                                     Swal.fire({
@@ -293,7 +293,7 @@
                                                     return;
                                                 }
                                                 console.log('response status:' + response.status);
-                                                
+
                                                 // location.reload();
                                             })
                                         }
@@ -372,7 +372,7 @@
                                                                 <td>`+ n.goodImageID + `</td>
                                                                 <td><img src=\"`+ n.imagePath + `\" alt="Image preview"
                                                                     style="height: 100px;width: 100px;" class="photo" /></td>
-                                                                <td><input type="file" class="previewfile" name="photo`+ i +`" form="NO" /></td>
+                                                                <td><input type="file" class="previewfile" name="photo`+ i + `" form="NO" /></td>
                                                                 <td hidden><input type="text" name="ControllerData" value="" form="NO"></td>
                                                             </tr>`;
                                     })
@@ -503,12 +503,12 @@
                     let arrtd = [...td];
                     let arrVal = new Array(arrtd.length - 2);
                     for (let i = 0; i < arrtd.length - 4; i++) {//原本只有兩個功能，現在已經變成四個功能了
-                        if(i==2){
+                        if (i == 2) {
                             let imagephotoselect = arrtd[i].children;
                             let arrimagephotoselect = [...imagephotoselect];
                             arrVal[i] = arrimagephotoselect[0].getAttribute("src");
                         }
-                        else{
+                        else {
                             arrVal[i] = arrtd[i].innerHTML.trim();
                         }
                     }
@@ -644,7 +644,7 @@
                         '</tr>' +
                         '<tr>' +
                         '<td>商品封面</td>' +
-                        '<td><img src="'+ titleImage +'" alt="'+ titleImage +'"></td>' +
+                        '<td><img src="' + titleImage + '" alt="' + titleImage + '"></td>' +
                         '</tr>' +
                         '<tr>' +
                         '<td>商品說明</td>' +
@@ -760,7 +760,7 @@
             <form action="InsertGood.controller" method="post">
                 <button id="InsertGoodPPage">進入新增頁面</button>
             </form>
-            
+
             <div id="productListTitle">Product Query All</div>
             <table id="showproduct" class="table table-bordered" style="width:100%"></table>
             <!-- <table id="showpage">
@@ -781,7 +781,7 @@
             crossorigin="anonymous"></script>
         <script>
             let insertPage = document.getElementById("InsertGoodPPage");
-            insertPage.onclick = function(){
+            insertPage.onclick = function () {
                 // location.href = "http://localhost:8081/InsertGood.controller";
                 location.href = "/InsertGood.controller";
             }
@@ -884,7 +884,7 @@
                     input.setAttribute("name", Name);
                     input.setAttribute("required", true);
                     input.setAttribute("form", "field");
-                    
+
                     //
                     let item = $('#field').find(`input[type="file"]`);
                     console.log(item.length);

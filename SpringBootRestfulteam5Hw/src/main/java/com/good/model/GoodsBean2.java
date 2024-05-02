@@ -6,6 +6,7 @@ import java.util.Set;
 
 import org.springframework.stereotype.Component;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.member.model.MemberBean;
@@ -47,6 +48,7 @@ public class GoodsBean2 implements java.io.Serializable {
 	private String shipmentPlace;
 	@ManyToOne
 	@JoinColumn(name = "GOODSSELLERID")
+	@JsonBackReference
 	private MemberBean goodsSellerID;
 	//
 	@Column(name="TITLEIMAGE")

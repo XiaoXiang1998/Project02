@@ -212,5 +212,41 @@ public class GoodController {
 
 		return page.getContent();
 	}
+	//透過商品編號 查詢商品基本資訊
+	//在查詢全部的頁面中點擊其中一項商品的編輯按鈕
+	@GetMapping("goodQuery.controller")
+	public String goodMidifyPage() {
+//		public String goodMidifyPage(@RequestParam("GoodsID") Integer goodID) {
+		int goodID = 2;
+		session.setAttribute("goodID", goodID);
+		return "good/jsp/modifyPage";
+	}
+	//-> 進入該商品的編輯頁面
+	@GetMapping("/good/{goodID}")
+	@ResponseBody
+	public GoodsBean2 queryGoodById(@PathVariable("goodID") Integer goodID) {
+		GoodsBean2 good = gService.getById(goodID);
+		return good;
+	}
+	//透過商品編號查詢商品圖片表資料
+	@GetMapping("/goodImage/{goodID}")
+	@ResponseBody
+	public Set<GoodImageBean> processGetImageByID(@PathVariable("goodID") int goodID) {// 取得對應商品ID的所有圖片路徑
+		GoodsBean2 good = gService.getById(goodID);
+		Set<GoodImageBean> images = good.getImages();
+		return images;
+	}
+	//透過商品編號查詢商品規格表資料
+	@GetMapping("/goodformatHI/{goodID}")
+	@ResponseBody
+	public List<GoodFormat> queryByIdOrderByFormatImage(@PathVariable("goodID") Integer goodID) {
+		List<GoodFormat> goodFormat = gfService.getByIDOrderByFormatImage(goodID);
+		for(GoodFormat item:goodFormat) {
+			item.setGoodsID(goodID);
+			System.out.println(item.toString());
+		}
+		return goodFormat;
+	}
+
 	/////////////////////////////////////////////////////修改頁面/////////////////////////////////////////////////
 }

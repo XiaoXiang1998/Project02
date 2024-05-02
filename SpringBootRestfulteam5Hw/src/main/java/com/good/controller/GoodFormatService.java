@@ -37,5 +37,8 @@ public class GoodFormatService {
 	public List<GoodFormat> getAll() {
 		return goodformatRepos.findAll();
 	}
+	public List<GoodFormat> getByIDOrderByFormatImage(Integer goodID){
+		return goodformatRepos.getByIDOrderByFormatImage(goodID);
+	}
 	
 }

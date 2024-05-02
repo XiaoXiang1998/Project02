@@ -47,4 +47,5 @@ public class GoodService{
 		return goodRepos.findAll(pageable);
 	}
 	
+	
 }

@@ -108,6 +108,11 @@ public class GoodFormat {
 	public void setGoodsStock(Integer goodsStock) {
 		this.goodsStock = goodsStock;
 	}
+	@Override
+	public String toString() {
+		return "GoodFormat [formatID=" + formatID + ", goodsID=" + goodsID + ", goodSize=" + goodSize + ", goodPrice="
+				+ goodPrice + ", goodImagePath=" + goodImagePath + ", goodsStock=" + goodsStock + "]";
+	}
 	
 	
 	

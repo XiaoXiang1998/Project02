@@ -13,7 +13,24 @@
 <script
 	src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<style>
+.message {
+    margin-bottom: 10px; /* 设置消息之间的间距 */
+    overflow: auto; /* 自动滚动条 */
+}
 
+.right-float {
+    float: right;
+    clear: both; /* 清除浮动 */
+    text-align: right; /* 消息右对齐 */
+}
+
+.left-float {
+    float: left;
+    clear: both; /* 清除浮动 */
+    text-align: left; /* 消息左对齐 */
+}
+</style>
 </head>
 <body style="margin: 45px">
 	<div class="container">
@@ -23,8 +40,7 @@
 				<div id="chat-box" class="card mb-3">
 					<div id="chat-content" class="card-body">
 						<label for="content">聊天内容：</label>
-						<textarea id="content" readonly="readonly" class="form-control"
-							rows="15"></textarea>
+						 <div id="content" class="form-control" style="height: 200px; overflow-y: auto;"></div>
 					</div>
 				</div>
 				<div class="input-group mt-3">
@@ -56,35 +72,39 @@
 					console.log("建立 websocket 连接......");
 				};
 
-				ws.onmessage = function(event) {
-					  var message = event.data;
-					    console.log("Received message:", message); // 输出收到的消息到控制台
+					ws.onmessage = function(event) {
+					    var data = JSON.parse(event.data);
+						    console.log("Received message:", data); // 输出收到的消息到控制台
 
-					    // 直接将消息追加到 textarea 的值中
-					    var textarea = $('#content');
-					    textarea.val(textarea.val() + message + '\n');
-					
-				};
+						    var $content = $('#content');
+							
+						    if (data.sender !== undefined) {
+						        // 根据发送者确定消息的 CSS 类
+						        messageClass = data.sender === $('#username').val() ? 'right-float' : 'left-float';
+						    }
+
+						        // 使用 <div> 包装每一条消息，并添加不同的 CSS 类
+						        var messageDiv = '<div class="message ' + messageClass + '">' + data.sender + ': ' + data.content + '</div>';
+						        $content.append(messageDiv); // 将消息追加到内容区域
+						    
+						
+					};
 				
 				
 				
-				// 连接关闭时，触发事件
 				ws.onclose = function() {
 					$('#content').append('[' + username + ']已离线');
 					console.log("关闭 websocket 连接......");
 				};
 
-				// 发生错误时，触发事件
 				ws.onerror = function(event) {
 					console.log("websocket 发生错误......" + event + '\n');
 				};
 
-				// 发送按钮触发的行为，客户端发送消息到服务器
 				$('#toSend').click(function() {
 					sendMsg();
 				});
 
-				// 支持回车键发送消息
 				$(document).keyup(function(event) {
 					if (event.keyCode == 13) {
 						sendMsg();
@@ -92,31 +112,31 @@
 				});
 
 				function sendMsg() {
-				    var receiver = $('#receiver').val(); // 获取接收者名称
-				    var message = $('#message').val(); // 获取消息内容
-				    var username = $('#username').val(); // 获取消息内容
+				    var receiver = $('#receiver').val(); 
+				    var message = $('#message').val(); 
+				    var username = $('#username').val(); 
 
 				    var msgObj = {
 				    	"sender": username,
 				        "receiver": receiver,
 				        "content": message
 				    };
-				    var jsonString = JSON.stringify(msgObj); // 将消息对象转换为 JSON 字符串
-				    ws.send(jsonString); // 发送 JSON 字符串
-				    
-				 // 将发送的消息也追加到自己的聊天框中
-    			$('#content').append('<p><strong>' + username + ':</strong> ' + message + '</p>');
+				    var jsonString = JSON.stringify(msgObj); 
+				    var $content = $('#content'); 
+				    $content.append('<div class="message right-float">' + "我"+ ': ' + message + '</div>');
+
 					    
-				    $('#message').val(""); // 清空消息输入框
+				    $('#message').val(""); 
+				    
+				    ws.send(jsonString);
 				}
 
-				// 离线按钮触发的行为
 				$('#toExit').click(function() {
 					if (ws) {
 						ws.close();
 					}
 				});
-			} else { // 如果浏览器不支持 WebSocket
+			} else { 
 				alert("很抱歉，您的浏览器不支持 WebSocket！！！");
 			}
 		});

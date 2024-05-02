@@ -43,8 +43,7 @@ public class MyWebSocket {
         MemberBean member = (MemberBean) httpSession.getAttribute("member");
         if (member != null) {
             JSONObject jsonObject = new JSONObject();
-            jsonObject.put("sender", "System");
-            jsonObject.put("content", "歡迎來到ezbuy聊聊");
+            jsonObject.put("welcome", "歡迎來到ezbuy聊聊");
             String message = jsonObject.toString();
             
             ChatUtils.sendMessage(session, message);
@@ -59,7 +58,9 @@ public class MyWebSocket {
             String sender = jsonObject.getString("sender"); // 获取发送者信息
             String receiver = jsonObject.getString("receiver");
             String content = jsonObject.getString("content");
-            
+            System.out.println(sender);
+            System.out.println(receiver);
+            System.out.println(content);
             // 处理消息...
             
             // 将消息发送给接收者，并包含发送者信息

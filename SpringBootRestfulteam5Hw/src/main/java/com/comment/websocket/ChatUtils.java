@@ -1,8 +1,10 @@
 	package com.comment.websocket;
 	
 	import org.slf4j.LoggerFactory;
-	
-	import com.member.model.MemberBean;
+import org.springframework.boot.configurationprocessor.json.JSONException;
+import org.springframework.boot.configurationprocessor.json.JSONObject;
+
+import com.member.model.MemberBean;
 	
 	import org.slf4j.Logger;
 	import org.slf4j.LoggerFactory;
@@ -41,11 +43,13 @@
 	        }
 	    }
 	
-	    public static void sendMessageToUser(String receiver, String sender, String message) {
+	    public static void sendMessageToUser(String receiver, String sender, String message) throws JSONException {
 	        Session receiverSession = CLIENTS.get(receiver);
 	        if (receiverSession != null) {
-	            String fullMessage = sender + ": " + message; // 包含发送者信息的完整消息
-	            sendMessage(receiverSession, fullMessage);
+	            JSONObject jsonObject = new JSONObject();
+	            jsonObject.put("sender", sender);
+	            jsonObject.put("content", message);
+	            sendMessage(receiverSession, jsonObject.toString());
 	        } else {
 	            sendMessageToSender("System", "User " + receiver + " is not online.");
 	        }

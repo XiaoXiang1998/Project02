@@ -14,6 +14,7 @@
 	src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <style>
+
 .message {
     margin-bottom: 10px; /* 设置消息之间的间距 */
     overflow: auto; /* 自动滚动条 */
@@ -29,7 +30,48 @@
     float: left;
     clear: both; /* 清除浮动 */
     text-align: left; /* 消息左对齐 */
+} 
+.message-container {
+    width: 100%;
+    max-height: 400px;
+    overflow-y: auto;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
 }
+
+.message {
+    margin-bottom: 10px;
+    padding: 8px 12px;
+    border-radius: 10px;
+}
+
+.right-message {
+    background-color: #DCF8C6;
+    align-self: flex-end;
+}
+
+.left-message {
+    background-color: #EFEFEF;
+}
+.message-input {
+    width: calc(100% - 80px);
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.send-button {
+    width: 70px;
+    margin-left: 10px;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: #fff;
+}
+
 </style>
 </head>
 <body style="margin: 45px">
@@ -38,18 +80,18 @@
 			<div class="col-md-8 offset-md-2 col-lg-6 offset-lg-3">
 				<h4 class="text-center">${username}在線聊天室</h4>
 				<div id="chat-box" class="card mb-3">
-					<div id="chat-content" class="card-body">
+					<div id="chat-content" class="card-body message-container">
 						<label for="content">聊天内容：</label>
-						 <div id="content" class="form-control" style="height: 200px; overflow-y: auto;"></div>
+						 <div id="content" class="message-content" style="height: 300px; overflow-y: auto;"></div>
 					</div>
 				</div>
 				<div class="input-group mt-3">
 					<input type="text" id="receiver" class="form-control"
 						placeholder="輸入接收者">
-					<textarea id="message" class="form-control" rows="3"
+					<textarea id="message" class="form-control  message-input" rows="3"
 						placeholder="請輸入消息"></textarea>
 					<div class="input-group-append">
-						<button id="toSend" class="btn btn-info">發送</button>
+						<button id="toSend" class="btn btn-info  send-button">發送</button>
 						<button id="toExit" class="btn btn-danger">離開</button>
 						 <input id="username" value="${username}" style="display: none">
 					</div>
@@ -93,7 +135,7 @@
 				
 				
 				ws.onclose = function() {
-					$('#content').append('[' + username + ']已离线');
+					$('#content').append('[' + username + ']已離線');
 					console.log("关闭 websocket 连接......");
 				};
 
@@ -137,7 +179,7 @@
 					}
 				});
 			} else { 
-				alert("很抱歉，您的浏览器不支持 WebSocket！！！");
+				alert("很抱歉，您的瀏覽器不支持 WebSocket！！！");
 			}
 		});
 	</script>

@@ -35,6 +35,7 @@
 					<div class="input-group-append">
 						<button id="toSend" class="btn btn-info">發送</button>
 						<button id="toExit" class="btn btn-danger">離開</button>
+						 <input id="username" value="${username}" style="display: none">
 					</div>
 				</div>
 			</div>
@@ -47,7 +48,7 @@
 			// 如果浏览器支持 WebSocket
 			if ("WebSocket" in window) {
 				var baseUrl = 'ws://localhost:8081/websocket/';
-				var username = $('#username').val();
+                var username=$('#username').val();
 				ws = new WebSocket(baseUrl + username);
 
 				// 建立连接之后，触发事件
@@ -56,20 +57,17 @@
 				};
 
 				ws.onmessage = function(event) {
-					var message = event.data;
-					var currentUser = $('#username').val();
+					  var message = event.data;
+					    console.log("Received message:", message); // 输出收到的消息到控制台
 
-					// 直接使用消息内容作为接收到的消息
-					var content = message;
-
-					// 输出日志，用于调试
-					console.log("接收到服务端发送的消息：" + message);
-
-					// 在聊天框中显示消息内容
-					$('#content').append('<p>' + content + '</p>');
-
+					    // 直接将消息追加到 textarea 的值中
+					    var textarea = $('#content');
+					    textarea.val(textarea.val() + message + '\n');
+					
 				};
-
+				
+				
+				
 				// 连接关闭时，触发事件
 				ws.onclose = function() {
 					$('#content').append('[' + username + ']已离线');
@@ -93,12 +91,23 @@
 					}
 				});
 
-				// 发送消息的函数
 				function sendMsg() {
-					var message = $('#message').val(); // 消息内容
-					ws.send(message); // 直接发送消息内容
+				    var receiver = $('#receiver').val(); // 获取接收者名称
+				    var message = $('#message').val(); // 获取消息内容
+				    var username = $('#username').val(); // 获取消息内容
 
-					$('#message').val(""); // 清空消息输入框
+				    var msgObj = {
+				    	"sender": username,
+				        "receiver": receiver,
+				        "content": message
+				    };
+				    var jsonString = JSON.stringify(msgObj); // 将消息对象转换为 JSON 字符串
+				    ws.send(jsonString); // 发送 JSON 字符串
+				    
+				 // 将发送的消息也追加到自己的聊天框中
+    			$('#content').append('<p><strong>' + username + ':</strong> ' + message + '</p>');
+					    
+				    $('#message').val(""); // 清空消息输入框
 				}
 
 				// 离线按钮触发的行为

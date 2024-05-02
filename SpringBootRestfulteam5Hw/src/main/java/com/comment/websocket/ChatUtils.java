@@ -41,10 +41,11 @@
 	        }
 	    }
 	
-	    public static void sendMessageToUser(String sender, String receiver, String message) {
+	    public static void sendMessageToUser(String receiver, String sender, String message) {
 	        Session receiverSession = CLIENTS.get(receiver);
 	        if (receiverSession != null) {
-	            sendMessage(receiverSession, message);
+	            String fullMessage = sender + ": " + message; // 包含发送者信息的完整消息
+	            sendMessage(receiverSession, fullMessage);
 	        } else {
 	            sendMessageToSender("System", "User " + receiver + " is not online.");
 	        }

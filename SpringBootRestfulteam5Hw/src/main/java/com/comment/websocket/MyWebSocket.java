@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.configurationprocessor.json.JSONException;
+import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.stereotype.Component;
 
 import com.config.Configurator;
@@ -31,15 +33,20 @@ public class MyWebSocket {
      */
     /**
      * 连接建立时触发
+     * @throws JSONException 
      */
     @OnOpen
-    public void onOpen(@PathParam("username") String username, Session session, EndpointConfig config) {
+    public void onOpen(@PathParam("username") String username, Session session, EndpointConfig config) throws JSONException {
         Map<String, Object> userProperties = config.getUserProperties();
         HttpSession httpSession = (HttpSession) userProperties.get(HttpSession.class.getName());
         
         MemberBean member = (MemberBean) httpSession.getAttribute("member");
         if (member != null) {
-            String message = "Welcome to the chat room! You can start chatting now.";
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("sender", "System");
+            jsonObject.put("content", "歡迎來到ezbuy聊聊");
+            String message = jsonObject.toString();
+            
             ChatUtils.sendMessage(session, message);
             ChatUtils.CLIENTS.put(username, session);
         }
@@ -47,19 +54,21 @@ public class MyWebSocket {
 
     @OnMessage
     public void onMessage(String message, Session session) {
-        String sender = (String) session.getUserProperties().get("username"); // 获取当前登录用户作为发送者
-        String[] parts = message.split(":", 2); // 分割接收者和消息内容
-        if (parts.length == 2) { // 检查消息格式是否正确
-            String receiver = parts[0];  // 接收者
-            String content = parts[1];  // 消息内容
+        try {
+            JSONObject jsonObject = new JSONObject(message);
+            String sender = jsonObject.getString("sender"); // 获取发送者信息
+            String receiver = jsonObject.getString("receiver");
+            String content = jsonObject.getString("content");
             
-            ChatUtils.sendMessageToUser(sender, receiver, content); // 传递发送者、接收者和消息内容
-        } else {
-            // 处理消息格式错误的情况
-            String errorMessage = "Invalid message format: " + message;
-            ChatUtils.sendMessageToSender("System", errorMessage);
+            // 处理消息...
+            
+            // 将消息发送给接收者，并包含发送者信息
+            ChatUtils.sendMessageToUser(receiver, sender, content);
+        } catch (JSONException e) {
+            // 处理解析错误...
         }
     }
+    
 
     @OnClose
     public void onClose(@PathParam("username") String username, Session session) {

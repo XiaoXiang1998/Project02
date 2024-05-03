@@ -31,53 +31,14 @@
     clear: both; /* 清除浮动 */
     text-align: left; /* 消息左对齐 */
 } 
-.message-container {
-    width: 100%;
-    max-height: 400px;
-    overflow-y: auto;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    background-color: #f9f9f9;
-}
 
-.message {
-    margin-bottom: 10px;
-    padding: 8px 12px;
-    border-radius: 10px;
-}
-
-.right-message {
-    background-color: #DCF8C6;
-    align-self: flex-end;
-}
-
-.left-message {
-    background-color: #EFEFEF;
-}
-.message-input {
-    width: calc(100% - 80px);
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-}
-
-.send-button {
-    width: 70px;
-    margin-left: 10px;
-    padding: 10px;
-    border: none;
-    border-radius: 5px;
-    background-color: #007bff;
-    color: #fff;
-}
 
 </style>
 </head>
 <body style="margin: 45px">
-	<div class="container">
+	<div class="container" id="chat-room">
 		<div class="row">
-			<div class="col-md-8 offset-md-2 col-lg-6 offset-lg-3">
+			<div class="col-md-6 offset-md-3">
 				<h4 class="text-center">${username}在線聊天室</h4>
 				<div id="chat-box" class="card mb-3">
 					<div id="chat-content" class="card-body message-container">
@@ -86,12 +47,12 @@
 					</div>
 				</div>
 				<div class="input-group mt-3">
-					<input type="text" id="receiver" class="form-control"
+					<input type="text" id="receiver" class="form-control chat-input"
 						placeholder="輸入接收者">
 					<textarea id="message" class="form-control  message-input" rows="3"
 						placeholder="請輸入消息"></textarea>
 					<div class="input-group-append">
-						<button id="toSend" class="btn btn-info  send-button">發送</button>
+						<button id="toSend" class="btn btn-primary  send-button">發送</button>
 						<button id="toExit" class="btn btn-danger">離開</button>
 						 <input id="username" value="${username}" style="display: none">
 					</div>
@@ -125,8 +86,7 @@
 						        messageClass = data.sender === $('#username').val() ? 'right-float' : 'left-float';
 						    }
 
-						        // 使用 <div> 包装每一条消息，并添加不同的 CSS 类
-						        var messageDiv = '<div class="message ' + messageClass + '">' + data.sender + ': ' + data.content + '</div>';
+						         var messageDiv = '<div class="message ' + messageClass + '">' + data.sender + ': ' + data.content + '</div>';
 						        $content.append(messageDiv); // 将消息追加到内容区域
 						    
 						
@@ -159,10 +119,10 @@
 				    var username = $('#username').val(); 
 
 				    var msgObj = {
-				    	"sender": username,
-				        "receiver": receiver,
-				        "content": message
-				    };
+				    	    "sender": username,
+				    	    "receiver": receiver,
+				    	    "content": message,
+				    	};
 				    var jsonString = JSON.stringify(msgObj); 
 				    var $content = $('#content'); 
 				    $content.append('<div class="message right-float">' + "我"+ ': ' + message + '</div>');

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.configurationprocessor.json.JSONArray;
 import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.stereotype.Component;
@@ -28,13 +29,7 @@ public class MyWebSocket {
 
     @Autowired
     private HttpSession httpSession;
-	 /**
-     * 连接建立时触发
-     */
-    /**
-     * 连接建立时触发
-     * @throws JSONException 
-     */
+	
     @OnOpen
     public void onOpen(@PathParam("username") String username, Session session, EndpointConfig config) throws JSONException {
         Map<String, Object> userProperties = config.getUserProperties();
@@ -42,12 +37,15 @@ public class MyWebSocket {
         
         MemberBean member = (MemberBean) httpSession.getAttribute("member");
         if (member != null) {
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put("welcome", "歡迎來到ezbuy聊聊");
-            String message = jsonObject.toString();
             
-            ChatUtils.sendMessage(session, message);
+            // 添加调试语句以确保正确获取用户名
+            System.out.println("用户连接：username = " + username);
+            
+            // 将用户名和会话对象添加到在线用户列表中
             ChatUtils.CLIENTS.put(username, session);
+            
+            // 向所有用户发送更新后的在线用户列表
+            sendOnlineUsersUpdate();
         }
     }
 
@@ -61,12 +59,12 @@ public class MyWebSocket {
             System.out.println(sender);
             System.out.println(receiver);
             System.out.println(content);
-            // 处理消息...
             
-            // 将消息发送给接收者，并包含发送者信息
+            
             ChatUtils.sendMessageToUser(receiver, sender, content);
         } catch (JSONException e) {
-            // 处理解析错误...
+        	e.printStackTrace();
+        	
         }
     }
     
@@ -91,6 +89,21 @@ public class MyWebSocket {
             e.printStackTrace();
         }
     }
+    
+    
+    private void sendOnlineUsersUpdate() throws JSONException {
+    	 JSONArray onlineUsersArray = new JSONArray();
+    	    for (String username : ChatUtils.CLIENTS.keySet()) {
+    	        onlineUsersArray.put(username);
+    	    }
+    	    JSONObject jsonObject = new JSONObject();
+    	    jsonObject.put("onlineUsers", onlineUsersArray);
 
+    	    String onlineUsersUpdate = jsonObject.toString();
+
+    	    for (Session session : ChatUtils.CLIENTS.values()) {
+    	        ChatUtils.sendMessage(session, onlineUsersUpdate);
+    	    }
 	
+}
 }

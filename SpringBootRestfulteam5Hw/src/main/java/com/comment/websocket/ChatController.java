@@ -28,7 +28,7 @@ public class ChatController {
         if (member != null) {
             String username = member.getName(); 
             model.addAttribute("username", username);
-            return "comment/index"; 
+            return "comment/talk"; 
         }
         
         return "redirect:/login"; 

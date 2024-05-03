@@ -11,6 +11,19 @@
 
 <meta charset="UTF-8">
 <title>賣家回覆區</title>
+<style>
+        /* 添加样式使得聊天小框框定位在右下角 */
+        .chat-link {
+            position: fixed;
+            bottom: 20px; /* 距离底部的距离 */
+            right: 20px; /* 距离右侧的距离 */
+            background-color: #ffffff; /* 背景颜色 */
+            border: 1px solid #000000; /* 边框 */
+            padding: 10px; /* 内边距 */
+            border-radius: 5px; /* 边框圆角 */
+            box-shadow: 0 0 10px rgba(0,0,0,0.2); /* 添加阴影效果 */
+        }
+    </style>
 </head>
 <body>
 	<header class="bg-dark py-3">
@@ -36,9 +49,14 @@
 			</ul>
 		</div>
 	</nav>
+	
+
+
+
+	
 	<script
 		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-	<c:import url="index.jsp" />
-
+		
+		
 </body>
 </html>

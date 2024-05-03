@@ -35,4 +35,7 @@ public class GoodImageService {
 	public GoodImageBean getByID(int goodImageID){
 		return goodimageRepos.getById(goodImageID);
 	}
+	public GoodImageBean findImagesByID(Integer goodID) {
+		return goodimageRepos.findImagesByID(goodID);
+	}
 }

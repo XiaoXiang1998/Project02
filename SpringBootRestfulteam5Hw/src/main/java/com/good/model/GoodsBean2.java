@@ -180,6 +180,13 @@ public class GoodsBean2 implements java.io.Serializable {
 	public void setTitleImage(String titleImage) {
 		this.titleImage = titleImage;
 	}
+
+	@Override
+	public String toString() {
+		return "GoodsBean2 [goodsID=" + goodsID + ", goodsName=" + goodsName + ", goodsDirection=" + goodsDirection
+				+ ", goodsType=" + goodsType + ", launchDate=" + launchDate + ", brand=" + brand + ", shipmentPlace="
+				+ shipmentPlace + ", goodsSellerID=" + goodsSellerID + ", titleImage=" + titleImage + "]";
+	}
 	
 
 }

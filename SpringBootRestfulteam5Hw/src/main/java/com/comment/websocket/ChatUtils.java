@@ -33,10 +33,14 @@ import com.member.model.MemberBean;
 	
 	        final RemoteEndpoint.Basic basic = session.getBasicRemote();
 	        if (basic == null) {
+	            logger.error("Basic remote is null");
+
 	            return;
 	        }
 	
 	        try {
+	            logger.info("Sending message: " + message);
+
 	            basic.sendText(message);
 	        } catch (IOException e) {
 	            logger.error("Error sending message", e);

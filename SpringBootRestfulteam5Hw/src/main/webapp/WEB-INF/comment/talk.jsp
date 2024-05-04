@@ -58,6 +58,11 @@
 	color: #fff;
 	text-align: left;
 }
+
+#chat-content {
+    overflow-y: auto;
+    max-height: 400px; /* 如果需要限制最大高度的话，可以添加这个属性 */
+}
 </style>
 </head>
 <body class="gradient-custom">
@@ -96,112 +101,121 @@
 	</div>
 
 	<script>
-		$(function() {
-			var ws;
-			if ("WebSocket" in window) {
-				var baseUrl = 'ws://localhost:8081/websocket/';
-				var username = $('#username').val();
-				ws = new WebSocket(baseUrl + username);
+	$(function() {
+		var ws;
+		if ("WebSocket" in window) {
+			var baseUrl = 'ws://localhost:8081/websocket/';
+			var username = $('#username').val();
+			ws = new WebSocket(baseUrl + username);
 
-				ws.onopen = function() {
-					console.log("建立 websocket 连接......");
+			ws.onopen = function() {
+				  console.log("建立 websocket 连接......");
 
-					ws.send(username);
 
-				};
+			};
 
-				ws.onmessage = function(event) {
-					var data = JSON.parse(event.data);
-					console.log("Received message:", data);
+			ws.onmessage = function(event) {
+			    var data = JSON.parse(event.data);
+			    console.log("Received message:", data);
 
-					if (data.onlineUsers !== undefined) {
-						handleOnlineUsersUpdate(data.onlineUsers);
-					} else {
+			    if (data.onlineUsers !== undefined) {
+			        handleOnlineUsersUpdate(data.onlineUsers);
+			    } else if (data.offlineUser !== undefined) { 
+			        var offlineUser = data.offlineUser;
+			        $('#content').append('[' + offlineUser + ']已離線');
+			    } else if (data.onlineUser !== undefined) { 
+			        var onlineUser = data.onlineUser;
+			        $('#content').append('[' + onlineUser + ']已進入聊天室');
+			    } else {
+			        var $content = $('#content');
+			        var messageClass = data.sender === $('#username').val() ? 'right-float'
+			                : 'left-float';
+			        var messageDiv = '<div class="message ' + messageClass + '">'
+			                + data.sender + ': ' + data.content + '</div>';
+			        $content.append(messageDiv);
+			        
+			        var scrollHeight = $('#chat-content')[0].scrollHeight;
+			        $('#chat-content').scrollTop(scrollHeight);
+			    }
+			};
 
-						var $content = $('#content');
-						var messageClass = data.sender === $('#username').val() ? 'right-float'
-								: 'left-float';
-						var messageDiv = '<div class="message ' + messageClass + '">'
-								+ data.sender + ': ' + data.content + '</div>';
-						$content.append(messageDiv);
-					}
-				};
+			ws.onclose = function() {
+				console.log("关闭 websocket 连接......");
+			};
 
-				ws.onclose = function() {
-					$('#content').append('[' + username + ']已離線');
-					console.log("关闭 websocket 连接......");
-				};
+			ws.onerror = function(event) {
+				console.log("websocket 发生错误......" + event + '\n');
+			};
 
-				ws.onerror = function(event) {
-					console.log("websocket 发生错误......" + event + '\n');
-				};
+			$('#toSend').click(function() {
+				sendMsg();
+			});
 
-				$('#toSend').click(function() {
+			$(document).keyup(function(event) {
+				if (event.keyCode == 13) {
 					sendMsg();
-				});
-
-				$(document).keyup(function(event) {
-					if (event.keyCode == 13) {
-						sendMsg();
-					}
-				});
-
-				function handleOnlineUsersUpdate(onlineUsers) {
-				    var onlineUsersList = document.getElementById("onlineUsersList");
-				    onlineUsersList.innerHTML = ""; 
-
-				    onlineUsers.forEach(function(user) {
-				        if (user !== $('#username').val()) { 
-				            var listItem = document.createElement("li");
-				            listItem.textContent = user;
-				            listItem.classList.add("user"); 
-				            onlineUsersList.appendChild(listItem);
-				        }
-				    });
-
-				    onlineUsersList.querySelectorAll(".user").forEach(function(userElement) {
-				        userElement.addEventListener("click", function() {
-				            var receiver = userElement.textContent;
-
-				            onlineUsersList.querySelectorAll(".user").forEach(function(element) {
-				                element.classList.remove("selected-user");
-				            });
-
-				            userElement.classList.add("selected-user");
-
-				            window.selectedReceiver = receiver;
-				        });
-				    });
 				}
-				function sendMsg(receiver) {
-					var message = $('#message').val();
-					var username = $('#username').val();
-					var receiver = window.selectedReceiver;
+			});
 
-					var msgObj = {
-						"sender" : username,
-						"receiver" : receiver,
-						"content" : message,
-					};
-					var jsonString = JSON.stringify(msgObj);
-					var $content = $('#content');
-					$content.append('<div class="message right-float">' + "我"
-							+ ': ' + message + '</div>');
+			function handleOnlineUsersUpdate(onlineUsers) {
+			    var onlineUsersList = document.getElementById("onlineUsersList");
+			    onlineUsersList.innerHTML = ""; 
 
-					$('#message').val("");
+			    onlineUsers.forEach(function(user) {
+			        if (user !== $('#username').val()) { 
+			            var listItem = document.createElement("li");
+			            listItem.textContent = user;
+			            listItem.classList.add("user"); 
+			            onlineUsersList.appendChild(listItem);
+			        }
+			    });
 
-					ws.send(jsonString);
-				}
+			    onlineUsersList.querySelectorAll(".user").forEach(function(userElement) {
+			        userElement.addEventListener("click", function() {
+			            var receiver = userElement.textContent;
 
-				$('#toExit').click(function() {
-					if (ws) {
-						ws.close();
-					}
-				});
-			} else {
-				alert("很抱歉，您的瀏覽器不支持 WebSocket！！！");
+			            onlineUsersList.querySelectorAll(".user").forEach(function(element) {
+			                element.classList.remove("selected-user");
+			            });
+
+			            userElement.classList.add("selected-user");
+
+			            window.selectedReceiver = receiver;
+			        });
+			    });
 			}
-		});
+			function sendMsg(receiver) {
+				var message = $('#message').val();
+				var username = $('#username').val();
+				var receiver = window.selectedReceiver;
+
+				var msgObj = {
+					"sender" : username,
+					"receiver" : receiver,
+					"content" : message,
+				};
+				var jsonString = JSON.stringify(msgObj);
+				var $content = $('#content');
+				$content.append('<div class="message right-float">' + "我"
+						+ ': ' + message + '</div>');
+
+				$('#message').val("");
+
+				ws.send(jsonString);
+				
+			    var scrollHeight = $('#chat-content')[0].scrollHeight;
+			    $('#chat-content').scrollTop(scrollHeight);
+			}
+
+			$('#toExit').click(function() {
+				if (ws) {
+					ws.close();
+				}
+			});
+		} else {
+			alert("很抱歉，您的瀏覽器不支持 WebSocket！！！");
+		}
+	});
 	</script>
 </body>
 </html>

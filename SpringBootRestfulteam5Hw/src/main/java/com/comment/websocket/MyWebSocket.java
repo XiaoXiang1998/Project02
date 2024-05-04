@@ -38,28 +38,31 @@ public class MyWebSocket {
         MemberBean member = (MemberBean) httpSession.getAttribute("member");
         if (member != null) {
             
-            // 添加调试语句以确保正确获取用户名
             System.out.println("用户连接：username = " + username);
             
-            // 将用户名和会话对象添加到在线用户列表中
             ChatUtils.CLIENTS.put(username, session);
             
-            // 向所有用户发送更新后的在线用户列表
-            sendOnlineUsersUpdate();
+            sendUserOnlineMessage(username); // 在用戶進入聊天室時發送進入聊天室提示
+
+            
+            if (ChatUtils.CLIENTS.size() > 1) {
+                sendOnlineUsersUpdate();
+            }
         }
     }
 
     @OnMessage
     public void onMessage(String message, Session session) {
         try {
+            System.out.println("Received message: " + message);
+
             JSONObject jsonObject = new JSONObject(message);
-            String sender = jsonObject.getString("sender"); // 获取发送者信息
+            String sender = jsonObject.getString("sender"); 
             String receiver = jsonObject.getString("receiver");
             String content = jsonObject.getString("content");
             System.out.println(sender);
             System.out.println(receiver);
             System.out.println(content);
-            
             
             ChatUtils.sendMessageToUser(receiver, sender, content);
         } catch (JSONException e) {
@@ -72,32 +75,73 @@ public class MyWebSocket {
     @OnClose
     public void onClose(@PathParam("username") String username, Session session) {
         ChatUtils.CLIENTS.remove(username);
+        
+        if (!ChatUtils.CLIENTS.isEmpty()) {
+            sendOnlineUsersUpdate();
+            sendUserOfflineMessage(username); // 在用戶離線時發送離線提示
 
+        }
     }
 
     @OnError
     public void onError(Session session, Throwable throwable) {
         try {
             session.close();
-        } catch (Exception e) {
+        } catch (Exception e) {	
             e.printStackTrace();
         }
     }
     
     
-    private void sendOnlineUsersUpdate() throws JSONException {
-    	 JSONArray onlineUsersArray = new JSONArray();
-    	    for (String username : ChatUtils.CLIENTS.keySet()) {
-    	        onlineUsersArray.put(username);
-    	    }
-    	    JSONObject jsonObject = new JSONObject();
-    	    jsonObject.put("onlineUsers", onlineUsersArray);
-
-    	    String onlineUsersUpdate = jsonObject.toString();
-
-    	    for (Session session : ChatUtils.CLIENTS.values()) {
-    	        ChatUtils.sendMessage(session, onlineUsersUpdate);
-    	    }
-	
+    private void sendOnlineUsersUpdate() {
+        try {
+            JSONArray onlineUsersArray = new JSONArray();
+            for (String username : ChatUtils.CLIENTS.keySet()) {
+                onlineUsersArray.put(username);
+                System.out.println("username"+username);
+            }
+            System.out.println("onlineUserArray:"+onlineUsersArray);
+            JSONObject jsonObject = new JSONObject();
+            
+            jsonObject.put("onlineUsers", onlineUsersArray);
+            
+            String onlineUsersUpdate = jsonObject.toString();
+            System.out.println("onlineUsersUpdate"+onlineUsersUpdate);
+            for (Session session : ChatUtils.CLIENTS.values()) {
+                session.getBasicRemote().sendText(onlineUsersUpdate);
+            }
+        } catch (IOException | JSONException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    private void sendUserOfflineMessage(String offlineUsername) {
+        try {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("offlineUser", offlineUsername);
+            String offlineMessage = jsonObject.toString();
+            
+            for (Session session : ChatUtils.CLIENTS.values()) {
+                session.getBasicRemote().sendText(offlineMessage);
+            }
+        } catch (IOException | JSONException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    private void sendUserOnlineMessage(String onlineUsername) {
+        try {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("onlineUser", onlineUsername);
+            String onlineMessage = jsonObject.toString();
+            
+            for (Session session : ChatUtils.CLIENTS.values()) {
+                session.getBasicRemote().sendText(onlineMessage);
+            }
+        } catch (IOException | JSONException e) {
+            e.printStackTrace();
+        }
+    }
+    
 }
-}
+

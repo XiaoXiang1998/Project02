@@ -71,14 +71,8 @@ public class MyWebSocket {
 
     @OnClose
     public void onClose(@PathParam("username") String username, Session session) {
-        Map<String, Object> userProperties = session.getUserProperties();
-        HttpSession httpSession = (HttpSession) userProperties.get(HttpSession.class.getName());
-        MemberBean member = (MemberBean) httpSession.getAttribute("member");
-        
-        if (member != null) {
-            String roleName = member.isSeller() ? "seller" : "buyer";
-            ChatUtils.CLIENTS.remove(roleName + "-" + username);
-        }
+        ChatUtils.CLIENTS.remove(username);
+
     }
 
     @OnError

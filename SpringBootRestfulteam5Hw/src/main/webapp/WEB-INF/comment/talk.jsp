@@ -32,34 +32,32 @@
 
 .message-container {
 	height: 300px;
-	 display: flex;
-    flex-direction: column;
+	display: flex;
+	flex-direction: column;
 }
 
 .message {
-    padding: 10px;
-    margin-bottom: 10px;
-    border-radius: 10px;
-    word-wrap: break-word; 
+	padding: 10px;
+	margin-bottom: 10px;
+	border-radius: 10px;
+	word-wrap: break-word;
 }
-
 
 .selected-user {
-    background-color: #f0f0f0; 
+	background-color: #f0f0f0;
 }
-
 
 .right-float {
-            align-self: flex-end;
-            color: #fff;
-            text-align: right;
+	align-self: flex-end;
+	color: #fff;
+	text-align: right;
 }
 
- .left-float {
-     align-self: flex-start;
-     color: #fff;
-     text-align: left;
- }
+.left-float {
+	align-self: flex-start;
+	color: #fff;
+	text-align: left;
+}
 </style>
 </head>
 <body class="gradient-custom">
@@ -98,11 +96,6 @@
 	</div>
 
 	<script>
-	
-	
-	
-	
-	
 		$(function() {
 			var ws;
 			if ("WebSocket" in window) {
@@ -112,24 +105,26 @@
 
 				ws.onopen = function() {
 					console.log("建立 websocket 连接......");
-					
+
 					ws.send(username);
 
 				};
 
 				ws.onmessage = function(event) {
-				    var data = JSON.parse(event.data);
-				    console.log("Received message:", data);
+					var data = JSON.parse(event.data);
+					console.log("Received message:", data);
 
-				    if (data.onlineUsers !== undefined) {
-				        handleOnlineUsersUpdate(data.onlineUsers);
-				    } else {
-				        
-				        var $content = $('#content');
-				        var messageClass = data.sender === $('#username').val() ? 'right-float' : 'left-float';
-				        var messageDiv = '<div class="message ' + messageClass + '">' + data.sender + ': ' + data.content + '</div>';
-				        $content.append(messageDiv); 
-				    }
+					if (data.onlineUsers !== undefined) {
+						handleOnlineUsersUpdate(data.onlineUsers);
+					} else {
+
+						var $content = $('#content');
+						var messageClass = data.sender === $('#username').val() ? 'right-float'
+								: 'left-float';
+						var messageDiv = '<div class="message ' + messageClass + '">'
+								+ data.sender + ': ' + data.content + '</div>';
+						$content.append(messageDiv);
+					}
 				};
 
 				ws.onclose = function() {
@@ -150,8 +145,7 @@
 						sendMsg();
 					}
 				});
-				
-				
+
 				function handleOnlineUsersUpdate(onlineUsers) {
 				    var onlineUsersList = document.getElementById("onlineUsersList");
 				    onlineUsersList.innerHTML = ""; 
@@ -180,22 +174,23 @@
 				    });
 				}
 				function sendMsg(receiver) {
-				    var message = $('#message').val();
-				    var username = $('#username').val();
-		            var receiver = window.selectedReceiver;
+					var message = $('#message').val();
+					var username = $('#username').val();
+					var receiver = window.selectedReceiver;
 
-				    var msgObj = {
-				        "sender" : username,
-				        "receiver" : receiver,
-				        "content" : message,
-				    };
-				    var jsonString = JSON.stringify(msgObj);
-				    var $content = $('#content');
-				    $content.append('<div class="message right-float">' + "我" + ': ' + message + '</div>');
+					var msgObj = {
+						"sender" : username,
+						"receiver" : receiver,
+						"content" : message,
+					};
+					var jsonString = JSON.stringify(msgObj);
+					var $content = $('#content');
+					$content.append('<div class="message right-float">' + "我"
+							+ ': ' + message + '</div>');
 
-				    $('#message').val("");
+					$('#message').val("");
 
-				    ws.send(jsonString);
+					ws.send(jsonString);
 				}
 
 				$('#toExit').click(function() {

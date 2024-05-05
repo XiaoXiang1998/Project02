@@ -1,21 +1,25 @@
 package com.sean.controller;
 
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-
+import java.net.URLEncoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.good.controller.GoodFormatService;
 import com.good.controller.GoodService;
@@ -138,76 +142,82 @@ public class OrderController {
 		m.addAttribute("page","shopcar");
 		return "Order/jsp/Payment";
 	}
-//	@PostMapping("/ecpayCheckout")
-//	@ResponseBody
-//	public String ecpayCheckout() {
-//		String aioCheckOutALLForm = oService.ecpayCheckout();
-//		return aioCheckOutALLForm;
-//	}
-	@PostMapping("order.controller")
+	@GetMapping("/ecpayCheckout")
 	@ResponseBody
-	public String Order(@RequestParam("memberId") Integer memberId, @RequestParam("sellerId") Integer[] sellerIds,
-			@RequestParam("productId") Integer[] productIds, @RequestParam("quantity") Integer[] quantities,
-			@RequestParam("name") String[] names, @RequestParam("address") String[] addresses,
-			@RequestParam("tel") String[] tels, @RequestParam("shippingMethod") short[] shippingMethods,
-			@RequestParam("shippingFee") Integer[] shippingFees, @RequestParam("totalPrices") Integer[] totalPrices,
-			@RequestParam("originalPrices") Integer[] oringinalPrices, @RequestParam("totalPrice") Integer AlltotalPrice,
-			@RequestParam("paymentMethod") short paymentMethod, @RequestParam("statusValue") short statusValue,
-			@RequestParam("itemId") String[] itemIds) {
-		
-		
-		System.out.println(memberId.getClass());
-		Date currentDate = new Date();
-		Optional<MemberBean> members = mService.findById(memberId);
-		MemberBean member = members.get();
-		PaymentDetails p = new PaymentDetails();
-		p.setPayUserId(member);
-		p.setPaymentMethod(paymentMethod);
-		p.setCreatedAt(currentDate);
-		p.setModifiedAt(currentDate);
-		p.setTotalPrice(AlltotalPrice);
-		PaymentDetails pBean = pService.paymentDetails(p);
+	public String ecpayCheckout(@RequestParam("aioCheckOutALLForm") String aioCheckOutALLForm) {
 
-		for (int i = 0; i < itemIds.length; i++) {
-
-			
-			Optional<MemberBean> sellerId = mService.findById(sellerIds[i]);
-			MemberBean seller = sellerId.get();
-			Optional<GoodFormat> products = gService.findById(productIds[i]);
-			GoodFormat product = products.get();
-			Orders order = new Orders();
-			order.setBuyerId(member);
-			order.setSellerId(seller);
-			order.setFormatgoodId(product);
-			order.setQuantity(quantities[i]);
-			order.setName(names[i]);
-			order.setAddress(addresses[i]);
-			order.setTel(tels[i]);
-			order.setShippingMethod(shippingMethods[i]);
-			order.setShippingFee(shippingFees[i]);
-			order.setOriginalPrice(oringinalPrices[i]);
-			order.setTotalPrice(totalPrices[i]+shippingFees[i]);
-			order.setPaymentId(pBean);
-			if(paymentMethod == 1) {
-				order.setPayStatus((short)1);				
-			}else {
-				order.setPayStatus(statusValue);
-			}
-			order.setOrderStatus((short) 0);
-			order.setCreatedAt(currentDate);
-			order.setModifiedAt(currentDate);
-			oService.insertToOrder(order);
-		}
-			cService.clearShopCarByMemberId(memberId);
-			Optional<GoodFormat> products = gService.findById(productIds[0]);
-			GoodFormat product = products.get();
-			String goodsName = product.getGood().getGoodsName();
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-			String StringDate = sdf.format(currentDate);
-			String StringTotalAmount = String.valueOf(AlltotalPrice);
-			String aioCheckOutALLForm = oService.ecpayCheckout(StringTotalAmount,StringDate,goodsName);
-			return aioCheckOutALLForm;
+		return aioCheckOutALLForm;
 	}
+	
+	@PostMapping("order.controller")
+		public String Order(@RequestParam("memberId") Integer memberId, @RequestParam("sellerId") Integer[] sellerIds,
+				@RequestParam("productId") Integer[] productIds, @RequestParam("quantity") Integer[] quantities,
+				@RequestParam("name") String[] names, @RequestParam("address") String[] addresses,
+				@RequestParam("tel") String[] tels, @RequestParam("shippingMethod") short[] shippingMethods,
+				@RequestParam("shippingFee") Integer[] shippingFees, @RequestParam("totalPrices") Integer[] totalPrices,
+				@RequestParam("originalPrices") Integer[] oringinalPrices, @RequestParam("totalPrice") Integer AlltotalPrice,
+				@RequestParam("paymentMethod") short paymentMethod, @RequestParam("statusValue") short statusValue,
+				@RequestParam("itemId") String[] itemIds,Model m) {
+			
+			
+			System.out.println(memberId.getClass());
+			Date currentDate = new Date();
+			Optional<MemberBean> members = mService.findById(memberId);
+			MemberBean member = members.get();
+			PaymentDetails p = new PaymentDetails();
+			p.setPayUserId(member);
+			p.setPaymentMethod(paymentMethod);
+			p.setCreatedAt(currentDate);
+			p.setModifiedAt(currentDate);
+			p.setTotalPrice(AlltotalPrice);
+			PaymentDetails pBean = pService.paymentDetails(p);
+	
+			for (int i = 0; i < itemIds.length; i++) {
+	
+				
+				Optional<MemberBean> sellerId = mService.findById(sellerIds[i]);
+				MemberBean seller = sellerId.get();
+				Optional<GoodFormat> products = gService.findById(productIds[i]);
+				GoodFormat product = products.get();
+				Orders order = new Orders();
+				order.setBuyerId(member);
+				order.setSellerId(seller);
+				order.setFormatgoodId(product);
+				order.setQuantity(quantities[i]);
+				order.setName(names[i]);
+				order.setAddress(addresses[i]);
+				order.setTel(tels[i]);
+				order.setShippingMethod(shippingMethods[i]);
+				order.setShippingFee(shippingFees[i]);
+				order.setOriginalPrice(oringinalPrices[i]);
+				order.setTotalPrice(totalPrices[i]+shippingFees[i]);
+				order.setPaymentId(pBean);
+				if(paymentMethod == 1) {
+					order.setPayStatus((short)1);				
+				}else {
+					order.setPayStatus(statusValue);
+				}
+				order.setOrderStatus((short) 0);
+				order.setCreatedAt(currentDate);
+				order.setModifiedAt(currentDate);
+				oService.insertToOrder(order);
+			}
+				cService.clearShopCarByMemberId(memberId);
+				if(paymentMethod == 1) {
+					Optional<GoodFormat> products = gService.findById(productIds[0]);
+					GoodFormat product = products.get();
+					String goodsName = product.getGood().getGoodsName();
+					SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+					String StringDate = sdf.format(currentDate);
+					String StringTotalAmount = String.valueOf(AlltotalPrice);
+					String aioCheckOutALLForm = oService.ecpayCheckout(StringTotalAmount,StringDate,goodsName);
+
+					m.addAttribute("aioCheckOutALLForm",aioCheckOutALLForm);
+				
+					return "redirect:/ecpayCheckout?aioCheckOutALLForm=" + URLEncoder.encode(aioCheckOutALLForm, StandardCharsets.UTF_8);
+				}
+					return "redirect:/goindex.controller";
+		}
 	
 	@GetMapping("queryOrder.controller")
 	public String QueryOrder(@RequestParam("queryType") String queryType, @RequestParam("orderId") String orderIdStr,

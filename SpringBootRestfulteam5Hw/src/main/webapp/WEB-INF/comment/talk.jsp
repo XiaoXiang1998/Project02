@@ -62,18 +62,18 @@
 
 #chat-content {
     overflow-y: auto;
-    max-height: 400px; /* 如果需要限制最大高度的话，可以添加这个属性 */
+    max-height: 400px; 
 }
 
 .message-time {
-    display: inline; /* 设置为内联元素 */
+    display: inline; 
 }
 
 .avatar-icon {
-    width: 30px; /* 調整頭像的寬度 */
-    height: 30px; /* 調整頭像的高度 */
-    border-radius: 50%; /* 將頭像設置為圓形 */
-    margin-right: 10px; /* 可以根據需要調整頭像與使用者名稱之間的間距 */
+    width: 30px;
+    height: 30px; 
+    border-radius: 50%; 
+    margin-right: 10px; 
 }
 </style>
 </head>
@@ -146,8 +146,8 @@
 			                : 'left-float';
 			        var currentTime = getCurrentTime(); 
 			        var messageDiv = '<div class="message ' + messageClass + '">' +
-                    '<img class="avatar" src="commentPicture/deafult-avatar.png" alt="Avatar">' + // 添加头像
-                    data.sender + ': ' + data.content + // 保留原來的發送者和內容
+                    '<img class="avatar" src="commentPicture/deafult-avatar.png" alt="Avatar">' +
+                    data.sender + ': ' + data.content + 
                     '<span class="message-time">' + data.time + '</span>' +
                  '</div>';
 			        $content.append(messageDiv);
@@ -188,12 +188,12 @@
 			            listItem.textContent = user;
 			            listItem.classList.add("user"); 
 			            
-			            // 創建圖片元素
+			            
 			            var img = document.createElement("img");
-			            img.src = "commentPicture/deafult-avatar.png"; // 替換成你的圖片路徑
+			            img.src = "commentPicture/deafult-avatar.png"; 
 			            img.alt = "Avatar";
 			            img.classList.add("avatar");
-			            listItem.prepend(img); // 在列表項前插入圖片
+			            listItem.prepend(img); 
 			            
 			            onlineUsersList.appendChild(listItem);
 			        }

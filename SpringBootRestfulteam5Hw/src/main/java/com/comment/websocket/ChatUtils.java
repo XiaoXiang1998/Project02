@@ -47,12 +47,14 @@ import com.member.model.MemberBean;
 	        }
 	    }
 	
-	    public static void sendMessageToUser(String receiver, String sender, String message) throws JSONException {
+	    public static void sendMessageToUser(String receiver, String sender, String message,String time) throws JSONException {
 	        Session receiverSession = CLIENTS.get(receiver);
 	        if (receiverSession != null) {
 	            JSONObject jsonObject = new JSONObject();
 	            jsonObject.put("sender", sender);
 	            jsonObject.put("content", message);
+	            jsonObject.put("time", time); 
+
 	            sendMessage(receiverSession, jsonObject.toString());
 	        } else {
 	            sendMessageToSender("System", "User " + receiver + " is not online.");

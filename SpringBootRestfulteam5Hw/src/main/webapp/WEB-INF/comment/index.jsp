@@ -63,6 +63,9 @@
 
 	<script>
 		$(function() {
+			
+		    var avatarPath = 'commentPicture/default-avatar.png';
+
 			var ws;
 			// 如果浏览器支持 WebSocket
 			if ("WebSocket" in window) {

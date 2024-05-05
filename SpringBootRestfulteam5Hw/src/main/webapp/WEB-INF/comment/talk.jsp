@@ -63,6 +63,10 @@
     overflow-y: auto;
     max-height: 400px; /* 如果需要限制最大高度的话，可以添加这个属性 */
 }
+
+.message-time {
+    display: inline; /* 设置为内联元素 */
+}
 </style>
 </head>
 <body class="gradient-custom">
@@ -111,7 +115,7 @@
 			ws.onopen = function() {
 				  console.log("建立 websocket 连接......");
 
-
+	              loadChatHistory();
 			};
 
 			ws.onmessage = function(event) {
@@ -123,19 +127,25 @@
 			    } else if (data.offlineUser !== undefined) { 
 			        var offlineUser = data.offlineUser;
 			        $('#content').append('[' + offlineUser + ']已離線');
-			    } else if (data.onlineUser !== undefined) { 
+			    } else if (data.onlineUser !== undefined ) { 
 			        var onlineUser = data.onlineUser;
 			        $('#content').append('[' + onlineUser + ']已進入聊天室');
 			    } else {
 			        var $content = $('#content');
 			        var messageClass = data.sender === $('#username').val() ? 'right-float'
 			                : 'left-float';
-			        var messageDiv = '<div class="message ' + messageClass + '">'
-			                + data.sender + ': ' + data.content + '</div>';
+			        var currentTime = getCurrentTime(); 
+			        var messageDiv = '<div class="message ' + messageClass + '">' +
+                    data.sender + ': ' + data.content +
+                    '<span class="message-time">' + data.time + '</span>' +
+                 '</div>';
 			        $content.append(messageDiv);
 			        
 			        var scrollHeight = $('#chat-content')[0].scrollHeight;
 			        $('#chat-content').scrollTop(scrollHeight);
+			        
+			        storeMessage(data);
+			        
 			    }
 			};
 
@@ -188,16 +198,23 @@
 				var message = $('#message').val();
 				var username = $('#username').val();
 				var receiver = window.selectedReceiver;
-
+	
+			    var currentTime = getCurrentTime(); 
+	
+				
+				
 				var msgObj = {
 					"sender" : username,
 					"receiver" : receiver,
 					"content" : message,
+			        "time": currentTime 
 				};
 				var jsonString = JSON.stringify(msgObj);
 				var $content = $('#content');
-				$content.append('<div class="message right-float">' + "我"
-						+ ': ' + message + '</div>');
+				$content.append('<div class="message right-float">' + "我" + ': ' + message + '<span class="message-time">' + currentTime + '</span></div>'); 
+				
+				
+			    storeMessage(msgObj);
 
 				$('#message').val("");
 
@@ -206,12 +223,45 @@
 			    var scrollHeight = $('#chat-content')[0].scrollHeight;
 			    $('#chat-content').scrollTop(scrollHeight);
 			}
+			
+			function getCurrentTime() {
+			    var now = new Date();
+			    var hours = now.getHours();
+			    var minutes = now.getMinutes();
 
-			$('#toExit').click(function() {
-				if (ws) {
-					ws.close();
-				}
-			});
+			    hours = hours < 10 ? '0' + hours : hours;
+			    minutes = minutes < 10 ? '0' + minutes : minutes;
+
+			    var period = hours >= 12 ? '下午' : '上午'; 
+			    hours = hours > 12 ? hours - 12 : hours; 
+			    return period + ' ' + hours + '點' + ' ' + minutes + '分';
+			}
+
+	        function storeMessage(message) {
+	            var chatHistory = localStorage.getItem('chatHistory');
+	            var messages = chatHistory ? JSON.parse(chatHistory) : [];
+	            messages.push(message);
+	            localStorage.setItem('chatHistory', JSON.stringify(messages));
+	        }
+	        
+	        function loadChatHistory() {
+	            var chatHistory = localStorage.getItem('chatHistory');
+	            if (chatHistory) {
+	                var messages = JSON.parse(chatHistory);
+	                messages.forEach(function(message) {
+	                    var messageClass = message.sender === $('#username').val() ? 'right-float' : 'left-float';
+	                    var senderName = message.sender === $('#username').val() ? '我' : message.sender;
+	                    var messageDiv = '<div class="message ' + messageClass + '">' +
+	                                        senderName + ': ' + message.content +
+	                                        '<span class="message-time">' + message.time + '</span>' +
+	                                     '</div>';
+	                    $('#content').append(messageDiv);
+	                });
+
+	                var scrollHeight = $('#chat-content')[0].scrollHeight;
+	                $('#chat-content').scrollTop(scrollHeight);
+	            }
+	        }
 		} else {
 			alert("很抱歉，您的瀏覽器不支持 WebSocket！！！");
 		}

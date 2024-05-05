@@ -60,11 +60,14 @@ public class MyWebSocket {
             String sender = jsonObject.getString("sender"); 
             String receiver = jsonObject.getString("receiver");
             String content = jsonObject.getString("content");
+            String time = jsonObject.getString("time"); // 提取时间信息
+
             System.out.println(sender);
             System.out.println(receiver);
             System.out.println(content);
-            
-            ChatUtils.sendMessageToUser(receiver, sender, content);
+            System.out.println(time); // 打印时间信息
+
+            ChatUtils.sendMessageToUser(receiver, sender, content,time);
         } catch (JSONException e) {
         	e.printStackTrace();
         	

@@ -41,6 +41,7 @@
 	margin-bottom: 10px;
 	border-radius: 10px;
 	word-wrap: break-word;
+	
 }
 
 .selected-user {
@@ -66,6 +67,13 @@
 
 .message-time {
     display: inline; /* 设置为内联元素 */
+}
+
+.avatar-icon {
+    width: 30px; /* 調整頭像的寬度 */
+    height: 30px; /* 調整頭像的高度 */
+    border-radius: 50%; /* 將頭像設置為圓形 */
+    margin-right: 10px; /* 可以根據需要調整頭像與使用者名稱之間的間距 */
 }
 </style>
 </head>
@@ -106,6 +114,8 @@
 
 	<script>
 	$(function() {
+	    var avatarPath = 'commentPicture/default-avatar.png';
+
 		var ws;
 		if ("WebSocket" in window) {
 			var baseUrl = 'ws://localhost:8081/websocket/';
@@ -136,7 +146,8 @@
 			                : 'left-float';
 			        var currentTime = getCurrentTime(); 
 			        var messageDiv = '<div class="message ' + messageClass + '">' +
-                    data.sender + ': ' + data.content +
+                    '<img class="avatar" src="commentPicture/deafult-avatar.png" alt="Avatar">' + // 添加头像
+                    data.sender + ': ' + data.content + // 保留原來的發送者和內容
                     '<span class="message-time">' + data.time + '</span>' +
                  '</div>';
 			        $content.append(messageDiv);
@@ -176,6 +187,14 @@
 			            var listItem = document.createElement("li");
 			            listItem.textContent = user;
 			            listItem.classList.add("user"); 
+			            
+			            // 創建圖片元素
+			            var img = document.createElement("img");
+			            img.src = "commentPicture/deafult-avatar.png"; // 替換成你的圖片路徑
+			            img.alt = "Avatar";
+			            img.classList.add("avatar");
+			            listItem.prepend(img); // 在列表項前插入圖片
+			            
 			            onlineUsersList.appendChild(listItem);
 			        }
 			    });
@@ -211,8 +230,11 @@
 				};
 				var jsonString = JSON.stringify(msgObj);
 				var $content = $('#content');
-				$content.append('<div class="message right-float">' + "我" + ': ' + message + '<span class="message-time">' + currentTime + '</span></div>'); 
-				
+				$content.append('<div class="message right-float">' +
+		                '<img class="avatar" src="commentPicture/deafult-avatar.png" alt="Avatar">' +
+		                "我" + ': ' + message + 
+		                '<span class="message-time">' + currentTime + '</span>' +
+		                '</div>');				
 				
 			    storeMessage(msgObj);
 
@@ -252,9 +274,10 @@
 	                    var messageClass = message.sender === $('#username').val() ? 'right-float' : 'left-float';
 	                    var senderName = message.sender === $('#username').val() ? '我' : message.sender;
 	                    var messageDiv = '<div class="message ' + messageClass + '">' +
-	                                        senderName + ': ' + message.content +
-	                                        '<span class="message-time">' + message.time + '</span>' +
-	                                     '</div>';
+                        '<img class="avatar" src="commentPicture/deafult-avatar.png" alt="Avatar">' +
+                        senderName + ': ' + message.content +
+                        '<span class="message-time">' + message.time + '</span>' +
+                     '</div>';
 	                    $('#content').append(messageDiv);
 	                });
 

@@ -56,28 +56,13 @@
   </div>
 </nav>
 
-<!-- 聊天按钮 -->
-<button class="chat-button" onclick="loadChatRoom()">聊聊</button>
 
-<!-- 聊天室内容容器 -->
-<div id="chat-room" style="display: none;">
-    <!-- 这里放置聊天室的内容 -->
-</div>
+
+
 
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
 	
-	<script>
-    // 使用 AJAX 加载聊天页面的内容并添加到首页中
-     function loadChatRoom() {
-        $.ajax({
-            url: "/chat", // 聊天页面的 URL
-            type:"GET",
-            success: function(data) {
-                $("#chat-room").html(data).slideDown();
-            }
-        });
-    }
-</script>
+	
 </body>
 </html>

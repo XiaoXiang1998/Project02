@@ -18,10 +18,12 @@
 <link href="commentcss/styles.css" rel="stylesheet" />
 <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js"
 	crossorigin="anonymous"></script>
-	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/css/lightbox.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/js/lightbox.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/css/lightbox.min.css">
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/js/lightbox.min.js"></script>
 </head>
 <body class="sb-nav-fixed">
 	<nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
@@ -139,20 +141,27 @@
 								<tbody>
 									<c:forEach var="member" items="${allMembers}">
 										<c:forEach items="${member.posts}" var="post">
-												<tr>
-													<td>${member.name}</td>
-													<td>${post.commentcontent}</td>
-													<td><img src="${post.productphoto}" width="80px" height="80px" alt="商品圖片">
-													</td>
-													<fmt:formatDate value="${post.commenttime}"
-												pattern="yyyy-MM-dd HH:mm" var="formattedCommentTime" />
-													<td>${formattedCommentTime}</td>
-													<fmt:formatDate value="${post.commenttime}"
-												pattern="yyyy-MM-dd HH:mm" var="formattedCommentTime" />
-													<td>${formattedCommentTime}</td>
-													<td>${post.buyerrate}</td>
-													<td><button onclick="deleteComment(${post.commentid});">刪除</button></td>
-												</tr>
+											<tr>
+												<td>${member.name}</td>
+												<td>${post.commentcontent}</td>
+												<td><c:if test="${not empty post.productphoto}">
+														<a
+															href="${pageContext.request.contextPath}/${post.productphoto}"
+															data-lightbox="imagee-${post.commentid}"> <img
+															class="product-photo"
+															src="${pageContext.request.contextPath}/${post.productphoto}"
+															alt="產品圖片" width="60px" height="60px">
+														</a>
+													</c:if></td>
+												<fmt:formatDate value="${post.commenttime}"
+													pattern="yyyy-MM-dd HH:mm" var="formattedCommentTime" />
+												<td>${formattedCommentTime}</td>
+												<fmt:formatDate value="${post.commenttime}"
+													pattern="yyyy-MM-dd HH:mm" var="formattedCommentTime" />
+												<td>${formattedCommentTime}</td>
+												<td>${post.buyerrate}</td>
+												<td><button onclick="deleteComment(${post.commentid});">刪除</button></td>
+											</tr>
 										</c:forEach>
 									</c:forEach>
 								</tbody>

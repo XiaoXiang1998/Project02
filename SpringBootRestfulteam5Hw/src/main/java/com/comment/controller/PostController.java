@@ -229,6 +229,17 @@ public class PostController {
 	        return "redirect:allUsersComments";
 	    }
 	 
+	 @GetMapping("/commentadmin")
+		public String commentadmin(Model model) {
+	     List<MemberBean> allMembersWithPosts = mService.getAllMembersWithPosts();
+
+		 	
+	     model.addAttribute("allMembers", allMembersWithPosts);
+
+	     
+			return "comment/commentadmin";
+		}
+	 
 //		@GetMapping("/sellerComments")
 //	    public String getsellerComments(Model model, HttpSession session) {
 //			MemberBean member = (MemberBean) session.getAttribute("member");

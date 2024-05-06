@@ -293,8 +293,8 @@ body {
 	    }).then((result) => {
 	        if (result.isConfirmed) {
 	            $.ajax({
-	                url: 'post/' + commentId, // 使用 POST 請求的路由
-	                type: 'DELETE', // 使用 POST 方法
+	                url: 'post/' + commentId,
+	                type: 'DELETE', 
 	                success: function(result) {
 	                    Swal.fire({
 	                        title: "已刪除!",

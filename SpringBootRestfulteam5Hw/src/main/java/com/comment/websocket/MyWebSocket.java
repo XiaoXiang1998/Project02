@@ -38,7 +38,7 @@ public class MyWebSocket {
         MemberBean member = (MemberBean) httpSession.getAttribute("member");
         if (member != null) {
             
-            System.out.println("用户连接：username = " + username);
+            System.out.println("用戶連接：username = " + username);
             
             ChatUtils.CLIENTS.put(username, session);
             
@@ -60,12 +60,12 @@ public class MyWebSocket {
             String sender = jsonObject.getString("sender"); 
             String receiver = jsonObject.getString("receiver");
             String content = jsonObject.getString("content");
-            String time = jsonObject.getString("time"); // 提取时间信息
+            String time = jsonObject.getString("time"); 
 
             System.out.println(sender);
             System.out.println(receiver);
             System.out.println(content);
-            System.out.println(time); // 打印时间信息
+            System.out.println(time); 
 
             ChatUtils.sendMessageToUser(receiver, sender, content,time);
         } catch (JSONException e) {
@@ -81,7 +81,7 @@ public class MyWebSocket {
         
         if (!ChatUtils.CLIENTS.isEmpty()) {
             sendOnlineUsersUpdate();
-            sendUserOfflineMessage(username); // 在用戶離線時發送離線提示
+            sendUserOfflineMessage(username); 
 
         }
     }

@@ -11,11 +11,7 @@ import org.springframework.web.socket.server.support.HttpSessionHandshakeInterce
 @EnableWebSocket
 public class WebSocketConfig {
  
-    /**
-     * 自动注册使用了@ServerEndpoint注解声明的Websocket endpoint
-     *
-     * @return
-     */
+    
  
     @Bean
     public ServerEndpointExporter serverEndpointExporter() {

@@ -75,6 +75,8 @@
     border-radius: 50%; 
     margin-right: 10px; 
 }
+
+
 </style>
 </head>
 <body class="gradient-custom">
@@ -114,7 +116,6 @@
 
 	<script>
 	$(function() {
-	    var avatarPath = 'commentPicture/default-avatar.png';
 
 		var ws;
 		if ("WebSocket" in window) {
@@ -126,6 +127,7 @@
 				  console.log("建立 websocket 连接......");
 
 	              loadChatHistory();
+	              handleOnlineUsersUpdate([]);
 			};
 
 			ws.onmessage = function(event) {
@@ -137,9 +139,11 @@
 			    } else if (data.offlineUser !== undefined) { 
 			        var offlineUser = data.offlineUser;
 			        $('#content').append('[' + offlineUser + ']已離線');
+
 			    } else if (data.onlineUser !== undefined ) { 
 			        var onlineUser = data.onlineUser;
 			        $('#content').append('[' + onlineUser + ']已進入聊天室');
+	
 			    } else {
 			        var $content = $('#content');
 			        var messageClass = data.sender === $('#username').val() ? 'right-float'
@@ -157,15 +161,16 @@
 			        
 			        storeMessage(data);
 			        
+			        
 			    }
 			};
 
 			ws.onclose = function() {
-				console.log("关闭 websocket 连接......");
+				console.log("關閉 websocket 連接......");
 			};
 
 			ws.onerror = function(event) {
-				console.log("websocket 发生错误......" + event + '\n');
+				console.log("websocket 發生錯誤......" + event + '\n');
 			};
 
 			$('#toSend').click(function() {
@@ -188,36 +193,65 @@
 			            listItem.textContent = user;
 			            listItem.classList.add("user"); 
 			            
+			            // 添加一个容器来显示最后一条消息的内容
+			            var lastMessageContainer = document.createElement("div");
+			            lastMessageContainer.classList.add("last-message");
+			            listItem.appendChild(lastMessageContainer);
 			            
+			            // 获取用户的最后一条消息
+			            var lastMessage = getLastMessageForUser(user);
+
+			            if (lastMessage !== null) { // 检查是否存在最后一条消息
+			                // 更新容器中的内容为最后一条消息的内容
+			                lastMessageContainer.textContent = lastMessage ? lastMessage.content : "";
+			            }
+
+			            // 添加用户头像
 			            var img = document.createElement("img");
 			            img.src = "commentPicture/deafult-avatar.png"; 
 			            img.alt = "Avatar";
 			            img.classList.add("avatar");
 			            listItem.prepend(img); 
 			            
+			            // 将用户列表项添加到用户列表中
 			            onlineUsersList.appendChild(listItem);
+
+			            // 添加点击事件监听器
+			            listItem.addEventListener("click", function() {
+			                var receiver = user;
+			                onlineUsersList.querySelectorAll(".user").forEach(function(element) {
+			                    element.classList.remove("selected-user");
+			                });
+			                listItem.classList.add("selected-user");
+			                window.selectedReceiver = receiver;
+			            });
 			        }
 			    });
-
-			    onlineUsersList.querySelectorAll(".user").forEach(function(userElement) {
-			        userElement.addEventListener("click", function() {
-			            var receiver = userElement.textContent;
-
-			            onlineUsersList.querySelectorAll(".user").forEach(function(element) {
-			                element.classList.remove("selected-user");
-			            });
-
-			            userElement.classList.add("selected-user");
-
-			            window.selectedReceiver = receiver;
-			        });
-			    });
 			}
+			
+			
+
+			
+			
+			function getLastMessageForUser(username) {
+	            var chatHistory = localStorage.getItem('chatHistory');
+	            if (chatHistory) {
+	                var messages = JSON.parse(chatHistory);
+	                var userMessages = messages.filter(function(message) {
+	                    return message.sender === username;
+	                });
+	                if (userMessages.length > 0) {
+	                    return userMessages[userMessages.length - 1];
+	                }
+	            }
+	            return null;
+	        }
+			
 			function sendMsg(receiver) {
 				var message = $('#message').val();
 				var username = $('#username').val();
 				var receiver = window.selectedReceiver;
-	
+				var sender=$('#message').val();
 			    var currentTime = getCurrentTime(); 
 	
 				
@@ -244,6 +278,8 @@
 				
 			    var scrollHeight = $('#chat-content')[0].scrollHeight;
 			    $('#chat-content').scrollTop(scrollHeight);
+			    
+
 			}
 			
 			function getCurrentTime() {
@@ -285,6 +321,9 @@
 	                $('#chat-content').scrollTop(scrollHeight);
 	            }
 	        }
+	        
+	        
+	        
 		} else {
 			alert("很抱歉，您的瀏覽器不支持 WebSocket！！！");
 		}

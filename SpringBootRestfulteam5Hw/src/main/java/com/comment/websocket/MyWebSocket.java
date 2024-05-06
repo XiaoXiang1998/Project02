@@ -29,7 +29,9 @@ public class MyWebSocket {
 
     @Autowired
     private HttpSession httpSession;
-	
+		
+    
+    
     @OnOpen
     public void onOpen(@PathParam("username") String username, Session session, EndpointConfig config) throws JSONException {
         Map<String, Object> userProperties = config.getUserProperties();

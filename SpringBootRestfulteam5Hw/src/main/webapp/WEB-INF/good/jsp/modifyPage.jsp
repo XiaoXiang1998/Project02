@@ -55,6 +55,9 @@
                         <!-- 新的coding -->
                     </div>
                     <div id="hiddenGoodImageData">
+                        <!--  -->
+                        <input type="text" class="form-control" value="-1" name="GoodDelete" hidden>
+                        <!--  -->
                     </div>
                 </div>
             </fieldset>
@@ -437,6 +440,8 @@
                 if ([...formatdata.children()].length == 6) {
                     console.log([...[...formatdata.children()][5].children][0].getAttribute("value"));//取得表格編號
                     let formatID = [...[...formatdata.children()][5].children][0].getAttribute("value");
+                    // console.log(formatdata);
+                    // formatdata.prop("innerHTML", "");
                     if (formatID == null) {
 
                     }
@@ -454,6 +459,18 @@
                     if ([...formatdata.children()].length == 8) {
                         console.log([...[...formatdata.children()][7].children][0].getAttribute("value"));
                         let formatID = [...[...formatdata.children()][7].children][0].getAttribute("value");
+                        // let nexttr = $(this).closest('tr').next();
+                        // let arrnexttd = [...nexttr.children()];
+                        // let reserveSize = arrnexttd[0].getAttribute("value");
+                        // let reservePrice = arrnexttd[1].getAttribute("value");
+                        // let reserveStock = arrnexttd[2].getAttribute("value");
+                        // let reserveHidden = arrnexttd[4].getAttribute("value");
+                        // let reserveGoodID = arrnexttd[5].getAttribute("value");
+                        // [...[...formatdata.children()][1].children][0].setAttribute("value", reserveSize);
+                        // [...[...formatdata.children()][2].children][0].setAttribute("value", reservePrice);
+                        // [...[...formatdata.children()][3].children][0].setAttribute("value", reserveStock);
+                        // [...[...formatdata.children()][6].children][0].setAttribute("value", reserveHidden);
+                        // [...[...formatdata.children()][7].children][0].setAttribute("value", reserveGoodID);
                         if (formatID == null) {
 
                         } else {
@@ -502,12 +519,14 @@
                     else {//假若仍有超過一筆資料
                         let nextdata = $(this).closest('tr').next();
                         let arrnextdata = [...nextdata.children()];
-                        console.log(arrnextdata);
+                        console.log([...arrnextdata[0].children][0].getAttribute("value"));
                         //取得下一個tr標籤的屬性
-                        let size = arrnextdata[0].getAttribute("value"); console.log(size);
-                        let price = arrnextdata[1].getAttribute("value"); console.log(price);
-                        let stock = arrnextdata[2].getAttribute("value"); console.log(stock);
-                        let hiddenValue = arrnextdata[4].getAttribute("value"); console.log(hiddenValue);
+                        let size = [...arrnextdata[0].children][0].getAttribute("value"); console.log(size);
+                        let price = [...arrnextdata[1].children][0].getAttribute("value"); console.log(price);
+                        let stock = [...arrnextdata[2].children][0].getAttribute("value"); console.log(stock);
+                        let hiddenValue = [...arrnextdata[4].children][0].getAttribute("value"); console.log(hiddenValue);
+                        let formatID = [...arrnextdata[5].children][0].getAttribute("value"); console.log(formatID);
+
                         //將取得的屬性值填入第一列
                         let arrtargettd = [...formatdata.children()];//裡面是td標籤
                         let input1 = arrtargettd[1].children[0];
@@ -516,6 +535,8 @@
                         arrtargettd[2].children[0].setAttribute("value", price);
                         arrtargettd[3].children[0].setAttribute("value", stock);
                         arrtargettd[6].children[0].setAttribute("value", hiddenValue);
+                        arrtargettd[7].children[0].setAttribute("value", formatID);
+
                         let rowspanNum = arrtargettd[0].getAttribute("rowspan");
                         console.log(rowspanNum);
                         //將
@@ -526,7 +547,7 @@
                 }
                 else {
                     let previewformdata = formatdata.prev();
-                    while (previewformdata.children().length == 5) {//
+                    while (previewformdata.children().length == 6) {//
                         previewformdata = previewformdata.prev();
                     }
                     formatdata.prop("outerHTML", "");

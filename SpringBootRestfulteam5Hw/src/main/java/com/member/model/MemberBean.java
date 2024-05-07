@@ -60,13 +60,13 @@ public class MemberBean {
 	private boolean seller;
 
 	@Column(name = "reviewcount")
-	private int reviewCount;
+	private Integer reviewCount;
 
 	@Column(name = "cumulativescore")
-	private int cumulativeScore;
+	private Integer cumulativeScore;
 
 	@Column(name = "totalsalesamount")
-	private int totalSalesAmount;
+	private Integer totalSalesAmount;
 	
 	@Column(name="level")
 	private Integer level;
@@ -212,34 +212,32 @@ public class MemberBean {
 	public boolean isSeller() {
 		return seller;
 	}
-	
-	
 
 	public void setSeller(boolean seller) {
 		this.seller = seller;
 	}
 
-	public int getReviewCount() {
+	public Integer getReviewCount() {
 		return reviewCount;
 	}
 
-	public void setReviewCount(int reviewCount) {
+	public void setReviewCount(Integer reviewCount) {
 		this.reviewCount = reviewCount;
 	}
 
-	public int getCumulativeScore() {
+	public Integer getCumulativeScore() {
 		return cumulativeScore;
 	}
 
-	public void setCumulativeScore(int cumulativeScore) {
+	public void setCumulativeScore(Integer cumulativeScore) {
 		this.cumulativeScore = cumulativeScore;
 	}
 
-	public int getTotalSalesAmount() {
+	public Integer getTotalSalesAmount() {
 		return totalSalesAmount;
 	}
 
-	public void setTotalSalesAmount(int totalSalesAmount) {
+	public void setTotalSalesAmount(Integer totalSalesAmount) {
 		this.totalSalesAmount = totalSalesAmount;
 	}
 
@@ -251,6 +249,38 @@ public class MemberBean {
 		this.level = level;
 	}
 
+	public Set<GoodsBean2> getGoods2() {
+		return goods2;
+	}
+
+	public void setGoods2(Set<GoodsBean2> goods2) {
+		this.goods2 = goods2;
+	}
+
+	public Set<PaymentDetails> getPayments() {
+		return payments;
+	}
+
+	public void setPayments(Set<PaymentDetails> payments) {
+		this.payments = payments;
+	}
+
+	public Set<Orders> getBuyers() {
+		return buyers;
+	}
+
+	public void setBuyers(Set<Orders> buyers) {
+		this.buyers = buyers;
+	}
+
+	public Set<Orders> getSellers() {
+		return sellers;
+	}
+
+	public void setSellers(Set<Orders> sellers) {
+		this.sellers = sellers;
+	}
+
 	public List<Post> getPosts() {
 		return posts;
 	}
@@ -258,6 +288,8 @@ public class MemberBean {
 	public void setPosts(List<Post> posts) {
 		this.posts = posts;
 	}
+
+	
 
 	
 	

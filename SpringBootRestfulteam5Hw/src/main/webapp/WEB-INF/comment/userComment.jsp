@@ -211,12 +211,31 @@ body {
     pointer-events: none;
     cursor: default;
 }
+
+.time-and-details {
+        flex-grow: 1; /* 彈性增長，以填滿可用空間 */
+        display: flex;
+        flex-direction: row;
+    }
+    .order-details {
+        margin-right: 10px; /* 增加右邊距，使得各項目之間有一定間距 */
+    }
+    
+    .time{
+	    margin-right: 5px; /* 調整時間和 | 之間的間距 */
+	
+}
+
+.separator {
+    margin-right: 5px; /* 調整右側間距 */
+    margin-left: 5px; /* 調整左側間距 */
+}
 </style>
 </head>
 <body>
 	<%@ include file="indexcomment.jsp" %>
 
-		<div class="container">
+	<div class="container">
     <c:forEach items="${comments}" var="comment">
         <div class="item" data-comment-id="${comment.commentid}">
             <i class="avatar"></i>
@@ -227,10 +246,18 @@ body {
                         <img src="commentPicture/output.png" alt="star" width="20" height="20">
                     </c:forEach>
                 </p>
-                <c:if test="${not empty comment.commenttime}">
-                    <fmt:formatDate value="${comment.commenttime}" pattern="yyyy-MM-dd HH:mm" var="formattedCommentTime" />
-                    <p class="time">${formattedCommentTime}</p>
-                </c:if>
+                <div class="time-and-details">
+                    <c:if test="${not empty comment.commenttime}">
+                        <fmt:formatDate value="${comment.commenttime}" pattern="yyyy-MM-dd HH:mm" var="formattedCommentTime" />
+                        <p class="time">${formattedCommentTime}</p>
+                    </c:if>
+                        <!-- 顯示訂單的ID -->
+                    <p class="order-details"><span class="separator">|</span>訂單編號: ${comment.orders.orderId}</p>
+                        <!-- 顯示規格的尺寸 -->
+                    <p class="order-details">規格尺寸: ${comment.orders.formatgoodId.goodSize}</p>
+                        <!-- 顯示商品的名稱 -->
+                    <p class="order-details">商品名稱: ${comment.orders.formatgoodId.good.goodsName}</p>  
+                </div>
                 <c:choose>
                     <c:when test="${not empty comment.productphoto}">
                         <a href="${pageContext.request.contextPath}/${comment.productphoto}" data-lightbox="product-images-${comment.commentid}">
@@ -241,12 +268,6 @@ body {
                         <div class="no-image"></div>
                     </c:otherwise>
                 </c:choose>
-                <!-- 顯示訂單的ID -->
-                <p class="order-id">訂單編號: ${comment.orders.orderId}</p>
-                <!-- 顯示規格的尺寸 -->
-                <p class="spec-size">規格尺寸: ${comment.orders.formatgoodId.goodSize}</p>
-                <!-- 顯示商品的名稱 -->
-                <p class="product-name">商品名稱: ${comment.orders.formatgoodId.good.goodsName}</p>
                 <p class="text">${comment.commentcontent}</p>
                 <div class="dropdown">
                     <button class="dropbtn">&#8942;</button>

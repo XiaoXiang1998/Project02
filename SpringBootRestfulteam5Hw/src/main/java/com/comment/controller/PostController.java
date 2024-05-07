@@ -125,6 +125,10 @@ public class PostController {
         
         return "comment/userComment"; 
     }
+	
+	
+	
+	
 	 
 	 @DeleteMapping("/post/{pid}")
 	 public ResponseEntity<String> deleteAction(@PathVariable("pid") Integer id) {
@@ -279,7 +283,24 @@ public class PostController {
 //	        
 //	        model.addAttribute("post", userComments);
 //	        
-//	        return "comment/sellerReplay"; 
-//	    }
+  //      return "comment/sellerReplay"; 
+	//    }
+	 
+/
+	 
+	 @GetMapping("/sellerComments")
+	 public String getsellerComments(Model model, HttpSession session) {
+	     // 從會話中獲取當前登入的賣家
+	     MemberBean seller = (MemberBean) session.getAttribute("member");
+	     
+	     // 調用PostRepository中的自定義查詢方法來查詢與賣家相關的評論
+	     List<Post> sellerComments = pService.findCommentsBySellerId(seller.getSid());
+	     
+	     // 將查詢結果添加到模型中
+	     model.addAttribute("comments", sellerComments);
+	     
+	     // 返回視圖名稱
+	     return "comment/sellercomment"; 
+	 }
 	
 }

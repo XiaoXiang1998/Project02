@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import com.member.model.MemberBean;
+import com.member.model.MemberService;
 import com.sean.model.Orders;
 import com.sean.model.OrdersService;
 import com.comment.model.PostMemberService;
@@ -49,6 +50,9 @@ public class PostController {
 	private PostMemberService mService;
 	@Autowired
 	private OrdersService oService;
+	
+	@Autowired
+	private MemberService memberService;
 	
 	@Autowired
 	private GoodService gService;
@@ -97,17 +101,25 @@ public class PostController {
 		post.setOrders(orders);
 		pService.insert(post);
 		
-		if (good != null) {
-		    if (good.getNumberRatings() == null) {
-		        good.setNumberRatings(0);
+		 if (good != null) {
+		        if (good.getNumberRatings() == null) {
+		            good.setNumberRatings(0);
+		        }
+		        if (good.getRating() == null) {
+		            good.setRating(0);
+		        }
+		        good.setNumberRatings(good.getNumberRatings() + 1);
+		        good.setRating(good.getRating() + rate);
+		        gService.update(good);
+		        
+		        MemberBean seller = good.getGoodsSellerID();
+		        if (seller != null) {
+		           
+		        	seller.setReviewCount(seller.getReviewCount() + 1);
+		            seller.setCumulativeScore(seller.getCumulativeScore() + rate);
+		            memberService.update(member); 
+		        }
 		    }
-		    if (good.getRating() == null) {
-		        good.setRating(0);
-		    }
-		    good.setNumberRatings(good.getNumberRatings() + 1);
-		    good.setRating(good.getRating() + rate);
-		    gService.update(good);
-		}
 		
 		return "redirect:indexcomment";
 	}
@@ -255,13 +267,13 @@ public class PostController {
 	        // 更新會員信息
 	        MemberBean memberBean = mService.findById(memberId).orElse(null);
 	        if (memberBean != null) {
-	            // 更新被評論分數和累積次數
-	            member.setReviewCount(member.getReviewCount() + 1);
-	            member.setCumulativeScore(member.getTotalSalesAmount() + sellerRate);
-	            mService.insertMember(member);
+	        	 // 更新被評論分數和累積次數
+	            memberBean.setReviewCount(memberBean.getReviewCount() + 1);
+	            memberBean.setCumulativeScore(memberBean.getTotalSalesAmount() + sellerRate);
+	            mService.insertMember(memberBean);// 使用 save 方法來更新會員信息
 	        }
 
-	        return "redirect:allUsersComments";
+	        return "redirect:sellerComments";
 	    }
 	 
 	 @GetMapping("/commentadmin")
@@ -291,7 +303,7 @@ public class PostController {
 	 public String getsellerComments(Model model, HttpSession session) {
 	     // 從會話中獲取當前登入的賣家
 	     MemberBean seller = (MemberBean) session.getAttribute("member");
-	     
+	     System.out.println("ID"+seller.getSid());
 	     // 調用PostRepository中的自定義查詢方法來查詢與賣家相關的評論
 	     List<Post> sellerComments = pService.findCommentsBySellerId(seller.getSid());
 	     
@@ -299,7 +311,7 @@ public class PostController {
 	     model.addAttribute("comments", sellerComments);
 	     
 	     // 返回視圖名稱
-	     return "comment/sellercomment"; 
+	     return "comment/sellerReplay"; 
 	 }
 	
 }

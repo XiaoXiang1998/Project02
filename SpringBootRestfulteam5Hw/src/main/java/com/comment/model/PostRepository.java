@@ -11,12 +11,13 @@ import org.springframework.data.repository.query.Param;
 import com.member.model.MemberBean;
 
 public interface PostRepository extends JpaRepository<Post, Integer> {
-	Page<Post> findByMemberOrderByCommenttimeDesc(MemberBean member, Pageable pageable);
+	Page<Post> findByMemberOrderByCommenttimeDesc(MemberBean member, Pageable pageable);	
+	
 	 // 根據商品的賣家ID查詢相關的評論
     @Query("SELECT p FROM Post p " +
            "INNER JOIN p.orders o " +
            "INNER JOIN o.formatgoodId f " +
            "INNER JOIN f.good g " +
-           "WHERE g.goodsSellerID = :sellerId")
+           "WHERE g.goodsSellerID.sid = :sellerId")
     List<Post> findPostsBySellerId(@Param("sellerId") Integer sellerId);
 }

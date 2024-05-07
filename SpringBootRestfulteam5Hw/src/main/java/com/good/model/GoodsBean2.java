@@ -46,6 +46,11 @@ public class GoodsBean2 implements java.io.Serializable {
 	private String brand;
 	@Column(name = "SHIPMENTPLACE")
 	private String shipmentPlace;
+	@Column(name = "NUMBERRATINGS")
+	private Integer numberRatings;
+	@Column(name = "RATING")
+	private Integer rating;
+
 	@ManyToOne
 	@JoinColumn(name = "GOODSSELLERID")
 	@JsonBackReference
@@ -180,7 +185,21 @@ public class GoodsBean2 implements java.io.Serializable {
 	public void setTitleImage(String titleImage) {
 		this.titleImage = titleImage;
 	}
+	public Integer getNumberRatings() {
+		return numberRatings;
+	}
 
+	public void setNumberRatings(Integer numberRatings) {
+		this.numberRatings = numberRatings;
+	}
+
+	public Integer getRating() {
+		return rating;
+	}
+
+	public void setRating(Integer rating) {
+		this.rating = rating;
+	}
 	@Override
 	public String toString() {
 		return "GoodsBean2 [goodsID=" + goodsID + ", goodsName=" + goodsName + ", goodsDirection=" + goodsDirection

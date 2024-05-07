@@ -161,7 +161,8 @@
 			        
 			        storeMessage(data);
 			        
-			        
+			        updateLastMessageForUser(data.sender, data.content, data.time);
+
 			    }
 			};
 
@@ -192,6 +193,9 @@
 			            var listItem = document.createElement("li");
 			            listItem.textContent = user;
 			            listItem.classList.add("user"); 
+			            
+			            listItem.setAttribute("data-username", user); 
+
 			            
 			            // 添加一个容器来显示最后一条消息的内容
 			            var lastMessageContainer = document.createElement("div");
@@ -246,6 +250,25 @@
 	            }
 	            return null;
 	        }
+			
+			function updateLastMessageForUser(username, content, time) {
+			    console.log("进步来是沙小");
+
+			    var onlineUsersList = document.getElementById("onlineUsersList");
+			    var userItems = onlineUsersList.querySelectorAll(".user");
+
+			    userItems.forEach(function(userItem) {
+			        // 使用自定义属性来获取用户名
+			        var userItemUsername = userItem.getAttribute("data-username");
+			        if (userItemUsername === username) { // 如果用户名匹配
+			            var lastMessageContainer = userItem.querySelector(".last-message");
+			            console.log(userItemUsername);
+			            lastMessageContainer.textContent = content;
+			            console.log(content);
+			        }
+			    });
+			}
+
 			
 			function sendMsg(receiver) {
 				var message = $('#message').val();

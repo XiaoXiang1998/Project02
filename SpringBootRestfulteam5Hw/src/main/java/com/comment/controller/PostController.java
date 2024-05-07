@@ -286,7 +286,6 @@ public class PostController {
   //      return "comment/sellerReplay"; 
 	//    }
 	 
-/
 	 
 	 @GetMapping("/sellerComments")
 	 public String getsellerComments(Model model, HttpSession session) {

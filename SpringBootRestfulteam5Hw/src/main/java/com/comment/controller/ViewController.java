@@ -1,7 +1,9 @@
 package com.comment.controller;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
@@ -20,7 +22,8 @@ public class ViewController {
 	}
 	
 	@GetMapping("/insertPost")
-	public String insert() {
+	public String insert(@RequestParam("commentId") Integer orderId, Model m) {
+		m.addAttribute("orderId",orderId);
 		return "comment/insert";
 	}
 	

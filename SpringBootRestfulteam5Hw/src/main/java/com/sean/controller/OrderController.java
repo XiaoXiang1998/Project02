@@ -204,13 +204,20 @@ public class OrderController {
 			}
 				cService.clearShopCarByMemberId(memberId);
 				if(paymentMethod == 1) {
-					Optional<GoodFormat> products = gService.findById(productIds[0]);
-					GoodFormat product = products.get();
-					String goodsName = product.getGood().getGoodsName();
+					StringBuilder concatenatedGoodsNames = new StringBuilder();
+					for (Integer productId : productIds) {
+					    Optional<GoodFormat> products = gService.findById(productId);
+					    if (products.isPresent()) {
+					        GoodFormat product = products.get();
+					        String goodsName = product.getGood().getGoodsName();
+					        concatenatedGoodsNames.append(goodsName).append("#");
+					    }
+					}
+					String goodsNamesString = concatenatedGoodsNames.toString();
 					SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 					String StringDate = sdf.format(currentDate);
 					String StringTotalAmount = String.valueOf(AlltotalPrice);
-					String aioCheckOutALLForm = oService.ecpayCheckout(StringTotalAmount,StringDate,goodsName);
+					String aioCheckOutALLForm = oService.ecpayCheckout(StringTotalAmount,StringDate,goodsNamesString);
 
 					m.addAttribute("aioCheckOutALLForm",aioCheckOutALLForm);
 				

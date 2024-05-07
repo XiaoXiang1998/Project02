@@ -33,6 +33,9 @@ import com.sean.model.OrdersService;
 import com.comment.model.PostMemberService;
 import com.comment.model.Post;
 import com.comment.model.PostService;
+import com.good.controller.GoodService;
+import com.good.model.GoodsBean2;
+
 import org.springframework.data.domain.Pageable;
 
 import jakarta.servlet.http.HttpSession;
@@ -47,6 +50,10 @@ public class PostController {
 	@Autowired
 	private OrdersService oService;
 	
+	@Autowired
+	private GoodService gService;
+	
+	
 	@PostMapping("/post")
 	public String postAction(@RequestParam(value = "commentContent", required = false) String commentContent,@RequestParam("commentId") Integer orderId ,@RequestParam("productimage")  MultipartFile mf,@RequestParam("rate") int rate,
             HttpSession session) throws IllegalStateException, IOException {
@@ -55,6 +62,8 @@ public class PostController {
 		
 	
 		Orders orders = oService.getById(orderId);
+		
+		GoodsBean2 good = orders.getFormatgoodId().getGood();
 		
 		Post post =new Post();
 		
@@ -87,6 +96,18 @@ public class PostController {
 		post.setMember(member);
 		post.setOrders(orders);
 		pService.insert(post);
+		
+		if (good != null) {
+		    if (good.getNumberRatings() == null) {
+		        good.setNumberRatings(0);
+		    }
+		    if (good.getRating() == null) {
+		        good.setRating(0);
+		    }
+		    good.setNumberRatings(good.getNumberRatings() + 1);
+		    good.setRating(good.getRating() + rate);
+		    gService.update(good);
+		}
 		
 		return "redirect:indexcomment";
 	}

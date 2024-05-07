@@ -140,6 +140,7 @@
 								</thead>
 								<tbody>
 									<c:forEach var="member" items="${allMembers}">
+									<c:if test="${not empty member.posts}">
 										<c:forEach items="${member.posts}" var="post">
 											<tr>
 												<td>${member.name}</td>
@@ -163,6 +164,8 @@
 												<td><button onclick="deleteComment(${post.commentid});">刪除</button></td>
 											</tr>
 										</c:forEach>
+										    </c:if>
+										
 									</c:forEach>
 								</tbody>
 							</table>

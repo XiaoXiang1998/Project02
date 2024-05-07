@@ -567,7 +567,6 @@ public class GoodController {
 						// EX: 中/1400/500/sharkitty20.jpg
 						String[] dataImageNum = item2.split("/");
 						System.out.println("item2 = " + item2);
-						String check = "";
 						if (dataImageNum.length == 4) {// 新增資料(1.新增圖片)
 							// 攔截隱藏欄位的所有資料
 							// 新增圖片(大/1500/1000/sharkitty19.jpg)

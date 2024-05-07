@@ -241,6 +241,12 @@ body {
                         <div class="no-image"></div>
                     </c:otherwise>
                 </c:choose>
+                <!-- 顯示訂單的ID -->
+                <p class="order-id">訂單編號: ${comment.orders.orderId}</p>
+                <!-- 顯示規格的尺寸 -->
+                <p class="spec-size">規格尺寸: ${comment.orders.formatgoodId.goodSize}</p>
+                <!-- 顯示商品的名稱 -->
+                <p class="product-name">商品名稱: ${comment.orders.formatgoodId.good.goodsName}</p>
                 <p class="text">${comment.commentcontent}</p>
                 <div class="dropdown">
                     <button class="dropbtn">&#8942;</button>

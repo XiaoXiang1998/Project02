@@ -8,7 +8,6 @@ import java.util.Set;
 import org.springframework.stereotype.Component;
 
 import com.comment.model.Post;
-import com.comment.model.Result;
 import com.good.model.GoodsBean2;
 import com.sean.model.Orders;
 import com.sean.model.PaymentDetails;

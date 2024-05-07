@@ -8,16 +8,18 @@
 
 <head>
 <meta charset="BIG5">
-<title>Insert title here</title>
+<title>訂單管理</title>
 <link
 	href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css"
-	rel="stylesheet" />
+	rel="stylesheet"/>
 <link href="Order/css/styles.css" rel="stylesheet" />
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/plug-ins/2.0.7/i18n/zh-HANT.json"></script>
 <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js"
 	crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 <link rel="stylesheet"
 	href="https://cdn.jsdelivr.net/npm/sweetalert2@10/dist/sweetalert2.min.css">
+
 </head>
 
 <body class="sb-nav-fixed">
@@ -157,10 +159,7 @@
 		<div id="layoutSidenav_content">
 			<main>
 				<div class="container-fluid px-4">
-					<h1 class="mt-4">Dashboard</h1>
-					<ol class="breadcrumb mb-4">
-						<li class="breadcrumb-item active">Dashboard</li>
-					</ol>
+					<h1 class="mt-4">訂單管理</h1>
 					<div class="row">
 						<div class="col-xl-6">
 							<div class="card mb-4">
@@ -185,7 +184,7 @@
 					</div>
 					<div class="card mb-4">
 						<div class="card-header">
-							<i class="fas fa-table me-1"></i> DataTable Example
+							<i class="fas fa-table me-1"></i> 訂單詳情
 						</div>
 						<div class="card-body">
 							<table id="datatablesSimple">
@@ -358,6 +357,7 @@
 		src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js"
 		crossorigin="anonymous"></script>
 	<script src="Order/js/datatables-simple-demo.js"></script>
+	
 	<script>
 							function showEditForm(orderId, shippingName, shippingTel, shippingAddress, orderStatus) {
 								document.getElementById('editOrderId').value = orderId;
@@ -443,7 +443,8 @@
 											});
 									}
 								});
-							}	
+							}
+							
 		</script>
 </body>
 

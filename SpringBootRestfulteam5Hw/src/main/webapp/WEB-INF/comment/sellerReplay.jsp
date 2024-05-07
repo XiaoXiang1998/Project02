@@ -12,7 +12,10 @@
 <link rel="stylesheet" id="templatecss" type="text/css"
 	href="/commentcss/style.css">
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-	
+	<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/css/lightbox.min.css">
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/js/lightbox.min.js"></script>
 <style>
 body {
 	font-family: Arial, sans-serif;
@@ -134,7 +137,7 @@ body {
                 <c:choose>
                     <c:when test="${not empty comment.productphoto}">
                         <a href="${pageContext.request.contextPath}/${comment.productphoto}" data-lightbox="product-images-${comment.commentid}">
-                            <img class="product-photo" src="${pageContext.request.contextPath}/${comment.productphoto}" alt="產品圖片">
+                            <img class="product-photo" src="${pageContext.request.contextPath}/${comment.productphoto}" alt="產品圖片" width="60px" height="60px">
                         </a>
                     </c:when>
                     <c:otherwise>

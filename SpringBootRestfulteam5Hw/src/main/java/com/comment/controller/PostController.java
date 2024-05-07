@@ -43,10 +43,10 @@ public class PostController {
 	private PostMemberService mService;
 	
 	@PostMapping("/post")
-	public String postAction(@RequestParam(value = "commentContent", required = false) String commentContent,@RequestParam("productimage")  MultipartFile mf,@RequestParam("rate") int rate,
+	public String postAction(@RequestParam(value = "commentContent", required = false) String commentContent,@RequestParam("commentId") Integer orderId ,@RequestParam("productimage")  MultipartFile mf,@RequestParam("rate") int rate,
             HttpSession session) throws IllegalStateException, IOException {
 		MemberBean member = (MemberBean) session.getAttribute("member");
-		
+		System.out.println(orderId);
 		Post post =new Post();
 		
 		if (mf != null && !mf.isEmpty()) { // 檢查圖片是否不為空
@@ -76,6 +76,7 @@ public class PostController {
 		post.setCommenttime(currentTimestamp);
 		post.setLastmodifiedtime(currentTimestamp);
 		post.setMember(member);
+		post.setOrders(orderId);
 		pService.insert(post);
 		
 		return "redirect:indexcomment";

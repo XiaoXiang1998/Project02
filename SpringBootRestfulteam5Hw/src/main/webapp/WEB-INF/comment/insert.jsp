@@ -45,14 +45,14 @@ button {
 </style>
 </head>
 <body>
-	<%@ include file="indexcomment.jsp" %>
-	
-		<form action="post" method="post" class="basic-grey"
-		id="commentForm" enctype="multipart/form-data">
+	<%@ include file="indexcomment.jsp"%>
+
+	<form action="post" method="post" class="basic-grey" id="commentForm"
+		enctype="multipart/form-data">
 		<h1 id="alter">
 			評論區<span>請發表友善評論!</span>
 		</h1>
-		 <label> <span>要給的評論 :</span> <textarea id="CommentContent"
+		<label> <span>要給的評論 :</span> <textarea id="CommentContent"
 				name="commentContent" rows="10" cols="30" maxlength="100"
 				placeholder="請寫下您的評論"></textarea>
 		</label> <span id="charCount" class="charCount">輸入的字數:0/100</span><br /> <label>
@@ -65,12 +65,10 @@ button {
 		</div>
 		<input type="hidden" name="rate" id="rate" value="0"><label>
 			<span>&nbsp;</span> <input type="submit" class="button" value="Send" />
-		</label>
-
+		</label> <input type="hidden" id="comment" name="commentId" value="${orderId}">
 	</form>
 
 	<script>
-
 		$(document).ready(function() {
 			var rating = 0;
 

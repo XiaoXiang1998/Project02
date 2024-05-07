@@ -2,10 +2,13 @@ package com.sean.model;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.comment.model.Post;
 
 import ecpay.payment.integration.AllInOne;
 import ecpay.payment.integration.domain.AioCheckOutALL;
@@ -60,4 +63,15 @@ public class OrdersService {
 
 		return form;
 	}
+
+	public Orders getById(Integer id) {
+		 Optional<Orders> op1 = oRops.findById(id);
+		 if(op1.isPresent()) {
+			 return op1.get();
+		 }
+		 
+		 return null;
+	}
+	
+	
 }

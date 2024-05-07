@@ -258,9 +258,8 @@
 			    var userItems = onlineUsersList.querySelectorAll(".user");
 
 			    userItems.forEach(function(userItem) {
-			        // 使用自定义属性来获取用户名
 			        var userItemUsername = userItem.getAttribute("data-username");
-			        if (userItemUsername === username) { // 如果用户名匹配
+			        if (userItemUsername === username) { 
 			            var lastMessageContainer = userItem.querySelector(".last-message");
 			            console.log(userItemUsername);
 			            lastMessageContainer.textContent = content;

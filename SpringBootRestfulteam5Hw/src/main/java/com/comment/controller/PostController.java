@@ -6,6 +6,7 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.apache.commons.io.FilenameUtils;
@@ -27,6 +28,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import com.member.model.MemberBean;
+import com.sean.model.Orders;
+import com.sean.model.OrdersService;
 import com.comment.model.PostMemberService;
 import com.comment.model.Post;
 import com.comment.model.PostService;
@@ -41,12 +44,18 @@ public class PostController {
 	
 	@Autowired
 	private PostMemberService mService;
+	@Autowired
+	private OrdersService oService;
 	
 	@PostMapping("/post")
 	public String postAction(@RequestParam(value = "commentContent", required = false) String commentContent,@RequestParam("commentId") Integer orderId ,@RequestParam("productimage")  MultipartFile mf,@RequestParam("rate") int rate,
             HttpSession session) throws IllegalStateException, IOException {
 		MemberBean member = (MemberBean) session.getAttribute("member");
 		System.out.println(orderId);
+		
+	
+		Orders orders = oService.getById(orderId);
+		
 		Post post =new Post();
 		
 		if (mf != null && !mf.isEmpty()) { // 檢查圖片是否不為空
@@ -76,7 +85,7 @@ public class PostController {
 		post.setCommenttime(currentTimestamp);
 		post.setLastmodifiedtime(currentTimestamp);
 		post.setMember(member);
-		post.setOrders(orderId);
+		post.setOrders(orders);
 		pService.insert(post);
 		
 		return "redirect:indexcomment";

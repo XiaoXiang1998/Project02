@@ -84,6 +84,10 @@ public class OrderController {
 		m.addAttribute("carItems", carItems);
 		return "Order/jsp/ShopCar";
 	}
+	@GetMapping("test")
+	public String test() {
+		return "Order/jsp/Test";
+	}
 
 	@GetMapping("product.controller")
 	public String Product(Model m) {
@@ -236,7 +240,7 @@ public class OrderController {
 			List<Orders> orders = oService.findByOrderStatusNot(5);
 			m.addAttribute("queryType", queryType);
 			m.addAttribute("orders", orders);
-			return "/Order/jsp/QueryAll";
+			return "/Order/jsp/Test";
 		case "byOrderId":
 			int orderId = Integer.parseInt(orderIdStr);
 			Orders order = oService.findByOrderIdAndOrderStatusNot(orderId,5);

@@ -236,8 +236,7 @@
 											});
 									}
 								});
-							}
-						</script>
+							}	
+		</script>
 </body>
-
 </html>

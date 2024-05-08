@@ -290,7 +290,7 @@ body {
 														<div class="bit-com">
 															<c:forEach begin="1" end="${reply.sellerrate}">
 																<img src="commentPicture/output.png" alt="star"
-																	width="20" height="20">
+																		width="20" height="20">
 															</c:forEach>
 														</div>
 													</c:if>

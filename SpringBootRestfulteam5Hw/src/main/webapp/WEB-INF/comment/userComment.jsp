@@ -247,16 +247,12 @@ body {
                     </c:forEach>
                 </p>
                 <div class="time-and-details">
-                    <c:if test="${not empty comment.commenttime}">
-                        <fmt:formatDate value="${comment.commenttime}" pattern="yyyy-MM-dd HH:mm" var="formattedCommentTime" />
-                        <p class="time">${formattedCommentTime}</p>
+                    <p class="time">${comment.commenttime}</p>
+                    <c:if test="${empty comment.repliedcommentid}">
+                        <p class="order-details"><span class="separator">|</span>訂單編號: ${comment.orders.orderId}</p>
+                        <p class="order-details">規格尺寸: ${comment.orders.formatgoodId.goodSize}</p>
+                        <p class="order-details">商品名稱: ${comment.orders.formatgoodId.good.goodsName}</p>
                     </c:if>
-                        <!-- 顯示訂單的ID -->
-                    <p class="order-details"><span class="separator">|</span>訂單編號: ${comment.orders.orderId}</p>
-                        <!-- 顯示規格的尺寸 -->
-                    <p class="order-details">規格尺寸: ${comment.orders.formatgoodId.goodSize}</p>
-                        <!-- 顯示商品的名稱 -->
-                    <p class="order-details">商品名稱: ${comment.orders.formatgoodId.good.goodsName}</p>  
                 </div>
                 <c:choose>
                     <c:when test="${not empty comment.productphoto}">
@@ -269,6 +265,22 @@ body {
                     </c:otherwise>
                 </c:choose>
                 <p class="text">${comment.commentcontent}</p>
+				<c:if test="${comment.commentid == comment.repliedcommentid}">
+                        <div class="seller-reply">
+                            <p class="text">賣家回應<br /><br />${comment.replaycontent}</p>
+                            <c:if test="${not empty comment.replaytime}">
+                                <fmt:formatDate value="${comment.replaytime}" pattern="yyyy-MM-dd HH:mm" var="formattedResponseTime" />
+                                <p class="time">回覆時間: ${formattedResponseTime}</p>
+                            </c:if>
+                            <c:if test="${not empty comment.sellerrate}">
+                                <div class="bit-com">
+                                    <c:forEach begin="1" end="${comment.sellerrate}">
+                                        <img src="commentPicture/output.png" alt="star" width="20" height="20">
+                                    </c:forEach>
+                                </div>
+                            </c:if>
+                        </div>
+                    </c:if>
                 <div class="dropdown">
                     <button class="dropbtn">&#8942;</button>
                     <div class="dropdown-content">
@@ -277,14 +289,13 @@ body {
                     </div>
                 </div>
                 <div id="editForm${comment.commentid}" style="display: none;" class="edit-window">
-                    <!-- 編輯表單 -->
                     <span class="close-btn" onclick="closeEditWindow(${comment.commentid})">×</span>
                     <form id="commentForm${comment.commentid}" action="post/${comment.commentid}" method="post">
                         <input type="hidden" name="_method" value="PUT">
                         <textarea name="commentContent" id="commentContent_${comment.commentid}"></textarea>
                         <button type="button" onclick="updateComment(${comment.commentid});">提交</button>
                     </form>
-                </div>
+                </div>                            
             </div>
         </div>
     </c:forEach>

@@ -129,11 +129,11 @@ public class PostController {
 		MemberBean member = (MemberBean) session.getAttribute("member");
 	    Pageable pageable = PageRequest.of(page, 5); 
 
-        Page<Post> userComments = pService.findByMemberOrderByCommenttimeDesc(member, pageable);
+	    Page<Post> userComments = pService.findByMemberOrderByCommenttimeDesc(member, pageable);
         
-        model.addAttribute("comments", userComments.getContent()); // 当前页的评论列表
+	    model.addAttribute("comments", userComments.getContent()); // Current page's comments
         model.addAttribute("currentPage", page); // 当前页码
-        model.addAttribute("totalPages", userComments.getTotalPages()); // 总页数
+        model.addAttribute("totalPages", userComments.getTotalPages()); // Total number of pages
         
         return "comment/userComment"; 
     }
@@ -300,15 +300,25 @@ public class PostController {
 	 
 	 
 	 @GetMapping("/sellerComments")
-	 public String getsellerComments(Model model, HttpSession session) {
+	 public String getsellerComments(Model model, HttpSession session,
+	                                 @RequestParam(defaultValue = "0") int page) {
 	     // 從會話中獲取當前登入的賣家
 	     MemberBean seller = (MemberBean) session.getAttribute("member");
-	     System.out.println("ID"+seller.getSid());
-	     // 調用PostRepository中的自定義查詢方法來查詢與賣家相關的評論
-	     List<Post> sellerComments = pService.findCommentsBySellerId(seller.getSid());
+	     System.out.println("ID" + seller.getSid());
 	     
-	     // 將查詢結果添加到模型中
-	     model.addAttribute("comments", sellerComments);
+	     // 設定每頁顯示的資料筆數
+	     int pageSize = 2;
+	     
+	     // 使用Pageable對象進行分頁查詢
+	     Pageable pageable = PageRequest.of(page, pageSize);
+	     
+	     // 調用PostRepository中的自定義查詢方法來查詢與賣家相關的評論
+	     Page<Post> sellerComments = pService.findCommentsBySellerId(seller.getSid(), pageable);
+	     
+	     // 將查詢結果和分頁相關的資訊添加到模型中
+	     model.addAttribute("comments", sellerComments.getContent());
+	     model.addAttribute("currentPage", sellerComments.getNumber()); // 注意: Spring Data JPA的頁碼從0開始
+	     model.addAttribute("totalPages", sellerComments.getTotalPages());
 	     
 	     // 返回視圖名稱
 	     return "comment/sellerReplay"; 

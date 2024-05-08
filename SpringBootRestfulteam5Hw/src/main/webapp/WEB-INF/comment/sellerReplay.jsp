@@ -103,7 +103,45 @@ body {
 	background: url(commentPicture/output.png) no-repeat;
 	background-size: 24px 24px;
 }
+    .tab .page-link {
+        border: 1px solid rgba(0, 0, 0, 0.2);
+        border-radius: 5px;
+        background-color: transparent;
+        outline: none;
+        cursor: pointer;
+        padding: 10px 15px;
+        transition: background-color 0.3s;
+        margin: 0 5px; /* 調整按鈕之間的間距 */
+        position: relative; /* 將span元素定位相對於按鈕 */
+        text-align: center;
+    }
 
+    .tab .page-link .badge {
+        position: absolute; /* 使用絕對位置 */
+        top: -10px; /* 調整數字在按鈕上的位置 */
+        right: -10px; /* 調整數字在按鈕上的位置 */
+        background-color: #ff0000; /* 設置背景顏色 */
+        color: #ffffff; /* 設置文字顏色 */
+        border-radius: 50%; /* 圓形邊框 */
+        padding: 5px; /* 調整內邊距 */
+        font-size: 12px; /* 調整字體大小 */
+        display: inline-block; /* 使span元素顯示為行內塊 */
+        opacity: 1; /* 初始時顯示 */
+        transition: opacity 0.3s; /* 添加過渡效果 */
+    }
+
+    /* 鼠標懸停時的效果 */
+    .tab .page-link:hover {
+        background-color: rgba(0, 0, 0, 0.1);
+    }
+
+    /* 激活/選中按鈕的樣式 */
+    .tab .page-link.active {
+        background-color: rgba(0, 0, 0, 0.2);
+        color: #fff; /* 設置文字顏色 */
+    }
+
+ 
 </style>
 </head>
 <body>
@@ -171,6 +209,18 @@ body {
         </div>
     </c:forEach>
 </div>
+
+<!-- 分頁連結 -->
+<div class="tab" style="text-align: center; margin-top: 20px;">
+    <ul class="pagination justify-content-center" style="margin-left: -20px;">
+        <c:forEach begin="1" end="${totalPages}" var="pageNumber">
+            <li class="page-item" style="margin-right: 5px;">
+                <a class="page-link ${pageNumber eq currentPage + 1 ? 'active' : ''}" href="?page=${pageNumber - 1}">${pageNumber}</a>
+            </li>
+        </c:forEach>
+    </ul>
+</div>
+
 <script>
 
 

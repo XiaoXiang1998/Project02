@@ -65,7 +65,7 @@ public class PostService {
         return pRepository.findByMemberOrderByCommenttimeDesc(member, pageable);
     }
 	
-	public Page<Post> findCommentsBySellerId(Integer sellerId, Pageable pageable) {
+	public Page<Post> findPostsBySellerId(int sellerId, Pageable pageable) {
 	    return pRepository.findPostsBySellerId(sellerId, pageable);
 	}
 	  public Page<Post> findUserCommentsAndReplies(MemberBean member, Pageable pageable) {

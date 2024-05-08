@@ -34,7 +34,7 @@
 	<nav class="bg-light py-3">
 		<div class="container">
 			<ul class="nav justify-content-center">
-				<li class="nav-item"><a class="nav-link" href="sellerComments">查看關於我的評論</a>
+				<li class="nav-item"><a class="nav-link" href="sellerComments">查看賣場評價</a>
 				</li>
 				<li class="nav-item"><a class="nav-link" href="#">查看所有買家的評論</a>
 				</li>

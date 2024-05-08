@@ -147,68 +147,429 @@ body {
 <body>
 
 	<%@ include file="sellercomment.jsp"%>
-
+	
+	
+	
 
 	<div class="container">
-    <c:forEach items="${comments}" var="comment">
-        <div class="item" data-comment-id="${comment.commentid}">
-            <i class="avatar"></i>
-            <div class="info">
-                <p class="name">${comment.member.name}</p>
-                <p>
-                    <c:forEach begin="1" end="${comment.buyerrate}">
-                        <img src="commentPicture/output.png" alt="star" width="20" height="20">
-                    </c:forEach>
-                </p>
-                <div class="time-and-details">
-                    <c:if test="${not empty comment.commenttime}">
-                        <fmt:formatDate value="${comment.commenttime}" pattern="yyyy-MM-dd HH:mm" var="formattedCommentTime" />
-                        <p class="time">${formattedCommentTime}</p>
-                    </c:if>
-                    <!-- 顯示訂單的ID -->
-                    <p class="order-details"><span class="separator">|</span>訂單編號: ${comment.orders.orderId}</p>
-                    <!-- 顯示規格的尺寸 -->
-                    <p class="order-details">規格尺寸: ${comment.orders.formatgoodId.goodSize}</p>
-                    <!-- 顯示商品的名稱 -->
-                    <p class="order-details">商品名稱: ${comment.orders.formatgoodId.good.goodsName}</p>
-                </div>
-                <c:choose>
-                    <c:when test="${not empty comment.productphoto}">
-                        <a href="${pageContext.request.contextPath}/${comment.productphoto}" data-lightbox="product-images-${comment.commentid}">
-                            <img class="product-photo" src="${pageContext.request.contextPath}/${comment.productphoto}" alt="產品圖片" width="60px" height="60px">
-                        </a>
-                    </c:when>
-                    <c:otherwise>
-                        <div class="no-image"></div>
-                    </c:otherwise>
-                </c:choose>
-                <p class="text">${comment.commentcontent}</p>
-            </div>
-            	  <!-- 回覆按鈕 -->
-                <button class="reply-btn" onclick="toggleReplyForm('${comment.commentid}')">回覆</button>
-                <!-- 回覆表單 -->
-                <div id="replyFormContainer${comment.commentid}" style="display: none;">
-                    <form action="/submitReply" method="post" class="bootstrap-frm" id="replyForm${comment.commentid}">
-                        <span class="close-btn" onclick="closeReplyForm('${comment.commentid}')">×</span>
-                        <h1 id="alter">
-                            回覆<span>請填寫回覆內容</span>
-                        </h1>
-                        <input type="hidden" name="memberId" value="${comment.member.sid}">
-                        <input type="hidden" name="commentId" value="${comment.commentid}">
-                        <label><span>回覆內容:</span>
-                            <textarea id="replyContent${comment.commentid}" name="replyContent" rows="10" cols="30" maxlength="100" placeholder="Your Reply" required></textarea>
-                        </label>
-                        <span class="replyContent${comment.commentid}" id="replyContent" data->輸入的字數:0/100</span><br />
-                        <div class="bit-com">
-                            評分:<span class="bit" id="bit1"></span> <span class="bit" id="bit2"></span> <span class="bit" id="bit3"></span> <span class="bit" id="bit4"></span> <span class="bit" id="bit5"></span>
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" id="all-tab" data-toggle="tab" href="#all" role="tab" aria-controls="all" aria-selected="true">全部</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="five-star-tab" data-toggle="tab" href="#five-star" role="tab" aria-controls="five-star" aria-selected="false">五星評論</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="four-star-tab" data-toggle="tab" href="#four-star" role="tab" aria-controls="four-star" aria-selected="false">四星評論</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="three-star-tab" data-toggle="tab" href="#three-star" role="tab" aria-controls="three-star" aria-selected="false">三星評論</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="two-star-tab" data-toggle="tab" href="#two-star" role="tab" aria-controls="two-star" aria-selected="false">二星評論</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="one-star-tab" data-toggle="tab" href="#one-star" role="tab" aria-controls="one-star" aria-selected="false">一星評論</a>
+        </li>
+    </ul>
+    <div class="tab-content" id="myTabContent">
+        <!-- 全部 -->
+        <div class="tab-pane fade show active" id="all" role="tabpanel" aria-labelledby="all-tab">
+            <c:forEach items="${comments}" var="comment">
+                <div class="item" data-comment-id="${comment.commentid}">
+                    <!-- 评论内容展示 -->
+                    <i class="avatar"></i>
+                    <div class="info">
+                        <p class="name">${comment.member.name}</p>
+                        <p>
+                            <c:forEach begin="1" end="${comment.buyerrate}">
+                                <img src="commentPicture/output.png" alt="star" width="20" height="20">
+                            </c:forEach>
+                        </p>
+                        <div class="time-and-details">
+                            <c:if test="${not empty comment.commenttime}">
+                                <fmt:formatDate value="${comment.commenttime}" pattern="yyyy-MM-dd HH:mm" var="formattedCommentTime" />
+                                <p class="time">${formattedCommentTime}</p>
+                            </c:if>
+                            <!-- 顯示訂單的ID -->
+                            <p class="order-details"><span class="separator">|</span>訂單編號: ${comment.orders.orderId}</p>
+                            <!-- 顯示規格的尺寸 -->
+                            <p class="order-details">規格尺寸: ${comment.orders.formatgoodId.goodSize}</p>
+                            <!-- 顯示商品的名稱 -->
+                            <p class="order-details">商品名稱: ${comment.orders.formatgoodId.good.goodsName}</p>
                         </div>
-                        <input type="hidden" name="rate" id="replyRate${comment.commentid}" value="0">
-                        <label><span>&nbsp;</span><input type="submit" class="button" value="Send Reply" /></label>
-                    </form>
+                        <c:choose>
+                            <c:when test="${not empty comment.productphoto}">
+                                <a href="${pageContext.request.contextPath}/${comment.productphoto}" data-lightbox="product-images-${comment.commentid}">
+                                    <img class="product-photo" src="${pageContext.request.contextPath}/${comment.productphoto}" alt="產品圖片" width="60px" height="60px">
+                                </a>
+                            </c:when>
+                            <c:otherwise>
+                                <div class="no-image"></div>
+                            </c:otherwise>
+                        </c:choose>
+                        <p class="text">${comment.commentcontent}</p>
+                    </div>
+                    <!-- 回覆按鈕 -->
+                    <button class="reply-btn" onclick="toggleReplyForm('${comment.commentid}')">回覆</button>
+                    <!-- 回覆表單 -->
+                    <div id="replyFormContainer${comment.commentid}" style="display: none;">
+                        <form action="/submitReply" method="post" class="bootstrap-frm" id="replyForm${comment.commentid}">
+                            <span class="close-btn" onclick="closeReplyForm('${comment.commentid}')">×</span>
+                            <h1 id="alter">
+                                回覆<span>請填寫回覆內容</span>
+                            </h1>
+                            <input type="hidden" name="memberId" value="${comment.member.sid}">
+                            <input type="hidden" name="commentId" value="${comment.commentid}">
+                            <label><span>回覆內容:</span>
+                                <textarea id="replyContent${comment.commentid}" name="replyContent" rows="10" cols="30" maxlength="100" placeholder="Your Reply" required></textarea>
+                            </label>
+                            <span class="replyContent${comment.commentid}" id="replyContent" data->輸入的字數:0/100</span><br />
+                            <div class="bit-com">
+                                評分:<span class="bit" id="bit1"></span> <span class="bit" id="bit2"></span> <span class="bit" id="bit3"></span> <span class="bit" id="bit4"></span> <span class="bit" id="bit5"></span>
+                            </div>
+                            <input type="hidden" name="rate" id="replyRate${comment.commentid}" value="0">
+                            <label><span>&nbsp;</span><input type="submit" class="button" value="Send Reply" /></label>
+                        </form>
+                    </div>
                 </div>
+            </c:forEach>
         </div>
-    </c:forEach>
+
+        <!-- 五星評論 -->
+        <div class="tab-pane fade" id="five-star" role="tabpanel" aria-labelledby="five-star-tab">
+            <c:forEach items="${comments}" var="comment">
+                <c:if test="${comment.buyerrate == 5}">
+                    <!-- 评论内容展示 -->
+                    <div class="item" data-comment-id="${comment.commentid}">
+                        <!-- 评论内容展示 -->
+                        <i class="avatar"></i>
+                        <div class="info">
+                            <p class="name">${comment.member.name}</p>
+                            <p>
+                                <c:forEach begin="1" end="${comment.buyerrate}">
+                                    <img src="commentPicture/output.png" alt="star" width="20" height="20">
+                                </c:forEach>
+                            </p>
+                            <div class="time-and-details">
+                                <c:if test="${not empty comment.commenttime}">
+                                    <fmt:formatDate value="${comment.commenttime}" pattern="yyyy-MM-dd HH:mm" var="formattedCommentTime" />
+                                    <p class="time">${formattedCommentTime}</p>
+                                </c:if>
+                                <!-- 顯示訂單的ID -->
+                                <p class="order-details"><span class="separator">|</span>訂單編號: ${comment.orders.orderId}</p>
+                                <!-- 顯示規格的尺寸 -->
+                                <p class="order-details">規格尺寸: ${comment.orders.formatgoodId.goodSize}</p>
+                                <!-- 顯示商品的名稱 -->
+                                <p class="order-details">商品名稱: ${comment.orders.formatgoodId.good.goodsName}</p>
+                            </div>
+                            <c:choose>
+                                <c:when test="${not empty comment.productphoto}">
+                                    <a href="${pageContext.request.contextPath}/${comment.productphoto}" data-lightbox="product-images-${comment.commentid}">
+                                        <img class="product-photo" src="${pageContext.request.contextPath}/${comment.productphoto}" alt="產品圖片" width="60px" height="60px">
+                                    </a>
+                                </c:when>
+                                <c:otherwise>
+                                    <div class="no-image"></div>
+                                </c:otherwise>
+                            </c:choose>
+                            <p class="text">${comment.commentcontent}</p>
+                        </div>
+                        <!-- 回覆按鈕 -->
+                        <button class="reply-btn" onclick="toggleReplyForm('${comment.commentid}')">回覆</button>
+                        <!-- 回覆表單 -->
+                        <div id="replyFormContainer${comment.commentid}" style="display: none;">
+                            <form action="/submitReply" method="post" class="bootstrap-frm" id="replyForm${comment.commentid}">
+                                <span class="close-btn" onclick="closeReplyForm('${comment.commentid}')">×</span>
+                                <h1 id="alter">
+                                    回覆<span>請填寫回覆內容</span>
+                                </h1>
+                                <input type="hidden" name="memberId" value="${comment.member.sid}">
+                                <input type="hidden" name="commentId" value="${comment.commentid}">
+                                <label><span>回覆內容:</span>
+                                    <textarea id="replyContent${comment.commentid}" name="replyContent" rows="10" cols="30" maxlength="100" placeholder="Your Reply" required></textarea>
+                                </label>
+                                <span class="replyContent${comment.commentid}" id="replyContent" data->輸入的字數:0/100</span><br />
+                                <div class="bit-com">
+                                    評分:<span class="bit" id="bit1"></span> <span class="bit" id="bit2"></span> <span class="bit" id="bit3"></span> <span class="bit" id="bit4"></span> <span class="bit" id="bit5"></span>
+                                </div>
+                                <input type="hidden" name="rate" id="replyRate${comment.commentid}" value="0">
+                                <label><span>&nbsp;</span><input type="submit" class="button" value="Send Reply" /></label>
+                            </form>
+                        </div>
+                    </div>
+                </c:if>
+            </c:forEach>
+        </div>
+
+        <!-- 四星評論 -->
+        <div class="tab-pane fade" id="four-star" role="tabpanel" aria-labelledby="four-star-tab">
+            <c:forEach items="${comments}" var="comment">
+                <c:if test="${comment.buyerrate == 4}">
+                    <!-- 评论内容展示 -->
+                    <div class="item" data-comment-id="${comment.commentid}">
+                        <!-- 评论内容展示 -->
+                        <i class="avatar"></i>
+                        <div class="info">
+                            <p class="name">${comment.member.name}</p>
+                            <p>
+                                <c:forEach begin="1" end="${comment.buyerrate}">
+                                    <img src="commentPicture/output.png" alt="star" width="20" height="20">
+                                </c:forEach>
+                            </p>
+                            <div class="time-and-details">
+                                <c:if test="${not empty comment.commenttime}">
+                                    <fmt:formatDate value="${comment.commenttime}" pattern="yyyy-MM-dd HH:mm" var="formattedCommentTime" />
+                                    <p class="time">${formattedCommentTime}</p>
+                                </c:if>
+                                <!-- 顯示訂單的ID -->
+                                <p class="order-details"><span class="separator">|</span>訂單編號: ${comment.orders.orderId}</p>
+                                <!-- 顯示規格的尺寸 -->
+                                <p class="order-details">規格尺寸: ${comment.orders.formatgoodId.goodSize}</p>
+                                <!-- 顯示商品的名稱 -->
+                                <p class="order-details">商品名稱: ${comment.orders.formatgoodId.good.goodsName}</p>
+                            </div>
+                            <c:choose>
+                                <c:when test="${not empty comment.productphoto}">
+                                    <a href="${pageContext.request.contextPath}/${comment.productphoto}" data-lightbox="product-images-${comment.commentid}">
+                                        <img class="product-photo" src="${pageContext.request.contextPath}/${comment.productphoto}" alt="產品圖片" width="60px" height="60px">
+                                    </a>
+                                </c:when>
+                                <c:otherwise>
+                                    <div class="no-image"></div>
+                                </c:otherwise>
+                            </c:choose>
+                            <p class="text">${comment.commentcontent}</p>
+                        </div>
+                        <!-- 回覆按鈕 -->
+                        <button class="reply-btn" onclick="toggleReplyForm('${comment.commentid}')">回覆</button>
+                        <!-- 回覆表單 -->
+                        <div id="replyFormContainer${comment.commentid}" style="display: none;">
+                            <form action="/submitReply" method="post" class="bootstrap-frm" id="replyForm${comment.commentid}">
+                                <span class="close-btn" onclick="closeReplyForm('${comment.commentid}')">×</span>
+                                <h1 id="alter">
+                                    回覆<span>請填寫回覆內容</span>
+                                </h1>
+                                <input type="hidden" name="memberId" value="${comment.member.sid}">
+                                <input type="hidden" name="commentId" value="${comment.commentid}">
+                                <label><span>回覆內容:</span>
+                                    <textarea id="replyContent${comment.commentid}" name="replyContent" rows="10" cols="30" maxlength="100" placeholder="Your Reply" required></textarea>
+                                </label>
+                                <span class="replyContent${comment.commentid}" id="replyContent" data->輸入的字數:0/100</span><br />
+                                <div class="bit-com">
+                                    評分:<span class="bit" id="bit1"></span> <span class="bit" id="bit2"></span> <span class="bit" id="bit3"></span> <span class="bit" id="bit4"></span> <span class="bit" id="bit5"></span>
+                                </div>
+                                <input type="hidden" name="rate" id="replyRate${comment.commentid}" value="0">
+                                <label><span>&nbsp;</span><input type="submit" class="button" value="Send Reply" /></label>
+                            </form>
+                        </div>
+                    </div>
+                </c:if>
+            </c:forEach>
+        </div>
+
+        <!-- 三星評論 -->
+        <div class="tab-pane fade" id="three-star" role="tabpanel" aria-labelledby="three-star-tab">
+            <c:forEach items="${comments}" var="comment">
+                <c:if test="${comment.buyerrate == 3}">
+                    <!-- 评论内容展示 -->
+                    <div class="item" data-comment-id="${comment.commentid}">
+                        <!-- 评论内容展示 -->
+                        <i class="avatar"></i>
+                        <div class="info">
+                            <p class="name">${comment.member.name}</p>
+                            <p>
+                                <c:forEach begin="1" end="${comment.buyerrate}">
+                                    <img src="commentPicture/output.png" alt="star" width="20" height="20">
+                                </c:forEach>
+                            </p>
+                            <div class="time-and-details">
+                                <c:if test="${not empty comment.commenttime}">
+                                    <fmt:formatDate value="${comment.commenttime}" pattern="yyyy-MM-dd HH:mm" var="formattedCommentTime" />
+                                    <p class="time">${formattedCommentTime}</p>
+                                </c:if>
+                                <!-- 顯示訂單的ID -->
+                                <p class="order-details"><span class="separator">|</span>訂單編號: ${comment.orders.orderId}</p>
+                                <!-- 顯示規格的尺寸 -->
+                                <p class="order-details">規格尺寸: ${comment.orders.formatgoodId.goodSize}</p>
+                                <!-- 顯示商品的名稱 -->
+                                <p class="order-details">商品名稱: ${comment.orders.formatgoodId.good.goodsName}</p>
+                            </div>
+                            <c:choose>
+                                <c:when test="${not empty comment.productphoto}">
+                                    <a href="${pageContext.request.contextPath}/${comment.productphoto}" data-lightbox="product-images-${comment.commentid}">
+                                        <img class="product-photo" src="${pageContext.request.contextPath}/${comment.productphoto}" alt="產品圖片" width="60px" height="60px">
+                                    </a>
+                                </c:when>
+                                <c:otherwise>
+                                    <div class="no-image"></div>
+                                </c:otherwise>
+                            </c:choose>
+                            <p class="text">${comment.commentcontent}</p>
+                        </div>
+                        <!-- 回覆按鈕 -->
+                        <button class="reply-btn" onclick="toggleReplyForm('${comment.commentid}')">回覆</button>
+                        <!-- 回覆表單 -->
+                        <div id="replyFormContainer${comment.commentid}" style="display: none;">
+                            <form action="/submitReply" method="post" class="bootstrap-frm" id="replyForm${comment.commentid}">
+                                <span class="close-btn" onclick="closeReplyForm('${comment.commentid}')">×</span>
+                                <h1 id="alter">
+                                    回覆<span>請填寫回覆內容</span>
+                                </h1>
+                                <input type="hidden" name="memberId" value="${comment.member.sid}">
+                                <input type="hidden" name="commentId" value="${comment.commentid}">
+                                <label><span>回覆內容:</span>
+                                    <textarea id="replyContent${comment.commentid}" name="replyContent" rows="10" cols="30" maxlength="100" placeholder="Your Reply" required></textarea>
+                                </label>
+                                <span class="replyContent${comment.commentid}" id="replyContent" data->輸入的字數:0/100</span><br />
+                                <div class="bit-com">
+                                    評分:<span class="bit" id="bit1"></span> <span class="bit" id="bit2"></span> <span class="bit" id="bit3"></span> <span class="bit" id="bit4"></span> <span class="bit" id="bit5"></span>
+                                </div>
+                                <input type="hidden" name="rate" id="replyRate${comment.commentid}" value="0">
+                                <label><span>&nbsp;</span><input type="submit" class="button" value="Send Reply" /></label>
+                            </form>
+                        </div>
+                    </div>
+                </c:if>
+            </c:forEach>
+        </div>
+
+        <!-- 二星評論 -->
+        <div class="tab-pane fade" id="two-star" role="tabpanel" aria-labelledby="two-star-tab">
+            <c:forEach items="${comments}" var="comment">
+                <c:if test="${comment.buyerrate == 2}">
+                    <!-- 评论内容展示 -->
+                    <div class="item" data-comment-id="${comment.commentid}">
+                        <!-- 评论内容展示 -->
+                        <i class="avatar"></i>
+                        <div class="info">
+                            <p class="name">${comment.member.name}</p>
+                            <p>
+                                <c:forEach begin="1" end="${comment.buyerrate}">
+                                    <img src="commentPicture/output.png" alt="star" width="20" height="20">
+                                </c:forEach>
+                            </p>
+                            <div class="time-and-details">
+                                <c:if test="${not empty comment.commenttime}">
+                                    <fmt:formatDate value="${comment.commenttime}" pattern="yyyy-MM-dd HH:mm" var="formattedCommentTime" />
+                                    <p class="time">${formattedCommentTime}</p>
+                                </c:if>
+                                <!-- 顯示訂單的ID -->
+                                <p class="order-details"><span class="separator">|</span>訂單編號: ${comment.orders.orderId}</p>
+                                <!-- 顯示規格的尺寸 -->
+                                <p class="order-details">規格尺寸: ${comment.orders.formatgoodId.goodSize}</p>
+                                <!-- 顯示商品的名稱 -->
+                                <p class="order-details">商品名稱: ${comment.orders.formatgoodId.good.goodsName}</p>
+                            </div>
+                            <c:choose>
+                                <c:when test="${not empty comment.productphoto}">
+                                    <a href="${pageContext.request.contextPath}/${comment.productphoto}" data-lightbox="product-images-${comment.commentid}">
+                                        <img class="product-photo" src="${pageContext.request.contextPath}/${comment.productphoto}" alt="產品圖片" width="60px" height="60px">
+                                    </a>
+                                </c:when>
+                                <c:otherwise>
+                                    <div class="no-image"></div>
+                                </c:otherwise>
+                            </c:choose>
+                            <p class="text">${comment.commentcontent}</p>
+                        </div>
+                        <!-- 回覆按鈕 -->
+                        <button class="reply-btn" onclick="toggleReplyForm('${comment.commentid}')">回覆</button>
+                        <!-- 回覆表單 -->
+                        <div id="replyFormContainer${comment.commentid}" style="display: none;">
+                            <form action="/submitReply" method="post" class="bootstrap-frm" id="replyForm${comment.commentid}">
+                                <span class="close-btn" onclick="closeReplyForm('${comment.commentid}')">×</span>
+                                <h1 id="alter">
+                                    回覆<span>請填寫回覆內容</span>
+                                </h1>
+                                <input type="hidden" name="memberId" value="${comment.member.sid}">
+                                <input type="hidden" name="commentId" value="${comment.commentid}">
+                                <label><span>回覆內容:</span>
+                                    <textarea id="replyContent${comment.commentid}" name="replyContent" rows="10" cols="30" maxlength="100" placeholder="Your Reply" required></textarea>
+                                </label>
+                                <span class="replyContent${comment.commentid}" id="replyContent" data->輸入的字數:0/100</span><br />
+                                <div class="bit-com">
+                                    評分:<span class="bit" id="bit1"></span> <span class="bit" id="bit2"></span> <span class="bit" id="bit3"></span> <span class="bit" id="bit4"></span> <span class="bit" id="bit5"></span>
+                                </div>
+                                <input type="hidden" name="rate" id="replyRate${comment.commentid}" value="0">
+                                <label><span>&nbsp;</span><input type="submit" class="button" value="Send Reply" /></label>
+                            </form>
+                        </div>
+                    </div>
+                </c:if>
+            </c:forEach>
+        </div>
+
+        <!-- 一星評論 -->
+        <div class="tab-pane fade" id="one-star" role="tabpanel" aria-labelledby="one-star-tab">
+            <c:forEach items="${comments}" var="comment">
+                <c:if test="${comment.buyerrate == 1}">
+                    <!-- 评论内容展示 -->
+                    <div class="item" data-comment-id="${comment.commentid}">
+                        <!-- 评论内容展示 -->
+                        <i class="avatar"></i>
+                        <div class="info">
+                            <p class="name">${comment.member.name}</p>
+                            <p>
+                                <c:forEach begin="1" end="${comment.buyerrate}">
+                                    <img src="commentPicture/output.png" alt="star" width="20" height="20">
+                                </c:forEach>
+                            </p>
+                            <div class="time-and-details">
+                                <c:if test="${not empty comment.commenttime}">
+                                    <fmt:formatDate value="${comment.commenttime}" pattern="yyyy-MM-dd HH:mm" var="formattedCommentTime" />
+                                    <p class="time">${formattedCommentTime}</p>
+                                </c:if>
+                                <!-- 顯示訂單的ID -->
+                                <p class="order-details"><span class="separator">|</span>訂單編號: ${comment.orders.orderId}</p>
+                                <!-- 顯示規格的尺寸 -->
+                                <p class="order-details">規格尺寸: ${comment.orders.formatgoodId.goodSize}</p>
+                                <!-- 顯示商品的名稱 -->
+                                <p class="order-details">商品名稱: ${comment.orders.formatgoodId.good.goodsName}</p>
+                            </div>
+                            <c:choose>
+                                <c:when test="${not empty comment.productphoto}">
+                                    <a href="${pageContext.request.contextPath}/${comment.productphoto}" data-lightbox="product-images-${comment.commentid}">
+                                        <img class="product-photo" src="${pageContext.request.contextPath}/${comment.productphoto}" alt="產品圖片" width="60px" height="60px">
+                                    </a>
+                                </c:when>
+                                <c:otherwise>
+                                    <div class="no-image"></div>
+                                </c:otherwise>
+                            </c:choose>
+                            <p class="text">${comment.commentcontent}</p>
+                        </div>
+                        <!-- 回覆按鈕 -->
+                        <button class="reply-btn" onclick="toggleReplyForm('${comment.commentid}')">回覆</button>
+                        <!-- 回覆表單 -->
+                        <div id="replyFormContainer${comment.commentid}" style="display: none;">
+                            <form action="/submitReply" method="post" class="bootstrap-frm" id="replyForm${comment.commentid}">
+                                <span class="close-btn" onclick="closeReplyForm('${comment.commentid}')">×</span>
+                                <h1 id="alter">
+                                    回覆<span>請填寫回覆內容</span>
+                                </h1>
+                                <input type="hidden" name="memberId" value="${comment.member.sid}">
+                                <input type="hidden" name="commentId" value="${comment.commentid}">
+                                <label><span>回覆內容:</span>
+                                    <textarea id="replyContent${comment.commentid}" name="replyContent" rows="10" cols="30" maxlength="100" placeholder="Your Reply" required></textarea>
+                                </label>
+                                <span class="replyContent${comment.commentid}" id="replyContent" data->輸入的字數:0/100</span><br />
+                                <div class="bit-com">
+                                    評分:<span class="bit" id="bit1"></span> <span class="bit" id="bit2"></span> <span class="bit" id="bit3"></span> <span class="bit" id="bit4"></span> <span class="bit" id="bit5"></span>
+                                </div>
+                                <input type="hidden" name="rate" id="replyRate${comment.commentid}" value="0">
+                                <label><span>&nbsp;</span><input type="submit" class="button" value="Send Reply" /></label>
+                            </form>
+                        </div>
+                    </div>
+                </c:if>
+            </c:forEach>
+        </div>
+    </div>
 </div>
+
+
+
 
 <!-- 分頁連結 -->
 <div class="tab" style="text-align: center; margin-top: 20px;">
@@ -268,6 +629,17 @@ $('body').on('submit', '.bootstrap-frm', function() {
         return false;
     }
 });
+</script>
+
+<script>
+    $(document).ready(function () {
+        $(".nav-link").click(function () {
+            $(".nav-link").removeClass("active");
+            $(this).addClass("active");
+            $(".tab-pane").removeClass("show active");
+            $($(this).attr("href")).addClass("show active");
+        });
+    });
 </script>
 </body>
 </html>

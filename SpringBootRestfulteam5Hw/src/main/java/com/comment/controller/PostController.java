@@ -287,22 +287,13 @@ public class PostController {
 			return "comment/commentadmin";
 		}
 	 
-//		@GetMapping("/sellerComments")
-//	    public String getsellerComments(Model model, HttpSession session) {
-//			MemberBean member = (MemberBean) session.getAttribute("member");
-//	        
-//	       List<Post> userComments = pService.f(member);
-//	        
-//	        model.addAttribute("post", userComments);
-//	        
-  //      return "comment/sellerReplay"; 
-	//    }
+
 	 
 	 
 	 @GetMapping("/sellerComments")
 	 public String getsellerComments(Model model, HttpSession session,
 	                                 @RequestParam(defaultValue = "0") int page) {
-	     // 從會話中獲取當前登入的賣家
+    //  從會話中獲取當前登入的賣家
 	     MemberBean seller = (MemberBean) session.getAttribute("member");
 	     System.out.println("ID" + seller.getSid());
 	     
@@ -313,7 +304,7 @@ public class PostController {
 	     Pageable pageable = PageRequest.of(page, pageSize);
 	     
 	     // 調用PostRepository中的自定義查詢方法來查詢與賣家相關的評論
-	     Page<Post> sellerComments = pService.findCommentsBySellerId(seller.getSid(), pageable);
+     Page<Post> sellerComments = pService.findPostsBySellerId(seller.getSid(), pageable);
 	     
 	     // 將查詢結果和分頁相關的資訊添加到模型中
 	     model.addAttribute("comments", sellerComments.getContent());
@@ -323,5 +314,7 @@ public class PostController {
 	     // 返回視圖名稱
 	     return "comment/sellerReplay"; 
 	 }
+	 
+
 	
 }

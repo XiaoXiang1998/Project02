@@ -265,22 +265,6 @@ body {
                     </c:otherwise>
                 </c:choose>
                 <p class="text">${comment.commentcontent}</p>
-				<c:if test="${comment.commentid == comment.repliedcommentid}">
-                        <div class="seller-reply">
-                            <p class="text">賣家回應<br /><br />${comment.replaycontent}</p>
-                            <c:if test="${not empty comment.replaytime}">
-                                <fmt:formatDate value="${comment.replaytime}" pattern="yyyy-MM-dd HH:mm" var="formattedResponseTime" />
-                                <p class="time">回覆時間: ${formattedResponseTime}</p>
-                            </c:if>
-                            <c:if test="${not empty comment.sellerrate}">
-                                <div class="bit-com">
-                                    <c:forEach begin="1" end="${comment.sellerrate}">
-                                        <img src="commentPicture/output.png" alt="star" width="20" height="20">
-                                    </c:forEach>
-                                </div>
-                            </c:if>
-                        </div>
-                    </c:if>
                 <div class="dropdown">
                     <button class="dropbtn">&#8942;</button>
                     <div class="dropdown-content">

@@ -68,8 +68,8 @@ public class PostService {
 	public Page<Post> findPostsBySellerId(int sellerId, Pageable pageable) {
 	    return pRepository.findPostsBySellerId(sellerId, pageable);
 	}
-	  public Page<Post> findUserCommentsAndReplies(MemberBean member, Pageable pageable) {
-	        return pRepository.findUserCommentsAndReplies(member, pageable);
-	    }
+	  
+	
+
 
 }

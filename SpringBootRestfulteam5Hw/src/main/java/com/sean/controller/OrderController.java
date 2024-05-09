@@ -231,18 +231,13 @@ public class OrderController {
 		}
 	
 	@GetMapping("queryOrder.controller")
-	public String QueryOrder(@RequestParam("queryType")String queryType, Model m ) {
-			m.addAttribute("page","query");
-		switch (queryType) {
-		case "all":
+	public String QueryOrder(Model m ) {
 			List<Orders> orders = oService.findByOrderStatusNot(5);
-			m.addAttribute("queryType", queryType);
 			m.addAttribute("orders", orders);
 			return "/Order/jsp/Test";
-		default:
-			throw new IllegalArgumentException("Error");
+
 		}
-	}
+	
 	
 	@PutMapping("fakeDelete.controller")
 	public void DeleteOrder(@RequestParam("orderId") String orderIdStr,

@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.comment.model.Post;
+import com.member.model.MemberBean;
 
 import ecpay.payment.integration.AllInOne;
 import ecpay.payment.integration.domain.AioCheckOutALL;
@@ -27,6 +28,27 @@ public class OrdersService {
 	
 	public List<Orders> findByOrderStatusNot(Integer orderStatus){
 		return oRops.findByOrderStatusNot(orderStatus);
+	}
+	public List<Orders> findByBuyerIdAndOrderStatus(MemberBean BuyerId,Integer status){
+		return oRops.findByBuyerIdAndOrderStatus(BuyerId,status);
+	}
+	public List<Orders> findBySellerIdAndOrderStatus0(MemberBean SellerId,Integer status){
+		return oRops.findBySellerIdAndOrderStatus(SellerId, 0);
+	}
+	public List<Orders> findBySellerIdAndOrderStatus1(MemberBean SellerId,Integer status){
+		return oRops.findBySellerIdAndOrderStatus(SellerId, 1);
+	}
+	public List<Orders> findBySellerIdAndOrderStatus2(MemberBean SellerId,Integer status){
+		return oRops.findBySellerIdAndOrderStatus(SellerId, 2);
+	}
+	public List<Orders> findBySellerIdAndOrderStatus3(MemberBean SellerId,Integer status){
+		return oRops.findBySellerIdAndOrderStatus(SellerId, 3);
+	}
+	public List<Orders> findBySellerIdAndOrderStatus4(MemberBean SellerId,Integer status){
+		return oRops.findBySellerIdAndOrderStatus(SellerId, 4);
+	}
+	public List<Orders> findBySellerIdAndOrderStatus5(MemberBean SellerId,Integer status){
+		return oRops.findBySellerIdAndOrderStatus(SellerId, 5);
 	}
 	
 	public Orders findByOrderIdAndOrderStatusNot(Integer orderId,Integer orderStatus) {

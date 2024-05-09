@@ -24,9 +24,9 @@ public class GoodImageBean {
 	@Column(name="GOODIMAGEID")
 	private Integer goodImageID;//自動建立ID
 	
-	@Column(name="GOODSID")
-	@Transient
-	private Integer goodsID;//外來鍵不用給值
+//	@Column(name="GOODSID")
+//	@Transient
+//	private Integer goodsID;//外來鍵不用給值
 
 	@Column(name="IMAGEPATH")
 	private String imagePath;//路徑名稱需要給值
@@ -36,9 +36,9 @@ public class GoodImageBean {
 	@JsonBackReference
 	private GoodsBean2 good;
 	//
-	public GoodImageBean(Integer goodImageID, Integer goodID, String imagePath) {
+	public GoodImageBean(Integer goodImageID, String imagePath) {
 		this.goodImageID = goodImageID;
-		this.goodsID = goodID;
+//		this.goodsID = goodID;
 		this.imagePath = imagePath;
 	}
 	
@@ -46,8 +46,8 @@ public class GoodImageBean {
 
 	}
 
-	public GoodImageBean(Integer goodID, String imagePath) {
-		this.goodsID = goodID;
+	public GoodImageBean( String imagePath) {
+//		this.goodsID = goodID;
 		this.imagePath = imagePath;
 	}
 	//
@@ -60,13 +60,13 @@ public class GoodImageBean {
 		this.goodImageID = goodImageID;
 	}
 
-	public Integer getGoodID() {
-		return goodsID;
-	}
-
-	public void setGoodID(Integer goodID) {
-		this.goodsID = goodID;
-	}
+//	public Integer getGoodID() {
+//		return goodsID;
+//	}
+//
+//	public void setGoodID(Integer goodID) {
+//		this.goodsID = goodID;
+//	}
 
 	public String getImagePath() {
 		return imagePath;
@@ -82,6 +82,11 @@ public class GoodImageBean {
 
 	public void setGood(GoodsBean2 good) {
 		this.good = good;
+	}
+
+	@Override
+	public String toString() {
+		return "GoodImageBean [goodImageID=" + goodImageID + ", imagePath=" + imagePath + ", good=" + good + "]";
 	}
 	
 }

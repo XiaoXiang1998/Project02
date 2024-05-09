@@ -8,6 +8,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
+import com.member.model.MemberBean;
+
 public interface OrderRepository extends JpaRepository<Orders, Integer> {
 	
 	public List<Orders> findByOrderStatusNot(Integer orderStatus);
@@ -16,6 +18,9 @@ public interface OrderRepository extends JpaRepository<Orders, Integer> {
 
 	public List<Orders> findByCreatedAtBetweenAndOrderStatusNot(Date startDate, Date endDate, int orderStatus);
 	
+	public List<Orders> findByBuyerIdAndOrderStatus(MemberBean BuyerId,Integer status);
+	
+	public List<Orders> findBySellerIdAndOrderStatus(MemberBean SellerId,Integer status);
 	@Modifying
 	@Query(value = "update Orders set orderStatus = 5 where orderId = ?1")
 	public void cancelOrderById(Integer orderId);

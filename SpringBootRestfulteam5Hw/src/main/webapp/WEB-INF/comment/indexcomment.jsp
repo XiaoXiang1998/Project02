@@ -44,6 +44,9 @@
           <a class="nav-link" href="allUsersComments">查看其他人評論</a>
         </li>
         <li class="nav-item">
+          <a class="nav-link" href="sellerCommentsForUser">買家評價</a>
+        </li>
+        <li class="nav-item">
           <a class="nav-link" href="returnToControlUI">返回管理介面</a>
         </li>
         <li class="nav-item">

@@ -196,6 +196,7 @@ body {
                         </h1>
                         <input type="hidden" name="memberId" value="${comment.member.sid}">
                         <input type="hidden" name="commentId" value="${comment.commentid}">
+                        <input type="hidden" name="orderId" value="${comment.orders.orderId}">
                         <label><span>回覆內容:</span>
                             <textarea id="replyContent${comment.commentid}" name="replyContent" rows="10" cols="30" maxlength="100" placeholder="Your Reply" required></textarea>
                         </label>

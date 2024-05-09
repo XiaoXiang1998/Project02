@@ -4,7 +4,7 @@ package com.comment.model;
 
 
 
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Component;	
 
 import com.member.model.MemberBean;
 import com.sean.model.Orders;

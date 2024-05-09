@@ -271,7 +271,6 @@ public class PostController {
 	        reply.setMember(member);
 	        
 	        reply.setRepliedcommentid(commentId);
-	        reply.setOrders(orders);
 	        
 	       pService.insert(reply);
 	       
@@ -282,7 +281,7 @@ public class PostController {
 	        if (memberBean != null) {
 	        	 // 更新被評論分數和累積次數
 	            memberBean.setReviewCount(memberBean.getReviewCount() + 1);
-	            memberBean.setCumulativeScore(memberBean.getTotalSalesAmount() + sellerRate);
+	            memberBean.setCumulativeScore(memberBean.getCumulativeScore() + sellerRate);
 	            mService.insertMember(memberBean);// 使用 save 方法來更新會員信息
 	        }
 
@@ -332,7 +331,12 @@ public class PostController {
 	 public String getSellerCommentsForUser(Model model, HttpSession session) {
 	     // 从 session 中获取当前登录的用户信息
 	     MemberBean user = (MemberBean) session.getAttribute("member");
-
+	     int reviewCount=user.getReviewCount();
+	     int cumulativeScore=user.getCumulativeScore();
+	     
+	     int avergeScore=cumulativeScore/reviewCount;
+	     
+	     
 	     // 获取当前登录用户的所有评论
 	     List<Post> userComments = user.getPosts();
 
@@ -344,7 +348,7 @@ public class PostController {
 	         List<Post> sellerReplies = pService.getSellerCommentsForUser(userCommentId);
 	         sellerComments.addAll(sellerReplies);
 	     }
-
+	     model.addAttribute("avergeScore", avergeScore);
 	     model.addAttribute("sellerComments", sellerComments);
 
 	     return "comment/sellercommentforuser";

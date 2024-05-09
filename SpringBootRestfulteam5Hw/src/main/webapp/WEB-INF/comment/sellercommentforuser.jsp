@@ -39,15 +39,52 @@
 .comment-container + .comment-container {
     margin-top: 20px; /* 设置相邻评论容器之间的上间距 */
 }
+
+/* 标签按钮样式 */
+  .tab {
+    text-align: center;
+  }
+
+  .tab button {
+    background-color: transparent;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 10px 20px;
+    margin: 0 5px;
+    transition: background-color 0.3s, color 0.3s;
+    border-radius: 20px;
+    border: 2px solid #ccc;
+  }
+
+  .tab button:hover {
+    background-color: #ddd;
+  }
+
+  .tab button.active {
+    background-color: #ccc;
+    color: white;
+  }
+  
+
 </style>
 </head>
 <body>
 		<%@ include file="indexcomment.jsp" %>
 		
+<div class="tab">
+    ${avergeScore}
+    <button class="tablinks" onclick="filterComments('all')">全部</button>
+    <button class="tablinks" onclick="filterComments(5)">5顆星</button>
+    <button class="tablinks" onclick="filterComments(4)">4顆星</button>
+    <button class="tablinks" onclick="filterComments(3)">3顆星</button>
+    <button class="tablinks" onclick="filterComments(2)">2顆星</button>
+    <button class="tablinks" onclick="filterComments(1)">1顆星</button>
+</div>
 
 		<!-- 循环显示评论 -->
 <c:forEach var="comment" items="${sellerComments}">
-    <div class="comment-container">
+    <div class="comment-container comment-container rating${comment.sellerrate}">
         <!-- 显示评论内容 -->
         <!-- 显示其他评论相关信息 -->
         <p>${comment.member.name}</p>
@@ -60,11 +97,60 @@
           <fmt:formatDate value="${comment.replaytime}" pattern="yyyy-MM-dd HH:mm" var="formattedCommentTime" />
                     <p class="time">${formattedCommentTime}</p>
                     <p class="order-details"><span class="separator">|</p>
-                    <p class="order-details">規格尺寸: ${comment.orders.formatgoodId.goodSize}</p>
-                    <p class="order-details">商品名稱: ${comment.orders.formatgoodId.good.goodsName}</p>
+                    <!-- 获取规格尺寸 -->
+            <c:forEach var="goods" items="${comment.member.goods2}">
+                <c:forEach var="format" items="${goods.format}">
+                    <p class="order-details">規格尺寸: ${format.goodSize}</p>
+                    <p class="order-details">商品名稱: ${goods.goodsName}</p>
+                </c:forEach>
+            </c:forEach>
                 </div>
         <p>${comment.replayconetnt}</p>
     </div>
 </c:forEach>
+
+<script>
+    // 根据评分级别过滤评论
+    function filterComments(rating) {
+        var comments = document.getElementsByClassName('comment-container');
+        if (rating === 'all') {
+            for (var i = 0; i < comments.length; i++) {
+                comments[i].style.display = 'block';
+            }
+        } else {
+            for (var i = 0; i < comments.length; i++) {
+                var comment = comments[i];
+                var commentRating = parseInt(comment.classList[1].substring(6)); // 获取评论的评分级别
+                if (commentRating === rating) {
+                    comment.style.display = 'block';
+                } else {
+                    comment.style.display = 'none';
+                }
+            }
+        }
+    }
+
+    // 页面加载后重新显示评论内容
+    window.onload = function() {
+        filterComments('all');
+    }
+</script>
+
+<script>
+  // 获取所有按钮元素
+  var btns = document.querySelectorAll('.tab button');
+
+  // 为每个按钮添加点击事件监听器
+  btns.forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      // 移除所有按钮的 active 类
+      btns.forEach(function(b) {
+        b.classList.remove('active');
+      });
+      // 将当前点击的按钮添加 active 类
+      this.classList.add('active');
+    });
+  });
+</script>
 </body>
 </html>

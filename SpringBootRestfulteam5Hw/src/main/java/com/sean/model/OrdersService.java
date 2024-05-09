@@ -32,23 +32,8 @@ public class OrdersService {
 	public List<Orders> findByBuyerIdAndOrderStatus(MemberBean BuyerId,Integer status){
 		return oRops.findByBuyerIdAndOrderStatus(BuyerId,status);
 	}
-	public List<Orders> findBySellerIdAndOrderStatus0(MemberBean SellerId,Integer status){
-		return oRops.findBySellerIdAndOrderStatus(SellerId, 0);
-	}
-	public List<Orders> findBySellerIdAndOrderStatus1(MemberBean SellerId,Integer status){
-		return oRops.findBySellerIdAndOrderStatus(SellerId, 1);
-	}
-	public List<Orders> findBySellerIdAndOrderStatus2(MemberBean SellerId,Integer status){
-		return oRops.findBySellerIdAndOrderStatus(SellerId, 2);
-	}
-	public List<Orders> findBySellerIdAndOrderStatus3(MemberBean SellerId,Integer status){
-		return oRops.findBySellerIdAndOrderStatus(SellerId, 3);
-	}
-	public List<Orders> findBySellerIdAndOrderStatus4(MemberBean SellerId,Integer status){
-		return oRops.findBySellerIdAndOrderStatus(SellerId, 4);
-	}
-	public List<Orders> findBySellerIdAndOrderStatus5(MemberBean SellerId,Integer status){
-		return oRops.findBySellerIdAndOrderStatus(SellerId, 5);
+	public List<Orders> findBySellerIdAndOrderStatus(MemberBean SellerId,Integer status){
+		return oRops.findBySellerIdAndOrderStatus(SellerId, status);
 	}
 	
 	public Orders findByOrderIdAndOrderStatusNot(Integer orderId,Integer orderStatus) {
@@ -59,6 +44,9 @@ public class OrdersService {
 		return oRops.findByCreatedAtBetweenAndOrderStatusNot(startDate, endDate, orderStatus);
 	}
 	
+	public Integer findOrdersCount(Date star,Date end){
+		return oRops.findOrdersCount(star, end);
+	}
 	public void cancelOrderById(Integer orderId) {
 		oRops.cancelOrderById(orderId);
 	}

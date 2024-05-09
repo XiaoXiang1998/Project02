@@ -363,8 +363,10 @@
                         {
                             "data": null,
                             "render": function (data, type, row) {
-                                return '<button type="button" class="btn btn-warning btn-sm editBtn" data-bs-toggle="modal" data-bs-target="#exampleModal">修改</button>' +
-                                    '<button type="button" class="btn btn-danger btn-sm deleteBtn">刪除</button>';
+                                return '<div class="button-container">' +
+                                    '<button type="button" class="btn btn-warning btn-sm editBtn" data-bs-toggle="modal" data-bs-target="#exampleModal">修改</button>' +
+                                    '<button type="button" class="btn btn-danger btn-sm deleteBtn">刪除</button>' +
+                                    '</div>';
                             }
                         }
                     ]

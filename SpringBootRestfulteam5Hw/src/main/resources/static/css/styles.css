@@ -13227,6 +13227,23 @@ table#levelDataTables tbody tr:hover {
 	/* 淺灰色背景色 */
 }
 
+.button-container {
+	display: flex;
+	justify-content: space-between;
+	/* 讓兩個按鈕分佈在容器的兩側 */
+	align-items: center;
+	/* 垂直居中對齊按鈕 */
+	padding: 0 10px;
+	/* 調整左右邊距 */
+}
+
+.button-container button {
+	flex: 1;
+	/* 讓按鈕自動拉伸填滿可用空間 */
+	margin: 0 5px;
+	/* 調整按鈕之間的距離 */
+}
+
 .modal-content {
 	padding: 20px;
 	border-radius: 20px;

@@ -251,8 +251,10 @@
                         {
                             "data": null,
                             "render": function (data, type, row) {
-                                return '<button type="button" class="btn btn-warning btn-sm editBtn" data-bs-toggle="modal" data-bs-target="#exampleModal">修改</button>' +
-                                    '<button type="button" class="btn btn-danger btn-sm deleteBtn">刪除</button>';
+                                return '<div class="button-container">'+
+                                '<button type="button" class="btn btn-warning btn-sm editBtn" data-bs-toggle="modal" data-bs-target="#exampleModal">修改</button>'+
+                                '<button type="button" class="btn btn-danger btn-sm deleteBtn">刪除</button>'+
+                                '</div>';
                             }
                         }
                     ]
@@ -327,27 +329,11 @@
                 $('#levelDataTables tbody').on('click', 'button.editBtn', function () {
                     // 獲取所在行的資料
                     var data = $('#levelDataTables').DataTable().row($(this).closest('tr')).data();
-                    let isSeller = Boolean(data.seller);
-                    console.log(isSeller);
 
                     // 將資料填充到表單的input欄位中
-                    $('#editForm input[name="sid"]').val(data.sid);
-                    $('#editForm input[name="account"]').val(data.account);
-                    $('#editForm input[name="password"]').val(data.password);
-                    $('#editForm input[name="email"]').val(data.email);
-                    $('#editForm input[name="phone"]').val(data.phone);
-                    $('#editForm input[name="name"]').val(data.name);
-                    $('#editForm select[name="gender"]').val(data.gender);
-                    $('#editForm input[name="address"]').val(data.address);
-                    $('#editForm input[name="oldPath"]').val(data.photoSticker);
-                    $('#editForm input[name="seller"]').prop('checked', isSeller);
-                    // $('#sellerSwitch').prop('checked', true);
-                    $('#editForm input[name="reviewCount"]').val(data.reviewCount);
-                    $('#editForm input[name="cumulativeScore"]').val(data.cumulativeScore);
-                    $('#editForm input[name="totalSalesAmount"]').val(data.totalSalesAmount);
                     $('#editForm input[name="level"]').val(data.level);
-                    $('#editForm input[name="thirdPartyProvider"]').val(data.thirdPartyProvider);
-                    $('#editForm input[name="registrationTime"]').val(data.registrationTime);
+                    $('#editForm input[name="title"]').val(data.title);
+                    $('#editForm input[name="threshold"]').val(data.threshold);
 
                     // 顯示表單
                     $('#editForm').show();

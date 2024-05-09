@@ -13,27 +13,32 @@ public class LevelService {
 
 	@Autowired
 	public LevelRepository levRepos;
-/*------------------------------------------------基本資料操作-----------------------------------------------------*/
+	/*------------------------------------------------基本資料操作-----------------------------------------------------*/
 
-	/*新增等級*/
-	public LevelBean insert(LevelBean LeBean) {
-		return levRepos.save(LeBean);
+	/* 新增等級 */
+	public boolean insert(LevelBean LeBean) {
+		try {
+			levRepos.save(LeBean);
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
-	
-	
-	/*更新等級*/
+
+	/* 更新等級 */
 	public LevelBean update(LevelBean LeBean) {
 		return levRepos.save(LeBean);
-	} 
-	
-	/*刪除等級*/
+	}
+
+	/* 刪除等級 */
 	public void deleteById(Integer id) {
 		levRepos.deleteById(id);
 	}
-	
-	/*查詢等級*/
+
+	/* 查詢等級 */
 	public List<LevelBean> getAll() {
 		return levRepos.findAll();
 	}
-	
+
 }

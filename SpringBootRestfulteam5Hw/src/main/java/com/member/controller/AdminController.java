@@ -316,4 +316,8 @@ public class AdminController {
 	public String turnToMembershipLevelGuidelines() {
 		return "/member/MembershipLevelGuidelines";
 	}
+	@GetMapping("/InsertMembershipLevel")
+	public String turnToInsertMembershipLevel() {
+		return "/member/InsertMembershipLevel";
+	}
 }

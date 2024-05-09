@@ -9,6 +9,7 @@
         <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
         <link href="css/styles.css" rel="stylesheet" />
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+        <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
     </head>
 
     <body class="sb-nav-fixed">
@@ -74,8 +75,33 @@
                                             <a class="nav-link" href="AdminInsert">新增後台人員</a>
                                         </nav>
                                     </div>
-                                    <a class="nav-link" href="MembershipLevelGuidelines">
-                                        會員等級規範
+
+                                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
+                                        data-bs-target="#MembershipLevel" aria-expanded="false"
+                                        aria-controls="pagesCollapseAuth">
+                                        會員規範管理
+                                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                                    </a>
+                                    <div class="collapse" id="MembershipLevel" aria-labelledby="headingOne"
+                                        data-bs-parent="#sidenavAccordionPages">
+                                        <nav class="sb-sidenav-menu-nested nav">
+                                            <a class="nav-link" href="MembershipLevelGuidelines">檢視會員等級規範</a>
+                                            <a class="nav-link" href="InsertMembershipLevel">新增會員等級規範</a>
+                                        </nav>
+                                    </div>
+                                </nav>
+                            </div>
+                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#order"
+                                aria-expanded="false" aria-controls="collapsePages">
+                                <div class="sb-nav-link-icon"><i class="fa-solid fa-sheet-plastic"></i></div>
+                                訂單管理
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            </a>
+                            <div class="collapse" id="order" aria-labelledby="headingTwo"
+                                data-bs-parent="#sidenavAccordion">
+                                <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
+                                    <a class="nav-link" href="queryOrder.controller">
+                                        訂單詳情
                                     </a>
                                 </nav>
                             </div>
@@ -124,8 +150,8 @@
                                             <div class="modal-body">
                                                 <form id="editForm">
                                                     <div class="form-floating mb-3">
-                                                        <input type="text" id="level" name="level class=" form-control"
-                                                            readonly>
+                                                        <input type="text" id="level" name="level"
+                                                            class=" form-control">
                                                         <label for="levelId">會員級別:</label>
                                                     </div>
                                                     <div class="form-floating mb-3">
@@ -251,10 +277,10 @@
                         {
                             "data": null,
                             "render": function (data, type, row) {
-                                return '<div class="button-container">'+
-                                '<button type="button" class="btn btn-warning btn-sm editBtn" data-bs-toggle="modal" data-bs-target="#exampleModal">修改</button>'+
-                                '<button type="button" class="btn btn-danger btn-sm deleteBtn">刪除</button>'+
-                                '</div>';
+                                return '<div class="button-container">' +
+                                    '<button type="button" class="btn btn-warning btn-sm editBtn" data-bs-toggle="modal" data-bs-target="#exampleModal">修改</button>' +
+                                    '<button type="button" class="btn btn-danger btn-sm deleteBtn">刪除</button>' +
+                                    '</div>';
                             }
                         }
                     ]

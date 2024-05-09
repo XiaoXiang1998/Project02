@@ -10,6 +10,11 @@ public class WebAppConfig implements WebMvcConfigurer {
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
 		  registry.addResourceHandler("/goodImages/**").addResourceLocations("/WEB-INF/goodImages/");
+		  registry.addResourceHandler("/frontcss/**").addResourceLocations("/WEB-INF/frontcss/");
+		  registry.addResourceHandler("/frontimg/**").addResourceLocations("/WEB-INF/frontimg/");
+		  registry.addResourceHandler("/frontjs/**").addResourceLocations("/WEB-INF/frontjs/");
+		  registry.addResourceHandler("/frontlib/**").addResourceLocations("/WEB-INF/frontlib/");
+		  //
 			registry.addResourceHandler("/commentPicture/**").addResourceLocations("/WEB-INF/commentPicture/");
 			registry.addResourceHandler("/commentcss/**").addResourceLocations("/WEB-INF/commentcss/");
 			registry.addResourceHandler("/comment/**").addResourceLocations("/WEB-INF/comment/");

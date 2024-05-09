@@ -74,7 +74,7 @@ public class PostController {
 		if (mf != null && !mf.isEmpty()) { // 檢查圖片是否不為空
 			 String fileName = UUID.randomUUID().toString(); // 生成唯一的文件名
 
-			String fileDir = "D:/Action/workspace/team5project/SpringBootRestfulteam5Hw/src/main\\webapp\\WEB-INF\\commentPicture";
+			String fileDir = "C:\\team5project\\SpringBootRestfulteam5Hw\\src\\main\\webapp\\WEB-INF\\commentPicture";
 
 			File fileDirPath = new File(fileDir);
 			if (!fileDirPath.exists()) {
@@ -156,7 +156,7 @@ public class PostController {
 		    String imagePath = post.getProductphoto();
 
 		    if (imagePath != null && !imagePath.isEmpty()) {
-		        String fileDir = "D:/Action/workspace/team5project/SpringBootRestfulteam5Hw/src/main/webapp/WEB-INF/" + imagePath;
+		        String fileDir = "C:\\team5project\\SpringBootRestfulteam5Hw\\src\\main\\webapp\\WEB-INF\\commentPicture" + imagePath;
 		        File imageFile = new File(fileDir);
 		        if (imageFile.exists()) {
 		            imageFile.delete(); 

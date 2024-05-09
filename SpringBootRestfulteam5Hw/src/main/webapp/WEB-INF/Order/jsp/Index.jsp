@@ -24,7 +24,7 @@
               <a class="nav-link ${page eq 'shopcar' ? 'active' : ''}" href="shopcar.controller">購物車</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link ${page eq 'query' ? 'active' : ''}" href="goquery.controller">訂單管理</a>
+              <a class="nav-link ${page eq 'query' ? 'active' : ''}" href="queryOrder.controller">訂單管理</a>
             </li>
             <li class="nav-item">
               <a class="nav-link ${page eq 'admin' ? 'active' : ''}" href="goui.controller">管理系統</a>

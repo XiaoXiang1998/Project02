@@ -236,7 +236,7 @@ public class MemberController {
 			httpSession.setAttribute("member", memberInformation);
 			System.out.println("session設定成功");
 			// 檢查會員等級
-			return "member/AdminUI";
+			return "ControlUI";
 		}
 		return null;
 	}

@@ -19,8 +19,14 @@ public class MemberService {
 /*------------------------------------------------基本資料操作-----------------------------------------------------*/
 
 	/*新增會員*/
-	public MemberBean insert(MemberBean mem) {
-		return memRepos.save(mem);
+	public boolean insert(MemberBean mem) {
+		try {
+			memRepos.save(mem);
+	        return true;
+	    } catch (Exception e) {
+	    	 e.printStackTrace();
+	    	return false;
+	    }
 	}
 	
 	/*更新會員*/

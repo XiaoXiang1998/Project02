@@ -9,7 +9,6 @@
         <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
         <link href="css/styles.css" rel="stylesheet" />
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-        <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
     </head>
 
     <body class="sb-nav-fixed">
@@ -63,18 +62,18 @@
                                         會員管理
                                     </a>
                                     <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
-                                    data-bs-target="#pagesCollapseAuth" aria-expanded="false"
-                                    aria-controls="pagesCollapseAuth">
-                                    後台人員管理
-                                    <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                                </a>
-                                <div class="collapse" id="pagesCollapseAuth" aria-labelledby="headingOne"
-                                    data-bs-parent="#sidenavAccordionPages">
-                                    <nav class="sb-sidenav-menu-nested nav">
-                                        <a class="nav-link" href="AdminManagement">檢視後台人員</a>
-                                        <a class="nav-link" href="AdminInsert">新增後台人員</a>
-                                    </nav>
-                                </div>
+                                        data-bs-target="#pagesCollapseAuth" aria-expanded="false"
+                                        aria-controls="pagesCollapseAuth">
+                                        後台人員管理
+                                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                                    </a>
+                                    <div class="collapse" id="pagesCollapseAuth" aria-labelledby="headingOne"
+                                        data-bs-parent="#sidenavAccordionPages">
+                                        <nav class="sb-sidenav-menu-nested nav">
+                                            <a class="nav-link" href="AdminManagement">檢視後台人員</a>
+                                            <a class="nav-link" href="AdminInsert">新增後台人員</a>
+                                        </nav>
+                                    </div>
                                     <a class="nav-link" href="MembershipLevelGuidelines">
                                         會員等級規範
                                     </a>

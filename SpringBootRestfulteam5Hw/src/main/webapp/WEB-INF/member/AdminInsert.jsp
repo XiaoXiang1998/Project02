@@ -9,7 +9,6 @@
         <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
         <link href="css/styles.css" rel="stylesheet" />
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-        <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
         <style>
             .is-invalid {
                 border-color: #dc3545 !important;
@@ -272,7 +271,33 @@
                 });
                 input.classList.add('is-invalid-shake');
             }
+            $(document).ready(function () {
+                $('#saveChangesBtn').click(function () {
+                    // 使用 jQuery 收集表單數據
+                    var formData = new FormData($('#editForm')[0]);
 
+                    // 使用 jQuery 發送 POST 請求
+                    $.ajax({
+                        url: 'InsertAdmin',
+                        type: 'POST',
+                        data: formData,
+                        contentType: false, // 不要設置內容類型頭部
+                        processData: false, // 不處理發送的數據
+                        success: function (data) {
+                            // 根據後端回應顯示 SweetAlert 提示消息
+                            if (data.success) {
+                                Swal.fire("成功", "新增成功", "success");
+                            } else {
+                                Swal.fire("錯誤", "新增失敗", "error");
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            console.error('Error:', error);
+                            Swal.fire("錯誤", "發生了一個錯誤", "error");
+                        }
+                    });
+                });
+            });
         </script>
     </body>
 

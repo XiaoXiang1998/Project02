@@ -21,8 +21,14 @@ public class AdminService {
 /*--------------------------------------------------基本操作--------------------------------------------------*/
 	
 	/*新增管理員*/ 
-	public AdminBean insert(AdminBean ad) {
-		return adRepos.save(ad);
+	public boolean insert(AdminBean ad) {
+		try {
+			adRepos.save(ad);
+	        return true;
+	    } catch (Exception e) {
+	    	 e.printStackTrace();
+	    	return false;
+	    }
 	}
 	
 	/*刪除管理員*/

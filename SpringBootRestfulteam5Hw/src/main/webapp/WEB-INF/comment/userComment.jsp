@@ -248,11 +248,9 @@ body {
                 </p>
                 <div class="time-and-details">
                     <p class="time">${comment.commenttime}</p>
-                    <c:if test="${empty comment.repliedcommentid}">
                         <p class="order-details"><span class="separator">|</span>訂單編號: ${comment.orders.orderId}</p>
                         <p class="order-details">規格尺寸: ${comment.orders.formatgoodId.goodSize}</p>
                         <p class="order-details">商品名稱: ${comment.orders.formatgoodId.good.goodsName}</p>
-                    </c:if>
                 </div>
                 <c:choose>
                     <c:when test="${not empty comment.productphoto}">

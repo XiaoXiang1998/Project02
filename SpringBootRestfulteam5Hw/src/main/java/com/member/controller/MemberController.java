@@ -65,7 +65,7 @@ public class MemberController {
 		System.out.println("filename: " + fileName);
 
 		/* 設定檔案路徑 */
-		String fileDir = "C:/SpringBoot/workspace/SpringBootRestfulHw/src/main/resources/static/UsersPic";
+		String fileDir = "C:/team5project/SpringBootRestfulteam5Hw/src/main/resources/static/UsersPic";
 
 		/* 移動檔案 */
 		if (fileName != null && fileName.length() > 0) {
@@ -113,14 +113,14 @@ public class MemberController {
 			@RequestParam("registrationTime") LocalDate registrationTime, @RequestParam(name = "oldPath", required = false) String op)
 			throws IllegalStateException, IOException {
 
-		String fileDir = "C:/SpringBoot/workspace/SpringBootRestfulHw/src/main/resources/static/UsersPic";
+		String fileDir = "C:/team5project/SpringBootRestfulteam5Hw/src/main/resources/static/UsersPic";
 
 		/* 抓取檔案名稱 */
 		String fileName = mf.getOriginalFilename();
 		System.out.println("filename: " + fileName);
 
 		/* 獲取舊路徑 */
-		String realOldPath = "C:/SpringBoot/workspace/SpringBootRestfulHw/src/main/resources/static/UsersPic/" + op;
+		String realOldPath = "C:/team5project/SpringBootRestfulteam5Hw/src/main/resources/static/UsersPic/" + op;
 
 		/* 檢查是否有上傳檔案 */
 		if (fileName != null && fileName.length() > 0) {

@@ -66,7 +66,7 @@ public class AdminController {
 		System.out.println("filename: " + fileName);
 
 		/* 設定檔案路徑 */
-		String fileDir = "C:/SpringBoot/workspace/SpringBootRestfulHw/src/main/resources/static/AdminsPic";
+		String fileDir = "C:/team5project/SpringBootRestfulteam5Hw/src/main/resources/static/AdminsPic";
 
 		/* 移動檔案 */
 		if (fileName != null && fileName.length() > 0) {
@@ -108,14 +108,14 @@ public class AdminController {
 			@RequestParam(name = "oldPath", required = false) String op)
 			throws IllegalStateException, IOException {
 
-		String fileDir = "C:/SpringBoot/workspace/SpringBootRestfulHw/src/main/resources/static/AdminsPic";
+		String fileDir = "C:/team5project/SpringBootRestfulteam5Hw/src/main/resources/static/AdminsPic";
 
 		/* 抓取檔案名稱 */
 		String fileName = mf.getOriginalFilename();
 		System.out.println("filename: " + fileName);
 
 		/* 獲取舊路徑 */
-		String realOldPath = "C:/SpringBoot/workspace/SpringBootRestfulHw/src/main/resources/static/" + op;
+		String realOldPath = "C:/team5project/SpringBootRestfulteam5Hw/src/main/resources/static/AdminsPic/" + op;
 
 		/* 檢查是否有上傳檔案 */
 		if (fileName != null && fileName.length() > 0) {

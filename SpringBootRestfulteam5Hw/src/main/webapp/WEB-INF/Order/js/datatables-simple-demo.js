@@ -8,7 +8,7 @@ window.addEventListener('DOMContentLoaded', event => {
     pageTitle: "Page {page}",
     perPage: "筆1頁",
     noRows: "查無資料",
-    info: "Showing {start} to {end} of {rows} entries",
+    info: "第 {start} 到第 {end} 筆訂單 總共 {rows} 筆訂單",
     noResults: "No results match your search query",
 }
         });

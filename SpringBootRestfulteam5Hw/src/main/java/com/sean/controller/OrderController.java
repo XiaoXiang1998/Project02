@@ -2,6 +2,8 @@ package com.sean.controller;
 
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -232,11 +234,50 @@ public class OrderController {
 	
 	@GetMapping("queryOrder.controller")
 	public String QueryOrder(Model m ) {
-			List<Orders> orders = oService.findByOrderStatusNot(5);
-			m.addAttribute("orders", orders);
-			return "/Order/jsp/Test";
+		LocalDate today = LocalDate.now();
+	    
+	    LocalDate twoDaysAgo = today.minusDays(2);
+	    
+	    LocalDate yesterday = today.minusDays(1);
+	    
+	    LocalDate tomorrow = today.plusDays(1);
+	    
+	    LocalDate twoDaysLater = today.plusDays(2);
+	    
+	    LocalDate threeDaysLater = today.plusDays(3);
 
-		}
+	    Date twoDaysAgoDate = java.sql.Date.valueOf(twoDaysAgo);
+	    Date yesterdayDate = java.sql.Date.valueOf(yesterday);
+	    Date todayDate = java.sql.Date.valueOf(today);
+	    Date tomorrowDate = java.sql.Date.valueOf(tomorrow);
+	    Date twoDaysLaterDate = java.sql.Date.valueOf(twoDaysLater);
+	    Date threeDaysLaterDate = java.sql.Date.valueOf(threeDaysLater);
+		List<Orders> orders = oService.findByOrderStatusNot(5);
+		m.addAttribute("orders", orders);
+		Integer todayOrdersCount = oService.findOrdersCount(todayDate, tomorrowDate);
+		Integer yesterdayOrdersCount = oService.findOrdersCount(yesterdayDate, todayDate);
+		Integer twoDaysAgoOrdersCount = oService.findOrdersCount(twoDaysAgoDate, yesterdayDate);
+		Integer tomorrowOrdersCount = oService.findOrdersCount(tomorrowDate, twoDaysLaterDate);
+		Integer twoDaysLaterOrdersCount = oService.findOrdersCount(twoDaysLaterDate, threeDaysLaterDate);
+		System.out.println(todayOrdersCount);
+		System.out.println(yesterdayOrdersCount);
+		System.out.println(twoDaysAgoOrdersCount);
+		System.out.println(tomorrowOrdersCount);
+		System.out.println(twoDaysLaterOrdersCount);
+		
+		m.addAttribute("todayOrdersCount",todayOrdersCount);
+		m.addAttribute("yesterdayOrdersCount",yesterdayOrdersCount);
+		m.addAttribute("twoDaysAgoOrdersCount",twoDaysAgoOrdersCount);
+		m.addAttribute("tomorrowOrdersCount",tomorrowOrdersCount);
+		m.addAttribute("twoDaysLaterOrdersCount",twoDaysLaterOrdersCount);
+		m.addAttribute("todayDate",todayDate);
+		m.addAttribute("yesterdayDate",yesterdayDate);
+		m.addAttribute("twoDaysAgoDate",twoDaysAgoDate);
+		m.addAttribute("tomorrowDate",tomorrowDate);
+		m.addAttribute("twoDaysLaterDate",twoDaysLaterDate);
+		return "/Order/jsp/Test";
+
+	}
 	
 	
 	@PutMapping("fakeDelete.controller")

@@ -29,14 +29,14 @@ public class Orders {
 	@Column(name = "ORDER_ID")
 	private Integer orderId;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "FK_BUYERID")
 	private MemberBean buyerId;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "FK_SELLERID")
 	private MemberBean sellerId;
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "FK_FORMATGOODID")
 	private GoodFormat formatgoodId;
 	
@@ -70,7 +70,7 @@ public class Orders {
 	@Column(name = "TOTAL_PRICE")
 	private Integer totalPrice;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "FK_PAYMENT_ID")
 	private PaymentDetails paymentId;
 

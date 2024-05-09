@@ -96,6 +96,7 @@
 										訂單詳情
 									</a>
 								</nav>
+							</div>
 						</div>
 					</div>
 				<div class="sb-sidenav-footer">

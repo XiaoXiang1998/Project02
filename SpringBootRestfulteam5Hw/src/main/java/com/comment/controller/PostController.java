@@ -131,10 +131,16 @@ public class PostController {
 
 	    Page<Post> userComments = pService.findByMemberOrderByCommenttimeDesc(member, pageable);
         
-	 
-	    
+	    List<Post> userReplies = new ArrayList<>();
+	    for (Post comment : userComments.getContent()) {
+	        if (comment.getCommentid() != null) {
+	            List<Post> replies = pService.findRepliesByRepliedCommentId(comment.getCommentid());
+	            userReplies.addAll(replies);
+	        }
+	    }
 	    
 	    model.addAttribute("comments", userComments.getContent());
+	    model.addAttribute("replies", userReplies);
         model.addAttribute("currentPage", page); 
         model.addAttribute("totalPages", userComments.getTotalPages()); 
         
@@ -156,7 +162,7 @@ public class PostController {
 		    String imagePath = post.getProductphoto();
 
 		    if (imagePath != null && !imagePath.isEmpty()) {
-		        String fileDir = "C:\\team5project\\SpringBootRestfulteam5Hw\\src\\main\\webapp\\WEB-INF\\commentPicture" + imagePath;
+		        String fileDir = "C:/team5project/SpringBootRestfulteam5Hw/src/main/webapp/WEB-INF/commentPicture/" + imagePath;
 		        File imageFile = new File(fileDir);
 		        if (imageFile.exists()) {
 		            imageFile.delete(); 
@@ -245,10 +251,14 @@ public class PostController {
 	    public String submitReply(@RequestParam("memberId") Integer memberId, 
 	                              @RequestParam("replyContent") String replyContent,
 	                              @RequestParam("rate") Integer sellerRate,
-	                              @RequestParam("commentId") Integer commentId, 
+	                              @RequestParam("commentId") Integer commentId,
+	                              @RequestParam("orderId") Integer orderId,
 	                              HttpSession session) {
 			MemberBean member = (MemberBean) session.getAttribute("member");
+				
+			Orders orders = oService.getById(orderId);
 
+			
 	        // 保存回复内容
 	        Post reply = new Post();
 	        reply.setReplayconetnt(replyContent);
@@ -260,8 +270,8 @@ public class PostController {
 	        reply.setSellerrate(sellerRate);
 	        reply.setMember(member);
 	        
-	        
 	        reply.setRepliedcommentid(commentId);
+	        reply.setOrders(orders);
 	        
 	       pService.insert(reply);
 	       
@@ -301,7 +311,7 @@ public class PostController {
 	     System.out.println("ID" + seller.getSid());
 	     
 	     // 設定每頁顯示的資料筆數
-	     int pageSize = 2;
+	     int pageSize = 5;
 	     
 	     // 使用Pageable對象進行分頁查詢
 	     Pageable pageable = PageRequest.of(page, pageSize);
@@ -318,6 +328,27 @@ public class PostController {
 	     return "comment/sellerReplay"; 
 	 }
 	 
+	 @GetMapping("/sellerCommentsForUser")
+	 public String getSellerCommentsForUser(Model model, HttpSession session) {
+	     // 从 session 中获取当前登录的用户信息
+	     MemberBean user = (MemberBean) session.getAttribute("member");
 
+	     // 获取当前登录用户的所有评论
+	     List<Post> userComments = user.getPosts();
+
+	     List<Post> sellerComments = new ArrayList<>();
+
+	     // 遍历用户的评论列表，查找卖家对该评论的回复
+	     for (Post comment : userComments) {
+	         Integer userCommentId = comment.getCommentid();
+	         List<Post> sellerReplies = pService.getSellerCommentsForUser(userCommentId);
+	         sellerComments.addAll(sellerReplies);
+	     }
+
+	     model.addAttribute("sellerComments", sellerComments);
+
+	     return "comment/sellercommentforuser";
+	 }
+	 
 	
 }

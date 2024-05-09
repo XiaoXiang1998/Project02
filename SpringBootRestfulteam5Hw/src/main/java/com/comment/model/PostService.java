@@ -69,7 +69,12 @@ public class PostService {
 	    return pRepository.findPostsBySellerId(sellerId, pageable);
 	}
 	  
+	public List<Post> findRepliesByRepliedCommentId(Integer repliedCommentId) {
+        return pRepository.findByRepliedcommentid(repliedCommentId);
+    }
 	
-
+    public List<Post> getSellerCommentsForUser( Integer userCommentId) {
+        return pRepository.findSellerCommentsForUser(userCommentId);
+    }
 
 }

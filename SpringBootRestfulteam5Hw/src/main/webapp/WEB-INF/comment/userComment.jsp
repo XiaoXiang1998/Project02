@@ -170,41 +170,54 @@ body {
     margin: 0 5px; /* 調整分頁連結之間的間距 */
 }
 
-.pagination {
+.tab .pagination {
     margin-top: 20px;
     padding-left: 0;
     list-style: none;
     text-align: center;
 }
 
-.pagination strong,
-.pagination a {
+.tab .pagination .page-link {
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+    background-color: transparent;
+    outline: none;
+    cursor: pointer;
+    padding: 10px 15px;
+    transition: background-color 0.3s;
+    margin: 0 5px; /* 调整按钮之间的间距 */
+    position: relative; /* 将span元素定位相对于按钮 */
+    text-align: center;
     color: #007bff;
     text-decoration: none;
-    padding: 8px 12px;
-    border: 1px solid #007bff;
-    border-radius: 5px;
 }
 
-.pagination strong:hover,
-.pagination a:hover {
-    background-color: #007bff;
-    color: #fff;
+.tab .pagination .page-link .badge {
+    position: absolute; /* 使用绝对位置 */
+    top: -10px; /* 调整数字在按钮上的位置 */
+    right: -10px; /* 调整数字在按钮上的位置 */
+    background-color: #ff0000; /* 设置背景颜色 */
+    color: #ffffff; /* 设置文字颜色 */
+    border-radius: 50%; /* 圆形边框 */
+    padding: 5px; /* 调整内边距 */
+    font-size: 12px; /* 调整字体大小 */
+    display: inline-block; /* 使span元素显示为行内块 */
+    opacity: 1; /* 初始时显示 */
+    transition: opacity 0.3s; /* 添加过渡效果 */
 }
 
-.pagination strong,
-.pagination a {
-    margin-right: 5px;
+/* 鼠标悬停时的效果 */
+.tab .pagination .page-link:hover {
+    background-color: rgba(0, 0, 0, 0.1);
 }
 
-.pagination .active a {
-    background-color: #007bff;
-    color: #fff;
-    pointer-events: none;
-    cursor: default;
+/* 激活/选中按钮的样式 */
+.tab .pagination .page-item.active .page-link {
+    background-color: rgba(0, 0, 0, 0.2);
+    color: #fff; /* 设置文字颜色 */
 }
 
-.pagination .disabled a {
+.tab .pagination .page-item.disabled .page-link {
     color: #6c757d;
     background-color: #fff;
     border-color: #6c757d;
@@ -230,6 +243,13 @@ body {
     margin-right: 5px; /* 調整右側間距 */
     margin-left: 5px; /* 調整左側間距 */
 }
+.reply {
+    border: 3px solid #ddd;
+    background-color: #f7f7f7;
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 10px;
+}
 </style>
 </head>
 <body>
@@ -247,10 +267,13 @@ body {
                     </c:forEach>
                 </p>
                 <div class="time-and-details">
-                    <p class="time">${comment.commenttime}</p>
-                        <p class="order-details"><span class="separator">|</span>訂單編號: ${comment.orders.orderId}</p>
-                        <p class="order-details">規格尺寸: ${comment.orders.formatgoodId.goodSize}</p>
-                        <p class="order-details">商品名稱: ${comment.orders.formatgoodId.good.goodsName}</p>
+                <c:if test="${not empty comment.commenttime}">
+                        <fmt:formatDate value="${comment.commenttime}" pattern="yyyy-MM-dd HH:mm" var="formattedCommentTime" />
+                        <p class="time">${formattedCommentTime}</p>
+                    </c:if>
+                    <p class="order-details"><span class="separator">|</span>訂單編號: ${comment.orders.orderId}</p>
+                    <p class="order-details">規格尺寸: ${comment.orders.formatgoodId.goodSize}</p>
+                    <p class="order-details">商品名稱: ${comment.orders.formatgoodId.good.goodsName}</p>
                 </div>
                 <c:choose>
                     <c:when test="${not empty comment.productphoto}">
@@ -263,6 +286,18 @@ body {
                     </c:otherwise>
                 </c:choose>
                 <p class="text">${comment.commentcontent}</p>
+                 <c:forEach items="${replies}" var="reply">
+                    <c:if test="${reply.repliedcommentid eq comment.commentid}">
+                        <div class="reply">
+                        <p>賣家回應:</p>
+                            <p class="reply-content">${reply.replayconetnt}</p>
+                            <c:if test="${not empty reply.replaytime}">
+                        <fmt:formatDate value="${reply.replaytime}" pattern="yyyy-MM-dd HH:mm" var="formattedCommentTime" />
+                        <p class="time">${formattedCommentTime}</p>
+                    </c:if>
+                        </div>
+                    </c:if>
+                </c:forEach>
                 <div class="dropdown">
                     <button class="dropbtn">&#8942;</button>
                     <div class="dropdown-content">
@@ -277,25 +312,29 @@ body {
                         <textarea name="commentContent" id="commentContent_${comment.commentid}"></textarea>
                         <button type="button" onclick="updateComment(${comment.commentid});">提交</button>
                     </form>
-                </div>                            
+                </div>            
             </div>
         </div>
     </c:forEach>
 </div>
 
 <c:if test="${totalPages > 1}">
-    <div class="pagination">
-        <c:forEach begin="0" end="${totalPages - 1}" var="pageNumber">
-            <c:url value="?page=${pageNumber}" var="pageUrl"/>
-            <c:if test="${pageNumber == currentPage}">
-                <strong>${pageNumber + 1}</strong>
-            </c:if>
-            <c:if test="${pageNumber != currentPage}">
-                <a href="${pageUrl}">${pageNumber + 1}</a>
-            </c:if>
-            <!-- 添加分页链接之间的间隔 -->
-            <span class="page-separator">&nbsp;</span>
-        </c:forEach>
+    <div class="tab">
+        <ul class="pagination">
+            <c:forEach begin="0" end="${totalPages - 1}" var="pageNumber">
+                <c:url value="?page=${pageNumber}" var="pageUrl"/>
+                <li class="page-item">
+                    <c:if test="${pageNumber == currentPage}">
+                        <strong class="page-link">${pageNumber + 1}</strong>
+                    </c:if>
+                    <c:if test="${pageNumber != currentPage}">
+                        <a class="page-link" href="${pageUrl}">${pageNumber + 1}</a>
+                    </c:if>
+                </li>
+                <!-- 添加分页链接之间的间隔 -->
+                <li class="page-separator">&nbsp;</li>
+            </c:forEach>
+        </ul>
     </div>
 </c:if>
 		
@@ -396,19 +435,7 @@ function updateComment(commentId) {
 }
 </script>
 <script>
-/*document.querySelectorAll('.item').forEach(item => {
-    item.querySelector('.dropdown-content a:nth-of-type(1)').addEventListener('click', function(event) {
-        event.preventDefault();
-        const commentId = item.dataset.commentId;
-        const editForm = document.getElementById('editForm' + commentId);
-        const rect = item.getBoundingClientRect();
-        const top = rect.top + window.scrollY;
-        const left = rect.left + window.scrollX;
-        editForm.style.display = 'block';
-        editForm.style.top = `${top}px`;
-        editForm.style.left = `${left}px`;
-    });
-});*/
+
 document.querySelectorAll('.item').forEach(item => {
     item.querySelector('.dropdown-content a:nth-of-type(1)').addEventListener('click', function(event) {
         event.preventDefault();

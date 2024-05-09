@@ -13180,7 +13180,8 @@ body {
 
 /* 設置表格邊框合併方式和邊框間距 */
 table#datatablesSimple,
-table#adminDataTables {
+table#adminDataTables,
+table#levelDataTables {
 	border-collapse: collapse;
 	border-spacing: 0;
 	width: 100%;
@@ -13188,7 +13189,8 @@ table#adminDataTables {
 
 /* 設置表格標題的樣式 */
 table#datatablesSimple th,
-table#adminDataTables th {
+table#adminDataTables th,
+table#levelDataTables th {
 	border: 1px solid #ddd;
 	/* 表格標題的邊框 */
 	padding: 8px;
@@ -13201,7 +13203,8 @@ table#adminDataTables th {
 
 /* 設置表格內容的樣式 */
 table#datatablesSimple td,
-table#adminDataTables td {
+table#adminDataTables td,
+table#levelDataTables td {
 	border: 1px solid #ddd;
 	/* 表格內容的邊框 */
 	padding: 8px;
@@ -13210,14 +13213,16 @@ table#adminDataTables td {
 
 /* 奇數行的背景色 */
 table#datatablesSimple tbody tr:nth-child(odd),
-table#adminDataTables tbody tr:nth-child(odd) {
+table#adminDataTables tbody tr:nth-child(odd),
+table#levelDataTables tbody tr:nth-child(odd) {
 	background-color: #f2f2f2;
 	/* 灰色背景色 */
 }
 
 /* 滑鼠懸停時的背景色 */
 table#datatablesSimple tbody tr:hover,
-table#adminDataTables tbody tr:hover {
+table#adminDataTables tbody tr:hover,
+table#levelDataTables tbody tr:hover {
 	background-color: #ddd;
 	/* 淺灰色背景色 */
 }

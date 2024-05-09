@@ -1,6 +1,7 @@
 package com.member.model;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -36,4 +37,15 @@ public interface MemberRepository extends JpaRepository<MemberBean, Integer> {
 	@Query(value = "SELECT * FROM members WHERE account = :account",nativeQuery = true)
 	public MemberBean selectByAccountBean(String account);
 	
+	/*檢查會員資料是否存在*/
+	@Query(value = "SELECT * FROM members WHERE account = :account",nativeQuery = true)
+	public Optional<MemberBean> findByAccount(String account);
+	
+	/*建構會員等級圖表*/
+	@Query(value = "SELECT COUNT(*) FROM members WHERE level = :level",nativeQuery = true)
+	public Integer headcount(Integer level);
+	
+	/*搜尋註冊人數*/
+	@Query(value = "SELECT COUNT(*) FROM members WHERE YEAR(registrationTime) = :year AND MONTH(registrationTime) = :month",nativeQuery = true)
+	public Integer registrationCount(Integer year ,Integer month);
 }

@@ -17,7 +17,7 @@ public class MemberService {
 	private MemberRepository memRepos;
 	
 /*------------------------------------------------基本資料操作-----------------------------------------------------*/
-	
+
 	/*新增會員*/
 	public MemberBean insert(MemberBean mem) {
 		return memRepos.save(mem);
@@ -59,9 +59,13 @@ public class MemberService {
 		return memRepos.selectByPhone(phone);
 	}
 	
-	/*提供登入用資訊*/
+	/*提供登入Session用資訊*/
 	public MemberBean selectByAccountBean(String account) {
 		return memRepos.selectByAccountBean(account);
+	}
+/*------------------------------------------------第三方登入機制-----------------------------------------------------*/			
+	public Optional<MemberBean> findByAccount(String account){
+		return memRepos.findByAccount(account);
 	}
 /*------------------------------------------------登入機制-----------------------------------------------------*/		
 	
@@ -79,4 +83,47 @@ public class MemberService {
 		
 		return memRepos.findById(memberId);
 	}
+/*------------------------------------------------檢視機制-----------------------------------------------------*/		
+	
+	public String getMemberLevelTitle(Integer memberId) {
+		MemberBean member = memRepos.findById(memberId).orElse(null);
+		if(member != null && member.getLevelEntity() != null) {
+			System.out.println("當前等級資料: " + member.getLevelEntity().getTitle());
+			System.out.println("當前等級消費上限: " + member.getLevelEntity().getThreshold());
+			System.out.println("當前總消費金額: " + member.getTotalSalesAmount());
+			return member.getLevelEntity().getTitle();
+		}
+		return "未知等級";
+	}
+	
+	public String updateMemberLevel(Integer memberId) {
+		MemberBean member = memRepos.findById(memberId).orElse(null);
+		if(member != null && member.getLevelEntity() != null) {
+			System.out.println("當前等級資料: " + member.getLevelEntity().getTitle());
+			System.out.println("當前等級消費上限: " + member.getLevelEntity().getThreshold());
+			System.out.println("當前總消費金額: " + member.getTotalSalesAmount());
+			/*把制度表裡面的金額轉成整數，後續做比較*/
+			int threshold = member.getLevelEntity().getThreshold();
+			if(member.getTotalSalesAmount() > threshold) {
+				System.out.println("before: " + member.getLevel());
+				member.setLevel(member.getLevel() + 1);
+				memRepos.save(member);
+				System.out.println("等級更新完成");
+			}
+			return member.getLevelEntity().getTitle();
+		}
+		return "未知等級";
+	}
+	
+/*------------------------------------------------返回圖表-----------------------------------------------------*/		
+	/*查詢對應級別會員人數*/
+	public Integer headcount(Integer level) {
+		return memRepos.headcount(level);
+	}
+	
+	/*查詢對應月份註冊人數*/
+	public Integer registrationCount(Integer year,Integer month) { 
+		return memRepos.registrationCount(year, month);
+	}
+
 }

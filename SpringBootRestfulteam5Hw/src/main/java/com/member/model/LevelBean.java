@@ -2,7 +2,10 @@ package com.member.model;
 
 import java.util.List;
 
+import org.hibernate.annotations.DynamicInsert;
 import org.springframework.stereotype.Component;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -15,6 +18,7 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "levelcorrespondencetable")
 @Component
+@DynamicInsert
 public class LevelBean {
 
 	@Id
@@ -30,6 +34,7 @@ public class LevelBean {
 	
 	/* Level類與Member類之間的一對多關聯 */
 	@OneToMany(mappedBy = "level")
+	@JsonIgnore
 	private List<MemberBean> members;
 
 	public LevelBean() {
@@ -65,7 +70,7 @@ public class LevelBean {
 	public void setThreshold(int threshold) {
 		this.threshold = threshold;
 	}
-
+	
 	public List<MemberBean> getMembers() {
 		return members;
 	}

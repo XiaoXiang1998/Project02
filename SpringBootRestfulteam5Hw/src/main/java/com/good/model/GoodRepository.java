@@ -13,7 +13,7 @@ public interface GoodRepository extends JpaRepository<GoodsBean2, Integer> {
 
 //	public List<GoodsBean> findByNameLike(String goodsName);
 	
-	@Query(value = "select * from Goods", nativeQuery = true)//用標準SQL語法
+//	@Query(value = "select * from Goods", nativeQuery = true)//用標準SQL語法
 	public List<GoodsBean2> findAll();
 	
 	

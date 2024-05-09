@@ -75,15 +75,6 @@ public class OrderController {
 		return "ControlUI";
 	}
 
-	@GetMapping("shopcar.controller")
-	public String ShopCar(Integer MemberId, Model m) {
-		MemberBean member =(MemberBean)session.getAttribute("member");
-		Integer memberId = member.getSid();
-		List<CarItem> carItems = cService.findByMemberId(memberId);
-		m.addAttribute("page","shopcar");
-		m.addAttribute("carItems", carItems);
-		return "Order/jsp/ShopCar";
-	}
 	@GetMapping("test")
 	public String test() {
 		return "Order/jsp/Test";
@@ -96,7 +87,7 @@ public class OrderController {
 		m.addAttribute("page","product");
 		return "Order/jsp/Product";
 	}
-
+	
 	@PostMapping("inserttoshopcar.controller")
 	public String insertToShopCar(@RequestParam("productId") Integer productId,
 			@RequestParam("quantity") Integer quantity, @RequestParam("productPrice") Integer productPrice) {
@@ -146,6 +137,15 @@ public class OrderController {
 		m.addAttribute("page","shopcar");
 		return "Order/jsp/Payment";
 	}
+    @GetMapping("shopcar.controller")
+    public String ShopCar(Integer MemberId, Model m) {
+        MemberBean member =(MemberBean)session.getAttribute("member");
+        Integer memberId = member.getSid();
+        List<CarItem> carItems = cService.findByMemberId(memberId);
+        m.addAttribute("page","shopcar");
+        m.addAttribute("carItems", carItems);
+        return "Order/jsp/ShopCar";
+    }
 	@GetMapping("/ecpayCheckout")
 	@ResponseBody
 	public String ecpayCheckout(@RequestParam("aioCheckOutALLForm") String aioCheckOutALLForm) {
@@ -231,40 +231,13 @@ public class OrderController {
 		}
 	
 	@GetMapping("queryOrder.controller")
-	public String QueryOrder(@RequestParam("queryType") String queryType, @RequestParam("orderId") String orderIdStr,
-			@RequestParam(value = "startDate", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate,
-			@RequestParam(value = "endDate", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate, Model m ) {
-			m.addAttribute("page","query");
-		switch (queryType) {
-		case "all":
+	public String QueryOrder(Model m ) {
 			List<Orders> orders = oService.findByOrderStatusNot(5);
-			m.addAttribute("queryType", queryType);
 			m.addAttribute("orders", orders);
 			return "/Order/jsp/Test";
-		case "byOrderId":
-			int orderId = Integer.parseInt(orderIdStr);
-			Orders order = oService.findByOrderIdAndOrderStatusNot(orderId,5);
-			m.addAttribute("orderId", orderId);
-			m.addAttribute("queryType", queryType);
-			m.addAttribute("order", order);
-			return "/Order/jsp/QueryById";
 
-		case "byDate":
-			Calendar calendar = Calendar.getInstance();
-	        calendar.setTime(endDate);
-	        calendar.add(Calendar.DATE, 1);
-	        endDate = calendar.getTime();
-	        
-			List<Orders> ordersByDate = oService.findByCreatedAtBetweenAndOrderStatusNot(startDate, endDate,5);
-			m.addAttribute("startDate", startDate);
-			m.addAttribute("endDate", endDate);
-			m.addAttribute("queryType", queryType);
-			m.addAttribute("orders", ordersByDate);
-			return "/Order/jsp/QueryByDate";
-		default:
-			throw new IllegalArgumentException("Error");
 		}
-	}
+	
 	
 	@PutMapping("fakeDelete.controller")
 	public void DeleteOrder(@RequestParam("orderId") String orderIdStr,

@@ -1,6 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=BIG5"
-	pageEncoding="BIG5"%>
-	<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <!DOCTYPE html>
@@ -8,17 +7,13 @@
 
 <head>
 <meta charset="BIG5">
-<title>­q³æºŞ²z</title>
-<link
-	href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css"
-	rel="stylesheet"/>
+<title>è¨‚å–®ç®¡ç†</title>
+<link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
 <link href="Order/css/styles.css" rel="stylesheet" />
 <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/plug-ins/2.0.7/i18n/zh-HANT.json"></script>
-<script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js"
-	crossorigin="anonymous"></script>
+<script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-<link rel="stylesheet"
-	href="https://cdn.jsdelivr.net/npm/sweetalert2@10/dist/sweetalert2.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10/dist/sweetalert2.min.css">
 
 </head>
 
@@ -27,16 +22,13 @@
 		<!-- Navbar Brand-->
 		<a class="navbar-brand ps-3" href="index.html">Start Bootstrap</a>
 		<!-- Sidebar Toggle-->
-		<button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0"
-			id="sidebarToggle" href="#!">
+		<button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!">
 			<i class="fas fa-bars"></i>
 		</button>
 		<!-- Navbar Search-->
-		<form
-			class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
+		<form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
 			<div class="input-group">
-				<input class="form-control" type="text" placeholder="Search for..."
-					aria-label="Search for..." aria-describedby="btnNavbarSearch" />
+				<input class="form-control" type="text" placeholder="Search for..." aria-label="Search for..." aria-describedby="btnNavbarSearch" />
 				<button class="btn btn-primary" id="btnNavbarSearch" type="button">
 					<i class="fas fa-search"></i>
 				</button>
@@ -44,12 +36,8 @@
 		</form>
 		<!-- Navbar-->
 		<ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
-			<li class="nav-item dropdown"><a
-				class="nav-link dropdown-toggle" id="navbarDropdown" href="#"
-				role="button" data-bs-toggle="dropdown" aria-expanded="false"><i
-					class="fas fa-user fa-fw"></i></a>
-				<ul class="dropdown-menu dropdown-menu-end"
-					aria-labelledby="navbarDropdown">
+			<li class="nav-item dropdown"><a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
+				<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
 					<li><a class="dropdown-item" href="#!">Settings</a></li>
 					<li><a class="dropdown-item" href="#!">Activity Log</a></li>
 					<li>
@@ -59,97 +47,57 @@
 				</ul></li>
 		</ul>
 	</nav>
-	<div id="layoutSidenav">
-		<div id="layoutSidenav_nav">
-			<nav class="sb-sidenav accordion sb-sidenav-dark"
-				id="sidenavAccordion">
-				<div class="sb-sidenav-menu">
-					<div class="nav">
-						<div class="sb-sidenav-menu-heading">Core</div>
-						<a class="nav-link" href="index.html">
-							<div class="sb-nav-link-icon">
-								<i class="fas fa-tachometer-alt"></i>
-							</div> Dashboard
-						</a>
-						<div class="sb-sidenav-menu-heading">Interface</div>
-						<a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
-							data-bs-target="#collapseLayouts" aria-expanded="false"
-							aria-controls="collapseLayouts">
-							<div class="sb-nav-link-icon">
-								<i class="fas fa-columns"></i>
-							</div> Layouts
-							<div class="sb-sidenav-collapse-arrow">
-								<i class="fas fa-angle-down"></i>
-							</div>
-						</a>
-						<div class="collapse" id="collapseLayouts"
-							aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
-							<nav class="sb-sidenav-menu-nested nav">
-								<a class="nav-link" href="layout-static.html">Static
-									Navigation</a> <a class="nav-link" href="layout-sidenav-light.html">Light
-									Sidenav</a>
-							</nav>
-						</div>
-						<a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
-							data-bs-target="#collapsePages" aria-expanded="false"
-							aria-controls="collapsePages">
-							<div class="sb-nav-link-icon">
-								<i class="fas fa-book-open"></i>
-							</div> Pages
-							<div class="sb-sidenav-collapse-arrow">
-								<i class="fas fa-angle-down"></i>
-							</div>
-						</a>
-						<div class="collapse" id="collapsePages"
-							aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
-							<nav class="sb-sidenav-menu-nested nav accordion"
-								id="sidenavAccordionPages">
-								<a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
-									data-bs-target="#pagesCollapseAuth" aria-expanded="false"
-									aria-controls="pagesCollapseAuth"> Authentication
-									<div class="sb-sidenav-collapse-arrow">
-										<i class="fas fa-angle-down"></i>
+		<div id="layoutSidenav">
+			<div id="layoutSidenav_nav">
+				<nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+					<div class="sb-sidenav-menu">
+						<div class="nav">
+							<div class="sb-sidenav-menu-heading">åŠŸèƒ½åˆ—è¡¨</div>
+							<a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
+								data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
+								<div class="sb-nav-link-icon"><i class="fa-solid fa-user-pen"></i></div>
+								äººå“¡ç®¡ç†
+								<div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+							</a>
+							<div class="collapse" id="collapsePages" aria-labelledby="headingTwo"
+								data-bs-parent="#sidenavAccordion">
+								<nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
+									<a class="nav-link" href="AdminIndex">
+										æœƒå“¡ç®¡ç†
+									</a>
+									<a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
+										data-bs-target="#pagesCollapseAuth" aria-expanded="false"
+										aria-controls="pagesCollapseAuth">
+										å¾Œå°äººå“¡ç®¡ç†
+										<div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+									</a>
+									<div class="collapse" id="pagesCollapseAuth" aria-labelledby="headingOne"
+										data-bs-parent="#sidenavAccordionPages">
+										<nav class="sb-sidenav-menu-nested nav">
+											<a class="nav-link" href="AdminManagement">æª¢è¦–å¾Œå°äººå“¡</a>
+											<a class="nav-link" href="AdminInsert">æ–°å¢å¾Œå°äººå“¡</a>
+										</nav>
 									</div>
-								</a>
-								<div class="collapse" id="pagesCollapseAuth"
-									aria-labelledby="headingOne"
-									data-bs-parent="#sidenavAccordionPages">
-									<nav class="sb-sidenav-menu-nested nav">
-										<a class="nav-link" href="login.html">Login</a> <a
-											class="nav-link" href="register.html">Register</a> <a
-											class="nav-link" href="password.html">Forgot Password</a>
-									</nav>
-								</div>
-								<a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
-									data-bs-target="#pagesCollapseError" aria-expanded="false"
-									aria-controls="pagesCollapseError"> Error
-									<div class="sb-sidenav-collapse-arrow">
-										<i class="fas fa-angle-down"></i>
-									</div>
-								</a>
-								<div class="collapse" id="pagesCollapseError"
-									aria-labelledby="headingOne"
-									data-bs-parent="#sidenavAccordionPages">
-									<nav class="sb-sidenav-menu-nested nav">
-										<a class="nav-link" href="401.html">401 Page</a> <a
-											class="nav-link" href="404.html">404 Page</a> <a
-											class="nav-link" href="500.html">500 Page</a>
-									</nav>
-								</div>
-							</nav>
+									<a class="nav-link" href="MembershipLevelGuidelines">
+										æœƒå“¡ç­‰ç´šè¦ç¯„
+									</a>
+								</nav>
+							</div>
+							<a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
+								data-bs-target="#order" aria-expanded="false" aria-controls="collapsePages">
+								<div class="sb-nav-link-icon"><i class="fa-solid fa-user-pen"></i></div>
+								è¨‚å–®ç®¡ç†
+								<div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+							</a>
+							<div class="collapse" id="order" aria-labelledby="headingTwo"
+								data-bs-parent="#sidenavAccordion">
+								<nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
+									<a class="nav-link" href="queryOrder.controller">
+										è¨‚å–®è©³æƒ…
+									</a>
+								</nav>
 						</div>
-						<div class="sb-sidenav-menu-heading">Addons</div>
-						<a class="nav-link" href="charts.html">
-							<div class="sb-nav-link-icon">
-								<i class="fas fa-chart-area"></i>
-							</div> Charts
-						</a> <a class="nav-link" href="tables.html">
-							<div class="sb-nav-link-icon">
-								<i class="fas fa-table"></i>
-							</div> Tables
-						</a>
 					</div>
-				</div>
 				<div class="sb-sidenav-footer">
 					<div class="small">Logged in as:</div>
 					Start Bootstrap
@@ -159,7 +107,7 @@
 		<div id="layoutSidenav_content">
 			<main>
 				<div class="container-fluid px-4">
-					<h1 class="mt-4">­q³æºŞ²z</h1>
+					<h1 class="mt-4">è¨‚å–®ç®¡ç†</h1>
 					<div class="row">
 						<div class="col-xl-6">
 							<div class="card mb-4">
@@ -184,102 +132,75 @@
 					</div>
 					<div class="card mb-4">
 						<div class="card-header">
-							<i class="fas fa-table me-1"></i> ­q³æ¸Ô±¡
+							<i class="fas fa-table me-1"></i> è¨‚å–®è©³æƒ…
 						</div>
 						<div class="card-body">
 							<table id="datatablesSimple">
 								<thead>
 									<tr>
-										<th>­q³æID</th>
-										<th>¶R®a</th>
-										<th>½æ®a</th>
-										<th>¹B°e¤è¦¡</th>
-										<th>¦¬¥ó¤H©m¦W</th>
-										<th>¦¬¥ó¤H¦a§}</th>
-										<th>¦¬¥ó¤H¹q¸Ü</th>
-										<th>°Ó«~¦WºÙ</th>
-										<th>°Ó«~³æ»ù</th>
-										<th>¼Æ¶q</th>
-										<th>¹B¶O</th>
-										<th>¤ä¥Iª÷ÃB</th>
-										<th>­q³æª¬ºA</th>
-										<th>¥I´Úª¬ºA</th>
-										<th>³Ğ«Ø®É¶¡</th>
-										<th>¾Ş§@</th>
-										<th>¾Ş§@</th>
+										<th>è¨‚å–®ID</th>
+										<th>è²·å®¶</th>
+										<th>è³£å®¶</th>
+										<th>é‹é€æ–¹å¼</th>
+										<th>æ”¶ä»¶äººå§“å</th>
+										<th>æ”¶ä»¶äººåœ°å€</th>
+										<th>æ”¶ä»¶äººé›»è©±</th>
+										<th>å•†å“åç¨±</th>
+										<th>å•†å“å–®åƒ¹</th>
+										<th>æ•¸é‡</th>
+										<th>é‹è²»</th>
+										<th>æ”¯ä»˜é‡‘é¡</th>
+										<th>è¨‚å–®ç‹€æ…‹</th>
+										<th>ä»˜æ¬¾ç‹€æ…‹</th>
+										<th>å‰µå»ºæ™‚é–“</th>
+										<th>æ“ä½œ</th>
+										<th>æ“ä½œ</th>
 									</tr>
 								</thead>
-								<tfoot>
-									<tr>
-										<th>­q³æID</th>
-										<th>¶R®a</th>
-										<th>½æ®a</th>
-										<th>¹B°e¤è¦¡</th>
-										<th>¦¬¥ó¤H©m¦W</th>
-										<th>¦¬¥ó¤H¦a§}</th>
-										<th>¦¬¥ó¤H¹q¸Ü</th>
-										<th>°Ó«~¦WºÙ</th>
-										<th>°Ó«~³æ»ù</th>
-										<th>¼Æ¶q</th>
-										<th>¹B¶O</th>
-										<th>¤ä¥Iª÷ÃB</th>
-										<th>­q³æª¬ºA</th>
-										<th>¥I´Úª¬ºA</th>
-										<th>³Ğ«Ø®É¶¡</th>
-										<th>¾Ş§@</th>
-										<th>¾Ş§@</th>
-									</tr>
-								</tfoot>
 								<tbody>
 									<c:forEach items="${orders}" var="order">
-						<tr style="height: 80px" class="text-center align-middle">
-							<td>${order.orderId}</td>
-							<td>${order.buyerId.name}</td>
-							<td>${order.sellerId.name}</td>
-							<td>${order.shippingMethod == 1 ? '¦v°t¨ì®a' : order.shippingMethod == 2 ?
-													'¶W°Óª«¬y' : ''}</td>
-							<td>${order.name}</td>
-							<td>${order.address}</td>
-							<td>${order.tel}</td>
-							<td>${order.formatgoodId.good.goodsName}</td>
-							<td>${order.originalPrice}</td>
-							<td>${order.quantity}</td>
-							<td>${order.shippingFee}</td>
-							<td>${order.totalPrice}</td>
-							<td><c:choose>
-									<c:when test="${order.orderStatus == 0}">¤w¦¨¥ß</c:when>
-									<c:when test="${order.orderStatus == 1}">«İ¥X³f</c:when>
-									<c:when test="${order.orderStatus == 2}">«İ¦¬³f</c:when>
-									<c:when test="${order.orderStatus == 3}">«İµû½×</c:when>
-									<c:when test="${order.orderStatus == 4}">¤w§¹¦¨</c:when>
-									<c:when test="${order.orderStatus == 5}">¤w¨ú®ø</c:when>
-									<c:otherwise></c:otherwise>
-								</c:choose></td>
-							<td>${order.payStatus == 0 ? '¥¼¥I´Ú' : '¤w¥I´Ú'}</td>
-							<td><fmt:formatDate value="${order.createdAt}"
-									pattern="yyyy-MM-dd HH:mm:ss" /></td>
-							<c:set var="queryType" value="${param.queryType}" />
-							<td><a href="#"
-								onclick="showEditForm('${order.orderId}','${order.name}','${order.tel}','${order.address}',${order.orderStatus})"
-								class="btn btn-primary btn-sm">­×§ï</a></td>
-							<c:choose>
-								<c:when test="${order.orderStatus == 3}">
-									<td>
-										<form action="insertPost" method="get">
-											<input type="hidden" id="comment" name="commentId"
-												value="${order.orderId}">
-											<button class="btn btn-warning btn-sm" type="submit">µû½×</button>
-										</form>
-									</td>
-								</c:when>
-								<c:otherwise>
-									<td><a href="#"
-										onclick="confirmDelete(${order.orderId}, '${queryType}')"
-										class="btn btn-danger btn-sm">§R°£</a></td>
-								</c:otherwise>
-							</c:choose>
-						</tr>
-					</c:forEach>
+										<tr style="height: 80px" class="text-center align-middle">
+											<td>${order.orderId}</td>
+											<td>${order.buyerId.name}</td>
+											<td>${order.sellerId.name}</td>
+											<td>${order.shippingMethod == 1 ? 'å®…é…åˆ°å®¶' : order.shippingMethod == 2 ?
+													'è¶…å•†ç‰©æµ' : ''}</td>
+											<td>${order.name}</td>
+											<td>${order.address}</td>
+											<td>${order.tel}</td>
+											<td>${order.formatgoodId.good.goodsName}</td>
+											<td>${order.originalPrice}</td>
+											<td>${order.quantity}</td>
+											<td>${order.shippingFee}</td>
+											<td>${order.totalPrice}</td>
+											<td><c:choose>
+													<c:when test="${order.orderStatus == 0}">å·²æˆç«‹</c:when>
+													<c:when test="${order.orderStatus == 1}">å¾…å‡ºè²¨</c:when>
+													<c:when test="${order.orderStatus == 2}">å¾…æ”¶è²¨</c:when>
+													<c:when test="${order.orderStatus == 3}">å¾…è©•è«–</c:when>
+													<c:when test="${order.orderStatus == 4}">å·²å®Œæˆ</c:when>
+													<c:when test="${order.orderStatus == 5}">å·²å–æ¶ˆ</c:when>
+													<c:otherwise></c:otherwise>
+												</c:choose></td>
+											<td>${order.payStatus == 0 ? 'æœªä»˜æ¬¾' : 'å·²ä»˜æ¬¾'}</td>
+											<td><fmt:formatDate value="${order.createdAt}" pattern="yyyy-MM-dd HH:mm:ss" /></td>
+											<c:set var="queryType" value="${param.queryType}" />
+											<td><a href="#" onclick="showEditForm('${order.orderId}','${order.name}','${order.tel}','${order.address}',${order.orderStatus})" class="btn btn-primary btn-sm">ä¿®æ”¹</a></td>
+											<c:choose>
+												<c:when test="${order.orderStatus == 3}">
+													<td>
+														<form action="insertPost" method="get">
+															<input type="hidden" id="comment" name="commentId" value="${order.orderId}">
+															<button class="btn btn-warning btn-sm" type="submit">è©•è«–</button>
+														</form>
+													</td>
+												</c:when>
+												<c:otherwise>
+													<td><a href="#" onclick="confirmDelete(${order.orderId})" class="btn btn-danger btn-sm">åˆªé™¤</a></td>
+												</c:otherwise>
+											</c:choose>
+										</tr>
+									</c:forEach>
 								</tbody>
 							</table>
 						</div>
@@ -288,77 +209,104 @@
 			</main>
 			<footer class="py-4 bg-light mt-auto">
 				<div class="container-fluid px-4">
-					<div
-						class="d-flex align-items-center justify-content-between small">
+					<div class="d-flex align-items-center justify-content-between small">
 						<div class="text-muted">Copyright &copy; Your Website 2023</div>
 						<div>
-							<a href="#">Privacy Policy</a> &middot; <a href="#">Terms
-								&amp; Conditions</a>
+							<a href="#">Privacy Policy</a> &middot; <a href="#">Terms &amp; Conditions</a>
 						</div>
 					</div>
 				</div>
 			</footer>
 		</div>
 	</div>
-	<div id="editForm" class="d-none"
-			style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(255, 255, 255, 0.9); z-index: 1000;">
-			<div class="row justify-content-center align-items-center h-100">
-				<div class="col-md-6 border p-4">
-					<h2 class="mt-5">­×§ï­q³æ</h2>
-					<form id="editOrderForm" action="updateOrder.controller"
-						method="post">
-						<input type="hidden" name="_method" value="PUT" /> <input
-							type="hidden" id="editOrderId" name="orderId"
-							value="${order.orderId}"> <input type="hidden"
-							id="editQueryType" name="queryType" value="${queryType}">
-						<div class="mb-3">
-							<label for="editShippingName" class="form-label">¦¬¥ó¤H©m¦W:</label> <input
-								type="text" id="editShippingName" name="name"
-								class="form-control">
-						</div>
-						<div class="mb-3">
-							<label for="editShippingTel" class="form-label">¦¬¥ó¤H¹q¸Ü:</label> <input
-								type="text" id="editShippingTel" name="tel" class="form-control">
-						</div>
-						<div class="mb-3">
-							<label for="editShippingAddress" class="form-label">¦¬¥ó¤H¦a§}:</label>
-							<input type="text" id="editShippingAddress" name="address"
-								class="form-control">
-						</div>
-						<div class="mb-3">
-							<label for="editOrderStatus" class="form-label">­q³æª¬ºA:</label> <select
-								id="editOrderStatus" name="orderstatus" class="form-select">
-								<option value="0">¤w¦¨¥ß</option>
-								<option value="1">«İ¥X³f</option>
-								<option value="2">«İ¦¬³f</option>
-								<option value="3">«İµû½×</option>
-								<option value="4">¤w§¹¦¨</option>
-								<option value="5">¤w¨ú®ø</option>
-							</select>
-						</div>
-						<button type="button" class="btn btn-primary"
-							onclick="confirmSave()">«O¦s</button>
-						<button type="button" class="btn btn-secondary"
-							onclick="hideEditForm()">¨ú®ø</button>
-					</form>
-				</div>
+	<div id="editForm" class="d-none" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(255, 255, 255, 0.9); z-index: 1000;">
+		<div class="row justify-content-center align-items-center h-100">
+			<div class="col-md-6 border p-4">
+				<h2 class="mt-5">ä¿®æ”¹è¨‚å–®</h2>
+				<form id="editOrderForm" action="updateOrder.controller" method="post">
+					<input type="hidden" name="_method" value="PUT" /> <input type="hidden" id="editOrderId" name="orderId" value="${order.orderId}"> <input type="hidden" id="editQueryType" name="queryType" value="${queryType}">
+					<div class="mb-3">
+						<label for="editShippingName" class="form-label">æ”¶ä»¶äººå§“å:</label> <input type="text" id="editShippingName" name="name" class="form-control">
+					</div>
+					<div class="mb-3">
+						<label for="editShippingTel" class="form-label">æ”¶ä»¶äººé›»è©±:</label> <input type="text" id="editShippingTel" name="tel" class="form-control">
+					</div>
+					<div class="mb-3">
+						<label for="editShippingAddress" class="form-label">æ”¶ä»¶äººåœ°å€:</label> <input type="text" id="editShippingAddress" name="address" class="form-control">
+					</div>
+					<div class="mb-3">
+						<label for="editOrderStatus" class="form-label">è¨‚å–®ç‹€æ…‹:</label> <select id="editOrderStatus" name="orderstatus" class="form-select">
+							<option value="0">å·²æˆç«‹</option>
+							<option value="1">å¾…å‡ºè²¨</option>
+							<option value="2">å¾…æ”¶è²¨</option>
+							<option value="3">å¾…è©•è«–</option>
+							<option value="4">å·²å®Œæˆ</option>
+							<option value="5">å·²å–æ¶ˆ</option>
+						</select>
+					</div>
+					<button type="button" class="btn btn-primary" onclick="confirmSave()">ä¿å­˜</button>
+					<button type="button" class="btn btn-secondary" onclick="hideEditForm()">å–æ¶ˆ</button>
+				</form>
 			</div>
 		</div>
-	<script
-		src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
-		crossorigin="anonymous"></script>
+	</div>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
 	<script src="Order/js/scripts.js"></script>
-	<script
-		src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"
-		crossorigin="anonymous"></script>
-	<script src="Order/assets/demo/chart-area-demo.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
 	<script src="Order/assets/demo/chart-bar-demo.js"></script>
-	<script
-		src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js"
-		crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
 	<script src="Order/js/datatables-simple-demo.js"></script>
-	
+
 	<script>
+	var ctx = document.getElementById("myAreaChart");
+	var myLineChart = new Chart(ctx, {
+	  type: 'line',
+	  data: {
+	    labels: ["Mar 1", "Mar 2", "Mar 3", "Mar 4", "Mar 5", "Mar 6", "Mar 7", "Mar 8", "Mar 9", "Mar 10", "Mar 11", "Mar 12", "Mar 13"],
+	    datasets: [{
+	      label: "Sessions",
+	      lineTension: 0.3,
+	      backgroundColor: "rgba(2,117,216,0.2)",
+	      borderColor: "rgba(2,117,216,1)",
+	      pointRadius: 5,
+	      pointBackgroundColor: "rgba(2,117,216,1)",
+	      pointBorderColor: "rgba(255,255,255,0.8)",
+	      pointHoverRadius: 5,
+	      pointHoverBackgroundColor: "rgba(2,117,216,1)",
+	      pointHitRadius: 50,
+	      pointBorderWidth: 2,
+	      data: [10000, 30162, 26263, 18394, 18287, 28682, 31274, 33259, 25849, 24159, 32651, 31984, 38451],
+	    }],
+	  },
+	  options: {
+	    scales: {
+	      xAxes: [{
+	        time: {
+	          unit: 'date'
+	        },
+	        gridLines: {
+	          display: false
+	        },
+	        ticks: {
+	          maxTicksLimit: 7
+	        }
+	      }],
+	      yAxes: [{
+	        ticks: {
+	          min: 0,
+	          max: 40000,
+	          maxTicksLimit: 5
+	        },
+	        gridLines: {
+	          color: "rgba(0, 0, 0, .125)",
+	        }
+	      }],
+	    },
+	    legend: {
+	      display: false
+	    }
+	  }
+	});
 							function showEditForm(orderId, shippingName, shippingTel, shippingAddress, orderStatus) {
 								document.getElementById('editOrderId').value = orderId;
 								document.getElementById('editShippingName').value = shippingName;
@@ -371,15 +319,15 @@
 							function confirmSave() {
 								var orderId = document.getElementById('editOrderId').value;
 								Swal.fire({
-									title: "½T»{­×§ï­q³æ½s¸¹¬°" + orderId + "ªº­q³æ¶Ü?",
+									title: "ç¢ºèªä¿®æ”¹è¨‚å–®ç·¨è™Ÿç‚º" + orderId + "çš„è¨‚å–®å—?",
 									showDenyButton: true,
-									confirmButtonText: "½T»{",
-									denyButtonText: "¨ú®ø"
+									confirmButtonText: "ç¢ºèª",
+									denyButtonText: "å–æ¶ˆ"
 								}).then((result) => {
 									if (result.isConfirmed) {
 										Swal.fire({
 											icon: "success",
-											title: "­×§ï¦¨¥\"
+											title: "ä¿®æ”¹æˆåŠŸ"
 										}).then((result) => {
 											if (result.isConfirmed) {
 												var formData = new FormData(document.getElementById('editOrderForm'));
@@ -400,7 +348,7 @@
 									} else if (result.isDenied) {
 										Swal.fire({
 											icon: "error",
-											title: "¨ú®ø­×§ï"
+											title: "å–æ¶ˆä¿®æ”¹"
 										}).then((result) => {
 											hideEditForm();
 										});
@@ -412,25 +360,25 @@
 								document.getElementById('editForm').classList.add('d-none');
 							}
 
-							function confirmDelete(orderId, queryType) {
+							function confirmDelete(orderId) {
 								Swal.fire({
-									title: "½T©w­n§R°£¶Ü?",
+									title: "ç¢ºå®šè¦åˆªé™¤å—?",
 									icon: "warning",
 									showCancelButton: true,
 									confirmButtonColor: "#3085d6",
 									cancelButtonColor: "#d33",
-									confirmButtonText: "½T©w",
-									cancelButtonText: '¨ú®ø'
+									confirmButtonText: "ç¢ºå®š",
+									cancelButtonText: 'å–æ¶ˆ'
 								}).then((result) => {
 									if (result.isConfirmed) {
-										fetch("fakeDelete.controller?orderId=" + orderId + "&queryType=" + queryType, {
+										fetch("fakeDelete.controller?orderId=" + orderId, {
 											method: 'PUT'
 										})
 											.then(response => response.text())
 											.then(result => {
 												Swal.fire({
-													title: "§R°£¦¨¥\¡I",
-													text: "±z¤w¸g§R°£­q³æ½s¸¹¬°" + orderId + "ªº­q³æ",
+													title: "åˆªé™¤æˆåŠŸï¼",
+													text: "æ‚¨å·²ç¶“åˆªé™¤è¨‚å–®ç·¨è™Ÿç‚º" + orderId + "çš„è¨‚å–®",
 													icon: "success"
 												}).then((result) => {
 													if (result.isConfirmed) {

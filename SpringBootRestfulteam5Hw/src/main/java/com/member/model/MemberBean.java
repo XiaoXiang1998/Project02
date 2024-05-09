@@ -1,13 +1,16 @@
 package com.member.model;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.hibernate.annotations.DynamicInsert;
 import org.springframework.stereotype.Component;
 
 import com.comment.model.Post;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.good.model.GoodsBean2;
 import com.sean.model.Orders;
 import com.sean.model.PaymentDetails;
@@ -19,12 +22,15 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "members")
 @Component
+@DynamicInsert
 public class MemberBean {
 
 	@Id
@@ -67,27 +73,44 @@ public class MemberBean {
 
 	@Column(name = "totalsalesamount")
 	private Integer totalSalesAmount;
-	
-	@Column(name="level")
+
+	@Column(name = "level")
 	private Integer level;
 	
+	@Column(name = "third_party_provider")
+	private String thirdPartyProvider;
+
+	@Column(name = "registrationtime")
+	private LocalDate registrationTime;
+	
+	/*表示可以多個會員對應一個等級*/
+	@ManyToOne
+	@JoinColumn(name = "level",insertable = false,updatable = false)
+	@JsonIgnore
+	private LevelBean levelEntity;
+	
+
+	@JsonIgnore
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "goodsSellerID", cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	private Set<GoodsBean2> goods2 = new LinkedHashSet<>();
 
+	@JsonIgnore
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "payUserId", cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	private Set<PaymentDetails> payments = new LinkedHashSet<>();
 
+	@JsonIgnore
 	@OneToMany(mappedBy = "buyerId", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private Set<Orders> buyers = new LinkedHashSet<>();
 
+	@JsonIgnore
 	@OneToMany(mappedBy = "sellerId", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private Set<Orders> sellers = new LinkedHashSet<>();
-	
-	
-	  @OneToMany(fetch = FetchType.LAZY,mappedBy = "member",cascade = CascadeType.ALL)
-		private List<Post> posts=new ArrayList<Post>();
-	    
-	
+
+	@JsonIgnore
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "member", cascade = CascadeType.ALL)
+	private List<Post> posts = new ArrayList<Post>();
+
+	/*建立聯繫*/
 	public MemberBean() {
 	}
 
@@ -104,8 +127,8 @@ public class MemberBean {
 		this.photoSticker = photoSticker;
 		this.seller = seller;
 	}
-
-	/* 新增時沒有頭貼用 */
+	
+	/*新增時無照片*/
 	public MemberBean(String account, String password, String email, String phone, String name, String gender,
 			String address, boolean seller) {
 		this.account = account;
@@ -117,11 +140,11 @@ public class MemberBean {
 		this.address = address;
 		this.seller = seller;
 	}
-
+	
 	/* 修改時用 */
 	public MemberBean(Integer sid, String account, String password, String email, String phone, String name,
-			String gender, String address, String photoSticker, boolean seller, int reviewCount,
-			int cumulativeScore, int totalSalesAmount) {
+			String gender, String address, String photoSticker, boolean seller, Integer reviewCount,
+			Integer cumulativeScore, Integer totalSalesAmount, Integer level, String thirdPartyProvider,LocalDate registrationTime) {
 		this.sid = sid;
 		this.account = account;
 		this.password = password;
@@ -135,6 +158,18 @@ public class MemberBean {
 		this.reviewCount = reviewCount;
 		this.cumulativeScore = cumulativeScore;
 		this.totalSalesAmount = totalSalesAmount;
+		this.level = level;
+		this.thirdPartyProvider = thirdPartyProvider;
+		this.registrationTime = registrationTime;
+	}
+	
+	/*第三方登入用*/
+	public MemberBean(String account, String password, String email, String name, String thirdPartyProvider) {
+		this.account = account;
+		this.password = password;
+		this.email = email;
+		this.name = name;
+		this.thirdPartyProvider = thirdPartyProvider;
 	}
 
 	public Integer getSid() {
@@ -249,6 +284,30 @@ public class MemberBean {
 		this.level = level;
 	}
 
+	public String getThirdPartyProvider() {
+		return thirdPartyProvider;
+	}
+
+	public void setThirdPartyProvider(String thirdPartyProvider) {
+		this.thirdPartyProvider = thirdPartyProvider;
+	}
+
+	public LocalDate getRegistrationTime() {
+		return registrationTime;
+	}
+
+	public void setRegistrationTime(LocalDate registrationTime) {
+		this.registrationTime = registrationTime;
+	}
+
+	public LevelBean getLevelEntity() {
+		return levelEntity;
+	}
+
+	public void setLevelEntity(LevelBean levelEntity) {
+		this.levelEntity = levelEntity;
+	}
+
 	public Set<GoodsBean2> getGoods2() {
 		return goods2;
 	}
@@ -289,9 +348,4 @@ public class MemberBean {
 		this.posts = posts;
 	}
 
-	
-
-	
-	
-	
 }

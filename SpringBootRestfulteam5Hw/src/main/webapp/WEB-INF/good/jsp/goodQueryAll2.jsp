@@ -757,7 +757,7 @@
 
         <body>
             <button id="InsertGoodData">新增</button>
-            <form action="InsertGood.controller" method="post">
+            <form action="InsertGood.controller" method="get">
                 <button id="InsertGoodPPage">進入新增頁面</button>
             </form>
 

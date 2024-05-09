@@ -464,7 +464,19 @@ public class GoodController2 {
 	@ResponseBody
 	public List<GoodsBean2> processQueryAll() {
 		List<GoodsBean2> goods = gService.getAll();
-		
+		for(GoodsBean2 item:goods) {
+			System.out.println(item.toString());
+			//
+			Set<GoodFormat> format = item.getFormat();
+			Set<GoodImageBean> images = item.getImages();
+			for(GoodFormat item2:format) {
+				System.out.println(item2.toString());
+			}
+			
+			for(GoodImageBean item3:images) {
+				System.out.println(item3.toString());
+			}
+		}
 		return goods;
 	}
 	

@@ -131,9 +131,12 @@ public class PostController {
 
 	    Page<Post> userComments = pService.findByMemberOrderByCommenttimeDesc(member, pageable);
         
-	    model.addAttribute("comments", userComments.getContent()); // Current page's comments
-        model.addAttribute("currentPage", page); // 当前页码
-        model.addAttribute("totalPages", userComments.getTotalPages()); // Total number of pages
+	 
+	    
+	    
+	    model.addAttribute("comments", userComments.getContent());
+        model.addAttribute("currentPage", page); 
+        model.addAttribute("totalPages", userComments.getTotalPages()); 
         
         return "comment/userComment"; 
     }

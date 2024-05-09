@@ -50,9 +50,10 @@ public class GoodController {
 	private GoodFormatService gfService;
 
 /////////////////////////////////////////////////////新增頁面/////////////////////////////////////////////////
-	@PostMapping("InsertGood.controller")
+//	InsertGood.controller
+	@GetMapping("InsertGood.controller")
 	public String processInsert() {
-		return "good/jsp/insertPage";
+		return "good/jsp/insertPageTemplete";
 	}
 
 	@PostMapping("InsertPage.controller")
@@ -147,7 +148,7 @@ public class GoodController {
 					GoodFormat goodformat = new GoodFormat();
 					goodformat.setGood(insertgood);// 商品規格表連結商品基本資訊表
 					String goodsImg = dataPath + timeStampFormat + "" + patternFormatImage;// dataPath =
-					goodformat.setGoodsID(iD); // "../../goodImages/"
+//					goodformat.setGoodsID(iD); // "../../goodImages/"
 					goodformat.setGoodImagePath(goodsImg);
 					goodformat.setGoodPrice(Integer.parseInt(price));
 					goodformat.setGoodSize(size);
@@ -183,7 +184,7 @@ public class GoodController {
 //3.5 處理圖片表的資料
 			String imagePath = dataPath + timeStampImage + "" + patternImage;
 			GoodImageBean goodImageBean = new GoodImageBean();
-			goodImageBean.setGoodID(iD);
+//			goodImageBean.setGoodID(iD);
 			goodImageBean.setGood(insertgood);
 			goodImageBean.setImagePath(imagePath);
 			Imageset.add(goodImageBean);
@@ -196,9 +197,17 @@ public class GoodController {
 	}
 
 	///////////////////////////////////////////////////// 查詢全部的頁面/////////////////////////////////////////////////
+	
+	@GetMapping("/goodDetail.controller") 
+	public String processGoodDetailAction(@RequestParam("GoodID") Integer goodID,HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		session.setAttribute("GoodID", goodID);
+		return "good/jsp/goodDetail";
+	}
+	
 	@GetMapping("/goodQueryAllPageForUser.controller")
 	public String processQueryAllPageAction() {
-		return "good/jsp/goodQueryAll3";
+		return "good/jsp/goodBasicQueryAll3";
 	}
 
 	// 分頁查詢
@@ -227,7 +236,7 @@ public class GoodController {
 //		public String goodMidifyPage(@RequestParam("GoodsID") Integer goodID) {
 		int goodID = 3;
 		session.setAttribute("goodID", goodID);
-		return "good/jsp/modifyPage";
+		return "good/jsp/modifyPageTemplete";
 	}
 
 	// -> 進入該商品的編輯頁面
@@ -243,12 +252,12 @@ public class GoodController {
 
 		Set<GoodImageBean> images = good.getImages();
 		for (GoodImageBean item : images) {
-			item.setGoodID(goodID);
+//			item.setGoodID(goodID);
 			System.out.println(item.toString());
 		}
 		Set<GoodFormat> format = good.getFormat();
 		for (GoodFormat item : format) {
-			item.setGoodsID(goodID);
+//			item.setGoodsID(goodID);
 			System.out.println(item.toString());
 		}
 		return good;
@@ -270,7 +279,7 @@ public class GoodController {
 	public List<GoodFormat> queryByIdOrderByFormatImage(@PathVariable("goodID") Integer goodID) {
 		List<GoodFormat> goodFormat = gfService.getByIDOrderByFormatImage(goodID);
 		for (GoodFormat item : goodFormat) {
-			item.setGoodsID(goodID);
+//			item.setGoodsID(goodID);
 			System.out.println(item.toString());
 		}
 		return goodFormat;
@@ -496,11 +505,11 @@ public class GoodController {
 		Map<String, String> checkImageMap = new HashMap<String, String>();
 		String checkpoint = "0";
 		System.out.println("開始處理商品規格表搂!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-		int formatmodifycheck = 0;
-		String modifyfilename = "";
 		for (MultipartFile item : goodFormatImages) {// 裡面包含修改圖片 和 新增圖片(只針對圖片有改動的案例)
 			String uploadGoodImageName = item.getOriginalFilename();// xxx.jpg
+			System.out.println("uploadGoodImageName = " + uploadGoodImageName);
 			if (item.getOriginalFilename().equals("") && checkpoint.equals("0")) {// 沒有上傳檔案
+				System.out.println("檔案沒有上傳");
 				// 處理沒有更新或上傳圖片的修改資料
 				for (String item2 : hiddenValue) {
 					System.out.println("item2 = " + item2);
@@ -528,7 +537,7 @@ public class GoodController {
 							String size = split[0];
 							String price = split[1];
 							String stock = split[2];
-							String figName = split[3];
+							String figName = split[3];// 隱藏欄位中 的圖片名稱
 							List<GoodFormat> byIDOrderByFormatImage = gfService.getByIDOrderByFormatImage(goodsID);
 							for (GoodFormat item3 : byIDOrderByFormatImage) {
 								String goodImagePath = item3.getGoodImagePath();
@@ -553,12 +562,13 @@ public class GoodController {
 			} else {// 取得到圖片資料(修改圖片或上傳圖片)
 //				String uploadGoodImageName = item.getOriginalFilename();// xxx.jpg
 				if (uploadGoodImageName.equals("")) {// 沒有圖片的案例處理玩了
-
+					System.out.println("裡面沒東西");
 				} else {
-					System.out.println("HI uploadGoodImageName = " + uploadGoodImageName);// uploadGoodImageName
-																							// 上傳或修改的圖片名稱
-					String check = "";// 一張規格圖片內有多個規格資料
-					String checkInsertAns = "";
+//					System.out.println("HI uploadGoodImageName = " + uploadGoodImageName);// uploadGoodImageName
+					// 上傳或修改的圖片名稱
+					System.out.println("取得到圖片資料(修改圖片或上傳圖片)");
+//					String check = "";// 一張規格圖片內有多個規格資料
+//					String checkInsertAns = "";
 					for (String item2 : hiddenValue) {
 						// 需要辨別是該圖片是新增還是修改
 						// EX: 大/1500/1000/sharkitty19.jpg
@@ -567,7 +577,7 @@ public class GoodController {
 						// EX: 中/1400/500/sharkitty20.jpg
 						String[] dataImageNum = item2.split("/");
 						System.out.println("item2 = " + item2);
-
+						String check1 = "";
 						if (dataImageNum.length == 4) {// 新增資料(1.新增圖片)
 							// 攔截隱藏欄位的所有資料
 							// 新增圖片(大/1500/1000/sharkitty19.jpg)
@@ -591,8 +601,17 @@ public class GoodController {
 								// 1. 新增圖片(小/1000/800/sharkitty19.jpg)
 								// 2.新增單一規格(大/1500/1000/202405071005123.jpg)
 								// 2.新增單一規格(中/1500/1000/202405071005123.jpg)
+								// 案例 小/800/100/sharkitty11.jpg(uploadGoodImageName = sharkitty11.jpg)
+								// 案例 大/1500/600/sharkitty14.jpg(uploadGoodImageName = sharkitty11.jpg) 跳過不處理
+
 								Set<String> keySet = checkImageMap.keySet();
-								if (keySet.contains(uploadformatImageName)) {
+								System.out.println("keySet start");
+								System.out.println(keySet);
+								System.out.println("keySet end");
+								System.out.println("keySet.contains(uploadformatImageName) = "
+										+ keySet.contains(uploadformatImageName));
+								if (keySet.contains(uploadformatImageName)
+										&& uploadformatImageName.equals(uploadGoodImageName)) {
 									//
 									String answer = checkImageMap.get(uploadformatImageName);
 									GoodFormat goodFormatforInsert = new GoodFormat();
@@ -601,128 +620,146 @@ public class GoodController {
 									goodFormatforInsert.setGoodPrice(Integer.parseInt(price));
 									goodFormatforInsert.setGoodSize(size);
 									goodFormatforInsert.setGoodsStock(Integer.parseInt(stock));
+									formatset.add(goodFormatforInsert);
 									gfService.insert(goodFormatforInsert);
+									break;
 								} else {// 假若map內沒有對應的資料
 										// 先檢查是不是案例2
-									List<GoodFormat> filterhidden = gfService.getByIDOrderByFormatImage(goodsID);
-									for (GoodFormat item3 : filterhidden) {
-										String goodImagePath = item3.getGoodImagePath();
-										String[] split = goodImagePath.split("/");
-										String checkdatabasefilename = split[3];
-										if (checkdatabasefilename.equals(uploadformatImageName)) {
-											// 假若隱藏資料中的圖片名稱和上傳圖片名稱吻合(新增單一規格)[不須處理圖片上傳]
-											checkImageMap.put(uploadformatImageName, goodImagePath);
-											check = "1";
-											break;
+									if (!uploadformatImageName.equals(uploadGoodImageName)) {
+										System.out.println("跳過不處理(隱藏欄位的圖片名稱和上傳圖片的名稱不符)");
+									} else {
+										List<GoodFormat> filterhidden = gfService.getByIDOrderByFormatImage(goodsID);// 透過商品編號取得所有對應的規格
+										for (GoodFormat item3 : filterhidden) {
+											String goodImagePath = item3.getGoodImagePath();// ex:../../goodImages/xxx.jpg
+											String[] split = goodImagePath.split("/");
+											String checkdatabasefilename = split[3];
+											if (checkdatabasefilename.equals(uploadformatImageName)) {
+												// 假若隱藏資料中的圖片名稱和上傳圖片名稱吻合(新增單一規格)[不須處理圖片上傳]
+												checkImageMap.put(uploadformatImageName, goodImagePath);
+												GoodFormat insertgoodformat = new GoodFormat();
+												insertgoodformat.setGood(good);
+												insertgoodformat.setGoodImagePath(goodImagePath);
+												insertgoodformat.setGoodPrice(Integer.parseInt(price));
+												insertgoodformat.setGoodSize(size);
+												insertgoodformat.setGoodsStock(Integer.parseInt(stock));
+												gfService.insert(insertgoodformat);
+												formatset.add(insertgoodformat);
+												check1 = "1";
+												break;
+											}
+										}
+										if (check1.equals("")) {// 代表不是案例2 可能是案例1(新增圖片)[需要處理圖片上傳]
+											GoodFormat goodFormat = new GoodFormat();
+											goodFormat.setGood(good);// 連結商品基本資訊
+											// 處理新增上去的圖片
+											System.out.println("uploadGoodImageName = " + uploadGoodImageName);
+											int position = uploadGoodImageName.lastIndexOf(".");
+											String imageFormat = uploadGoodImageName.substring(position);// .jpg
+											String timeStampFormat = simpleDateFormat.format(new Date());
+											String ImgRootFormat = patternPath + timeStampFormat + "" + imageFormat;
+											File file = new File(ImgRootFormat);
+											System.out.println("ImgRootFormat = " + ImgRootFormat);
+											System.out.println(
+													"item.getOriginalFilename() = " + item.getOriginalFilename());
+											try {
+												item.transferTo(file);// 將圖片上傳
+											} catch (IllegalStateException e) {
+												// TODO Auto-generated catch block
+												e.printStackTrace();
+											} catch (IOException e) {
+												// TODO Auto-generated catch block
+												e.printStackTrace();
+											}
+											String dataBaseRootFormat = dataPath + timeStampFormat + "" + imageFormat;
+											goodFormat.setGoodImagePath(dataBaseRootFormat);
+											goodFormat.setGoodPrice(Integer.parseInt(price));
+											goodFormat.setGoodsStock(Integer.parseInt(stock));
+											goodFormat.setGoodSize(size);
+											goodFormat.setGood(good);
+											formatset.add(goodFormat);// 將規格表集合起來
+											gfService.insert(goodFormat);// 將規格表寫進資料庫
+											checkImageMap.put(uploadGoodImageName, dataBaseRootFormat);
+										} else {
+											System.out.println("check1 only get 1 or \"\" something wrong happen");
 										}
 									}
-									if (check.equals("")) {// 代表不是案例2 可能是案例1(新增圖片)[需要處理圖片上傳]
-										GoodFormat goodFormat = new GoodFormat();
-										goodFormat.setGood(good);// 連結商品基本資訊
-										// 處理新增上去的圖片
-										System.out.println("uploadGoodImageName = " + uploadGoodImageName);
-										int position = uploadGoodImageName.lastIndexOf(".");
-										String imageFormat = uploadGoodImageName.substring(position);// .jpg
-										String timeStampFormat = simpleDateFormat.format(new Date());
-										String ImgRootFormat = patternPath + timeStampFormat + "" + imageFormat;
-										File file = new File(ImgRootFormat);
-										System.out.println("ImgRootFormat = " + ImgRootFormat);
-										System.out.println("item.getOriginalFilename() = " + item.getOriginalFilename());
-										try {
-											item.transferTo(file);// 將圖片上傳
-										} catch (IllegalStateException e) {
-											// TODO Auto-generated catch block
-											e.printStackTrace();
-										} catch (IOException e) {
-											// TODO Auto-generated catch block
-											e.printStackTrace();
-										}
-										String dataBaseRootFormat = dataPath + timeStampFormat + "" + imageFormat;
-										check = uploadGoodImageName;// 假若下一個規格資料的圖片上一個同名 代表
-										checkInsertAns = timeStampFormat + "" + imageFormat;
-										goodFormat.setGoodImagePath(dataBaseRootFormat);
-										goodFormat.setGoodPrice(Integer.parseInt(price));
-										goodFormat.setGoodsStock(Integer.parseInt(stock));
-										goodFormat.setGoodSize(size);
-										formatset.add(goodFormat);// 將規格表集合起來
-										gfService.insert(goodFormat);// 將規格表寫進資料庫
-										checkImageMap.put(uploadGoodImageName, dataBaseRootFormat);
-									}
+
 								}
 							}
 						} else {
 							if (dataImageNum.length == 5) {// 修改圖片
-								// 有三種狀況
-								// 修改規格單一細項(1100/大/1500/1000/YES)(不包含圖片)
+								// 有二種狀況
+								// 修改規格單一細項(1100/大/1500/1000/YES)(不包含圖片)[已經在其他地方處理過了]
 								// 修改規格細項(1100/大/1500/1000/sharkitty19.jpg)(包含圖片)
+								// 取得隱藏資料
 								String formatID = dataImageNum[0];
 								String size = dataImageNum[1];
 								String price = dataImageNum[2];
 								String stock = dataImageNum[3];
 								String formatModifyPath = dataImageNum[4];
+								//
 								System.out.println("HI uploadGoodImageName = " + uploadGoodImageName);
 								System.out.println("HI formatModifyPath = " + formatModifyPath);
-								if (!dataImageNum[4].equals("YES") && !dataImageNum[4].equals("NO")
-										&& uploadGoodImageName.equals(formatModifyPath)) {// 2
-									if (formatmodifycheck != 0) {// 假若新增的資料群共用同一張圖片 不需要再額外上傳圖片
-										GoodFormat goodFormat = gfService.getById(Integer.parseInt(formatID));
-//										String dataBaseRootFormat = dataPath + timeStampFormat + "" + imageFormat;
-										String dataBaseRootFormat = modifyfilename;
-										check = dataBaseRootFormat; // 將存放進類別的圖片路徑儲存起來
-										goodFormat.setGoodImagePath(dataBaseRootFormat);
-										goodFormat.setGoodPrice(Integer.parseInt(price));
-										goodFormat.setGoodsStock(Integer.parseInt(stock));
-										goodFormat.setGoodSize(size);
-//										formatset.add(goodFormat);// 將規格表集合起來
-										gfService.update(goodFormat);// 將規格表寫進資料庫
+								if (!dataImageNum[4].equals("YES") && !dataImageNum[4].equals("NO")) {// 修改規格單一細項(1100/大/1500/1000/sharkitty19.jpg)(不包含圖片)[已經在其他地方處理過了]
+									Set<String> keySet = checkImageMap.keySet();
+									System.out.println("keySet = " + keySet);
+									if (keySet.contains(uploadGoodImageName) && formatModifyPath.equals(uploadGoodImageName)) {
+										GoodFormat formatcheck = gfService.getById(Integer.parseInt(formatID));
+										formatcheck.setGoodImagePath(checkImageMap.get(uploadGoodImageName));
+										formatcheck.setGoodPrice(Integer.parseInt(price));
+										formatcheck.setGoodSize(size);
+										formatcheck.setGoodsStock(Integer.parseInt(stock));
+										gfService.update(formatcheck);
 									} else {
-										// 處理圖片上傳問題(把舊圖片刪除)
-										GoodFormat goodFormat = gfService.getById(Integer.parseInt(formatID));
-										String goodFormatImagePath = goodFormat.getGoodImagePath();
-										int pos = goodFormatImagePath.lastIndexOf("/");// ../../xxx.jpg
-										String FormatImagefilename = goodFormatImagePath.substring(pos + 1);
-										String FormatImageRootPath = patternPath + FormatImagefilename;
-										System.out.println("YA FormatImageRootPath = " + FormatImageRootPath);
-										File oldfile = new File(FormatImageRootPath);
-										oldfile.delete();
-										// 處理新增上去的圖片
-										int position = uploadGoodImageName.lastIndexOf(".");
-										String imageFormat = uploadGoodImageName.substring(position);// .jpg
-										String timeStampFormat = simpleDateFormat.format(new Date());
-										String ImgRootFormat = patternPath + timeStampFormat + "" + imageFormat;
-										File file = new File(ImgRootFormat);
-										try {
-											item.transferTo(file);// 將圖片上傳
-										} catch (IllegalStateException e) {
-											// TODO Auto-generated catch block
-											e.printStackTrace();
-										} catch (IOException e) {
-											// TODO Auto-generated catch block
-											e.printStackTrace();
+										if (!formatModifyPath.equals(uploadGoodImageName)) {
+											System.out.println("當前的圖片和隱藏欄位內的圖片名稱不一樣");
+										} else {
+											// 先將舊的圖片刪除
+											GoodFormat formatcheck = gfService.getById(Integer.parseInt(formatID));
+											String goodImagePath = formatcheck.getGoodImagePath();// ex: ../../goodImages/xxx.jpg
+											String[] split = goodImagePath.split("/");
+											String oldfilename = split[3];
+											String oldrootname = patternPath + oldfilename;
+											File file = new File(oldrootname);
+											file.delete();
+											// 處理新增上去的圖片
+											int position = uploadGoodImageName.lastIndexOf(".");
+											String imageFormat = uploadGoodImageName.substring(position);// .jpg
+											String timeStampFormat = simpleDateFormat.format(new Date());
+											String ImgRootFormat = patternPath + timeStampFormat + "" + imageFormat;
+											File fileupload = new File(ImgRootFormat);
+											try {
+												item.transferTo(fileupload);// 將圖片上傳
+											} catch (IllegalStateException e) {
+												// TODO Auto-generated catch block
+												e.printStackTrace();
+											} catch (IOException e) {
+												// TODO Auto-generated catch block
+												e.printStackTrace();
+											}
+											//
+											String dataBaseRootFormat = dataPath + timeStampFormat + "" + imageFormat;
+											formatcheck.setGoodImagePath(dataBaseRootFormat);
+											formatcheck.setGoodPrice(Integer.parseInt(price));
+											formatcheck.setGoodsStock(Integer.parseInt(stock));
+											formatcheck.setGoodSize(size);
+											gfService.update(formatcheck);// 將規格表寫進資料庫
+											checkImageMap.put(uploadGoodImageName, dataBaseRootFormat);
 										}
-										//
-										String dataBaseRootFormat = dataPath + timeStampFormat + "" + imageFormat;
-										modifyfilename = dataBaseRootFormat;
-										check = dataBaseRootFormat; // 將存放進類別的圖片路徑儲存起來
-										goodFormat.setGoodImagePath(dataBaseRootFormat);
-										goodFormat.setGoodPrice(Integer.parseInt(price));
-										goodFormat.setGoodsStock(Integer.parseInt(stock));
-										goodFormat.setGoodSize(size);
-										gfService.update(goodFormat);// 將規格表寫進資料庫
-										formatmodifycheck++;
 									}
 								} else {
-									if (!uploadGoodImageName.equals(formatModifyPath)) {
-										formatmodifycheck = 0;
-
-										System.out.println("!!!!!!!!!!!!!!另外一張圖片!!!!!!!!!!!!!!!!");
+									if (dataImageNum[4].equals("YES")) {
+										System.out.println("沒上傳圖片的案例已經處理過了");
+									} else {
+										if (dataImageNum[4].equals("NO")) {
+											System.out.println("資料沒有更動");
+										}
 									}
 								}
 							} else {
 								System.out.println("the length not equal to 5 or 4!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 							}
 						}
-						//
 
 					}
 				}

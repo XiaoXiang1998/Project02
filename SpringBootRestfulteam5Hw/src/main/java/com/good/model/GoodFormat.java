@@ -23,9 +23,9 @@ public class GoodFormat {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="FORMATID")
 	private Integer formatID;
-	@Column(name="GOODSID")
-	@Transient
-	private Integer goodsID;
+//	@Column(name="GOODSID")
+//	@Transient
+//	private Integer goodsID;
 	@Column(name="GOODSIZE")
 	private String goodSize;
 	
@@ -43,9 +43,9 @@ public class GoodFormat {
 	@JoinColumn(name = "GOODSID")
 	private GoodsBean2 good;
 	//
-	public GoodFormat(Integer formatID, Integer goodsID, String goodSize, Integer goodPrice, String goodImagePath) {
+	public GoodFormat(Integer formatID, String goodSize, Integer goodPrice, String goodImagePath) {
 		this.formatID = formatID;
-		this.goodsID = goodsID;
+//		this.goodsID = goodsID;
 		this.goodSize = goodSize;
 		this.goodPrice = goodPrice;
 		this.goodImagePath = goodImagePath;
@@ -70,13 +70,13 @@ public class GoodFormat {
 		this.formatID = formatID;
 	}
 
-	public int getGoodsID() {
-		return goodsID;
-	}
-
-	public void setGoodsID(Integer goodsID) {
-		this.goodsID = goodsID;
-	}
+//	public int getGoodsID() {
+//		return goodsID;
+//	}
+//
+//	public void setGoodsID(Integer goodsID) {
+//		this.goodsID = goodsID;
+//	}
 
 	public String getGoodSize() {
 		return goodSize;
@@ -110,7 +110,7 @@ public class GoodFormat {
 	}
 	@Override
 	public String toString() {
-		return "GoodFormat [formatID=" + formatID + ", goodsID=" + goodsID + ", goodSize=" + goodSize + ", goodPrice="
+		return "GoodFormat [formatID=" + formatID + ", goodSize=" + goodSize + ", goodPrice="
 				+ goodPrice + ", goodImagePath=" + goodImagePath + ", goodsStock=" + goodsStock + "]";
 	}
 	

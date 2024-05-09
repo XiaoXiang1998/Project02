@@ -103,16 +103,9 @@
                                 <table id="adminDataTables">
                                     <thead>
                                         <tr>
-                                            <th>會員ID</th>
-                                            <th>帳號</th>
-                                            <th>密碼</th>
-                                            <th>信箱</th>
-                                            <th>電話</th>
-                                            <th>姓名</th>
-                                            <th>性別</th>
-                                            <th>住址</th>
-                                            <th>頭貼</th>
-                                            <th>註冊時間</th>
+                                            <th>員工級別ID</th>
+                                            <th>會員級別名稱</th>
+                                            <th>累計金額上限</th>
                                             <th>功能操作</th>
                                         </tr>
                                     </thead>

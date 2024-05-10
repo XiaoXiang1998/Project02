@@ -22,7 +22,7 @@
             <link href="../../frontcss/bootstrap.min.css" rel="stylesheet">
             <link href="../../frontcss/style.css" rel="stylesheet">
             <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-
+            <script src="https://kit.fontawesome.com/ecfdbfb9a6.js" crossorigin="anonymous"></script>
             <style>
                 img {
                     height: 150px;
@@ -36,51 +36,80 @@
                 }
             </style>
             <script>
-                $.ajax({
-
-                    type: 'get',
-
-                    url: '/getallgood.controller',
-
-                    contentType: 'application/json',
-
-                    success: function (data) {
-
-                        $('#GoodBasicData').empty("");
-
-                        if (data == null) {
-
-                            $('#GoodBasicData').prepend('<tr><td>No Result</td></tr>');
-
-                        }
-
-                        else {
-
-                            var tbody = $('tbody');
-                            console.log(tbody);
-                            $.each(data, function (i, n) {
-                                // <input type="text" readonly class="form-control-plaintext" id="staticEmail" value="email@example.com">
-                                console.log(n.titleImage);
-                                var tr = "<tr data-index=\"" + i + "\"><td><form><input type=\"text\" readonly class=\"form-control-plaintext\" value=\"" + n.goodsID + "\" name=\"GoodID\"></form></td><td>" + n.goodsName + "</td><td><img src=" + n.titleImage + " alt=" + n.titleImage + "></td><td>" + n.goodsType + "</td><td>" + n.launchDate + "</td><td>" + n.brand + "</td><td>" + n.shipmentPlace + "</td><td>" + n.goodsSellerID.sid + + "</td><td><form><input type=\"text\" readonly class=\"form-control-plaintext\" value=\"" + n.goodsID + "\" name=\"GoodID\"></form></td></tr>";
-                                tbody.append(tr);
-                            });
-                            const datatablesSimple = document.getElementById('datatablesSimple');
-                            // console.log(datatablesSimple);
-                            // if (datatablesSimple) {
-                            //     new simpleDatatables.DataTable(datatablesSimple);
-                            // }
-                        }
-                    }
+                var indexPage = 1;
+                $(function () {
+                    loadPage(indexPage);
                 })
-                $(document).on('click', 'tr[data-index]', function () {
+                function change(page) {
+                    indexPage = page;
+                    loadPage(indexPage);
+                }
+                function loadPage(indexPage) {//全部基本商品資訊
+
+                    $.ajax({
+
+                        type: 'get',
+
+                        url: '/frontqueryByPage/' + indexPage,
+
+                        contentType: 'application/json',
+
+                        success: function (data) {
+
+                            $('#GoodBasicData').empty("");
+
+                            if (data == null) {
+
+                                $('#GoodBasicData').prepend('<tr><td>No Result</td></tr>');
+
+                            }
+
+                            else {
+
+                                var tbody = $('#GoodBasicData');
+                                console.log(tbody);
+                                $.each(data, function (i, n) {
+                                    // <input type="text" readonly class="form-control-plaintext" id="staticEmail" value="email@example.com">
+                                    console.log(typeof n.goodsSellerID.sid);
+                                    console.log("n.goodsID = " + n.goodsID);
+                                    var tr = `<tr data-index="` + i + `">` +
+                                        `<td hidden><form><input type="text" readonly class="form-control-plaintext" value="` + n.goodsID + `" name="GoodID" ></form></td>` +
+                                        `<td data-look="seeGoodData">` + n.goodsName + `</td>` +
+                                        `<td data-look="seeGoodData"><img src="` + n.titleImage + `" alt="` + n.titleImage + `"></td>
+                                    <td data-look="seeGoodData">` + n.goodsType + `</td>
+                                    <td data-look="seeGoodData">` + n.launchDate + `</td>
+                                    <td data-look="seeGoodData">` + n.brand + `</td>
+                                    <td data-look="seeGoodData">` + n.shipmentPlace + `</td>
+                                    <td data-look="seeGoodData">` + n.goodsSellerID.sid + `</td>
+                                    <td>` + `<form><input type="text" readonly class="form-control-plaintext" value="` + n.goodsID + `" name="GoodID" hidden><button type="button" class="btn modifyGoodDetail"><i class="fa-solid fa-pen"></i></button></form>` + `</td>
+                                    </tr>`;
+                                    // <td><form><input type=\"text\" readonly class=\"form-control-plaintext\" value=\"" + n.goodsID + "\" name=\"GoodID\"></form></td>
+                                    console.log(tr);
+                                    tbody.append(tr);
+                                });
+                                const datatablesSimple = document.getElementById('datatablesSimple');
+                                // console.log(datatablesSimple);
+                                // if (datatablesSimple) {
+                                //     new simpleDatatables.DataTable(datatablesSimple);
+                                // }
+                            }
+                        }
+                    })
+                }
+                $(document).on('click', 'td[data-look]', function () { //檢閱商品的詳細資訊
                     let targetForm = $(this).find('form');
+
                     targetForm.attr("method", "post");
                     targetForm.attr("enctype", "multipart/form-data");
                     targetForm.attr("action", "goodDetail.controller");
-                    console.log(targetForm);
+                    // console.log(targetForm);
+                    console.log("you click see GoodDetailData");
                     // targetForm.submit();
                     // let formdata = new FormData([...targetForm][0]);
                     // console.log([...targetForm][0]);
+                })
+                $(document).on('click', '.modifyGoodDetail', function () {
+                    console.log("you click modify GoodDetailData");
                 })
 
             </script>
@@ -170,8 +199,10 @@
                             <div class="input-group w-75 mx-auto d-flex">
                                 <input type="search" class="form-control p-3" placeholder="keywords"
                                     aria-describedby="search-icon-1">
-                                <span id="search-icon-1" class="input-group-text p-3"><i
-                                        class="fa fa-search"></i></span>
+                                <button id="search-icon-1" type="button" class="btn btn-primary"><i
+                                        class="fa fa-search"></i></button>
+                                <!-- <span id="search-icon-1" class="input-group-text p-3"><i
+                                        class="fa fa-search"></i></span> -->
                             </div>
                         </div>
                     </div>
@@ -206,7 +237,7 @@
                                     <table id="datatablesSimple" class="table">
                                         <thead> <!-- 商品描述透過跳脫視窗呈現 -->
                                             <tr>
-                                                <th scope="col">商品編號</th>
+                                                <!-- <th scope="col">商品編號</th> -->
                                                 <th scope="col">商品名稱</th>
                                                 <th scope="col">封面照片</th>
                                                 <th scope="col">商品種類</th>
@@ -219,7 +250,7 @@
                                         </thead>
                                         <tfoot>
                                             <tr>
-                                                <th scope="col">商品編號</th>
+                                                <!-- <th scope="col">商品編號</th> -->
                                                 <th scope="col">商品名稱</th>
                                                 <th scope="col">封面照片</th>
                                                 <th scope="col">商品種類</th>
@@ -233,6 +264,18 @@
                                         <tbody id="GoodBasicData">
 
                                         </tbody>
+                                    </table>
+                                    <table id="showpage">
+                                        <tr>
+                                            <td>Total Pages: ${totalPages} totalRecords: ${totalElements}</td>
+                                            <td colspan="3" align="right">Previous
+
+                                                <c:forEach var="i" begin="1" end="${totalPages}" step="1">
+                                                    <button id="myPage" type="button"
+                                                        onclick="change(${i})">${i}</button>
+                                                </c:forEach>Next
+                                            </td>
+                                        </tr>
                                     </table>
                                 </div>
                             </div>
@@ -257,21 +300,18 @@
             <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
             <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
             <!--  -->
-            <!-- <script src="../../frontlib/easing/easing.min.js"></script> -->
             <script src="../../frontlib/easing/easing.min.js"></script>
-
-            <!-- <script src="../../frontlib/waypoints/waypoints.min.js"></script> -->
             <script src="../../frontlib/waypoints/waypoints.min.js"></script>
-
-            <!-- <script src="../../frontlib/lightbox/js/lightbox.min.js"></script> -->
             <script src="../../frontlib/lightbox/js/lightbox.min.js"></script>
-
             <script src="../../frontlib/owlcarousel/owl.carousel.min.js"></script>
-
             <script src="../../frontjs/main.js"></script>
             <script>
-                $('#gotoInsertPage').click(function () { })
+                $('#search-icon-1').click(function () {
+                    console.log("查詢賣家底下的商品");
+                })
+                $('#gotoInsertPage').click(function () {//前往個人新增頁面
 
+                })
             </script>
         </body>
 

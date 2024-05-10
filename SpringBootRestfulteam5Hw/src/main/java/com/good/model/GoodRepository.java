@@ -16,6 +16,6 @@ public interface GoodRepository extends JpaRepository<GoodsBean2, Integer> {
 //	@Query(value = "select * from Goods", nativeQuery = true)//用標準SQL語法
 	public List<GoodsBean2> findAll();
 	
-	
-
+	@Query(value = "from GoodsBean2 g where g.goodsName like concat('%',?1,'%') AND g.goodsSellerID.sid = ?2")
+	public List<GoodsBean2> findSellerGood(String goodsName,Integer sellerID);
 }

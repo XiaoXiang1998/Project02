@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 import com.comment.model.Post;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.good.model.GoodsBean2;
 import com.sean.model.Orders;
 import com.sean.model.PaymentDetails;
@@ -90,8 +91,9 @@ public class MemberBean {
 	private LevelBean levelEntity;
 	
 
-	@JsonIgnore
+//	@JsonIgnore
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "goodsSellerID", cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+	@JsonIgnore
 	private Set<GoodsBean2> goods2 = new LinkedHashSet<>();
 
 	@JsonIgnore

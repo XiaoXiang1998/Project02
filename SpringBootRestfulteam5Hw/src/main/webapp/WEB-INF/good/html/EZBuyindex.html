@@ -53,7 +53,7 @@
                     //沒有活動 敬請期待
                 }
                 else {
-                    $.each(data, function (i, n) {
+                    $.each(data, function (i, n) { //
                         let content = `<div class="carousel-item rounded">
                                 <img src="`+ n.activityImage + `" class="img-fluid w-100 h-100 rounded"
                                     alt="Second slide"> 
@@ -64,6 +64,42 @@
                     })
                 }
             }
+        })
+        $.ajax({// 透過ajax取得商品基本資料表中所有種類商品
+            // select GoodType 
+            // from Orders o join GoodFormat gf on o.FK_FORMATGOODID = gf.goodFormatID
+            //               join Good g on gf.goodID = g.goodID
+            // group by g.goodType
+            // order by sum(o.quantity)
+            type: 'get',
+            url: "...(需要連結多張資料表)",
+            contentType: 'application/json',
+            success: function (data) {//取得五筆商品種類 還需要取得各種類中的前20名商品
+                if (data.length == 0) {
+                    //沒有活動 敬請期待
+                }
+                else {
+                    $.each(data, function (i, n) { //將得到的種類插入置網頁內
+
+                    })
+                }
+            }
+        }).then(function (res) {// 還需要取得各種類中的前10名商品
+            $.each(res, function (i, n) { //透過商品種類名稱個別去取得10筆資料
+                $.ajax({
+                    type: "get",
+                    data: { GoodType: n },
+                    url: "....(透過商品種類名稱去取資料)",
+                    contentType: 'application/json',
+                    success: function (data) {//取得該種類中的10筆資料
+                        //將資料插入頁面中
+                    },
+                })
+            })
+        })
+
+        $.ajax({//透過上架日期取得商品基本資訊
+
         })
     </script>
 </head>

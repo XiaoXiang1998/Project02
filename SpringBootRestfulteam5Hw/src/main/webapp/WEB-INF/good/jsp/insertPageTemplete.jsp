@@ -155,10 +155,10 @@
                                         <input type="text" name="GoodsType" class="form-control" id="GoodsType">
                                         <label for="GoodsType">商品種類</label>
                                     </div>
-                                    <div class="form-floating mb-3">
+                                    <!-- <div class="form-floating mb-3">
                                         <input type="date" name="LaunchDate" class="form-control" id="LaunchDate">
                                         <label for="LaunchDate">上架日期</label>
-                                    </div>
+                                    </div> -->
                                     <div class="form-floating mb-3">
                                         <input type="text" name="Brand" class="form-control" id="Brand">
                                         <label for="Brand">品牌</label>

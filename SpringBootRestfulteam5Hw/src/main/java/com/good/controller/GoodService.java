@@ -46,6 +46,8 @@ public class GoodService{
 	public Page<GoodsBean2> findAllByPage(Pageable pageable){
 		return goodRepos.findAll(pageable);
 	}
-	
+	public List<GoodsBean2> findSellerGood(String goodsName,Integer sellerID){
+		return goodRepos.findSellerGood(goodsName, sellerID);
+	}
 	
 }

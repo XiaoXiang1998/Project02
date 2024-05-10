@@ -62,7 +62,8 @@ public class GoodController2 {
 		//建立命名方式和圖片路徑
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMddHHmmssSSS");
 		String dataPath = "../../goodImages/";		//透過商品編號取得基本商品資訊 然後透過get取得編號對應的圖片集合
-		String patternPath = "../../../../../../../../Documents/team5project/SpringBootRestfulteam5Hw/src/main/webapp/WEB-INF/goodImages/";		//透過商品編號取得基本商品資訊 然後透過get取得編號對應的圖片集合
+//		String patternPath = "../../../../../../../../Documents/team5project/SpringBootRestfulteam5Hw/src/main/webapp/WEB-INF/goodImages/";		//透過商品編號取得基本商品資訊 然後透過get取得編號對應的圖片集合
+		String patternPath = "../../../../../../../../../../team5project/SpringBootRestfulteam5Hw/src/main/webapp/WEB-INF/goodImages/"; // 透過商品編號取得基本商品資訊
 
 		GoodsBean2 insertGood = gService.getById(goodsID);
 		Set<GoodImageBean> Imageset = insertGood.getImages();
@@ -134,7 +135,9 @@ public class GoodController2 {
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMddHHmmssSSS");
 //		String patternPath = "C:/Users/88691/Documents/team5project/SpringBootRestfulteam5Hw/src/main/webapp/WEB-INF/goodImages/";		//透過商品編號取得基本商品資訊 然後透過get取得編號對應的圖片集合
 		String dataPath = "../../goodImages/";		//透過商品編號取得基本商品資訊 然後透過get取得編號對應的圖片集合
-		String patternPath = "../../../../../../../../Documents/team5project/SpringBootRestfulteam5Hw/src/main/webapp/WEB-INF/goodImages/";		//透過商品編號取得基本商品資訊 然後透過get取得編號對應的圖片集合
+//		String patternPath = "../../../../../../../../Documents/team5project/SpringBootRestfulteam5Hw/src/main/webapp/WEB-INF/goodImages/";		//透過商品編號取得基本商品資訊 然後透過get取得編號對應的圖片集合
+		String patternPath = "../../../../../../../../../../team5project/SpringBootRestfulteam5Hw/src/main/webapp/WEB-INF/goodImages/"; // 透過商品編號取得基本商品資訊
+
 		GoodImageBean goodImage = null;
 		Set<GoodImageBean> Imageset = new LinkedHashSet<>();
 // Set Imageset = new HashSet<GoodImageBean>();
@@ -216,7 +219,8 @@ public class GoodController2 {
 				//透過商品編號取得基本商品資訊 然後透過get取得編號對應的圖片集合
 //		String patternPath = "C:/Users/88691/Documents/team5project/SpringBootRestfulteam5Hw/src/main/webapp/WEB-INF/goodImages/";		//透過商品編號取得基本商品資訊 然後透過get取得編號對應的圖片集合
 		String dataPath = "../../goodImages/";
-		String patternPath = "../../../../../../../../Documents/team5project/SpringBootRestfulteam5Hw/src/main/webapp/WEB-INF/goodImages/";		//透過商品編號取得基本商品資訊 然後透過get取得編號對應的圖片集合
+//		String patternPath = "../../../../../../../../Documents/team5project/SpringBootRestfulteam5Hw/src/main/webapp/WEB-INF/goodImages/";		//透過商品編號取得基本商品資訊 然後透過get取得編號對應的圖片集合
+		String patternPath = "../../../../../../../../../../team5project/SpringBootRestfulteam5Hw/src/main/webapp/WEB-INF/goodImages/"; // 透過商品編號取得基本商品資訊
 
 		/* 新寫的code */
 		GoodsBean2 good = gService.getById(goodsID);// 透過ID找出商品基本資訊
@@ -243,7 +247,8 @@ public class GoodController2 {
 				//透過商品編號取得基本商品資訊 然後透過get取得編號對應的圖片集合
 //		String patternPath = "C:/Users/88691/Documents/team5project/SpringBootRestfulteam5Hw/src/main/webapp/WEB-INF/goodImages/";		//透過商品編號取得基本商品資訊 然後透過get取得編號對應的圖片集合
 		String dataPath = "../../goodImages/";
-		String patternPath = "../../../../../../../../Documents/team5project/SpringBootRestfulteam5Hw/src/main/webapp/WEB-INF/goodImages/";		//透過商品編號取得基本商品資訊 然後透過get取得編號對應的圖片集合
+//		String patternPath = "../../../../../../../../Documents/team5project/SpringBootRestfulteam5Hw/src/main/webapp/WEB-INF/goodImages/";		//透過商品編號取得基本商品資訊 然後透過get取得編號對應的圖片集合
+		String patternPath = "../../../../../../../../../../team5project/SpringBootRestfulteam5Hw/src/main/webapp/WEB-INF/goodImages/"; // 透過商品編號取得基本商品資訊
 
 		for(String item:goodImageID) {
 			//將檔案刪掉
@@ -294,7 +299,8 @@ public class GoodController2 {
 				//透過商品編號取得基本商品資訊 然後透過get取得編號對應的圖片集合
 //		String patternPath = "C:/Users/88691/Documents/team5project/SpringBootRestfulteam5Hw/src/main/webapp/WEB-INF/goodImages/";		//透過商品編號取得基本商品資訊 然後透過get取得編號對應的圖片集合
 		String dataPath = "../../goodImages/";
-		String patternPath = "../../../../../../../../Documents/team5project/SpringBootRestfulteam5Hw/src/main/webapp/WEB-INF/goodImages/";		//透過商品編號取得基本商品資訊 然後透過get取得編號對應的圖片集合
+//		String patternPath = "../../../../../../../../Documents/team5project/SpringBootRestfulteam5Hw/src/main/webapp/WEB-INF/goodImages/";		//透過商品編號取得基本商品資訊 然後透過get取得編號對應的圖片集合
+		String patternPath = "../../../../../../../../../../team5project/SpringBootRestfulteam5Hw/src/main/webapp/WEB-INF/goodImages/"; // 透過商品編號取得基本商品資訊
 
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMddHHmmssSSS");
 		String uploadfilename = mf.getOriginalFilename();
@@ -349,7 +355,8 @@ public class GoodController2 {
 				//透過商品編號取得基本商品資訊 然後透過get取得編號對應的圖片集合
 //		String patternPath = "C:/Users/88691/Documents/team5project/SpringBootRestfulteam5Hw/src/main/webapp/WEB-INF/goodImages/";		//透過商品編號取得基本商品資訊 然後透過get取得編號對應的圖片集合
 		String dataPath = "../../goodImages/";
-		String patternPath = "../../../../../../../../Documents/team5project/SpringBootRestfulteam5Hw/src/main/webapp/WEB-INF/goodImages/";		//透過商品編號取得基本商品資訊 然後透過get取得編號對應的圖片集合
+//		String patternPath = "../../../../../../../../Documents/team5project/SpringBootRestfulteam5Hw/src/main/webapp/WEB-INF/goodImages/";		//透過商品編號取得基本商品資訊 然後透過get取得編號對應的圖片集合
+		String patternPath = "../../../../../../../../../../team5project/SpringBootRestfulteam5Hw/src/main/webapp/WEB-INF/goodImages/"; // 透過商品編號取得基本商品資訊
 
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMddHHmmssSSS");
 		System.out.println("files.size()="+files.size());
@@ -487,7 +494,9 @@ public class GoodController2 {
 			@RequestParam("GoodPrice") Integer goodPrice,
 			@RequestParam("GoodImagePath") MultipartFile mf,
 			@RequestParam("GoodsStock") Integer goodStock) {
-		String patternPath = "../../goodImags/";		//透過商品編號取得基本商品資訊 然後透過get取得編號對應的圖片集合
+//		String patternPath = "../../goodImags/";		//透過商品編號取得基本商品資訊 然後透過get取得編號對應的圖片集合
+		String patternPath = "../../../../../../../../../../team5project/SpringBootRestfulteam5Hw/src/main/webapp/WEB-INF/goodImages/"; // 透過商品編號取得基本商品資訊
+
 		/* 新寫的code */
 		GoodsBean2 good = gService.getById(goodsID);// 透過ID找出商品基本資訊
 		Set<GoodImageBean> images = good.getImages();// 找到連結的圖片,假如商品編號為1的圖片有三張,就會有3個images類別

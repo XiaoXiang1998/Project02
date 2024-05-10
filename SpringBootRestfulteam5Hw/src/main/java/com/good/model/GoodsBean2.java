@@ -41,7 +41,7 @@ public class GoodsBean2 implements java.io.Serializable {
 	private String goodsType;
 	@JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
 	@Column(name = "LAUNCHDATE")
-	private Date launchDate;
+	private Date launchDate = new Date();
 	@Column(name = "BRAND")
 	private String brand;
 	@Column(name = "SHIPMENTPLACE")
@@ -50,10 +50,10 @@ public class GoodsBean2 implements java.io.Serializable {
 	private Integer numberRatings;
 	@Column(name = "RATING")
 	private Integer rating;
-
+	
 	@ManyToOne
 	@JoinColumn(name = "GOODSSELLERID")
-	@JsonBackReference
+//	@JsonBackReference
 	private MemberBean goodsSellerID;
 	//
 	@Column(name="TITLEIMAGE")
@@ -73,24 +73,22 @@ public class GoodsBean2 implements java.io.Serializable {
 	}
 
 	public GoodsBean2(Integer goodsID, String goodsName, String goodsDirection, String goodsType,
-			Date launchDate, String brand, String shipmentPlace, MemberBean goodsSellerID,String titleImage) {
+			 String brand, String shipmentPlace, MemberBean goodsSellerID,String titleImage) {
 		this.goodsID = goodsID;
 		this.goodsName = goodsName;
 		this.goodsDirection = goodsDirection;
 		this.goodsType = goodsType;
-		this.launchDate = launchDate;
 		this.brand = brand;
 		this.shipmentPlace = shipmentPlace;
 		this.goodsSellerID = goodsSellerID;
 		this.titleImage = titleImage;
 	}
 
-	public GoodsBean2(String goodsName, String goodsDirection, String goodsType, Date launchDate,
+	public GoodsBean2(String goodsName, String goodsDirection, String goodsType,
 			String brand, String shipmentPlace, MemberBean goodsSellerID,String titleImage) {
 		this.goodsName = goodsName;
 		this.goodsDirection = goodsDirection;
 		this.goodsType = goodsType;
-		this.launchDate = launchDate;
 		this.brand = brand;
 		this.shipmentPlace = shipmentPlace;
 		this.goodsSellerID = goodsSellerID;

@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
 import com.member.model.MemberBean;
@@ -17,59 +18,67 @@ import jakarta.transaction.Transactional;
 @Service
 @Transactional
 public class PostService {
-	
+
 	@Autowired
 	private PostRepository pRepository;
 
 	public Post insert(Post post) {
 		return pRepository.save(post);
 	}
-	
-	public Post Update(Post post) {
-	    Optional<Post> existingComment = pRepository.findById(post.getCommentid());
-	    if (existingComment.isPresent()) {
-	         Post oldComment = existingComment.get();
-	        if (post.getCommentcontent() != null) {
-	            oldComment.setCommentcontent(post.getCommentcontent());
-	        }
-	        if(post.getLastmodifiedtime()!=null) {
-	        	oldComment.setLastmodifiedtime(post.getLastmodifiedtime());
-	        }
 
-	        return pRepository.save(oldComment);
-	    } else {
-	        // 如果找不到該評論，則可能需要處理此情況
-	        // 例如拋出異常或返回null
-	        return null;
-	    }
+	public Post Update(Post post) {
+		Optional<Post> existingComment = pRepository.findById(post.getCommentid());
+		if (existingComment.isPresent()) {
+			Post oldComment = existingComment.get();
+			if (post.getCommentcontent() != null) {
+				oldComment.setCommentcontent(post.getCommentcontent());
+			}
+			if (post.getLastmodifiedtime() != null) {
+				oldComment.setLastmodifiedtime(post.getLastmodifiedtime());
+			}
+
+			return pRepository.save(oldComment);
+		} else {
+			// 如果找不到該評論，則可能需要處理此情況
+			// 例如拋出異常或返回null
+			return null;
+		}
 	}
-	
+
 	public void deleteById(Integer id) {
 		pRepository.deleteById(id);
 	}
-	
-	
+
 	public Post getById(Integer id) {
-		 Optional<Post> op1 = pRepository.findById(id);
-		 if(op1.isPresent()) {
-			 return op1.get();
-		 }
-		 
-		 return null;
+		Optional<Post> op1 = pRepository.findById(id);
+		if (op1.isPresent()) {
+			return op1.get();
+		}
+
+		return null;
 	}
-	public List<Post> getAll(){
+
+	public List<Post> getAll() {
 		return pRepository.findAll();
 	}
 
-	public Page<Post> findByMemberOrderByCommenttimeDesc(MemberBean member,Pageable pageable) {
-        return pRepository.findByMemberOrderByCommenttimeDesc(member, pageable);
-    }
-	
-	public Page<Post> findPostsBySellerId(int sellerId, Pageable pageable) {
-	    return pRepository.findPostsBySellerId(sellerId, pageable);
+	public Page<Post> findByMemberOrderByCommenttimeDesc(MemberBean member, Pageable pageable) {
+		return pRepository.findByMemberOrderByCommenttimeDesc(member, pageable);
 	}
-	  
-	
 
+	public Page<Post> findPostsBySellerId(int sellerId, Pageable pageable) {
+		return pRepository.findPostsBySellerId(sellerId, pageable);
+	}
 
+	public List<Post> findRepliesByRepliedCommentId(Integer repliedCommentId) {
+		return pRepository.findByRepliedcommentid(repliedCommentId);
+	}
+
+	public List<Post> getSellerCommentsForUser(Integer userCommentId) {
+		return pRepository.findSellerCommentsForUser(userCommentId);
+	}
+
+	public Page<Post> findPostsBySellerIdAndRating(Integer sellerId, Integer rating, Pageable pageable) {
+		return pRepository.findPostsBySellerIdAndRating(sellerId, rating, pageable);
+	}
 }

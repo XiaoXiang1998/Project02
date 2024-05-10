@@ -2,9 +2,13 @@ package com.sean.controller;
 
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.net.URLEncoder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -232,11 +236,41 @@ public class OrderController {
 	
 	@GetMapping("queryOrder.controller")
 	public String QueryOrder(Model m ) {
-			List<Orders> orders = oService.findByOrderStatusNot(5);
-			m.addAttribute("orders", orders);
-			return "/Order/jsp/Test";
 
-		}
+		List<Orders> orders = oService.findByOrderStatusNot(5);
+		m.addAttribute("orders", orders);
+		Map<String, Integer> monthOrdersMap = new LinkedHashMap<>();
+	    LocalDate today = LocalDate.now();
+	    
+	    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM");
+
+	    for (int i = 4; i >= 0; i--) {
+	        LocalDate startOfMonth = today.minusMonths(i).withDayOfMonth(1);
+	        String monthLabel = startOfMonth.format(formatter);
+
+	        LocalDate endOfMonth = startOfMonth.withDayOfMonth(startOfMonth.lengthOfMonth());
+
+	        Integer ordersCount = oService.findOrdersCount(java.sql.Date.valueOf(startOfMonth), java.sql.Date.valueOf(endOfMonth));
+	        monthOrdersMap.put(monthLabel, ordersCount);
+	    }
+	    Map<String, Integer> monthOrdersPrice = new LinkedHashMap<>();
+	    
+	    for (int i = 4; i >= 0; i--) {
+	    	LocalDate startOfMonth = today.minusMonths(i).withDayOfMonth(1);
+	    	String monthLabel = startOfMonth.format(formatter);
+	    	
+	    	LocalDate endOfMonth = startOfMonth.withDayOfMonth(startOfMonth.lengthOfMonth());
+	    	
+	    	Integer ordersPrice = oService.findOrdersPrice(java.sql.Date.valueOf(startOfMonth), java.sql.Date.valueOf(endOfMonth));
+	    	System.out.println("6666666666"+ordersPrice);
+	    	monthOrdersPrice.put(monthLabel, ordersPrice);
+	    }
+
+	    m.addAttribute("monthOrdersMap", monthOrdersMap);
+	    m.addAttribute("monthOrdersPrice",monthOrdersPrice);
+	    return "/Order/jsp/Test";
+
+	}
 	
 	
 	@PutMapping("fakeDelete.controller")

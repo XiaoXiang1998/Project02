@@ -14,13 +14,12 @@
 <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10/dist/sweetalert2.min.css">
-
 </head>
 
 <body class="sb-nav-fixed">
 	<nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
 		<!-- Navbar Brand-->
-		<a class="navbar-brand ps-3" href="index.html">Start Bootstrap</a>
+		<a class="navbar-brand ps-3" href="index.html">EZ BUY</a>
 		<!-- Sidebar Toggle-->
 		<button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!">
 			<i class="fas fa-bars"></i>
@@ -85,7 +84,7 @@
 							</div>
 							<a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
 								data-bs-target="#order" aria-expanded="false" aria-controls="collapsePages">
-								<div class="sb-nav-link-icon"><i class="fa-solid fa-user-pen"></i></div>
+								<div class="sb-nav-link-icon"><i class="fa-solid fa-sheet-plastic"></i></div>
 								訂單管理
 								<div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
 							</a>
@@ -113,7 +112,7 @@
 						<div class="col-xl-6">
 							<div class="card mb-4">
 								<div class="card-header">
-									<i class="fas fa-chart-area me-1"></i> Area Chart Example
+									<i class="fas fa-chart-area me-1"></i> 近五月訂單數量
 								</div>
 								<div class="card-body">
 									<canvas id="myAreaChart" width="100%" height="40"></canvas>
@@ -123,7 +122,7 @@
 						<div class="col-xl-6">
 							<div class="card mb-4">
 								<div class="card-header">
-									<i class="fas fa-chart-bar me-1"></i> Bar Chart Example
+									<i class="fas fa-chart-bar me-1"></i> 近五月訂單金額	
 								</div>
 								<div class="card-body">
 									<canvas id="myBarChart" width="100%" height="40"></canvas>
@@ -254,7 +253,6 @@
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
 	<script src="Order/js/scripts.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
-	<script src="Order/assets/demo/chart-bar-demo.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
 	<script src="Order/js/datatables-simple-demo.js"></script>
 
@@ -263,9 +261,9 @@
 	var myLineChart = new Chart(ctx, {
 	  type: 'line',
 	  data: {
-	    labels: ["Mar 1", "Mar 2", "Mar 3", "Mar 4", "Mar 5", "Mar 6", "Mar 7", "Mar 8", "Mar 9", "Mar 10", "Mar 11", "Mar 12", "Mar 13"],
+	    labels: [<c:forEach var="monthLabel" items="${monthOrdersMap.keySet()}">${monthLabel},</c:forEach>],
 	    datasets: [{
-	      label: "Sessions",
+	      label: "Orders Count",
 	      lineTension: 0.3,
 	      backgroundColor: "rgba(2,117,216,0.2)",
 	      borderColor: "rgba(2,117,216,1)",
@@ -276,7 +274,7 @@
 	      pointHoverBackgroundColor: "rgba(2,117,216,1)",
 	      pointHitRadius: 50,
 	      pointBorderWidth: 2,
-	      data: [10000, 30162, 26263, 18394, 18287, 28682, 31274, 33259, 25849, 24159, 32651, 31984, 38451],
+	      data: [<c:forEach var="ordersCount" items="${monthOrdersMap.values()}">${ordersCount},</c:forEach>],
 	    }],
 	  },
 	  options: {
@@ -295,11 +293,52 @@
 	      yAxes: [{
 	        ticks: {
 	          min: 0,
-	          max: 40000,
-	          maxTicksLimit: 5
+	          max:100,
+	          maxTicksLimit: 10
 	        },
 	        gridLines: {
 	          color: "rgba(0, 0, 0, .125)",
+	        }
+	      }],
+	    },
+	    legend: {
+	      display: false
+	    }
+	  }
+	});
+	var ctx = document.getElementById("myBarChart");
+	var myLineChart = new Chart(ctx, {
+	  type: 'bar',
+	  data: {
+	    labels: [<c:forEach var="monthLabel" items="${monthOrdersPrice.keySet()}">${monthLabel},</c:forEach>],
+	    datasets: [{
+	      label: "Revenue",
+	      backgroundColor: "rgba(2,117,216,1)",
+	      borderColor: "rgba(2,117,216,1)",
+	      data: [<c:forEach var="ordersPrice" items="${monthOrdersPrice.values()}">${ordersPrice},</c:forEach>],
+	    }],
+	  },
+	  options: {
+	    scales: {
+	      xAxes: [{
+	        time: {
+	          unit: 'month'
+	        },
+	        gridLines: {
+	          display: false
+	        },
+	        ticks: {
+	          maxTicksLimit: 6
+	        }
+	      }],
+	      yAxes: [{
+	        ticks: {
+	          min: 0,
+	          max: 100000,
+	          maxTicksLimit: 10
+	        },
+	        gridLines: {
+	          display: true
 	        }
 	      }],
 	    },

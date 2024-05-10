@@ -244,8 +244,7 @@ public class AdminController {
 		for (int level = 1; level < 6; level++) {
 			System.out.println("level = " + level);
 			list.add(mService.headcount(level));
-		}
-		return list;
+		}		return list;
 	}
 
 	// 提供摺線圖
@@ -315,5 +314,9 @@ public class AdminController {
 	@GetMapping("/MembershipLevelGuidelines")
 	public String turnToMembershipLevelGuidelines() {
 		return "/member/MembershipLevelGuidelines";
+	}
+	@GetMapping("/InsertMembershipLevel")
+	public String turnToInsertMembershipLevel() {
+		return "/member/InsertMembershipLevel";
 	}
 }

@@ -78,14 +78,25 @@
 											<a class="nav-link" href="AdminInsert">新增後台人員</a>
 										</nav>
 									</div>
-									<a class="nav-link" href="MembershipLevelGuidelines">
-										會員等級規範
+
+									<a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
+										data-bs-target="#MembershipLevel" aria-expanded="false"
+										aria-controls="pagesCollapseAuth">
+										會員規範管理
+										<div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
 									</a>
+									<div class="collapse" id="MembershipLevel" aria-labelledby="headingOne"
+										data-bs-parent="#sidenavAccordionPages">
+										<nav class="sb-sidenav-menu-nested nav">
+											<a class="nav-link" href="MembershipLevelGuidelines">檢視會員等級規範</a>
+											<a class="nav-link" href="InsertMembershipLevel">新增會員等級規範</a>
+										</nav>
+									</div>
 								</nav>
 							</div>
 							<a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#order"
 								aria-expanded="false" aria-controls="collapsePages">
-								<div class="sb-nav-link-icon"><i class="fa-solid fa-user-pen"></i></div>
+								<div class="sb-nav-link-icon"><i class="fa-solid fa-sheet-plastic"></i></div>
 								訂單管理
 								<div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
 							</a>
@@ -97,20 +108,6 @@
 									</a>
 								</nav>
 							</div>
-						</div>
-						<a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
-								data-bs-target="#order" aria-expanded="false" aria-controls="collapsePages">
-								<div class="sb-nav-link-icon"><i class="fa-solid fa-user-pen"></i></div>
-								評論管理
-								<div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-							</a>
-							<div class="collapse" id="order" aria-labelledby="headingTwo"
-								data-bs-parent="#sidenavAccordion">
-								<nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
-									<a class="nav-link" href="commentadmin">
-										評論詳情
-									</a>
-								</nav>
 						</div>
 					</div>
 					<div class="sb-sidenav-footer">
@@ -517,8 +514,10 @@
 						{
 							"data": null,
 							"render": function (data, type, row) {
-								return '<button type="button" class="btn btn-warning btn-sm editBtn" data-bs-toggle="modal" data-bs-target="#exampleModal">修改</button>' +
-									'<button type="button" class="btn btn-danger btn-sm deleteBtn">刪除</button>';
+								return '<div class="button-container">' +
+									'<button type="button" class="btn btn-warning btn-sm editBtn" data-bs-toggle="modal" data-bs-target="#exampleModal">修改</button>' +
+									'<button type="button" class="btn btn-danger btn-sm deleteBtn">刪除</button>' +
+									'</div>';
 							}
 						}
 					]

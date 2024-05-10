@@ -9,6 +9,7 @@
         <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
         <link href="css/styles.css" rel="stylesheet" />
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+        <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
     </head>
 
     <body class="sb-nav-fixed">
@@ -74,8 +75,33 @@
                                             <a class="nav-link" href="AdminInsert">新增後台人員</a>
                                         </nav>
                                     </div>
-                                    <a class="nav-link" href="MembershipLevelGuidelines">
-                                        會員等級規範
+
+                                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
+                                        data-bs-target="#MembershipLevel" aria-expanded="false"
+                                        aria-controls="pagesCollapseAuth">
+                                        會員規範管理
+                                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                                    </a>
+                                    <div class="collapse" id="MembershipLevel" aria-labelledby="headingOne"
+                                        data-bs-parent="#sidenavAccordionPages">
+                                        <nav class="sb-sidenav-menu-nested nav">
+                                            <a class="nav-link" href="MembershipLevelGuidelines">檢視會員等級規範</a>
+                                            <a class="nav-link" href="InsertMembershipLevel">新增會員等級規範</a>
+                                        </nav>
+                                    </div>
+                                </nav>
+                            </div>
+                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#order"
+                                aria-expanded="false" aria-controls="collapsePages">
+                                <div class="sb-nav-link-icon"><i class="fa-solid fa-sheet-plastic"></i></div>
+                                訂單管理
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            </a>
+                            <div class="collapse" id="order" aria-labelledby="headingTwo"
+                                data-bs-parent="#sidenavAccordion">
+                                <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
+                                    <a class="nav-link" href="queryOrder.controller">
+                                        訂單詳情
                                     </a>
                                 </nav>
                             </div>
@@ -100,25 +126,55 @@
                                 員工資料
                             </div>
                             <div class="card-body">
-                                <table id="adminDataTables">
+                                <table id="levelDataTables">
                                     <thead>
                                         <tr>
-                                            <th>會員ID</th>
-                                            <th>帳號</th>
-                                            <th>密碼</th>
-                                            <th>信箱</th>
-                                            <th>電話</th>
-                                            <th>姓名</th>
-                                            <th>性別</th>
-                                            <th>住址</th>
-                                            <th>頭貼</th>
-                                            <th>註冊時間</th>
+                                            <th>會員級別</th>
+                                            <th>會員級別名稱</th>
+                                            <th>累計金額上限</th>
                                             <th>功能操作</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                     </tbody>
                                 </table>
+                                <div class="modal fade" id="exampleModal" tabindex="-1"
+                                    aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabel">會員級別</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form id="editForm">
+                                                    <div class="form-floating mb-3">
+                                                        <input type="text" id="level" name="level"
+                                                            class=" form-control">
+                                                        <label for="levelId">會員級別:</label>
+                                                    </div>
+                                                    <div class="form-floating mb-3">
+                                                        <input type="text" id="title" name="title" class="form-control"
+                                                            readonly>
+                                                        <label for="title">會員級別名稱:</label>
+                                                    </div>
+                                                    <div class="form-floating mb-3">
+                                                        <input type="text" id="threshold" name="threshold"
+                                                            class="form-control">
+                                                        <label for="threshold">累積金額上限:</label>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary"
+                                                    data-bs-dismiss="modal">取消</button>
+                                                <button type="button" class="btn btn-primary"
+                                                    id="saveChangesBtn">確認更新</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -152,13 +208,7 @@
                     console.log(form);
                     var formData = new FormData(form); // 使用原生JavaScript建立FormData
 
-                    var isSeller = $('#sellerSwitch').is(':checked');
-
-                    // 將 checkbox 的值添加到 FormData 中
-                    formData.append('seller', isSeller);
-
-
-                    fetch('UpdateMember', { // 發送fetch請求
+                    fetch('UpdateLevel', { // 發送fetch請求
                         method: 'PUT',
                         body: formData
                     })
@@ -166,7 +216,7 @@
                             if (response.ok) {
                                 // 更新成功的處理
                                 $('#exampleModal').modal('hide'); // 隱藏模態框
-                                var table = $('#adminDataTables').DataTable();
+                                var table = $('#levelDataTables').DataTable();
                                 // 檢查 DataTable 是否已經被初始化
                                 if (table) {
                                     table.ajax.reload(); // 只重新載入資料
@@ -180,125 +230,12 @@
                 });
             })
 
-            function updateCharArea() {
-                fetch('terminationDate', {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json' // 指定請求主體的類型為 JSON
-                    },
-                }).then(response => response.json())
-                    .then(data => {
-                        var ctx = document.getElementById("myAreaChart");
-                        var registerData = data;
-                        var myLineChart = new Chart(ctx, {
-                            type: 'line',
-                            data: {
-                                labels: ["Mar 1", "Mar 2", "Mar 3", "Mar 4", "Mar 5"],
-                                datasets: [{
-                                    label: "Sessions",
-                                    lineTension: 0.3,
-                                    backgroundColor: "rgba(2,117,216,0.2)",
-                                    borderColor: "rgba(2,117,216,1)",
-                                    pointRadius: 5,
-                                    pointBackgroundColor: "rgba(2,117,216,1)",
-                                    pointBorderColor: "rgba(255,255,255,0.8)",
-                                    pointHoverRadius: 5,
-                                    pointHoverBackgroundColor: "rgba(2,117,216,1)",
-                                    pointHitRadius: 50,
-                                    pointBorderWidth: 2,
-                                    data: registerData
-                                }],
-                            },
-                            options: {
-                                scales: {
-                                    xAxes: [{
-                                        time: {
-                                            unit: 'date'
-                                        },
-                                        gridLines: {
-                                            display: false
-                                        },
-                                        ticks: {
-                                            maxTicksLimit: 7
-                                        }
-                                    }],
-                                    yAxes: [{
-                                        ticks: {
-                                            min: 0,
-                                            max: 100,
-                                            maxTicksLimit: 10
-                                        },
-                                        gridLines: {
-                                            color: "rgba(0, 0, 0, .125)",
-                                        }
-                                    }],
-                                },
-                                legend: {
-                                    display: false
-                                }
-                            }
-                        });
-                    })
-            };
 
-            function updateBarChart() {
-                fetch('headcount', {
-                    method: 'GET', // 指定請求方法為 POST
-                    headers: {
-                        'Content-Type': 'application/json' // 指定請求主體的類型為 JSON
-                    },
-                })
-                    .then(response => response.json())
-                    .then(data => {
-                        var memberData = data;
-                        var ctx = document.getElementById("myBarChart");
-                        var myLineChart = new Chart(ctx, {
-                            type: 'bar',
-                            data: {
-                                labels: ["初心者", "銅", "銀", "金", "白金"],
-                                datasets: [{
-                                    label: "Revenue",
-                                    backgroundColor: "rgba(2,117,216,1)",
-                                    borderColor: "rgba(2,117,216,1)",
-                                    data: memberData,
-                                }],
-                            },
-                            options: {
-                                scales: {
-                                    xAxes: [{
-                                        time: {
-                                            unit: 'month'
-                                        },
-                                        gridLines: {
-                                            display: false
-                                        },
-                                        ticks: {
-                                            maxTicksLimit: 6
-                                        }
-                                    }],
-                                    yAxes: [{
-                                        ticks: {
-                                            min: 0,
-                                            max: 100,
-                                            maxTicksLimit: 10
-                                        },
-                                        gridLines: {
-                                            display: true
-                                        }
-                                    }],
-                                },
-                                legend: {
-                                    display: false
-                                }
-                            }
-                        });
-                    });
-            }
 
             function getAllAdmin() {
-                $('#adminDataTables').DataTable({
+                $('#levelDataTables').DataTable({
                     "ajax": {
-                        "url": "getAllAdmin",
+                        "url": "getAllLevel",
                         "method": "GET",
                         "dataSrc": ""
                     },
@@ -328,28 +265,16 @@
                         }
                     },
                     "columns": [
-                        { "data": "aid" },
-                        { "data": "account" },
-                        { "data": "password" },
-                        { "data": "email" },
-                        { "data": "phone" },
-                        { "data": "name" },
-                        { "data": "gender" },
-                        { "data": "address" },
-                        {
-                            "data": "photoSticker",
-                            "render": function (data, type, row) {
-                                return '<div style="width: 50px; height: 50px; border-radius: 50%; overflow: hidden;">' +
-                                    '    <img src="' + data + '" alt="沒有頭貼" style="width: 100%; height: 100%; object-fit: cover; object-position: center;">' +
-                                    '</div>';
-                            }
-                        },
-                        { "data": "hiredate" },
+                        { "data": "level" },
+                        { "data": "title" },
+                        { "data": "threshold" },
                         {
                             "data": null,
                             "render": function (data, type, row) {
-                                return '<button type="button" class="btn btn-warning btn-sm editBtn" data-bs-toggle="modal" data-bs-target="#exampleModal">修改</button>' +
-                                    '<button type="button" class="btn btn-danger btn-sm deleteBtn">刪除</button>';
+                                return '<div class="button-container">' +
+                                    '<button type="button" class="btn btn-warning btn-sm editBtn" data-bs-toggle="modal" data-bs-target="#exampleModal">修改</button>' +
+                                    '<button type="button" class="btn btn-danger btn-sm deleteBtn">刪除</button>' +
+                                    '</div>';
                             }
                         }
                     ]
@@ -358,13 +283,11 @@
 
             window.onload = function () {
                 // 加載完成後更新圖表
-                updateBarChart();
-                updateCharArea();
                 getAllAdmin();
 
-                $('#adminDataTables tbody').on('click', 'button.deleteBtn', function () {
-                    var data = $('#adminDataTables').DataTable().row($(this).closest('tr')).data();
-                    let sid = parseInt(data.sid);
+                $('#levelDataTables tbody').on('click', 'button.deleteBtn', function () {
+                    var data = $('#levelDataTables').DataTable().row($(this).closest('tr')).data();
+                    let level = parseInt(data.level);
 
                     const swalWithBootstrapButtons = Swal.mixin({
                         customClass: {
@@ -384,8 +307,8 @@
                     }).then((result) => {
                         if (result.isConfirmed) {
 
-                            console.log(sid);
-                            fetch('/DeleteMember/' + sid, {
+                            console.log(level);
+                            fetch('/DeleteLevel/' + level, {
                                 method: 'DELETE',
                                 headers: {
                                     'Content-Type': 'application/json'
@@ -393,7 +316,7 @@
                             }).then(response => {
                                 if (response.ok) {
                                     // 更新成功的處理
-                                    var table = $('#adminDataTables').DataTable();
+                                    var table = $('#levelDataTables').DataTable();
                                     // 檢查 DataTable 是否已經被初始化
                                     if (table) {
                                         table.ajax.reload(); // 只重新載入資料
@@ -423,30 +346,14 @@
 
                 })
 
-                $('#adminDataTables tbody').on('click', 'button.editBtn', function () {
+                $('#levelDataTables tbody').on('click', 'button.editBtn', function () {
                     // 獲取所在行的資料
-                    var data = $('#adminDataTables').DataTable().row($(this).closest('tr')).data();
-                    let isSeller = Boolean(data.seller);
-                    console.log(isSeller);
+                    var data = $('#levelDataTables').DataTable().row($(this).closest('tr')).data();
 
                     // 將資料填充到表單的input欄位中
-                    $('#editForm input[name="sid"]').val(data.sid);
-                    $('#editForm input[name="account"]').val(data.account);
-                    $('#editForm input[name="password"]').val(data.password);
-                    $('#editForm input[name="email"]').val(data.email);
-                    $('#editForm input[name="phone"]').val(data.phone);
-                    $('#editForm input[name="name"]').val(data.name);
-                    $('#editForm select[name="gender"]').val(data.gender);
-                    $('#editForm input[name="address"]').val(data.address);
-                    $('#editForm input[name="oldPath"]').val(data.photoSticker);
-                    $('#editForm input[name="seller"]').prop('checked', isSeller);
-                    // $('#sellerSwitch').prop('checked', true);
-                    $('#editForm input[name="reviewCount"]').val(data.reviewCount);
-                    $('#editForm input[name="cumulativeScore"]').val(data.cumulativeScore);
-                    $('#editForm input[name="totalSalesAmount"]').val(data.totalSalesAmount);
                     $('#editForm input[name="level"]').val(data.level);
-                    $('#editForm input[name="thirdPartyProvider"]').val(data.thirdPartyProvider);
-                    $('#editForm input[name="registrationTime"]').val(data.registrationTime);
+                    $('#editForm input[name="title"]').val(data.title);
+                    $('#editForm input[name="threshold"]').val(data.threshold);
 
                     // 顯示表單
                     $('#editForm').show();
@@ -459,9 +366,6 @@
                 });
             };
 
-            // 每隔一段時間定期更新圖表（例如每 5 秒更新一次）
-            setInterval(updateBarChart, 300000); // 5000 毫秒（即 5 秒）
-            setInterval(updateCharArea, 300000); // 5000 毫秒（即 5 秒）
         </script>
     </body>
 

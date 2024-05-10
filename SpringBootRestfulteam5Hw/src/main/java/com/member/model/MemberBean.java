@@ -109,7 +109,7 @@ public class MemberBean {
 	private Set<Orders> sellers = new LinkedHashSet<>();
 
 	@JsonIgnore
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "member", cascade = CascadeType.ALL)
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "member", cascade = CascadeType.ALL)
 	private List<Post> posts = new ArrayList<Post>();
 
 	/*建立聯繫*/

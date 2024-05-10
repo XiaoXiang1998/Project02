@@ -4,7 +4,7 @@
 
     <head>
         <meta charset="UTF-8">
-        <title>後台管理</title>
+        <title>新增會員等級制度</title>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
         <link href="css/styles.css" rel="stylesheet" />
@@ -161,40 +161,16 @@
                             <div class="card-body">
                                 <form id="editForm" method="post" action="InsertAdmin">
                                     <div class="form-floating mb-3">
-                                        <input type="text" id="account" name="account" class="form-control">
-                                        <label for="account">帳號:</label>
+                                        <input type="text" id="level" name="level" class=" form-control">
+                                        <label for="levelId">會員級別:</label>
                                     </div>
                                     <div class="form-floating mb-3">
-                                        <input type="text" id="password" name="password" class="form-control">
-                                        <label for="password">密碼:</label>
+                                        <input type="text" id="title" name="title" class="form-control">
+                                        <label for="title">會員級別名稱:</label>
                                     </div>
                                     <div class="form-floating mb-3">
-                                        <input type="email" id="email" name="email" class="form-control">
-                                        <label for="email">信箱:</label>
-                                    </div>
-                                    <div class="form-floating mb-3">
-                                        <input type="tel" id="phone" name="phone" class="form-control">
-                                        <label for="phone">電話:</label>
-                                    </div>
-                                    <div class="form-floating mb-3">
-                                        <input type="text" id="name" name="name" class="form-control">
-                                        <label for="name">姓名:</label>
-                                    </div>
-                                    <div class="form-floating mb-3">
-                                        <select id="gender" name="gender" class="form-select">
-                                            <option value="">請選擇</option>
-                                            <option value="male">男性</option>
-                                            <option value="female">女性</option>
-                                        </select>
-                                        <label for="gender">性別:</label>
-                                    </div>
-                                    <div class="form-floating mb-3">
-                                        <input type="text" id="address" name="address" class="form-control">
-                                        <label for="address">住址:</label>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="photoSticker" class="form-label">頭貼:</label> <input type="file"
-                                            id="photoSticker" name="photoSticker" class="form-control">
+                                        <input type="text" id="threshold" name="threshold" class="form-control">
+                                        <label for="threshold">累積金額上限:</label>
                                     </div>
                                     <div class="d-flex justify-content-center">
                                         <button type="button" class="btn btn-primary" id="saveChangesBtn">確認</button>
@@ -228,58 +204,25 @@
         <!-- 抓取會員等級的分布數量 -->
         <script>
             document.getElementById('saveChangesBtn').addEventListener('click', function () {
-                var accountInput = document.getElementById('account');
-                var passwordInput = document.getElementById('password');
-                var emailInput = document.getElementById('email');
-                var phoneInput = document.getElementById('phone');
-                var nameInput = document.getElementById('name');
-                var genderInput = document.getElementById('gender');
-                var addressInput = document.getElementById('address');
+                var levelInput = document.getElementById('level');
+                var titleInput = document.getElementById('title');
+                var thresholdInput = document.getElementById('threshold');
 
                 // 重置所有輸入框的樣式
                 resetInputStyles();
 
                 // 檢查所有必填字段是否為空
-                if (accountInput.value.trim() === '' ||
-                    passwordInput.value.trim() === '' ||
-                    emailInput.value.trim() === '' ||
-                    phoneInput.value.trim() === '' ||
-                    nameInput.value.trim() === '' ||
-                    genderInput.value.trim() === '' ||
-                    addressInput.value.trim() === '') {
+                if (levelInput.value.trim() === '' ||
+                    titleInput.value.trim() === '' ||
+                    thresholdInput.value.trim() === '') {
                     // 如果有必填字段為空，則添加紅色邊框和晃動效果
-                    addErrorStyle(accountInput);
-                    addErrorStyle(passwordInput);
-                    addErrorStyle(emailInput);
-                    addErrorStyle(phoneInput);
-                    addErrorStyle(nameInput);
-                    addErrorStyle(genderInput);
-                    addErrorStyle(addressInput);
+                    addErrorStyle(levelInput);
+                    addErrorStyle(titleInput);
+                    addErrorStyle(thresholdInput);
                     return;
                 }
-
-                // 檢查信箱格式
-                var email = emailInput.value.trim();
-                var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                if (!emailRegex.test(email)) {
-                    // 如果信箱格式不正確，則添加紅色邊框和晃動效果
-                    addErrorStyle(emailInput);
-                    return;
-                }
-
-                // 檢查電話格式
-                var phone = phoneInput.value.trim();
-                var phoneRegex = /^\d{10}$/; // 假設電話號碼為10位數
-                if (!phoneRegex.test(phone)) {
-                    // 如果電話格式不正確，則添加紅色邊框和晃動效果
-                    addErrorStyle(phoneInput);
-                    return;
-                }
-
-                // 其他格式驗證...
-
-                // 其他提交表單的相關操作
             });
+
 
             // 函數：重置所有輸入框的樣式
             function resetInputStyles() {
@@ -304,11 +247,11 @@
 
                     // 使用 jQuery 發送 POST 請求
                     $.ajax({
-                        url: 'InsertAdmin',
+                        url: 'InsertLevel',
                         type: 'POST',
                         data: formData,
-                        contentType: false,  // 不要設置內容類型頭部
-                        processData: false,  // 不處理發送的數據
+                        contentType: false, // 不要設置內容類型頭部
+                        processData: false, // 不處理發送的數據
                         success: function (data) {
                             // 根據後端回應顯示 SweetAlert 提示消息
                             if (data.success) {
@@ -319,24 +262,16 @@
                                 }).then((result) => {
                                     // 當點擊確認按鈕後，進行頁面跳轉
                                     if (result.value) {
-                                        window.location.href = "AdminManagement";  // 修改此處以對應實際的 URL 路徑
+                                        window.location.href = "MembershipLevelGuidelines"; // 修改此處以對應實際的 URL 路徑
                                     }
                                 });
                             } else {
-                                Swal.fire({
-                                    title: "錯誤",
-                                    text: "新增失敗",
-                                    icon: "error"
-                                });
+                                Swal.fire("錯誤", "新增失敗", "error");
                             }
                         },
                         error: function (xhr, status, error) {
                             console.error('Error:', error);
-                            Swal.fire({
-                                title: "錯誤",
-                                text: "發生了一個錯誤",
-                                icon: "error"
-                            });
+                            Swal.fire("錯誤", "發生了一個錯誤", "error");
                         }
                     });
 

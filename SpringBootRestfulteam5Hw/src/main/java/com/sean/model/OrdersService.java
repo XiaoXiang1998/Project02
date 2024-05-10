@@ -47,6 +47,10 @@ public class OrdersService {
 	public Integer findOrdersCount(Date star,Date end){
 		return oRops.findOrdersCount(star, end);
 	}
+	
+	public Integer findOrdersPrice(Date star,Date end) {
+		return oRops.findOrdersPrice(star, end);
+	}
 	public void cancelOrderById(Integer orderId) {
 		oRops.cancelOrderById(orderId);
 	}

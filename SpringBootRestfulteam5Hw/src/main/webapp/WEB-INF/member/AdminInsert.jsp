@@ -307,21 +307,39 @@
                         url: 'InsertAdmin',
                         type: 'POST',
                         data: formData,
-                        contentType: false, // 不要設置內容類型頭部
-                        processData: false, // 不處理發送的數據
+                        contentType: false,  // 不要設置內容類型頭部
+                        processData: false,  // 不處理發送的數據
                         success: function (data) {
                             // 根據後端回應顯示 SweetAlert 提示消息
                             if (data.success) {
-                                Swal.fire("成功", "新增成功", "success");
+                                Swal.fire({
+                                    title: "成功",
+                                    text: "新增成功",
+                                    icon: "success"
+                                }).then((result) => {
+                                    // 當點擊確認按鈕後，進行頁面跳轉
+                                    if (result.value) {
+                                        window.location.href = "AdminManagement";  // 修改此處以對應實際的 URL 路徑
+                                    }
+                                });
                             } else {
-                                Swal.fire("錯誤", "新增失敗", "error");
+                                Swal.fire({
+                                    title: "錯誤",
+                                    text: "新增失敗",
+                                    icon: "error"
+                                });
                             }
                         },
                         error: function (xhr, status, error) {
                             console.error('Error:', error);
-                            Swal.fire("錯誤", "發生了一個錯誤", "error");
+                            Swal.fire({
+                                title: "錯誤",
+                                text: "發生了一個錯誤",
+                                icon: "error"
+                            });
                         }
                     });
+
                 });
             });
         </script>

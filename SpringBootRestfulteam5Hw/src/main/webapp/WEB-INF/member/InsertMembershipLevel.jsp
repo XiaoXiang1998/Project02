@@ -255,7 +255,16 @@
                         success: function (data) {
                             // 根據後端回應顯示 SweetAlert 提示消息
                             if (data.success) {
-                                Swal.fire("成功", "新增成功", "success");
+                                Swal.fire({
+                                    title: "成功",
+                                    text: "新增成功",
+                                    icon: "success"
+                                }).then((result) => {
+                                    // 當點擊確認按鈕後，進行頁面跳轉
+                                    if (result.value) {
+                                        window.location.href = "MembershipLevelGuidelines"; // 修改此處以對應實際的 URL 路徑
+                                    }
+                                });
                             } else {
                                 Swal.fire("錯誤", "新增失敗", "error");
                             }
@@ -265,6 +274,7 @@
                             Swal.fire("錯誤", "發生了一個錯誤", "error");
                         }
                     });
+
                 });
             });
         </script>

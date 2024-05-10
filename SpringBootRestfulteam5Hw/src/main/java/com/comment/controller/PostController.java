@@ -45,34 +45,34 @@ import jakarta.servlet.http.HttpSession;
 public class PostController {
 	@Autowired
 	private PostService pService;
-	
+
 	@Autowired
 	private PostMemberService mService;
 	@Autowired
 	private OrdersService oService;
-	
+
 	@Autowired
 	private MemberService memberService;
-	
+
 	@Autowired
 	private GoodService gService;
-	
-	
+
+
 	@PostMapping("/post")
-	public String postAction(@RequestParam(value = "commentContent", required = false) String commentContent,@RequestParam("commentId") Integer orderId ,@RequestParam("productimage")  MultipartFile mf,@RequestParam("rate") int rate,
-            HttpSession session) throws IllegalStateException, IOException {
+	public String postAction(@RequestParam(value = "commentContent", required = false) String commentContent,
+			@RequestParam("commentId") Integer orderId, @RequestParam("productimage") MultipartFile mf,
+			@RequestParam("rate") int rate, HttpSession session) throws IllegalStateException, IOException {
 		MemberBean member = (MemberBean) session.getAttribute("member");
 		System.out.println(orderId);
-		
-	
+
 		Orders orders = oService.getById(orderId);
-		
+
 		GoodsBean2 good = orders.getFormatgoodId().getGood();
-		
-		Post post =new Post();
-		
+
+		Post post = new Post();
+
 		if (mf != null && !mf.isEmpty()) { // 檢查圖片是否不為空
-			 String fileName = UUID.randomUUID().toString(); // 生成唯一的文件名
+			String fileName = UUID.randomUUID().toString(); // 生成唯一的文件名
 
 			String fileDir = "C:\\team5project\\SpringBootRestfulteam5Hw\\src\\main\\webapp\\WEB-INF\\commentPicture";
 
@@ -80,9 +80,8 @@ public class PostController {
 			if (!fileDirPath.exists()) {
 				fileDirPath.mkdirs();
 			}
-	        String fileExtension = FilenameUtils.getExtension(mf.getOriginalFilename()); // 獲取文件擴展名
-	        String uploadedFileName = fileName + "." + fileExtension; // 構造完整的文件名
-
+			String fileExtension = FilenameUtils.getExtension(mf.getOriginalFilename()); // 獲取文件擴展名
+			String uploadedFileName = fileName + "." + fileExtension; // 構造完整的文件名
 
 			File uploadedFile = new File(fileDirPath, uploadedFileName);
 			mf.transferTo(uploadedFile);
@@ -100,268 +99,257 @@ public class PostController {
 		post.setMember(member);
 		post.setOrders(orders);
 		pService.insert(post);
-		
-		 if (good != null) {
-		        if (good.getNumberRatings() == null) {
-		            good.setNumberRatings(0);
-		        }
-		        if (good.getRating() == null) {
-		            good.setRating(0);
-		        }
-		        good.setNumberRatings(good.getNumberRatings() + 1);
-		        good.setRating(good.getRating() + rate);
-		        gService.update(good);
-		        
-		        MemberBean seller = good.getGoodsSellerID();
-		        if (seller != null) {
-		           
-		        	seller.setReviewCount(seller.getReviewCount() + 1);
-		            seller.setCumulativeScore(seller.getCumulativeScore() + rate);
-		            memberService.update(member); 
-		        }
-		    }
-		
+
+		if (good != null) {
+			if (good.getNumberRatings() == null) {
+				good.setNumberRatings(0);
+			}
+			if (good.getRating() == null) {
+				good.setRating(0);
+			}
+			good.setNumberRatings(good.getNumberRatings() + 1);
+			good.setRating(good.getRating() + rate);
+			gService.update(good);
+
+			MemberBean seller = good.getGoodsSellerID();
+			if (seller != null) {
+
+				seller.setReviewCount(seller.getReviewCount() + 1);
+				seller.setCumulativeScore(seller.getCumulativeScore() + rate);
+				memberService.update(member);
+			}
+		}
+
 		return "redirect:indexcomment";
 	}
-	
+
 	@GetMapping("/userComments")
-    public String getUserComments(Model model, HttpSession session,@RequestParam(defaultValue = "0") int page) {
+	public String getUserComments(Model model, HttpSession session, @RequestParam(defaultValue = "0") int page) {
 		MemberBean member = (MemberBean) session.getAttribute("member");
-	    Pageable pageable = PageRequest.of(page, 5); 
+		Pageable pageable = PageRequest.of(page, 5);
 
-	    Page<Post> userComments = pService.findByMemberOrderByCommenttimeDesc(member, pageable);
-        
-	    List<Post> userReplies = new ArrayList<>();
-	    for (Post comment : userComments.getContent()) {
-	        if (comment.getCommentid() != null) {
-	            List<Post> replies = pService.findRepliesByRepliedCommentId(comment.getCommentid());
-	            userReplies.addAll(replies);
-	        }
-	    }
-	    
-	    model.addAttribute("comments", userComments.getContent());
-	    model.addAttribute("replies", userReplies);
-        model.addAttribute("currentPage", page); 
-        model.addAttribute("totalPages", userComments.getTotalPages()); 
-        
-        return "comment/userComment"; 
-    }
-	
-	
-	
-	
-	 
-	 @DeleteMapping("/post/{pid}")
-	 public ResponseEntity<String> deleteAction(@PathVariable("pid") Integer id) {
-		    Post post = pService.getById(id);
-		    
-		    if (post == null) {
-		        return new ResponseEntity<>("評論不存在", HttpStatus.NOT_FOUND);
-		    }
+		Page<Post> userComments = pService.findByMemberOrderByCommenttimeDesc(member, pageable);
 
-		    String imagePath = post.getProductphoto();
-
-		    if (imagePath != null && !imagePath.isEmpty()) {
-		        String fileDir = "C:/team5project/SpringBootRestfulteam5Hw/src/main/webapp/WEB-INF/commentPicture/" + imagePath;
-		        File imageFile = new File(fileDir);
-		        if (imageFile.exists()) {
-		            imageFile.delete(); 
-		        }
-		    }
-
-		    pService.deleteById(id);
-		    
-		    return new ResponseEntity<>("評論已成功刪除", HttpStatus.OK);
-	 }
-	 
-	 @PutMapping("/post/{pid}")
-	 public ResponseEntity<String> updateAction(@PathVariable("pid") Integer pid,@RequestParam("commentContent") String commentContent) {
-		 long currentTimeMillis = System.currentTimeMillis();
-			java.sql.Timestamp currTimestamp = new java.sql.Timestamp(currentTimeMillis);
-			Post post = new Post(pid,commentContent,currTimestamp);
-			pService.Update(post);
-		     return new ResponseEntity<>("評論已成功修改", HttpStatus.OK);
-
-	 }
-	 
-	 @GetMapping("/allUsersComments")
-	 public String viewAllUsersComments(Model model) {
-	     List<MemberBean> allMembersWithPosts = mService.getAllMembersWithPosts();
-	     
-	     int fiveStarsCount = 0;
-	     int fourStarsCount = 0;
-	     int threeStarsCount = 0;
-	     int twoStarsCount = 0;
-	     int oneStarCount = 0;
-	     int totalPosts = 0; 
-	     int commentedPostsCount = 0;
-	     int postsWithImagesCount = 0; 
-
-	     for (MemberBean member : allMembersWithPosts) {
-	         for (Post post : member.getPosts()) {
-	             Integer buyerrate = post.getBuyerrate();
-	             if (buyerrate != null) {
-	                 String commentContent = post.getCommentcontent();
-	                 if (!commentContent.isEmpty()) {
-	                     commentedPostsCount++;
-	                 }
-	                     switch (buyerrate) {
-	                         case 5:
-	                             fiveStarsCount++;
-	                             break;
-	                         case 4:
-	                             fourStarsCount++;
-	                             break;
-	                         case 3:
-	                             threeStarsCount++;
-	                             break;
-	                         case 2:
-	                             twoStarsCount++;
-	                             break;
-	                         case 1:
-	                             oneStarCount++;
-	                             break;
-	                         default:
-	                             break;
-	                     }
-	                     
-	                     if (post.getProductphoto() != null && !post.getProductphoto().isEmpty()) {
-	                         postsWithImagesCount++;
-	                     }
-	                 
-	                 totalPosts++;
-	             }
-	         }
-	     }
-
-	     model.addAttribute("allMembers", allMembersWithPosts);
-	     model.addAttribute("fiveStarsCount", fiveStarsCount);
-	     model.addAttribute("fourStarsCount", fourStarsCount);
-	     model.addAttribute("threeStarsCount", threeStarsCount);
-	     model.addAttribute("twoStarsCount", twoStarsCount);
-	     model.addAttribute("oneStarCount", oneStarCount);
-	     model.addAttribute("totalPosts", totalPosts); 
-	     model.addAttribute("commentedPostsCount", commentedPostsCount);
-	     model.addAttribute("postsWithImagesCount", postsWithImagesCount);
-	     return "comment/allUsersComments";
-	 }
-	     
-	 
-	 @PostMapping("/submitReply")
-	    public String submitReply(@RequestParam("memberId") Integer memberId, 
-	                              @RequestParam("replyContent") String replyContent,
-	                              @RequestParam("rate") Integer sellerRate,
-	                              @RequestParam("commentId") Integer commentId,
-	                              @RequestParam("orderId") Integer orderId,
-	                              HttpSession session) {
-			MemberBean member = (MemberBean) session.getAttribute("member");
-				
-			Orders orders = oService.getById(orderId);
-
-			
-	        // 保存回复内容
-	        Post reply = new Post();
-	        reply.setReplayconetnt(replyContent);
-	        Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
-
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-			String formattedDateTime = sdf.format(currentTimestamp);
-	        reply.setReplaytime(currentTimestamp);
-	        reply.setSellerrate(sellerRate);
-	        reply.setMember(member);
-	        
-	        reply.setRepliedcommentid(commentId);
-	        
-	       pService.insert(reply);
-	       
-	        
-
-	        // 更新會員信息
-	        MemberBean memberBean = mService.findById(memberId).orElse(null);
-	        if (memberBean != null) {
-	        	 // 更新被評論分數和累積次數
-	            memberBean.setReviewCount(memberBean.getReviewCount() + 1);
-	            memberBean.setCumulativeScore(memberBean.getCumulativeScore() + sellerRate);
-	            mService.insertMember(memberBean);// 使用 save 方法來更新會員信息
-	        }
-
-	        return "redirect:sellerComments";
-	    }
-	 
-	 @GetMapping("/commentadmin")
-		public String commentadmin(Model model) {
-	     List<MemberBean> allMembersWithPosts = mService.getAllMembersWithPosts();
-
-		 	
-	     model.addAttribute("allMembers", allMembersWithPosts);
-
-	     
-			return "comment/commentadmin";
+		List<Post> userReplies = new ArrayList<>();
+		for (Post comment : userComments.getContent()) {
+			if (comment.getCommentid() != null) {
+				List<Post> replies = pService.findRepliesByRepliedCommentId(comment.getCommentid());
+				userReplies.addAll(replies);
+			}
 		}
-	 
 
-	 
-	 
-	 @GetMapping("/sellerComments")
-	 public String getsellerComments(Model model, HttpSession session,
-	                                 @RequestParam(defaultValue = "0") int page,
-	                                 @RequestParam(defaultValue = "0") int rating) {
-    //  從會話中獲取當前登入的賣家
-	     MemberBean seller = (MemberBean) session.getAttribute("member");
-	     System.out.println("ID" + seller.getSid());
-	     
-	     // 設定每頁顯示的資料筆數
-	     int pageSize = 2;
-	     
-	     // 使用Pageable對象進行分頁查詢
-	     Pageable pageable = PageRequest.of(page, pageSize);
-	     
-	     Page<Post> sellerComments;
+		model.addAttribute("comments", userComments.getContent());
+		model.addAttribute("replies", userReplies);
+		model.addAttribute("currentPage", page);
+		model.addAttribute("totalPages", userComments.getTotalPages());
 
-	     if (rating > 0) {
-	         // 根据评分等级筛选评论
-	         sellerComments = pService.findPostsBySellerIdAndRating(seller.getSid(), rating, pageable);
-	     } else {
-	         // 返回全部评论
-	         sellerComments = pService.findPostsBySellerId(seller.getSid(), pageable);
-	     }
-	     
-	     // 將查詢結果和分頁相關的資訊添加到模型中
-	     model.addAttribute("comments", sellerComments.getContent());
-	     model.addAttribute("currentPage", sellerComments.getNumber()); // 注意: Spring Data JPA的頁碼從0開始
-	     model.addAttribute("totalPages", sellerComments.getTotalPages());
-	     model.addAttribute("rating", rating);
-	     // 返回視圖名稱
-	     return "comment/sellerReplay"; 
-	 }
-	 
-	 @GetMapping("/sellerCommentsForUser")
-	 public String getSellerCommentsForUser(Model model, HttpSession session) {
-	     // 从 session 中获取当前登录的用户信息
-	     MemberBean user = (MemberBean) session.getAttribute("member");
-	     int reviewCount=user.getReviewCount();
-	     int cumulativeScore=user.getCumulativeScore();
-	     
-	     int avergeScore=cumulativeScore/reviewCount;
-	     
-	     
-	     // 获取当前登录用户的所有评论
-	     List<Post> userComments = user.getPosts();
+		return "comment/userComment";
+	}
 
-	     List<Post> sellerComments = new ArrayList<>();
-	     
-	     // 遍历用户的评论列表，查找卖家对该评论的回复
-	     for (Post comment : userComments) {
-	         Integer userCommentId = comment.getCommentid();
-	         List<Post> sellerReplies = pService.getSellerCommentsForUser(userCommentId);
-	         sellerComments.addAll(sellerReplies);
-	     }
-	     model.addAttribute("avergeScore", avergeScore);
-	     model.addAttribute("sellerComments", sellerComments);
+	@DeleteMapping("/post/{pid}")
+	public ResponseEntity<String> deleteAction(@PathVariable("pid") Integer id) {
+		Post post = pService.getById(id);
 
-	     return "comment/sellercommentforuser";
-	 }
-	 
-	 
-	
+		if (post == null) {
+			return new ResponseEntity<>("評論不存在", HttpStatus.NOT_FOUND);
+		}
+
+		String imagePath = post.getProductphoto();
+
+		if (imagePath != null && !imagePath.isEmpty()) {
+			String fileDir = "C:/team5project/SpringBootRestfulteam5Hw/src/main/webapp/WEB-INF/commentPicture/"
+					+ imagePath;
+			File imageFile = new File(fileDir);
+			if (imageFile.exists()) {
+				imageFile.delete();
+			}
+		}
+
+		pService.deleteById(id);
+
+		return new ResponseEntity<>("評論已成功刪除", HttpStatus.OK);
+	}
+
+	@PutMapping("/post/{pid}")
+	public ResponseEntity<String> updateAction(@PathVariable("pid") Integer pid,
+			@RequestParam("commentContent") String commentContent) {
+		long currentTimeMillis = System.currentTimeMillis();
+		java.sql.Timestamp currTimestamp = new java.sql.Timestamp(currentTimeMillis);
+		Post post = new Post(pid, commentContent, currTimestamp);
+		pService.Update(post);
+		return new ResponseEntity<>("評論已成功修改", HttpStatus.OK);
+
+	}
+
+	@GetMapping("/allUsersComments")
+	public String viewAllUsersComments(Model model) {
+		List<MemberBean> allMembersWithPosts = mService.getAllMembersWithPosts();
+
+		int fiveStarsCount = 0;
+		int fourStarsCount = 0;
+		int threeStarsCount = 0;
+		int twoStarsCount = 0;
+		int oneStarCount = 0;
+		int totalPosts = 0;
+		int commentedPostsCount = 0;
+		int postsWithImagesCount = 0;
+
+		for (MemberBean member : allMembersWithPosts) {
+			for (Post post : member.getPosts()) {
+				Integer buyerrate = post.getBuyerrate();
+				if (buyerrate != null) {
+					String commentContent = post.getCommentcontent();
+					if (!commentContent.isEmpty()) {
+						commentedPostsCount++;
+					}
+					switch (buyerrate) {
+					case 5:
+						fiveStarsCount++;
+						break;
+					case 4:
+						fourStarsCount++;
+						break;
+					case 3:
+						threeStarsCount++;
+						break;
+					case 2:
+						twoStarsCount++;
+						break;
+					case 1:
+						oneStarCount++;
+						break;
+					default:
+						break;
+					}
+
+					if (post.getProductphoto() != null && !post.getProductphoto().isEmpty()) {
+						postsWithImagesCount++;
+					}
+
+					totalPosts++;
+				}
+			}
+		}
+
+		model.addAttribute("allMembers", allMembersWithPosts);
+		model.addAttribute("fiveStarsCount", fiveStarsCount);
+		model.addAttribute("fourStarsCount", fourStarsCount);
+		model.addAttribute("threeStarsCount", threeStarsCount);
+		model.addAttribute("twoStarsCount", twoStarsCount);
+		model.addAttribute("oneStarCount", oneStarCount);
+		model.addAttribute("totalPosts", totalPosts);
+		model.addAttribute("commentedPostsCount", commentedPostsCount);
+		model.addAttribute("postsWithImagesCount", postsWithImagesCount);
+		return "comment/allUsersComments";
+	}
+
+	@PostMapping("/submitReply")
+	public String submitReply(@RequestParam("memberId") Integer memberId,
+			@RequestParam("replyContent") String replyContent, @RequestParam("rate") Integer sellerRate,
+			@RequestParam("commentId") Integer commentId, HttpSession session, Model model) {
+		MemberBean member = (MemberBean) session.getAttribute("member");
+
+		// 保存回复内容
+		Post reply = new Post();
+		reply.setReplayconetnt(replyContent);
+		Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+		String formattedDateTime = sdf.format(currentTimestamp);
+		reply.setReplaytime(currentTimestamp);
+		reply.setSellerrate(sellerRate);
+		reply.setMember(member);
+
+		reply.setRepliedcommentid(commentId);
+
+		pService.insert(reply);
+
+		// 将已回复评论的ID添加到列表中
+
+		// 更新會員信息
+		MemberBean memberBean = mService.findById(memberId).orElse(null);
+		if (memberBean != null) {
+			// 更新被評論分數和累積次數
+			memberBean.setReviewCount(memberBean.getReviewCount() + 1);
+			memberBean.setCumulativeScore(memberBean.getCumulativeScore() + sellerRate);
+			mService.insertMember(memberBean);// 使用 save 方法來更新會員信息
+		}
+
+		return "redirect:sellerComments";
+	}
+
+	@GetMapping("/commentadmin")
+	public String commentadmin(Model model) {
+		List<MemberBean> allMembersWithPosts = mService.getAllMembersWithPosts();
+
+		model.addAttribute("allMembers", allMembersWithPosts);
+
+		return "comment/commentadmin";
+	}
+
+	@GetMapping("/sellerComments")
+	public String getsellerComments(Model model, HttpSession session, @RequestParam(defaultValue = "0") int page,
+			@RequestParam(defaultValue = "0") int rating) {
+		// 從會話中獲取當前登入的賣家
+		MemberBean seller = (MemberBean) session.getAttribute("member");
+		System.out.println("ID" + seller.getSid());
+
+		// 設定每頁顯示的資料筆數
+		int pageSize = 2;
+
+		// 使用Pageable對象進行分頁查詢
+		Pageable pageable = PageRequest.of(page, pageSize);
+
+		Page<Post> sellerComments;
+
+		if (rating > 0) {
+			// 根据评分等级筛选评论
+			sellerComments = pService.findPostsBySellerIdAndRating(seller.getSid(), rating, pageable);
+		} else {
+			// 返回全部评论
+			sellerComments = pService.findPostsBySellerId(seller.getSid(), pageable);
+		}
+
+		// 將查詢結果和分頁相關的資訊添加到模型中
+		model.addAttribute("comments", sellerComments.getContent());
+		model.addAttribute("currentPage", sellerComments.getNumber()); // 注意: Spring Data JPA的頁碼從0開始
+		model.addAttribute("totalPages", sellerComments.getTotalPages());
+		model.addAttribute("rating", rating);
+		
+		// 查询已回复的评论 ID 列表，并将其添加到模型中
+	    List<Integer> repliedCommentIds = pService.findRepliedCommentIdsBySellerId(seller.getSid());
+	    model.addAttribute("repliedCommentIds", repliedCommentIds);
+		// 返回視圖名稱
+		
+		
+		
+		return "comment/sellerReplay";
+	}
+
+	@GetMapping("/sellerCommentsForUser")
+	public String getSellerCommentsForUser(Model model, HttpSession session) {
+		// 从 session 中获取当前登录的用户信息
+		MemberBean user = (MemberBean) session.getAttribute("member");
+		int reviewCount = user.getReviewCount();
+		int cumulativeScore = user.getCumulativeScore();
+
+		int avergeScore = cumulativeScore / reviewCount;
+
+		// 获取当前登录用户的所有评论
+		List<Post> userComments = user.getPosts();
+
+		List<Post> sellerComments = new ArrayList<>();
+
+		// 遍历用户的评论列表，查找卖家对该评论的回复
+		for (Post comment : userComments) {
+			Integer userCommentId = comment.getCommentid();
+			List<Post> sellerReplies = pService.getSellerCommentsForUser(userCommentId);
+			sellerComments.addAll(sellerReplies);
+		}
+		model.addAttribute("avergeScore", avergeScore);
+		model.addAttribute("sellerComments", sellerComments);
+
+		return "comment/sellercommentforuser";
+	}
+
 }

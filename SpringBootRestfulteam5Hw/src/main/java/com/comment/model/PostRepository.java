@@ -40,5 +40,9 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
     Page<Post> findPostsBySellerIdAndRating(@Param("sellerId") Integer sellerId,
                                             @Param("rating") Integer rating,
                                             Pageable pageable);
+    
+    // 根据卖家ID查询已回复的评论ID列表
+    @Query("SELECT p.repliedcommentid FROM Post p WHERE p.member.sid = :sellerId")
+    List<Integer> findRepliedCommentIdsBySellerId(@Param("sellerId") Integer sellerId);
 
 }

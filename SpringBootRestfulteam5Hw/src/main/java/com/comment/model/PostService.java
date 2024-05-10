@@ -81,4 +81,9 @@ public class PostService {
 	public Page<Post> findPostsBySellerIdAndRating(Integer sellerId, Integer rating, Pageable pageable) {
 		return pRepository.findPostsBySellerIdAndRating(sellerId, rating, pageable);
 	}
+	
+	public List<Integer> findRepliedCommentIdsBySellerId(Integer sellerId) {
+        // 根据卖家ID查询已回复的评论ID列表
+        return pRepository.findRepliedCommentIdsBySellerId(sellerId);
+    }
 }

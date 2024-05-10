@@ -103,45 +103,64 @@ body {
 	background: url(commentPicture/output.png) no-repeat;
 	background-size: 24px 24px;
 }
-    .tab .page-link {
-        border: 1px solid rgba(0, 0, 0, 0.2);
-        border-radius: 5px;
-        background-color: transparent;
-        outline: none;
-        cursor: pointer;
-        padding: 10px 15px;
-        transition: background-color 0.3s;
-        margin: 0 5px; /* 調整按鈕之間的間距 */
-        position: relative; /* 將span元素定位相對於按鈕 */
-        text-align: center;
-    }
+  /* 星级筛选按钮 */
+.rating-tab .btn {
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+    background-color: transparent;
+    outline: none;
+    cursor: pointer;
+    padding: 10px 15px;
+    transition: background-color 0.3s;
+    margin: 0 5px; /* 调整按钮之间的间距 */
+    text-align: center;
+}
 
-    .tab .page-link .badge {
-        position: absolute; /* 使用絕對位置 */
-        top: -10px; /* 調整數字在按鈕上的位置 */
-        right: -10px; /* 調整數字在按鈕上的位置 */
-        background-color: #ff0000; /* 設置背景顏色 */
-        color: #ffffff; /* 設置文字顏色 */
-        border-radius: 50%; /* 圓形邊框 */
-        padding: 5px; /* 調整內邊距 */
-        font-size: 12px; /* 調整字體大小 */
-        display: inline-block; /* 使span元素顯示為行內塊 */
-        opacity: 1; /* 初始時顯示 */
-        transition: opacity 0.3s; /* 添加過渡效果 */
-    }
+.rating-tab .btn.active {
+    background-color: #007bff; /* 选中状态的背景色 */
+    color: #fff; /* 选中状态的文本颜色 */
+}
 
-    /* 鼠標懸停時的效果 */
-    .tab .page-link:hover {
-        background-color: rgba(0, 0, 0, 0.1);
-    }
+.rating-tab .btn:hover {
+    background-color: rgba(0, 0, 0, 0.1); /* 鼠标悬停时的背景色 */
+}
 
-    /* 激活/選中按鈕的樣式 */
-    .tab .page-link.active {
-        background-color: rgba(0, 0, 0, 0.2);
-        color: #fff; /* 設置文字顏色 */
-    }
+/* 分页链接 */
+.pagination-container .page-link {
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+    background-color: transparent;
+    outline: none;
+    cursor: pointer;
+    padding: 10px 15px;
+    transition: background-color 0.3s;
+    margin: 0 5px; /* 调整按钮之间的间距 */
+    position: relative; /* 将 span 元素定位相对于按钮 */
+    text-align: center;
+}
 
- 
+.pagination-container .page-link.active {
+    background-color: #007bff; /* 选中状态的背景色 */
+    color: #fff; /* 选中状态的文本颜色 */
+}
+
+.pagination-container .page-link:hover {
+    background-color: rgba(0, 0, 0, 0.1); /* 鼠标悬停时的	背景色 */
+}
+
+.pagination-container .badge {
+    position: absolute; /* 使用绝对定位 */
+    top: -10px; /* 调整数字在按钮上的位置 */
+    right: -10px; /* 调整数字在按钮上的位置 */
+    background-color: #ff0000; /* 设置背景颜色 */
+    color: #ffffff; /* 设置文字颜色 */
+    border-radius: 50%; /* 圆形边框 */
+    padding: 5px; /* 调整内边距 */
+    font-size: 12px; /* 调整字体大小 */
+    display: inline-block; /* 使 span 元素显示为行内块 */
+    opacity: 1; /* 初始时显示 */
+    transition: opacity 0.3s; /* 添加过渡效果 */
+}
 </style>
 </head>
 <body>
@@ -149,7 +168,7 @@ body {
 	<%@ include file="sellercomment.jsp"%>
 	
 <!-- 星級篩選按鈕 -->
-<div class="tab" style="text-align: center; margin-top: 20px;">
+<div class="rating-tab" style="text-align: center; margin-top: 20px;">
     <ul class="nav nav-pills justify-content-center">
         <li class="nav-item">
             <button class="btn ${rating eq 0 ? 'active' : ''}" onclick="filterByRating(0)">全部</button>
@@ -196,8 +215,9 @@ body {
                 </c:choose>
                 <p class="text">${comment.commentcontent}</p>
             </div>
-               <!-- 回覆按鈕 -->
-                <button class="reply-btn" onclick="toggleReplyForm('${comment.commentid}')">回覆</button>
+               <c:if test="${!repliedCommentIds.contains(comment.commentid)}">
+        <button class="reply-btn" onclick="toggleReplyForm('${comment.commentid}')">回覆</button>
+    </c:if>
                 <!-- 回覆表單 -->
                 <div id="replyFormContainer${comment.commentid}" style="display: none;">
                     <form action="/submitReply" method="post" class="bootstrap-frm" id="replyForm${comment.commentid}">
@@ -221,11 +241,11 @@ body {
         </div>
     </c:forEach>
     <!-- 分页链接 -->
-<div class="tab" style="text-align: center; margin-top: 20px;" id="pagination">
+<div class="pagination-container" style="text-align: center; margin-top: 20px;" id="pagination">
     <ul class="pagination justify-content-center" style="margin-left: -20px;">
         <c:forEach begin="1" end="${totalPages}" var="pageNumber">
             <li class="page-item" style="margin-right: 5px;">
-                <button class="page-link" onclick="filterByPage(${pageNumber})">${pageNumber}</button>
+                <button class="page-link page-btn" data-page="${pageNumber}"  onclick="filterByPage(${pageNumber})">${pageNumber}</button>
             </li>
         </c:forEach>
     </ul>
@@ -301,19 +321,34 @@ $('body').on('submit', '.bootstrap-frm', function() {
 
 
 	var rating = 0;
+	
+	 var currentPage = 1; // 默认选中第一页
+
+	    // 初始化页面
+	    $(document).ready(function() {
+	        filterByRating(0); // 默认选中全部评分
+	    });
 
     // 篩選評分等級
     function filterByRating(ratingValue) {
         rating = ratingValue; 
-		
+        currentPage = 1; // 每次切换评分都回到第一页
         console.log("Rating: " + rating); // 添加调试信息
+        
+        // 更新选项卡样式
+        $('.nav-pills .btn').removeClass('active'); // 移除所有选项卡的活动状态
+        $('.nav-pills .btn').eq(ratingValue).addClass('active'); // 添加选中选项卡的活动状态
+
+        // 默认选中第一页的分页按钮
+        $('.pagination .page-item').removeClass('active'); // 移除所有分页链接的活动状态
+        $('.pagination .page-btn[data-page="1"]').parent().addClass('active'); // 添加选中分页按钮的活动状态
 
         
         $.ajax({
             type: "GET",
             url: "/sellerComments",
             data: {
-                page: 0,
+                page: currentPage - 1, // 后端分页从0开始
                 rating: rating
             },
             success: function (data) {
@@ -323,13 +358,20 @@ $('body').on('submit', '.bootstrap-frm', function() {
             }
         });
     }
+    
+  
 
     // 分頁連結
    // 分頁連結
 function filterByPage(pageNumber) {
-    	
-    console.log("Page Number: " + pageNumber); // 添加调试信息
+    console.log("Clicked page " + pageNumber); // 检查是否被调用
 
+	 currentPage = pageNumber;
+	
+	 // 更新分页按钮样式
+	    $('.pagination .page-item').removeClass('active'); // 移除所有分页链接的活动状态
+	    $('.pagination .page-btn[data-page="' + pageNumber + '"]').parent().addClass('active'); // 添加选中分页按钮的活动状态
+    
     $.ajax({
         type: "GET",
         url: "/sellerComments",
@@ -343,7 +385,9 @@ function filterByPage(pageNumber) {
             
         }
     });
-}
+}	
+    
+
 </script>
 
 </body>

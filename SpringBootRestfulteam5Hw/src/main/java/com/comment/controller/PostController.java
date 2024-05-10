@@ -304,25 +304,33 @@ public class PostController {
 	 
 	 @GetMapping("/sellerComments")
 	 public String getsellerComments(Model model, HttpSession session,
-	                                 @RequestParam(defaultValue = "0") int page) {
+	                                 @RequestParam(defaultValue = "0") int page,
+	                                 @RequestParam(defaultValue = "0") int rating) {
     //  從會話中獲取當前登入的賣家
 	     MemberBean seller = (MemberBean) session.getAttribute("member");
 	     System.out.println("ID" + seller.getSid());
 	     
 	     // 設定每頁顯示的資料筆數
-	     int pageSize = 5;
+	     int pageSize = 2;
 	     
 	     // 使用Pageable對象進行分頁查詢
 	     Pageable pageable = PageRequest.of(page, pageSize);
 	     
-	     // 調用PostRepository中的自定義查詢方法來查詢與賣家相關的評論
-     Page<Post> sellerComments = pService.findPostsBySellerId(seller.getSid(), pageable);
+	     Page<Post> sellerComments;
+
+	     if (rating > 0) {
+	         // 根据评分等级筛选评论
+	         sellerComments = pService.findPostsBySellerIdAndRating(seller.getSid(), rating, pageable);
+	     } else {
+	         // 返回全部评论
+	         sellerComments = pService.findPostsBySellerId(seller.getSid(), pageable);
+	     }
 	     
 	     // 將查詢結果和分頁相關的資訊添加到模型中
 	     model.addAttribute("comments", sellerComments.getContent());
 	     model.addAttribute("currentPage", sellerComments.getNumber()); // 注意: Spring Data JPA的頁碼從0開始
 	     model.addAttribute("totalPages", sellerComments.getTotalPages());
-	     
+	     model.addAttribute("rating", rating);
 	     // 返回視圖名稱
 	     return "comment/sellerReplay"; 
 	 }
@@ -341,7 +349,7 @@ public class PostController {
 	     List<Post> userComments = user.getPosts();
 
 	     List<Post> sellerComments = new ArrayList<>();
-
+	     
 	     // 遍历用户的评论列表，查找卖家对该评论的回复
 	     for (Post comment : userComments) {
 	         Integer userCommentId = comment.getCommentid();
@@ -353,6 +361,7 @@ public class PostController {
 
 	     return "comment/sellercommentforuser";
 	 }
+	 
 	 
 	
 }

@@ -25,8 +25,20 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
           "INNER JOIN f.good g " +
            "WHERE g.goodsSellerID.sid = :sellerId")
     Page<Post> findPostsBySellerId(@Param("sellerId") Integer sellerId, Pageable pageable);
+    
+    
     @Query("SELECT p FROM Post p WHERE p.repliedcommentid = :commentId")
     List<Post> findSellerCommentsForUser(Integer commentId);
-
+    
+    
+    @Query("SELECT p FROM Post p " +
+            "INNER JOIN p.orders o " +
+            "INNER JOIN o.formatgoodId f " +
+            "INNER JOIN f.good g " +
+            "WHERE g.goodsSellerID.sid = :sellerId " +
+            "AND p.buyerrate = :rating")
+    Page<Post> findPostsBySellerIdAndRating(@Param("sellerId") Integer sellerId,
+                                            @Param("rating") Integer rating,
+                                            Pageable pageable);
 
 }

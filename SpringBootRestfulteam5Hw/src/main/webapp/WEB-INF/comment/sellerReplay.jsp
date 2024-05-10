@@ -148,10 +148,21 @@ body {
 
 	<%@ include file="sellercomment.jsp"%>
 	
-	
-	
-
-	<div class="container">
+<!-- 星級篩選按鈕 -->
+<div class="tab" style="text-align: center; margin-top: 20px;">
+    <ul class="nav nav-pills justify-content-center">
+        <li class="nav-item">
+            <button class="btn ${rating eq 0 ? 'active' : ''}" onclick="filterByRating(0)">全部</button>
+        </li>
+        <c:forEach begin="1" end="5" var="i">
+            <li class="nav-item">
+                <button class="btn ${rating eq i ? 'active' : ''}" onclick="filterByRating(${i})">${i}顆星</button>
+            </li>
+        </c:forEach>
+    </ul>
+</div>
+	<div id="commentAndPaginationContainer">
+	<div class="container" id="commentContainer">
     <c:forEach items="${comments}" var="comment">
         <div class="item" data-comment-id="${comment.commentid}">
             <i class="avatar"></i>
@@ -209,21 +220,21 @@ body {
                 </div>
         </div>
     </c:forEach>
-</div>
-
-
-
-
-<!-- 分頁連結 -->
-<div class="tab" style="text-align: center; margin-top: 20px;">
+    <!-- 分页链接 -->
+<div class="tab" style="text-align: center; margin-top: 20px;" id="pagination">
     <ul class="pagination justify-content-center" style="margin-left: -20px;">
         <c:forEach begin="1" end="${totalPages}" var="pageNumber">
             <li class="page-item" style="margin-right: 5px;">
-                <a class="page-link ${pageNumber eq currentPage + 1 ? 'active' : ''}" href="?page=${pageNumber - 1}">${pageNumber}</a>
+                <button class="page-link" onclick="filterByPage(${pageNumber})">${pageNumber}</button>
             </li>
         </c:forEach>
     </ul>
 </div>
+</div>
+</div>
+
+
+
 
 <script>
 
@@ -284,5 +295,56 @@ $('body').on('submit', '.bootstrap-frm', function() {
         });
     });
 </script>
+
+<script>
+
+
+
+	var rating = 0;
+
+    // 篩選評分等級
+    function filterByRating(ratingValue) {
+        rating = ratingValue; 
+		
+        console.log("Rating: " + rating); // 添加调试信息
+
+        
+        $.ajax({
+            type: "GET",
+            url: "/sellerComments",
+            data: {
+                page: 0,
+                rating: rating
+            },
+            success: function (data) {
+                $('#commentContainer').html($(data).find('#commentContainer').html());
+                $('#pagination').html($(data).find('#pagination').html());
+
+            }
+        });
+    }
+
+    // 分頁連結
+   // 分頁連結
+function filterByPage(pageNumber) {
+    	
+    console.log("Page Number: " + pageNumber); // 添加调试信息
+
+    $.ajax({
+        type: "GET",
+        url: "/sellerComments",
+        data: {
+            page: pageNumber - 1,  // 修改这里
+            rating: rating
+        },
+        success: function (data) {
+            $('#commentContainer').html($(data).find('#commentContainer').html());
+            $('#pagination').html($(data).find('#pagination').html());
+            
+        }
+    });
+}
+</script>
+
 </body>
 </html>

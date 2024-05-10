@@ -39,11 +39,6 @@ public class LevelBean {
 	public LevelBean() {
 	}
 	
-	public LevelBean(String title, int threshold) {
-		this.title = title;
-		this.threshold = threshold;
-	}
-	
 	public LevelBean(Integer level, String title, int threshold) {
 		this.level = level;
 		this.title = title;

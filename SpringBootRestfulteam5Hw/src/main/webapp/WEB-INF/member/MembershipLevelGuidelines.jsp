@@ -208,13 +208,7 @@
                     console.log(form);
                     var formData = new FormData(form); // 使用原生JavaScript建立FormData
 
-                    var isSeller = $('#sellerSwitch').is(':checked');
-
-                    // 將 checkbox 的值添加到 FormData 中
-                    formData.append('seller', isSeller);
-
-
-                    fetch('UpdateMember', { // 發送fetch請求
+                    fetch('UpdateLevel', { // 發送fetch請求
                         method: 'PUT',
                         body: formData
                     })
@@ -293,7 +287,7 @@
 
                 $('#levelDataTables tbody').on('click', 'button.deleteBtn', function () {
                     var data = $('#levelDataTables').DataTable().row($(this).closest('tr')).data();
-                    let sid = parseInt(data.sid);
+                    let level = parseInt(data.level);
 
                     const swalWithBootstrapButtons = Swal.mixin({
                         customClass: {
@@ -313,8 +307,8 @@
                     }).then((result) => {
                         if (result.isConfirmed) {
 
-                            console.log(sid);
-                            fetch('/DeleteMember/' + sid, {
+                            console.log(level);
+                            fetch('/DeleteLevel/' + level, {
                                 method: 'DELETE',
                                 headers: {
                                     'Content-Type': 'application/json'

@@ -27,8 +27,14 @@ public class LevelService {
 	}
 
 	/* 更新等級 */
-	public LevelBean update(LevelBean LeBean) {
-		return levRepos.save(LeBean);
+	public boolean update(LevelBean LeBean) {
+		try {
+			levRepos.save(LeBean);
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
 
 	/* 刪除等級 */

@@ -149,23 +149,17 @@ public class PostController {
 	@DeleteMapping("/post/{pid}")
 	public ResponseEntity<String> deleteAction(@PathVariable("pid") Integer id) {
 		Post post = pService.getById(id);
-
-		if (post == null) {
-			return new ResponseEntity<>("評論不存在", HttpStatus.NOT_FOUND);
-		}
-
 		String imagePath = post.getProductphoto();
 
 		if (imagePath != null && !imagePath.isEmpty()) {
-			String fileDir = "C:/team5project/SpringBootRestfulteam5Hw/src/main/webapp/WEB-INF/commentPicture/"
+			String fileDir = "C:/team5project/SpringBootRestfulteam5Hw/src/main/webapp/WEB-INF/commentPicture"
 					+ imagePath;
 			File imageFile = new File(fileDir);
 			if (imageFile.exists()) {
 				imageFile.delete();
 			}
 		}
-
-		pService.deleteById(id);
+	    pService.deleteByCommentId(id); 
 
 		return new ResponseEntity<>("評論已成功刪除", HttpStatus.OK);
 	}
@@ -278,14 +272,14 @@ public class PostController {
 		return "redirect:sellerComments";
 	}
 
-	@GetMapping("/commentadmin")
-	public String commentadmin(Model model) {
-		List<MemberBean> allMembersWithPosts = mService.getAllMembersWithPosts();
-
-		model.addAttribute("allMembers", allMembersWithPosts);
-
-		return "comment/commentadmin";
-	}
+		@GetMapping("/commentadmin")
+		public String commentadmin(Model model) {
+			List<Post> Posts = pService.getAll();
+			
+			model.addAttribute("Post", Posts);
+	
+			return "comment/commentadmin";
+		}
 
 	@GetMapping("/sellerComments")
 	public String getsellerComments(Model model, HttpSession session, @RequestParam(defaultValue = "0") int page,

@@ -40,7 +40,7 @@ public class Orders {
 	@JoinColumn(name = "FK_FORMATGOODID")
 	private GoodFormat formatgoodId;
 	
-	@OneToOne(fetch = FetchType.LAZY,mappedBy = "orders",cascade = CascadeType.ALL)
+	@OneToOne(fetch = FetchType.LAZY, mappedBy = "orders",cascade = CascadeType.ALL)
 	private Post posts;
 
 	@Column(name = "QUANTITY")

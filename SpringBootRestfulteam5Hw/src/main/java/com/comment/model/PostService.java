@@ -10,10 +10,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.member.model.MemberBean;
 
-import jakarta.transaction.Transactional;
 
 @Service
 @Transactional
@@ -45,9 +45,9 @@ public class PostService {
 		}
 	}
 
-	public void deleteById(Integer id) {
-		pRepository.deleteById(id);
-	}
+
+	
+	
 
 	public Post getById(Integer id) {
 		Optional<Post> op1 = pRepository.findById(id);
@@ -58,9 +58,17 @@ public class PostService {
 		return null;
 	}
 
+	 public void deleteByCommentId(Integer commentId) {
+	        pRepository.deleteByCommentId(commentId);
+	    }
+	
+	
+
 	public List<Post> getAll() {
 		return pRepository.findAll();
 	}
+	
+	
 
 	public Page<Post> findByMemberOrderByCommenttimeDesc(MemberBean member, Pageable pageable) {
 		return pRepository.findByMemberOrderByCommenttimeDesc(member, pageable);

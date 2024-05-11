@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import com.member.model.MemberBean;
 import com.sean.model.Orders;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -22,16 +23,25 @@ import jakarta.persistence.Table;
 @Component
 public class Post {
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "commentid")
 	private Integer commentid;
+	@Column(name = "commentcontent")
 	private String commentcontent;
+	@Column(name = "productphoto")
 	private  String productphoto;
-	
+	@Column(name = "commenttime")
 	private java.sql.Timestamp commenttime;
+	@Column(name = "lastmodifiedtime")
 	private java.sql.Timestamp lastmodifiedtime;
+	@Column(name = "buyerrate")
 	private Integer buyerrate;
+	@Column(name = "replayconetnt")
 	private String replayconetnt;
+	@Column(name = "replaytime")
 	private java.sql.Timestamp replaytime;
+	@Column(name = "sellerrate")
 	private Integer sellerrate;
+	@Column(name = "repliedcommentid")
 	private Integer repliedcommentid;
 	
 	@ManyToOne
@@ -200,6 +210,39 @@ public class Post {
 
 	public void setOrders(Orders orders) {
 		this.orders = orders;
+	}
+
+
+
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("Post [commentid=");
+		builder.append(commentid);
+		builder.append(", commentcontent=");
+		builder.append(commentcontent);
+		builder.append(", productphoto=");
+		builder.append(productphoto);
+		builder.append(", commenttime=");
+		builder.append(commenttime);
+		builder.append(", lastmodifiedtime=");
+		builder.append(lastmodifiedtime);
+		builder.append(", buyerrate=");
+		builder.append(buyerrate);
+		builder.append(", replayconetnt=");
+		builder.append(replayconetnt);
+		builder.append(", replaytime=");
+		builder.append(replaytime);
+		builder.append(", sellerrate=");
+		builder.append(sellerrate);
+		builder.append(", repliedcommentid=");
+		builder.append(repliedcommentid);
+		builder.append(", member=");
+		builder.append(member);
+		builder.append(", orders=");
+		builder.append(orders);
+		builder.append("]");
+		return builder.toString();
 	}
 
 

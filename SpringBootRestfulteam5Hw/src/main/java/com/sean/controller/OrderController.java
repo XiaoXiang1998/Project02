@@ -33,6 +33,8 @@ import com.member.model.MemberBean;
 import com.member.model.MemberService;
 import com.sean.model.CarItem;
 import com.sean.model.CarItemService;
+import com.sean.model.Notifications;
+import com.sean.model.NotificationsService;
 import com.sean.model.Orders;
 import com.sean.model.OrdersService;
 import com.sean.model.PaymentDetails;
@@ -47,8 +49,10 @@ public class OrderController {
 
 	@Autowired
 	private GoodFormatService gService;
+	
 	@Autowired
-	private GoodService gdService;
+	private NotificationsService nService;
+	
 	@Autowired
 	private MemberService mService;
 
@@ -209,6 +213,16 @@ public class OrderController {
 				order.setCreatedAt(currentDate);
 				order.setModifiedAt(currentDate);
 				oService.insertToOrder(order);
+				
+				String goodsName = product.getGood().getGoodsName();
+				
+				Notifications n = new Notifications();
+				String buyerMessage = "你購買的商品" + goodsName + "已下單";
+				n.setRecipientId(member);
+				n.setContent(buyerMessage);
+				n.setSendTime(currentDate);
+				n.setReads(0);
+				nService.sendMessage(n);
 			}
 				cService.clearShopCarByMemberId(memberId);
 				if(paymentMethod == 1) {

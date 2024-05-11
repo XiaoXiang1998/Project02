@@ -47,13 +47,13 @@
                         <td><input type="hidden" name="quantity" value="${item.quantity}">${item.quantity}</td>
                         <td class="total-price">${item.quantity * item.price}</td>
                         <td>
-                            <input type="text" class="form-control" name="name" required>
+                            <input type="text" class="form-control" name="name" value="${member.name}" required>
                         </td>
                         <td>
-                            <input type="text" class="form-control" name="address" required>
+                            <input type="text" class="form-control" name="address" value="${member.address}" required>
                         </td>
                         <td>
-                            <input type="tel" class="form-control" name="tel" required>
+                            <input type="tel" class="form-control" name="tel" value="${member.phone}" required>
                         </td>
                         <td>
                             <select class="form-control" name="shippingMethod" onchange="calculateShippingFee" required>

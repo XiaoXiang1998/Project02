@@ -13,6 +13,7 @@ import com.comment.model.Post;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.good.model.GoodsBean2;
+import com.sean.model.Notifications;
 import com.sean.model.Orders;
 import com.sean.model.PaymentDetails;
 
@@ -107,6 +108,10 @@ public class MemberBean {
 	@JsonIgnore
 	@OneToMany(mappedBy = "sellerId", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private Set<Orders> sellers = new LinkedHashSet<>();
+
+	@JsonIgnore
+	@OneToMany(mappedBy = "recipientId", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private Set<Notifications> recipient = new LinkedHashSet<>();
 
 	@JsonIgnore
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "member", cascade = CascadeType.ALL)

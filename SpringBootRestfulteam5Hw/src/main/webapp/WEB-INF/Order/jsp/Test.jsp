@@ -132,7 +132,6 @@
 				</div>
 			</footer>
 		</div>
-	</div>
 	<div id="editForm" class="d-none" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(255, 255, 255, 0.9); z-index: 1000;">
 		<div class="row justify-content-center align-items-center h-100">
 			<div class="col-md-6 border p-4">

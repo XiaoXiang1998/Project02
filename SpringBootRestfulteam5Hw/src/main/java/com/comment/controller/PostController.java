@@ -287,7 +287,16 @@ public class PostController {
 		// 從會話中獲取當前登入的賣家
 		MemberBean seller = (MemberBean) session.getAttribute("member");
 		System.out.println("ID" + seller.getSid());
+		
+		// 計算全部評論數量
+        Long totalComments = pService.countCommentsBySellerId(seller.getSid());
 
+        // 計算每個星級的評論數量
+        long[] starCounts = new long[5];
+        for (int i = 1; i <= 5; i++) {
+            starCounts[i-1] = pService.countCommentsByBuyerrate(i);
+        }
+		
 		// 設定每頁顯示的資料筆數
 		int pageSize = 2;
 
@@ -309,6 +318,8 @@ public class PostController {
 		model.addAttribute("currentPage", sellerComments.getNumber()); // 注意: Spring Data JPA的頁碼從0開始
 		model.addAttribute("totalPages", sellerComments.getTotalPages());
 		model.addAttribute("rating", rating);
+        model.addAttribute("totalComments", totalComments);
+        model.addAttribute("starCounts", starCounts);
 		
 		// 查询已回复的评论 ID 列表，并将其添加到模型中
 	    List<Integer> repliedCommentIds = pService.findRepliedCommentIdsBySellerId(seller.getSid());
@@ -345,5 +356,5 @@ public class PostController {
 
 		return "comment/sellercommentforuser";
 	}
-
+	
 }

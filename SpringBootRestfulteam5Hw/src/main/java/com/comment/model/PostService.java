@@ -94,4 +94,17 @@ public class PostService {
         // 根据卖家ID查询已回复的评论ID列表
         return pRepository.findRepliedCommentIdsBySellerId(sellerId);
     }
+	
+	 // 根据买家评分计算评论数量
+    public long countCommentsByBuyerrate(int buyerrate) {
+        return pRepository.countCommentsByBuyerrate(buyerrate);
+    }
+
+    // 根据商品的卖家ID获取相关评论的数量
+    public long countCommentsBySellerId(int sellerId) {
+        return pRepository.countPostsBySellerId(sellerId);
+    }
+	 
+	 
+	 
 }

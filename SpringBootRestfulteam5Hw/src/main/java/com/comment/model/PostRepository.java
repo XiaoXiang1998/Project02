@@ -51,5 +51,16 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
     @Transactional
     @Query("DELETE FROM Post p WHERE p.commentid = :commentId")
     void deleteByCommentId(@Param("commentId") Integer commentId);
+    
+    
+    @Query(value = "SELECT COUNT(*) FROM post WHERE buyerrate = :buyerrate", nativeQuery = true)
+    long countCommentsByBuyerrate(@Param("buyerrate") int buyerrate);
+    
+    @Query("SELECT COUNT(p) FROM Post p " +
+           "INNER JOIN p.orders o " +
+           "INNER JOIN o.formatgoodId f " +
+           "INNER JOIN f.good g " +
+           "WHERE g.goodsSellerID.sid = :sellerId")
+    long countPostsBySellerId(@Param("sellerId") Integer sellerId);
 
 }

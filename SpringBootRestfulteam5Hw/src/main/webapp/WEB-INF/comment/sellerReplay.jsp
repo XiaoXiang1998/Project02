@@ -171,11 +171,11 @@ body {
 <div class="rating-tab" style="text-align: center; margin-top: 20px;">
     <ul class="nav nav-pills justify-content-center">
         <li class="nav-item">
-            <button class="btn ${rating eq 0 ? 'active' : ''}" onclick="filterByRating(0)">全部</button>
+            <button class="btn ${rating eq 0 ? 'active' : ''}" onclick="filterByRating(0)">全部(${totalComments})</button>
         </li>
         <c:forEach begin="1" end="5" var="i">
             <li class="nav-item">
-                <button class="btn ${rating eq i ? 'active' : ''}" onclick="filterByRating(${i})">${i}顆星</button>
+                <button class="btn ${rating eq i ? 'active' : ''}" onclick="filterByRating(${i})">${i}顆星(${starCounts[i-1]})</button>
             </li>
         </c:forEach>
     </ul>
@@ -303,6 +303,29 @@ $('body').on('submit', '.bootstrap-frm', function() {
         return false;
     }
 });
+
+
+</script>
+
+<script>
+$('body').on(
+		'input',
+		'textarea[id^="replyContent"]',
+		function() {
+			var commentId = $(this).attr('id').replace(
+					'replyContent', '');
+			var text = $(this).val();
+			var charCount = text.length;
+			$('.replyContent' + commentId).text(
+					'輸入的字數:' + charCount + '/100');
+			if (charCount > 100) {
+				$(this).val(text.slice(0, 100));
+				$('.replyContent' + commentId)
+						.text('輸入的字數:100/100');
+			}
+		});
+
+
 </script>
 
 <script>

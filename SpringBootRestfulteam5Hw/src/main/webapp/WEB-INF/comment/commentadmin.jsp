@@ -26,6 +26,7 @@
 	src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/js/lightbox.min.js"></script>
 </head>
 <body class="sb-nav-fixed">
+	<%@ include file="../Order/jsp/allindex.jsp"%>
 	<div id="layoutSidenav">
 		<div id="layoutSidenav_content">
 			<main>

@@ -86,20 +86,6 @@
 									</a>
 								</nav>
 							</div>
-								<a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
-								data-bs-target="#post" aria-expanded="false" aria-controls="collapsePages">
-								<div class="sb-nav-link-icon"><i class="fa-solid fa-pen-to-square"></i></div>
-								評論管理
-								<div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-							</a>
-							<div class="collapse" id="post" aria-labelledby="headingTwo"
-								data-bs-parent="#sidenavAccordion">
-								<nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
-									<a class="nav-link" href="commentadmin">
-										評論詳情
-									</a>
-								</nav>
-							</div>
 						</div>
 					</div>
 				<div class="sb-sidenav-footer">

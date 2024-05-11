@@ -149,14 +149,11 @@
             <div id="layoutSidenav_content">
                 <main>
                     <div class="container-fluid px-4">
-                        <h1 class="mt-4">人員數據</h1>
-                        <ol class="breadcrumb mb-4">
-                            <li class="breadcrumb-item active">員工總覽</li>
-                        </ol>
+                        <h1 class="mt-4">新增會員等級規範</h1>
                         <div class="card mb-4">
                             <div class="card-header">
                                 <i class="fas fa-table me-1"></i>
-                                員工資料
+                                新增規範
                             </div>
                             <div class="card-body">
                                 <form id="editForm" method="post" action="InsertAdmin">

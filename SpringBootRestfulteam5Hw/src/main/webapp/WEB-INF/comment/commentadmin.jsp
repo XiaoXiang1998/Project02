@@ -27,7 +27,8 @@
 </head>
 <body class="sb-nav-fixed">
 	<%@ include file="../Order/jsp/allindex.jsp"%>
-	<div id="layoutSidenav">
+
+	
 		<div id="layoutSidenav_content">
 			<main>
 				<div class="container-fluid px-4">
@@ -106,7 +107,6 @@
 				</div>
 			</footer>
 		</div>
-	</div>
 	<script
 		src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
 		crossorigin="anonymous"></script>

@@ -68,6 +68,11 @@ public class OrderController {
 	@GetMapping("goindex.controller")
 	public String GoIndex(Model m) {
 		m.addAttribute("page","index");
+		MemberBean member =(MemberBean)session.getAttribute("member");
+		List<Notifications> notifications = nService.findByRecipientIdAndReads(member,0);
+		int count = notifications.size();
+		session.setAttribute("count", count);
+		session.setAttribute("notifications", notifications);
 		return "Order/jsp/Index";
 	}
 	
@@ -212,17 +217,26 @@ public class OrderController {
 				order.setOrderStatus((short) 0);
 				order.setCreatedAt(currentDate);
 				order.setModifiedAt(currentDate);
-				oService.insertToOrder(order);
-				
+				Orders o = oService.insertToOrder(order);
 				String goodsName = product.getGood().getGoodsName();
-				
+				int orderId = o.getOrderId();			
+				String buyerName = member.getName();
 				Notifications n = new Notifications();
-				String buyerMessage = "你購買的商品" + goodsName + "已下單";
+				String buyerMessage = "親愛的" + buyerName +"您好，您的訂單" + orderId + "已成立";
+				n.setOrderId(o);
 				n.setRecipientId(member);
 				n.setContent(buyerMessage);
 				n.setSendTime(currentDate);
 				n.setReads(0);
 				nService.sendMessage(n);
+				Notifications n2 = new Notifications();
+				String sellerMessgae = "用戶" + buyerName + "已向你的商品" + goodsName + "下訂單，訂單編號為:" + orderId;
+				n2.setOrderId(o);
+				n2.setRecipientId(seller);
+				n2.setContent(sellerMessgae);
+				n2.setSendTime(currentDate);
+				n2.setReads(0);
+				nService.sendMessage(n2);
 			}
 				cService.clearShopCarByMemberId(memberId);
 				if(paymentMethod == 1) {

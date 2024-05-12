@@ -1,6 +1,7 @@
 package com.sean.model;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.stereotype.Component;
 
@@ -17,6 +18,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
@@ -42,7 +44,10 @@ public class Orders {
 	
 	@OneToOne(fetch = FetchType.LAZY, mappedBy = "orders",cascade = CascadeType.ALL)
 	private Post posts;
-
+	
+	@OneToMany(fetch = FetchType.LAZY,mappedBy = "orderId", cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+    private List<Notifications> notifications;
+	
 	@Column(name = "QUANTITY")
 	private Integer quantity;
 

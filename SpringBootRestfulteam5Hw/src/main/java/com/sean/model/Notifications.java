@@ -27,6 +27,10 @@ public class Notifications {
 	private Integer id;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "ORDERID")
+	private Orders orderId;
+
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "RECIPIENTID")
 	private MemberBean recipientId;
 	
@@ -45,6 +49,14 @@ public class Notifications {
 
 	public void setId(Integer id) {
 		this.id = id;
+	}
+	
+	public Orders getOrderId() {
+		return orderId;
+	}
+
+	public void setOrderId(Orders orderId) {
+		this.orderId = orderId;
 	}
 
 	public MemberBean getRecipientId() {
@@ -79,16 +91,17 @@ public class Notifications {
 		this.reads = reads;
 	}
 
-	public Notifications(MemberBean recipientId, String content, Date sendTime, Integer reads) {
+	public Notifications() {
 		super();
+	}
+
+	public Notifications(Orders orderId, MemberBean recipientId, String content, Date sendTime, Integer reads) {
+		super();
+		this.orderId = orderId;
 		this.recipientId = recipientId;
 		this.content = content;
 		this.sendTime = sendTime;
 		this.reads = reads;
-	}
-
-	public Notifications() {
-		super();
 	}
 
 	

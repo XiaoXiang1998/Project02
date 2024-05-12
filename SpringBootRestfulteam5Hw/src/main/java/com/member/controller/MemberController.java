@@ -4,8 +4,11 @@ import java.io.File;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.time.LocalDate;
+import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +28,7 @@ import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken.Payload;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.gson.GsonFactory;
+import com.member.model.MailService;
 import com.member.model.MemberBean;
 import com.member.model.MemberService;
 
@@ -35,6 +39,9 @@ public class MemberController {
 
 	@Autowired
 	private MemberService mService;
+
+	@Autowired
+	private MailService mailService;
 
 	@Autowired
 	private HttpSession httpSession;
@@ -324,6 +331,22 @@ public class MemberController {
 			System.out.println("Invalid ID token.");
 		}
 		return "失敗";
+	}
+	
+	/*------------------------------------------------Java Mail測試-----------------------------------------------------*/
+	@PostMapping("/MailTest")
+	public ResponseEntity<Map<String, Object>> mailTest(@RequestParam("receivers")Collection<String> receivers,@RequestParam("subject") String subject,@RequestParam("content") String content){
+		Map<String, Object> response = new HashMap<>();
+		try {
+			mailService.sendPlainText(receivers, subject, content);
+			response.put("success", true);
+			response.put("message", "發送成功");
+			return ResponseEntity.ok(response);
+		} catch (Exception e) {
+			response.put("success", false);
+			response.put("message", "發送失敗");
+			return ResponseEntity.badRequest().body(response);
+		}
 	}
 
 }

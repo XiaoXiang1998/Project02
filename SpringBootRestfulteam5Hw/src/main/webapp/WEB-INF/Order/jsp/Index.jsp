@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isErrorPage="true"%>
 <%@ taglib uri="jakarta.tags.core" prefix="c"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
@@ -51,9 +51,11 @@
 										<li class="dropdown-divider"></li>
 									</c:if>
 									<li>
-										<a class="dropdown-item" href="#">${notification.content}
-											<br>
-											<fmt:formatDate value="${notification.sendTime}" pattern="MM月dd日 HH時mm分" />
+										<a class="dropdown-item fs-md" href="#" onclick="readNotification(${notification.id})">${notification.content}
+										<input type="hidden" name="reads" value="${notification.reads}">
+											<div class="text-end">
+												<fmt:formatDate value="${notification.sendTime}" pattern="MM月dd日 HH時mm分" />
+											</div>
 										</a>
 									</li>
 								</c:forEach>
@@ -73,6 +75,15 @@
 		if (errorMessage.innerHTML.trim() === "") {
 			log.innerHTML = "登入";
 		}
+		function readNotification(notificationId) {
+            fetch("readMessage?notificationId=" + notificationId, {
+                method: 'PUT'
+            })
+                .then(response => {
+                	location.reload();
+                })
+        }
+		
 	</script>
 </body>
 

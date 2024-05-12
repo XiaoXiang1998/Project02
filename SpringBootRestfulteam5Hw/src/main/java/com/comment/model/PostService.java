@@ -95,9 +95,8 @@ public class PostService {
         return pRepository.findRepliedCommentIdsBySellerId(sellerId);
     }
 	
-	 // 根据买家评分计算评论数量
-    public long countCommentsByBuyerrate(int buyerrate) {
-        return pRepository.countCommentsByBuyerrate(buyerrate);
+	public long countCommentsBySellerIdAndBuyerrate(int sellerId, int buyerrate) {
+        return pRepository.countCommentsBySellerIdAndBuyerrate(sellerId, buyerrate);
     }
 
     // 根据商品的卖家ID获取相关评论的数量
@@ -105,6 +104,8 @@ public class PostService {
         return pRepository.countPostsBySellerId(sellerId);
     }
 	 
-	 
+    public Page<Post> findRepliedCommentsBySellerId(int sellerId, Pageable pageable) {
+        return pRepository.findRepliedCommentsBySellerId(sellerId, pageable);
+    }
 	 
 }

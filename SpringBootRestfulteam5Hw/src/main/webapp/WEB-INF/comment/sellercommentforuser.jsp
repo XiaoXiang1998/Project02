@@ -74,12 +74,12 @@
 		
 <div class="tab">
     ${avergeScore}
-    <button class="tablinks" onclick="filterComments('all')">全部</button>
-    <button class="tablinks" onclick="filterComments(5)">5顆星</button>
-    <button class="tablinks" onclick="filterComments(4)">4顆星</button>
-    <button class="tablinks" onclick="filterComments(3)">3顆星</button>
-    <button class="tablinks" onclick="filterComments(2)">2顆星</button>
-    <button class="tablinks" onclick="filterComments(1)">1顆星</button>
+<button id="allBtn" class="tablinks active" onclick="filterComments('all')">全部(${totalCommentsCount})</button>
+<button id="fiveStarBtn" class="tablinks" onclick="filterComments(5)">5顆星 (${ratingCounts.get(5)})</button>
+<button id="fourStarBtn" class="tablinks" onclick="filterComments(4)">4顆星 (${ratingCounts.get(4)})</button>
+<button id="threeStarBtn" class="tablinks" onclick="filterComments(3)">3顆星 (${ratingCounts.get(3)})</button>
+<button id="twoStarBtn" class="tablinks" onclick="filterComments(2)">2顆星 (${ratingCounts.get(2)})</button>
+<button id="oneStarBtn" class="tablinks" onclick="filterComments(1)">1顆星 (${ratingCounts.get(1)})</button>
 </div>
 
 		<!-- 循环显示评论 -->
@@ -108,6 +108,7 @@
         <p>${comment.replayconetnt}</p>
     </div>
 </c:forEach>
+
 
 <script>
     // 根据评分级别过滤评论

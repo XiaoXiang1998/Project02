@@ -53,8 +53,13 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
     void deleteByCommentId(@Param("commentId") Integer commentId);
     
     
-    @Query(value = "SELECT COUNT(*) FROM post WHERE buyerrate = :buyerrate", nativeQuery = true)
-    long countCommentsByBuyerrate(@Param("buyerrate") int buyerrate);
+ // 根據賣家ID和買家評分星級查詢相關的評論數量
+    @Query("SELECT COUNT(p) FROM Post p " +
+           "INNER JOIN p.orders o " +
+           "INNER JOIN o.formatgoodId f " +
+           "INNER JOIN f.good g " +
+           "WHERE g.goodsSellerID.sid = :sellerId AND p.buyerrate = :buyerrate")
+    long countCommentsBySellerIdAndBuyerrate(@Param("sellerId") Integer sellerId, @Param("buyerrate") Integer buyerrate);
     
     @Query("SELECT COUNT(p) FROM Post p " +
            "INNER JOIN p.orders o " +
@@ -62,5 +67,8 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
            "INNER JOIN f.good g " +
            "WHERE g.goodsSellerID.sid = :sellerId")
     long countPostsBySellerId(@Param("sellerId") Integer sellerId);
-
+    
+    @Query("SELECT p FROM Post p WHERE p.member.sid = :sellerId AND p.repliedcommentid IS NOT NULL")
+    Page<Post> findRepliedCommentsBySellerId(@Param("sellerId") int sellerId, Pageable pageable);
+   
 }

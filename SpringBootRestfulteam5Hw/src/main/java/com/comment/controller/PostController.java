@@ -5,7 +5,10 @@ import java.io.IOException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -13,8 +16,10 @@ import org.apache.commons.io.FilenameUtils;
 import org.hibernate.sql.Insert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -71,8 +76,8 @@ public class PostController {
 
 		Post post = new Post();
 
-		if (mf != null && !mf.isEmpty()) { // 檢查圖片是否不為空
-			String fileName = UUID.randomUUID().toString(); // 生成唯一的文件名
+		if (mf != null && !mf.isEmpty()) { 
+			String fileName = UUID.randomUUID().toString(); 
 
 			String fileDir = "C:\\team5project\\SpringBootRestfulteam5Hw\\src\\main\\webapp\\WEB-INF\\commentPicture";
 
@@ -80,8 +85,8 @@ public class PostController {
 			if (!fileDirPath.exists()) {
 				fileDirPath.mkdirs();
 			}
-			String fileExtension = FilenameUtils.getExtension(mf.getOriginalFilename()); // 獲取文件擴展名
-			String uploadedFileName = fileName + "." + fileExtension; // 構造完整的文件名
+			String fileExtension = FilenameUtils.getExtension(mf.getOriginalFilename());
+			String uploadedFileName = fileName + "." + fileExtension; 
 
 			File uploadedFile = new File(fileDirPath, uploadedFileName);
 			mf.transferTo(uploadedFile);
@@ -243,7 +248,6 @@ public class PostController {
 			@RequestParam("commentId") Integer commentId, HttpSession session, Model model) {
 		MemberBean member = (MemberBean) session.getAttribute("member");
 
-		// 保存回复内容
 		Post reply = new Post();
 		reply.setReplayconetnt(replyContent);
 		Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
@@ -258,15 +262,12 @@ public class PostController {
 
 		pService.insert(reply);
 
-		// 将已回复评论的ID添加到列表中
-
-		// 更新會員信息
+		
 		MemberBean memberBean = mService.findById(memberId).orElse(null);
 		if (memberBean != null) {
-			// 更新被評論分數和累積次數
 			memberBean.setReviewCount(memberBean.getReviewCount() + 1);
 			memberBean.setCumulativeScore(memberBean.getCumulativeScore() + sellerRate);
-			mService.insertMember(memberBean);// 使用 save 方法來更新會員信息
+			mService.insertMember(memberBean);
 		}
 
 		return "redirect:sellerComments";
@@ -284,36 +285,30 @@ public class PostController {
 	@GetMapping("/sellerComments")
 	public String getsellerComments(Model model, HttpSession session, @RequestParam(defaultValue = "0") int page,
 			@RequestParam(defaultValue = "0") int rating) {
-		// 從會話中獲取當前登入的賣家
 		MemberBean seller = (MemberBean) session.getAttribute("member");
 		System.out.println("ID" + seller.getSid());
 		
-		// 計算全部評論數量
         Long totalComments = pService.countCommentsBySellerId(seller.getSid());
 
-        // 計算每個星級的評論數量
         long[] starCounts = new long[5];
         for (int i = 1; i <= 5; i++) {
-            starCounts[i-1] = pService.countCommentsByBuyerrate(i);
+            starCounts[i-1] = pService.countCommentsBySellerIdAndBuyerrate(seller.getSid(), i);
         }
 		
-		// 設定每頁顯示的資料筆數
 		int pageSize = 2;
 
-		// 使用Pageable對象進行分頁查詢
 		Pageable pageable = PageRequest.of(page, pageSize);
 
 		Page<Post> sellerComments;
 
 		if (rating > 0) {
-			// 根据评分等级筛选评论
+			
 			sellerComments = pService.findPostsBySellerIdAndRating(seller.getSid(), rating, pageable);
 		} else {
-			// 返回全部评论
+			
 			sellerComments = pService.findPostsBySellerId(seller.getSid(), pageable);
 		}
 
-		// 將查詢結果和分頁相關的資訊添加到模型中
 		model.addAttribute("comments", sellerComments.getContent());
 		model.addAttribute("currentPage", sellerComments.getNumber()); // 注意: Spring Data JPA的頁碼從0開始
 		model.addAttribute("totalPages", sellerComments.getTotalPages());
@@ -321,40 +316,72 @@ public class PostController {
         model.addAttribute("totalComments", totalComments);
         model.addAttribute("starCounts", starCounts);
 		
-		// 查询已回复的评论 ID 列表，并将其添加到模型中
 	    List<Integer> repliedCommentIds = pService.findRepliedCommentIdsBySellerId(seller.getSid());
 	    model.addAttribute("repliedCommentIds", repliedCommentIds);
-		// 返回視圖名稱
 		
 		
 		
 		return "comment/sellerReplay";
-	}
+	}	
 
 	@GetMapping("/sellerCommentsForUser")
 	public String getSellerCommentsForUser(Model model, HttpSession session) {
-		// 从 session 中获取当前登录的用户信息
 		MemberBean user = (MemberBean) session.getAttribute("member");
 		int reviewCount = user.getReviewCount();
 		int cumulativeScore = user.getCumulativeScore();
 
 		int avergeScore = cumulativeScore / reviewCount;
 
-		// 获取当前登录用户的所有评论
 		List<Post> userComments = user.getPosts();
 
 		List<Post> sellerComments = new ArrayList<>();
 
-		// 遍历用户的评论列表，查找卖家对该评论的回复
 		for (Post comment : userComments) {
 			Integer userCommentId = comment.getCommentid();
 			List<Post> sellerReplies = pService.getSellerCommentsForUser(userCommentId);
 			sellerComments.addAll(sellerReplies);
 		}
+		
+	    List<Integer> ratingCounts = new ArrayList<>(Collections.nCopies(6, 0)); 
+	    for (Post comment : sellerComments) {
+	        int rating = comment.getSellerrate();
+	        ratingCounts.set(rating, ratingCounts.get(rating) + 1); 
+	    }
+		
+	    int totalCommentsCount = sellerComments.size();
+	    
 		model.addAttribute("avergeScore", avergeScore);
 		model.addAttribute("sellerComments", sellerComments);
+	    model.addAttribute("ratingCounts", ratingCounts);
+	    model.addAttribute("totalCommentsCount", totalCommentsCount);
 
 		return "comment/sellercommentforuser";
 	}
+	
+	@GetMapping("/repliedComments")
+    public String getRepliedComments(Model model, HttpSession session, @RequestParam(defaultValue = "0") int page) {
+        MemberBean seller = (MemberBean) session.getAttribute("member");
+        int sellerId = seller.getSid();
+
+        int pageSize = 3;
+        
+        Pageable pageable = PageRequest.of(page, pageSize);
+
+        Page<Post> repliedComments = pService.findRepliedCommentsBySellerId(sellerId, pageable);
+        
+        List<Post> sellerCommentsForUser = new ArrayList<>();
+        
+        for (Post comment : repliedComments.getContent()) {
+            Integer userCommentId = comment.getCommentid();
+            List<Post> sellerReplies = pService.getSellerCommentsForUser(userCommentId);
+            sellerCommentsForUser.addAll(sellerReplies);
+        }
+        model.addAttribute("repliedComments", repliedComments.getContent());
+        model.addAttribute("currentPage", repliedComments.getNumber()); // 注意：Spring Data JPA的页码从0开始
+        model.addAttribute("totalPages", repliedComments.getTotalPages());
+        model.addAttribute("sellerCommentsForUser", sellerCommentsForUser);
+
+        return "comment/repliedComments";
+    }
 	
 }

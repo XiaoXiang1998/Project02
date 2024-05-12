@@ -38,7 +38,7 @@
 				</li>
 				<li class="nav-item"><a class="nav-link" href="#">查看所有買家的評論</a>
 				</li>
-				<li class="nav-item"><a class="nav-link" href="#">查看我的回覆</a>
+				<li class="nav-item"><a class="nav-link" href="repliedComments">查看我的回覆</a>
 				</li>
 				<li class="nav-item"><a class="nav-link"
 					href="returnToControlUI">返回管理介面</a></li>

@@ -71,4 +71,7 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
     @Query("SELECT p FROM Post p WHERE p.member.sid = :sellerId AND p.repliedcommentid IS NOT NULL")
     Page<Post> findRepliedCommentsBySellerId(@Param("sellerId") int sellerId, Pageable pageable);
    
+    
+    @Query("SELECT p FROM Post p WHERE p.commentid IN (SELECT DISTINCT repliedcommentid FROM Post WHERE repliedcommentid IS NOT NULL)")
+    List<Post> findBuyerCommentsRepliedBySeller();
 }

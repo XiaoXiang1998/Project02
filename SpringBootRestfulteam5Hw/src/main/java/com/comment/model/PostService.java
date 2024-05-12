@@ -107,5 +107,9 @@ public class PostService {
     public Page<Post> findRepliedCommentsBySellerId(int sellerId, Pageable pageable) {
         return pRepository.findRepliedCommentsBySellerId(sellerId, pageable);
     }
+    
+    public List<Post> findBuyerCommentsRepliedBySeller() {
+        return pRepository.findBuyerCommentsRepliedBySeller();
+    }
 	 
 }

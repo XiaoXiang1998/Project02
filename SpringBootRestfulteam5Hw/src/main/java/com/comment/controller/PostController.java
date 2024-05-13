@@ -369,13 +369,7 @@ public class PostController {
 
         Page<Post> repliedComments = pService.findRepliedCommentsBySellerId(sellerId, pageable);
         
-        List<Post> sellerCommentsForUser = new ArrayList<>();
-        
-        for (Post comment : repliedComments.getContent()) {
-            Integer userCommentId = comment.getCommentid();
-            List<Post> sellerReplies = pService.getSellerCommentsForUser(userCommentId);
-            sellerCommentsForUser.addAll(sellerReplies);
-        }
+        List<Post> sellerCommentsForUser = pService.findBuyerCommentsRepliedBySeller();
         model.addAttribute("repliedComments", repliedComments.getContent());
         model.addAttribute("currentPage", repliedComments.getNumber()); // 注意：Spring Data JPA的页码从0开始
         model.addAttribute("totalPages", repliedComments.getTotalPages());

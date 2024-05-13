@@ -10,7 +10,7 @@ import com.member.model.MemberBean;
 
 public interface NotificationsRepository extends JpaRepository<Notifications,Integer> {
 	
-	public List<Notifications> findByRecipientIdAndReads(MemberBean recipientId,Integer reads);
+	public List<Notifications> findByRecipientId(MemberBean recipientId);
 	
 	@Modifying
 	@Query(value = "update Notifications set reads = 1 where id = ?1")

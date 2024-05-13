@@ -49,6 +49,25 @@
     background-color: #f0f0f0;
 }
 
+.time-and-details {
+        flex-grow: 1; /* 彈性增長，以填滿可用空間 */
+        display: flex;
+        flex-direction: row;
+    }
+    .order-details {
+        margin-right: 10px; /* 增加右邊距，使得各項目之間有一定間距 */
+    }
+    
+    .time{
+	    margin-right: 5px; /* 調整時間和 | 之間的間距 */
+	
+}
+
+.separator {
+    margin-right: 5px; /* 調整右側間距 */
+    margin-left: 5px; /* 調整左側間距 */
+}
+
 </style>
 </head>
 <body>
@@ -78,10 +97,15 @@
                 <div class="buyer-comment">
                     <p> ${buyer.member.name}</p>
                     <p> ${buyer.commentcontent}</p>
-                       <c:if test="${not empty buyer.commenttime}">
+                   <div class="time-and-details">
+                <c:if test="${not empty buyer.commenttime}">
                         <fmt:formatDate value="${buyer.commenttime}" pattern="yyyy-MM-dd HH:mm" var="formattedCommentTime" />
                         <p class="time">${formattedCommentTime}</p>
                     </c:if>
+                    <p class="order-details"><span class="separator">|</span>訂單編號: ${buyer.orders.orderId}</p>
+                    <p class="order-details">規格尺寸: ${buyer.orders.formatgoodId.goodSize}</p>
+                    <p class="order-details">商品名稱: ${buyer.orders.formatgoodId.good.goodsName}</p>
+                </div>
                     <!-- 如果存在产品图片，则显示 -->
                      <c:choose>
                     <c:when test="${not empty buyer.productphoto}">

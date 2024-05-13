@@ -4,8 +4,13 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -282,47 +287,47 @@ public class PostController {
 			return "comment/commentadmin";
 		}
 
-	@GetMapping("/sellerComments")
-	public String getsellerComments(Model model, HttpSession session, @RequestParam(defaultValue = "0") int page,
-			@RequestParam(defaultValue = "0") int rating) {
-		MemberBean seller = (MemberBean) session.getAttribute("member");
-		System.out.println("ID" + seller.getSid());
-		
-        Long totalComments = pService.countCommentsBySellerId(seller.getSid());
-
-        long[] starCounts = new long[5];
-        for (int i = 1; i <= 5; i++) {
-            starCounts[i-1] = pService.countCommentsBySellerIdAndBuyerrate(seller.getSid(), i);
-        }
-		
-		int pageSize = 2;
-
-		Pageable pageable = PageRequest.of(page, pageSize);
-
-		Page<Post> sellerComments;
-
-		if (rating > 0) {
+		@GetMapping("/sellerComments")
+		public String getsellerComments(Model model, HttpSession session, @RequestParam(defaultValue = "0") int page,
+				@RequestParam(defaultValue = "0") int rating) {
+			MemberBean seller = (MemberBean) session.getAttribute("member");
+			System.out.println("ID" + seller.getSid());
 			
-			sellerComments = pService.findPostsBySellerIdAndRating(seller.getSid(), rating, pageable);
-		} else {
-			
-			sellerComments = pService.findPostsBySellerId(seller.getSid(), pageable);
-		}
+	        Long totalComments = pService.countCommentsBySellerId(seller.getSid());
 
-		model.addAttribute("comments", sellerComments.getContent());
-		model.addAttribute("currentPage", sellerComments.getNumber()); // 注意: Spring Data JPA的頁碼從0開始
-		model.addAttribute("totalPages", sellerComments.getTotalPages());
-		model.addAttribute("rating", rating);
-        model.addAttribute("totalComments", totalComments);
-        model.addAttribute("starCounts", starCounts);
-		
-	    List<Integer> repliedCommentIds = pService.findRepliedCommentIdsBySellerId(seller.getSid());
-	    model.addAttribute("repliedCommentIds", repliedCommentIds);
-		
-		
-		
-		return "comment/sellerReplay";
-	}	
+	        long[] starCounts = new long[5];
+	        for (int i = 1; i <= 5; i++) {
+	            starCounts[i-1] = pService.countCommentsBySellerIdAndBuyerrate(seller.getSid(), i);
+	        }
+			
+			int pageSize = 2;
+
+			Pageable pageable = PageRequest.of(page, pageSize);
+
+			Page<Post> sellerComments;
+
+			if (rating > 0) {
+				
+				sellerComments = pService.findPostsBySellerIdAndRating(seller.getSid(), rating, pageable);
+			} else {
+				
+				sellerComments = pService.findPostsBySellerId(seller.getSid(), pageable);
+			}
+
+			model.addAttribute("comments", sellerComments.getContent());
+			model.addAttribute("currentPage", sellerComments.getNumber()); // 注意: Spring Data JPA的頁碼從0開始
+			model.addAttribute("totalPages", sellerComments.getTotalPages());
+			model.addAttribute("rating", rating);
+	        model.addAttribute("totalComments", totalComments);
+	        model.addAttribute("starCounts", starCounts);
+			
+		    List<Integer> repliedCommentIds = pService.findRepliedCommentIdsBySellerId(seller.getSid());
+		    model.addAttribute("repliedCommentIds", repliedCommentIds);
+			
+			
+			
+			return "comment/sellerReplay";
+		}	
 
 	@GetMapping("/sellerCommentsForUser")
 	public String getSellerCommentsForUser(Model model, HttpSession session) {
@@ -377,5 +382,6 @@ public class PostController {
 
         return "comment/repliedComments";
     }
+	
 	
 }

@@ -1,10 +1,15 @@
 package com.comment.model;
 
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -111,5 +116,10 @@ public class PostService {
     public List<Post> findBuyerCommentsRepliedBySeller() {
         return pRepository.findBuyerCommentsRepliedBySeller();
     }
-	 
+    
+
+    public Page<Post> searchCommentsByConditions(int sellerId, String productName, String productSpec, String userName, Pageable pageable) {
+        // 调用自定义的查询方法，包含卖家ID作为查询条件
+        return pRepository.searchByConditions(sellerId, productName, productSpec, userName, pageable);
+    }
 }

@@ -20,8 +20,12 @@ public class NotificationsService {
 		return nRops.save(notification);
 	}
 	
-	public List<Notifications> findByRecipientId(MemberBean recipientId){
-		return nRops.findByRecipientId(recipientId);
+	public Integer noReadCounts(MemberBean recipientId) {
+		return nRops.noReadCounts(recipientId);
+	}
+	
+	public List<Notifications> findByRecipientIdOrderBySendTimeDesc(MemberBean recipientId){
+		return nRops.findByRecipientIdOrderBySendTimeDesc(recipientId);
 	}
 	
 	public void readMessage(Integer Id) {

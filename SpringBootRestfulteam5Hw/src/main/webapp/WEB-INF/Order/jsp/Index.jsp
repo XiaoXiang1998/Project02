@@ -40,26 +40,30 @@
 						<span class="nav-link">${member.name}</span>
 					</li>
 					<li class="nav-item">
-						<div class="dropdown">
+						<div class="dropdown position-static">
 							<button class="btn btn-primary position-relative dropdown-toggle" type="button" id="notificationsDropdown" data-bs-toggle="dropdown" aria-expanded="false">
 								<i class="fa-regular fa-bell"></i>
 								<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">${count}</span>
 							</button>
-							<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notificationsDropdown">
-								<c:forEach var="notification" items="${notifications}" varStatus="loop">
-									<c:if test="${loop.index != 0}">
-										<li class="dropdown-divider"></li>
-									</c:if>
-									<li>
-										<a class="dropdown-item fs-md" href="#" onclick="readNotification(${notification.id})">${notification.content}
-										<input type="hidden" name="reads" value="${notification.reads}">
-											<div class="text-end">
-												<fmt:formatDate value="${notification.sendTime}" pattern="MM月dd日 HH時mm分" />
-											</div>
-										</a>
-									</li>
-								</c:forEach>
-							</ul>
+							<div class="dropdown-menu dropdown-menu-end" aria-labelledby="notificationsDropdown">
+								<ul class="list-group" style="max-height: 615px; overflow-y: auto;">
+									<c:forEach var="notification" items="${notifications}" varStatus="loop">
+										<c:if test="${loop.index != 0}">
+											<li class="dropdown-divider"></li>
+										</c:if>
+										<li>
+											<a class="dropdown-item fs-md ${notification.reads == 1 ? 'text-muted' : 'fw-bold'}" href="#" onclick="readNotification(${notification.id})">
+												<img src="${notification.orderId.formatgoodId.goodImagePath}" alt="商品图片" style="max-width: 50px; max-height: 50px;">
+												${notification.content}
+												<input type="hidden" name="reads" value="${notification.reads}">
+												<div class="text-end">
+													<fmt:formatDate value="${notification.sendTime}" pattern="MM月dd日 HH時mm分" />
+												</div>
+											</a>
+										</li>
+									</c:forEach>
+								</ul>
+							</div>
 						</div>
 					</li>
 					<li class="nav-item">

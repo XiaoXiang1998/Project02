@@ -65,6 +65,11 @@ public class MemberService {
 		return memRepos.selectByPhone(phone);
 	}
 	
+	/*查詢ID*/
+	public List<MemberBean> selectById(Integer id){
+		return memRepos.selectById(id);
+	}
+	
 	public Optional<MemberBean> findByEmail(String email){
 		return memRepos.findByEmail(email);
 	}
@@ -134,5 +139,4 @@ public class MemberService {
 	public Integer registrationCount(Integer year,Integer month) { 
 		return memRepos.registrationCount(year, month);
 	}
-
 }

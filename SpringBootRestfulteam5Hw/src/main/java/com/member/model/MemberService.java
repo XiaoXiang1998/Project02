@@ -65,6 +65,10 @@ public class MemberService {
 		return memRepos.selectByPhone(phone);
 	}
 	
+	public Optional<MemberBean> findByEmail(String email){
+		return memRepos.findByEmail(email);
+	}
+	
 	/*提供登入Session用資訊*/
 	public MemberBean selectByAccountBean(String account) {
 		return memRepos.selectByAccountBean(account);
@@ -86,7 +90,6 @@ public class MemberService {
 	}
 	
 	public Optional<MemberBean> findById(Integer memberId) {
-		
 		return memRepos.findById(memberId);
 	}
 /*------------------------------------------------檢視機制-----------------------------------------------------*/		

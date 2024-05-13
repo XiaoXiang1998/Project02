@@ -41,6 +41,10 @@ public interface MemberRepository extends JpaRepository<MemberBean, Integer> {
 	@Query(value = "SELECT * FROM members WHERE account = :account",nativeQuery = true)
 	public Optional<MemberBean> findByAccount(String account);
 	
+	/*檢查會員信箱是否存在，用於忘記密碼使用*/
+	@Query(value = "SELECT * FROM members WHERE email = :email",nativeQuery = true)
+	public Optional<MemberBean> findByEmail(String email);
+	
 	/*建構會員等級圖表*/
 	@Query(value = "SELECT COUNT(*) FROM members WHERE level = :level",nativeQuery = true)
 	public Integer headcount(Integer level);

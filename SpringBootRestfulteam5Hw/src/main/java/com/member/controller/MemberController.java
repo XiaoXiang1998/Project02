@@ -4,11 +4,15 @@ import java.io.File;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -31,7 +35,11 @@ import com.google.api.client.json.gson.GsonFactory;
 import com.member.model.MailService;
 import com.member.model.MemberBean;
 import com.member.model.MemberService;
+import com.member.model.ResetTokenBean;
+import com.member.model.ResetTokenService;
+import com.util.tokenGenerator.TokenService;
 
+import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpSession;
 
 @Controller
@@ -46,12 +54,19 @@ public class MemberController {
 	@Autowired
 	private HttpSession httpSession;
 
-	// http://localhost:8080/ezbuy.com
+	@Autowired
+	private ResetTokenService rtService;
+	
+	@Autowired
+	private TokenService tokenService;
+
+	// http://localhost:8081/ezbuy.com
 	@GetMapping("/ezbuy.com")
 	public String loginPage() {
 		return "Login";
 	}
 
+	// http://localhost:8081/ezbuy.admin.com
 	@GetMapping("/ezbuy.admin.com")
 	public String backStage() {
 		return "BackStageLogin";
@@ -117,8 +132,8 @@ public class MemberController {
 			@RequestParam("reviewCount") Integer reviewCount, @RequestParam("cumulativeScore") Integer cumulativeScore,
 			@RequestParam("totalSalesAmount") Integer totalSalesAmount, @RequestParam("level") Integer level,
 			@RequestParam("thirdPartyProvider") String thirdPartyProvider,
-			@RequestParam("registrationTime") LocalDate registrationTime, @RequestParam(name = "oldPath", required = false) String op)
-			throws IllegalStateException, IOException {
+			@RequestParam("registrationTime") LocalDate registrationTime,
+			@RequestParam(name = "oldPath", required = false) String op) throws IllegalStateException, IOException {
 
 		String fileDir = "C:/team5project/SpringBootRestfulteam5Hw/src/main/resources/static/UsersPic";
 
@@ -248,10 +263,9 @@ public class MemberController {
 		return null;
 	}
 
-	@GetMapping("/test01")
-	public ResponseEntity<List<MemberBean>> test() {
-		List<MemberBean> members = mService.getAll();
-		return ResponseEntity.ok(members);
+	@GetMapping("/forgotPassword")
+	public String turnToforgotPassword() {
+		return "/member/ForgetPassword";
 	}
 
 	/*------------------------------------------------第三方登入測試-----------------------------------------------------*/
@@ -332,21 +346,117 @@ public class MemberController {
 		}
 		return "失敗";
 	}
+
+	/*------------------------------------------------忘記密碼功能-----------------------------------------------------*/
 	
-	/*------------------------------------------------Java Mail測試-----------------------------------------------------*/
-	@PostMapping("/MailTest")
-	public ResponseEntity<Map<String, Object>> mailTest(@RequestParam("receivers")Collection<String> receivers,@RequestParam("subject") String subject,@RequestParam("content") String content){
+	/*創建忘記密碼的紀錄發送mail且紀錄資料庫*/
+	@PostMapping("/forgot-password")
+	public ResponseEntity<Map<String, Object>> forgetPassword(@RequestParam("email") String email) throws MessagingException {
 		Map<String, Object> response = new HashMap<>();
-		try {
-			mailService.sendPlainText(receivers, subject, content);
+
+		/* 紀錄當前時間 */
+		LocalDateTime now = LocalDateTime.now();
+		
+		/* 創建一個Optional物件 */
+		Optional<MemberBean> optionalMember = mService.findByEmail(email);
+		
+		/* 驗證此email是否存在並回傳布林值 */
+		boolean exist = optionalMember.isPresent();
+		
+		/*取得token*/
+		String token = tokenService.generateToken();
+		
+		if (exist) {
+			
+			/* 如果此電子信箱有人使用，順便建立memberBean物件以利後續作業 */
+			MemberBean member = optionalMember.get();
+			
+			/* 創建一個忘記密碼的物件 */
+			ResetTokenBean rtBean = new ResetTokenBean();
+			
+			/* 存入用戶id */
+			rtBean.setId(member.getSid());
+			
+			/* 將token設定進去 */
+			rtBean.setToken(token);
+			
+			/*設定當前的時間*/
+			rtBean.setCreated_at(now);
+
+			/*新增忘記密碼資料到資料庫*/
+			rtService.inserForgetPassword(rtBean);
+			
+			mailService.sendResetPasswordEmail(email, token);
+			System.out.println("信件已傳送");
+			
 			response.put("success", true);
-			response.put("message", "發送成功");
+			response.put("message", "重置密碼信件已發送到您的信箱");
 			return ResponseEntity.ok(response);
-		} catch (Exception e) {
+		} else {
 			response.put("success", false);
-			response.put("message", "發送失敗");
+			response.put("message", "此電子信箱不存在");
 			return ResponseEntity.badRequest().body(response);
 		}
 	}
-
+	
+	@PostMapping("/reset-password")
+	public ResponseEntity<Map<String, Object>> resetPassword(@RequestParam("token") String token){
+		Map<String, Object> response = new HashMap<>();
+		
+		/* 紀錄當前時間 */
+		LocalDateTime now = LocalDateTime.now();
+		
+		/* 創建一個Optional物件 */
+		Optional<ResetTokenBean> optionalToken = rtService.findByToken(token);
+		
+		/* 驗證此token是否存在並回傳布林值 */
+		boolean exist = optionalToken.isPresent();
+		
+		if(exist) {
+			/*如果此資料存在，創建他的bean物件*/
+			ResetTokenBean rtBean = optionalToken.get();
+			
+			/*紀錄此筆ID*/
+			Integer thisID = rtBean.getId();
+			
+			/*抓取創建時間*/
+			LocalDateTime harvestTime = rtBean.getCreated_at();
+			
+			/*抓取此token資料使否使用過*/
+			boolean used = rtBean.isUsed();
+			
+			/*取得當前時間與創建時間之間的時間差*/
+			long minutesDifference = ChronoUnit.MINUTES.between(harvestTime,now);
+			
+			/*判斷時間差是否大於15*/
+			boolean timeOut = minutesDifference < 15;
+			
+			if( used == false) {
+				if(timeOut == true) {
+					response.put("success", true);
+					response.put("message", "即將跳轉頁面");
+					rtService.deleteForgetPassword(thisID) ;
+					return ResponseEntity.ok(response);
+				} else { 
+					response.put("success", false);
+					response.put("message", "憑證已失效");
+					rtService.deleteForgetPassword(thisID) ;
+					return ResponseEntity.badRequest().body(response);
+				}
+				
+			} else {
+				response.put("success", false);
+				response.put("message", "此令牌已經無法使用");
+				rtService.deleteForgetPassword(thisID) ;
+				return ResponseEntity.badRequest().body(response);
+			}
+		} else {
+			response.put("success", false);
+			response.put("message", "此令牌不存在");
+			return ResponseEntity.badRequest().body(response);
+		}
+		
+		
+	}
+	
 }

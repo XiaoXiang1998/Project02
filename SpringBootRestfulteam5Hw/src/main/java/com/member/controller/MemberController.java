@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
@@ -56,7 +57,7 @@ public class MemberController {
 
 	@Autowired
 	private ResetTokenService rtService;
-	
+
 	@Autowired
 	private TokenService tokenService;
 
@@ -348,47 +349,50 @@ public class MemberController {
 	}
 
 	/*------------------------------------------------忘記密碼功能-----------------------------------------------------*/
-	
-	/*創建忘記密碼的紀錄發送mail且紀錄資料庫*/
+
+	/* 創建忘記密碼的紀錄發送mail且紀錄資料庫 */
 	@PostMapping("/forgot-password")
-	public ResponseEntity<Map<String, Object>> forgetPassword(@RequestParam("email") String email) throws MessagingException {
+	public ResponseEntity<Map<String, Object>> forgetPassword(@RequestParam("email") String email)
+			throws MessagingException {
 		Map<String, Object> response = new HashMap<>();
 
 		/* 紀錄當前時間 */
 		LocalDateTime now = LocalDateTime.now();
-		
+
 		/* 創建一個Optional物件 */
 		Optional<MemberBean> optionalMember = mService.findByEmail(email);
-		
+
 		/* 驗證此email是否存在並回傳布林值 */
 		boolean exist = optionalMember.isPresent();
-		
-		/*取得token*/
+
+		/* 取得token */
 		String token = tokenService.generateToken();
-		
+
 		if (exist) {
-			
+
 			/* 如果此電子信箱有人使用，順便建立memberBean物件以利後續作業 */
 			MemberBean member = optionalMember.get();
-			
+
 			/* 創建一個忘記密碼的物件 */
 			ResetTokenBean rtBean = new ResetTokenBean();
+
+			System.out.println("忘記密碼的會員編號: " + member.getSid());
 			
 			/* 存入用戶id */
-			rtBean.setId(member.getSid());
-			
+			rtBean.setUser_id(member.getSid());
+
 			/* 將token設定進去 */
 			rtBean.setToken(token);
-			
-			/*設定當前的時間*/
+
+			/* 設定當前的時間 */
 			rtBean.setCreated_at(now);
 
-			/*新增忘記密碼資料到資料庫*/
+			/* 新增忘記密碼資料到資料庫 */
 			rtService.inserForgetPassword(rtBean);
-			
+
 			mailService.sendResetPasswordEmail(email, token);
 			System.out.println("信件已傳送");
-			
+
 			response.put("success", true);
 			response.put("message", "重置密碼信件已發送到您的信箱");
 			return ResponseEntity.ok(response);
@@ -398,65 +402,63 @@ public class MemberController {
 			return ResponseEntity.badRequest().body(response);
 		}
 	}
-	
-	@PostMapping("/reset-password")
-	public ResponseEntity<Map<String, Object>> resetPassword(@RequestParam("token") String token){
-		Map<String, Object> response = new HashMap<>();
-		
+
+	@GetMapping("/reset-password")
+	public String resetPassword(@RequestParam("token") String token) {
+
 		/* 紀錄當前時間 */
 		LocalDateTime now = LocalDateTime.now();
-		
+
 		/* 創建一個Optional物件 */
 		Optional<ResetTokenBean> optionalToken = rtService.findByToken(token);
-		
+
 		/* 驗證此token是否存在並回傳布林值 */
 		boolean exist = optionalToken.isPresent();
-		
-		if(exist) {
-			/*如果此資料存在，創建他的bean物件*/
+
+		if (exist) {
+			/* 如果此資料存在，創建他的bean物件 */
 			ResetTokenBean rtBean = optionalToken.get();
-			
-			/*紀錄此筆ID*/
+
+			/* 設定session提供後續作使用 */
+			httpSession.setAttribute("forgetMember", rtBean);
+
+			/* 紀錄此筆ID */
 			Integer thisID = rtBean.getId();
-			
-			/*抓取創建時間*/
+
+			/* 抓取創建時間 */
 			LocalDateTime harvestTime = rtBean.getCreated_at();
-			
-			/*抓取此token資料使否使用過*/
+
+			/* 抓取此token資料使否使用過 */
 			boolean used = rtBean.isUsed();
-			
-			/*取得當前時間與創建時間之間的時間差*/
-			long minutesDifference = ChronoUnit.MINUTES.between(harvestTime,now);
-			
-			/*判斷時間差是否大於15*/
+
+			/* 取得當前時間與創建時間之間的時間差 */
+			long minutesDifference = ChronoUnit.MINUTES.between(harvestTime, now);
+
+			/* 判斷時間差是否大於15 */
 			boolean timeOut = minutesDifference < 15;
-			
-			if( used == false) {
-				if(timeOut == true) {
-					response.put("success", true);
-					response.put("message", "即將跳轉頁面");
-					rtService.deleteForgetPassword(thisID) ;
-					return ResponseEntity.ok(response);
-				} else { 
-					response.put("success", false);
-					response.put("message", "憑證已失效");
-					rtService.deleteForgetPassword(thisID) ;
-					return ResponseEntity.badRequest().body(response);
-				}
-				
+
+			if (timeOut == true) {
+				rtService.deleteForgetPassword(thisID);
+				return "/member/ResetPassword";
 			} else {
-				response.put("success", false);
-				response.put("message", "此令牌已經無法使用");
-				rtService.deleteForgetPassword(thisID) ;
-				return ResponseEntity.badRequest().body(response);
+				rtService.deleteForgetPassword(thisID);
+				return "/member/TimeOut";
 			}
 		} else {
-			response.put("success", false);
-			response.put("message", "此令牌不存在");
-			return ResponseEntity.badRequest().body(response);
+			return "/member/NotExist";
 		}
-		
-		
+
 	}
 	
+	@PostMapping("/memberResetPassword")
+	public String memberResetPassword(@RequestParam("password") String password,@SessionAttribute("forgetMember") ResetTokenBean forgetMember) {
+		Integer sid = forgetMember.getUser_id();
+		System.out.println("會員ID: " + sid);
+		Optional<MemberBean> forgetPasswordMember = mService.findById(sid);
+		MemberBean member = forgetPasswordMember.get();
+		member.setPassword(password);
+		mService.update(member);
+		return "Login";
+	}
+
 }

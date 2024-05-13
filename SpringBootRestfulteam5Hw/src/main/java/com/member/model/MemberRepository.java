@@ -29,6 +29,10 @@ public interface MemberRepository extends JpaRepository<MemberBean, Integer> {
 	@Query(value = "SELECT * FROM members WHERE account = :account",nativeQuery = true)
 	public List<MemberBean> selectByAccount(String account);
 	
+	/*查詢ID*/
+	@Query(value = "SELECT * FROM members WHERE sid = :sid",nativeQuery = true)
+	public List<MemberBean> selectById(Integer sid);
+	
 	/*查詢電話*/
 	@Query(value = "SELECT * FROM members WHERE phone = :phone",nativeQuery = true)
 	public List<MemberBean> selectByPhone(String phone);
@@ -52,4 +56,5 @@ public interface MemberRepository extends JpaRepository<MemberBean, Integer> {
 	/*搜尋註冊人數*/
 	@Query(value = "SELECT COUNT(*) FROM members WHERE YEAR(registrationTime) = :year AND MONTH(registrationTime) = :month",nativeQuery = true)
 	public Integer registrationCount(Integer year ,Integer month);
+	
 }

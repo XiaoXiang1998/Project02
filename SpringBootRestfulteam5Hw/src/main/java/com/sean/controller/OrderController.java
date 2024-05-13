@@ -13,6 +13,7 @@ import java.util.Optional;
 import java.net.URLEncoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -71,8 +72,8 @@ public class OrderController {
 	public String GoIndex(Model m) {
 		m.addAttribute("page","index");
 		MemberBean member =(MemberBean)session.getAttribute("member");
-		List<Notifications> notifications = nService.findByRecipientId(member);
-		int count = notifications.size();
+		List<Notifications> notifications = nService.findByRecipientIdOrderBySendTimeDesc(member);
+		Integer count = nService.noReadCounts(member);
 		session.setAttribute("count", count);
 		session.setAttribute("notifications", notifications);
 		return "Order/jsp/Index";
@@ -227,7 +228,7 @@ public class OrderController {
 				int orderId = o.getOrderId();			
 				String buyerName = member.getName();
 				Notifications n = new Notifications();
-				String buyerMessage = "親愛的" + buyerName +"您好，您的訂單" + orderId + "已成立";
+				String buyerMessage = "親愛的 <span style='color: blue;'>" + buyerName + "</span> 您好，您的訂單 <span style='color: red;'>" + orderId + "</span> 已成立";
 				n.setOrderId(o);
 				n.setRecipientId(member);
 				n.setContent(buyerMessage);
@@ -235,7 +236,7 @@ public class OrderController {
 				n.setReads(0);
 				nService.sendMessage(n);
 				Notifications n2 = new Notifications();
-				String sellerMessgae = "用戶" + buyerName + "已向你的商品" + goodsName + "下訂單，訂單編號為:" + orderId;
+				String sellerMessgae = "用戶 <span style='color: blue;'>" + buyerName + "</span> 已向你的商品 <span style='color: green;'>" + goodsName + "</span> 下訂單，訂單編號為: <span style='color: red;'>" + orderId + "</span>";
 				n2.setOrderId(o);
 				n2.setRecipientId(seller);
 				n2.setContent(sellerMessgae);
@@ -307,11 +308,35 @@ public class OrderController {
 	
 	
 	@PutMapping("fakeDelete.controller")
-	public void DeleteOrder(@RequestParam("orderId") String orderIdStr,
+	public void DeleteOrder(@RequestParam("orderId") Orders order,
 			Model m) {
-		int orderId = Integer.parseInt(orderIdStr);
+		int orderId = order.getOrderId();
 		oService.cancelOrderById(orderId);
-
+		Date currentDate = new Date();
+		Integer buyerId = order.getBuyerId().getSid();
+		String buyerName = order.getBuyerId().getName();
+		Integer sellerId = order.getSellerId().getSid();
+		Optional<MemberBean> members = mService.findById(buyerId);
+		MemberBean member = members.get();
+		Optional<MemberBean> members2 = mService.findById(sellerId);
+		MemberBean seller = members2.get();
+		
+		Notifications n = new Notifications();
+		String buyerMessage = "親愛的" + buyerName +"您好，您的訂單編號為:" + orderId + "的訂單已成功取消";
+		n.setOrderId(order);
+		n.setRecipientId(member);
+		n.setContent(buyerMessage);
+		n.setSendTime(currentDate);
+		n.setReads(0);
+		nService.sendMessage(n);
+		Notifications n2 = new Notifications();
+		String sellerMessgae = "用戶" + buyerName + "已取消編號為:" + orderId + "的訂單";
+		n2.setOrderId(order);
+		n2.setRecipientId(seller);
+		n2.setContent(sellerMessgae);
+		n2.setSendTime(currentDate);
+		n2.setReads(0);
+		nService.sendMessage(n2);
 	}
 	
 	@PutMapping("updateOrder.controller")

@@ -10,9 +10,13 @@ import com.member.model.MemberBean;
 
 public interface NotificationsRepository extends JpaRepository<Notifications,Integer> {
 	
-	public List<Notifications> findByRecipientId(MemberBean recipientId);
+	public List<Notifications> findByRecipientIdOrderBySendTimeDesc(MemberBean recipientId);
+	
+	@Query(value = "select count(*) from Notifications where recipientId = ?1 And reads = 0")
+	public Integer noReadCounts(MemberBean recipientId);
+	
 	
 	@Modifying
-	@Query(value = "update Notifications set reads = 1 where id = ?1")
+	@Query(value = "update Notifications set reads = 1 where id = ?1 ")
 	public void readMessage(Integer Id);
 }

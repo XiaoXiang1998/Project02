@@ -1,17 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 </head>
+
 <body>
-    
+    <div id="test1">HI 你好</div>
+    <div id="test2">我是游能佑</div>
+
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script>
-        let input0 = document.createElement("input");
-        input0.setAttribute("type","text");
-        $('#test').after(input0);
+        let div1 = document.createElement("div");
+        div1.innerHTML = "插入內容";
+        $('#test1').after(div1)
     </script>
 </body>
+
 </html>

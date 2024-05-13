@@ -18,4 +18,8 @@ public interface GoodRepository extends JpaRepository<GoodsBean2, Integer> {
 	
 	@Query(value = "from GoodsBean2 g where g.goodsName like concat('%',?1,'%') AND g.goodsSellerID.sid = ?2")
 	public List<GoodsBean2> findSellerGood(String goodsName,Integer sellerID);
+	
+	@Query(value = "from GoodsBean2 g order by g.launchDate DESC")
+	public List<GoodsBean2> findGoodByLaunchDate();
+	
 }

@@ -49,5 +49,7 @@ public class GoodService{
 	public List<GoodsBean2> findSellerGood(String goodsName,Integer sellerID){
 		return goodRepos.findSellerGood(goodsName, sellerID);
 	}
-	
+	public List<GoodsBean2> findGoodByLaunchDate(){
+		return goodRepos.findGoodByLaunchDate();
+	}
 }

@@ -53,7 +53,7 @@
 										</c:if>
 										<li>
 											<a class="dropdown-item fs-md ${notification.reads == 1 ? 'text-muted' : 'fw-bold'}" href="#" onclick="readNotification(${notification.id})">
-												<img src="${notification.orderId.formatgoodId.goodImagePath}" alt="商品图片" style="max-width: 50px; max-height: 50px;">
+												<img src="${notification.orderId.formatgoodId.goodImagePath}" alt="商品图片" style="max-width: 60px; max-height: 60px; margin-right:10px">
 												${notification.content}
 												<input type="hidden" name="reads" value="${notification.reads}">
 												<div class="text-end">

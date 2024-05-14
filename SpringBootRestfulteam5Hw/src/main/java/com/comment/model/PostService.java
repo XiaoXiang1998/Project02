@@ -121,4 +121,14 @@ public class PostService {
         // 调用自定义的查询方法，包含卖家ID作为查询条件
         return pRepository.searchByConditions(sellerId, productName, productSpec, userName, pageable);
     }
+    
+   
+    public Page<Post> findSellerCommentsForUserWithPagination(MemberBean user, Pageable pageable) {
+        return pRepository.findSellerCommentsForUserWithPagination(user, pageable);
+    }
+    
+    public Page<Post> countCommentsBySellerIdAndSellerrateWithPagination(MemberBean user, Integer sellerrate,Pageable pageable) {
+        return pRepository.findCommentsBySellerIdAndSellerrateWithPagination(user, sellerrate,pageable);
+    }
+   
 }

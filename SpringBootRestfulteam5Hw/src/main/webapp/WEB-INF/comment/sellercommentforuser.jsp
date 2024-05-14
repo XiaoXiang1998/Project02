@@ -76,16 +76,17 @@
 <div class="tab">
     ${avergeScore}
 <button id="allBtn" class="tablinks active" onclick="filterComments('all')">全部(${totalCommentsCount})</button>
-<button id="fiveStarBtn" class="tablinks" onclick="filterComments(5)">5顆星 (${ratingCounts.get(5)})</button>
-<button id="fourStarBtn" class="tablinks" onclick="filterComments(4)">4顆星 (${ratingCounts.get(4)})</button>
-<button id="threeStarBtn" class="tablinks" onclick="filterComments(3)">3顆星 (${ratingCounts.get(3)})</button>
-<button id="twoStarBtn" class="tablinks" onclick="filterComments(2)">2顆星 (${ratingCounts.get(2)})</button>
-<button id="oneStarBtn" class="tablinks" onclick="filterComments(1)">1顆星 (${ratingCounts.get(1)})</button>
+<button id="fiveStarBtn" class="tablinks" onclick="filterComments(5)">5顆星 (${ratingCounts.size() > 4 ? ratingCounts[4] : 0})</button>
+<button id="fourStarBtn" class="tablinks" onclick="filterComments(4)">4顆星 (${ratingCounts.size() > 3 ? ratingCounts[3] : 0})</button>
+<button id="threeStarBtn" class="tablinks" onclick="filterComments(3)">3顆星 (${ratingCounts.size() > 2 ? ratingCounts[2] : 0})</button>
+<button id="twoStarBtn" class="tablinks" onclick="filterComments(2)">2顆星 (${ratingCounts.size() > 1 ? ratingCounts[1] : 0})</button>
+<button id="oneStarBtn" class="tablinks" onclick="filterComments(1)">1顆星 (${ratingCounts.size() > 0 ? ratingCounts[0] : 0})</button>
 </div>
+<div id="sellerCommentsContainer">
 
 		<!-- 循环显示评论 -->
 <c:forEach var="comment" items="${sellerComments}">
-    <div class="comment-container comment-container rating${comment.sellerrate}">
+    <div class="comment-container comment-container rating${comment.sellerrate}" >
         <!-- 显示评论内容 -->
         <!-- 显示其他评论相关信息 -->
         <p>${comment.member.name}</p>
@@ -109,50 +110,82 @@
         <p>${comment.replayconetnt}</p>
     </div>
 </c:forEach>
-
+	</div>
+<!-- 分页部件 -->
+<nav aria-label="Page navigation">
+    <ul class="pagination">
+        <li class="page-item">
+            <c:if test="${page > 0}">
+                <a class="page-link" href="#" aria-label="Previous" onclick="filterComments(${rating}, ${page - 1})">
+                    <span aria-hidden="true">&laquo;</span>
+                    <span class="sr-only">Previous</span>
+                </a>
+            </c:if>
+        </li>
+        <c:forEach var="i" begin="0" end="${totalPages - 1}">
+            <li class="page-item">
+                <c:choose>
+                    <c:when test="${i == page}">
+                        <span class="page-link current">${i + 1}</span>
+                    </c:when>
+                    <c:otherwise>
+                        <a class="page-link" href="#" onclick="filterComments(${rating}, ${i})">${i + 1}</a>
+                    </c:otherwise>
+                </c:choose>
+            </li>
+        </c:forEach>
+        <li class="page-item">
+            <c:if test="${page < totalPages - 1}">
+                <a class="page-link" href="#" aria-label="Next" onclick="filterComments(${rating}, ${page + 1})">
+                    <span aria-hidden="true">&raquo;</span>
+                    <span class="sr-only">Next</span>
+                </a>
+            </c:if>
+        </li>
+    </ul>
+</nav>		
 
 <script>
-    // 根据评分级别过滤评论
-    function filterComments(rating) {
-        var comments = document.getElementsByClassName('comment-container');
-        if (rating === 'all') {
-            for (var i = 0; i < comments.length; i++) {
-                comments[i].style.display = 'block';
-            }
-        } else {
-            for (var i = 0; i < comments.length; i++) {
-                var comment = comments[i];
-                var commentRating = parseInt(comment.classList[1].substring(6)); // 获取评论的评分级别
-                if (commentRating === rating) {
-                    comment.style.display = 'block';
-                } else {
-                    comment.style.display = 'none';
-                }
-            }
+// 页面加载后重新显示评论内容
+window.onload = function() {
+    // 页面加载后默认获取全部评论
+    filterComments('all', 0);
+}
+
+// 根据评分级别过滤评论并进行分页处理
+function filterComments(rating, page) {
+    $.ajax({
+        type: "GET",
+        url: "/sellerCommentsForUser",
+        data: {
+            page: page,
+            rating: rating
+        },
+        success: function(response) {
+            // 将获取到的评论内容替换原有的评论内容
+            $("#sellerCommentsContainer").html(response);
         }
-    }
-
-    // 页面加载后重新显示评论内容
-    window.onload = function() {
-        filterComments('all');
-    }
-</script>
-
-<script>
-  // 获取所有按钮元素
-  var btns = document.querySelectorAll('.tab button');
-
-  // 为每个按钮添加点击事件监听器
-  btns.forEach(function(btn) {
-    btn.addEventListener('click', function() {
-      // 移除所有按钮的 active 类
-      btns.forEach(function(b) {
-        b.classList.remove('active');
-      });
-      // 将当前点击的按钮添加 active 类
-      this.classList.add('active');
     });
-  });
+}
+
+// 获取所有按钮元素
+var btns = document.querySelectorAll('.tab button');
+
+// 为每个按钮添加点击事件监听器
+btns.forEach(function(btn) {
+    btn.addEventListener('click', function() {
+        // 移除所有按钮的 active 类
+        btns.forEach(function(b) {
+            b.classList.remove('active');
+        });
+        // 将当前点击的按钮添加 active 类
+        this.classList.add('active');
+        // 获取当前点击的按钮的评分级别
+        var rating = this.innerText.charAt(0);
+        // 过滤评论并进行分页处理
+        filterComments(rating, 0);
+    });
+});
 </script>
 </body>
 </html>

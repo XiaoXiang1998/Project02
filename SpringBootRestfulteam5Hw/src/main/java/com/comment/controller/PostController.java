@@ -330,7 +330,7 @@ public class PostController {
 			
 			return "comment/sellerReplay";
 		}	
-
+		/*
 		@GetMapping("/sellerCommentsForUser")
 		public String getSellerCommentsForUser(Model model, HttpSession session) {
 			MemberBean user = (MemberBean) session.getAttribute("member");
@@ -363,7 +363,49 @@ public class PostController {
 		    model.addAttribute("totalCommentsCount", totalCommentsCount);
 
 			return "comment/sellercommentforuser";
+		}*/
+		
+		
+		@GetMapping("/sellerCommentsForUser")
+		public String getSellerCommentsForUser(@RequestParam(defaultValue = "0") int page,
+		                                       @RequestParam(defaultValue = "all") String rating,
+		                                       Model model, HttpSession session) {
+		    MemberBean user = (MemberBean) session.getAttribute("member");
+
+		    int reviewCount = user.getReviewCount();
+		    int cumulativeScore = user.getCumulativeScore();
+		    int averageScore = reviewCount != 0 ? cumulativeScore / reviewCount : 0;
+
+		    int pageSize = 2; // 每页显示的记录数
+		    Pageable pageable = PageRequest.of(page, pageSize);
+		    Page<Post> sellerCommentsPage;
+		    
+		    if (rating.equals("all")) {
+		        sellerCommentsPage = pService.findSellerCommentsForUserWithPagination(user, pageable);
+		    } else {
+		        int ratingValue = Integer.parseInt(rating);
+		        sellerCommentsPage = pService.countCommentsBySellerIdAndSellerrateWithPagination(user, ratingValue, pageable);
+		    }
+
+		    List<Long> ratingCounts = new ArrayList<>();
+		    for (int i = 1; i <= 5; i++) {
+		        Page<Post> commentsPage = pService.countCommentsBySellerIdAndSellerrateWithPagination(user, i, pageable);
+		        long count = commentsPage.getTotalElements();
+		        ratingCounts.add(count);
+		    }
+
+		    int totalCommentsCount = (int) sellerCommentsPage.getTotalElements();
+
+		    model.addAttribute("averageScore", averageScore);
+		    model.addAttribute("sellerComments", sellerCommentsPage.getContent());
+		    model.addAttribute("ratingCounts", ratingCounts);
+		    model.addAttribute("totalCommentsCount", totalCommentsCount);
+		    model.addAttribute("page", sellerCommentsPage.getNumber());
+		    model.addAttribute("totalPages", sellerCommentsPage.getTotalPages());
+
+		    return "comment/sellercommentforuser";
 		}
+		
 	
 	@GetMapping("/repliedComments")
     public String getRepliedComments(Model model, HttpSession session, @RequestParam(defaultValue = "0") int page) {

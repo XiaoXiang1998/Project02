@@ -146,7 +146,7 @@
 						<div id="g_id_onload"
 							data-client_id="892237680262-jsfn5kl8g9a7ks0nj2sh9vgeem2o4tla.apps.googleusercontent.com"
 							data-context="signin" data-ux_mode="popup"
-							data-login_uri="http://localhost:8080/google.login" data-auto_prompt="false"></div>
+							data-login_uri="http://localhost:8081/google.login" data-auto_prompt="false"></div>
 
 						<div class="g_id_signin" data-type="standard" data-shape="pill" data-theme="outline"
 							data-text="signin_with" data-size="large" data-logo_alignment="left">

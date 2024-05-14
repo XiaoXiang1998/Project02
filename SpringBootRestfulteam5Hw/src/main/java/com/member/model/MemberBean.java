@@ -171,12 +171,13 @@ public class MemberBean {
 	}
 	
 	/*第三方登入用*/
-	public MemberBean(String account, String password, String email, String name, String thirdPartyProvider) {
+	public MemberBean(String account, String password, String email, String name, String thirdPartyProvider,LocalDate registrationTime) {
 		this.account = account;
 		this.password = password;
 		this.email = email;
 		this.name = name;
 		this.thirdPartyProvider = thirdPartyProvider;
+		this.registrationTime = registrationTime;
 	}
 
 	public Integer getSid() {

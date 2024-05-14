@@ -259,7 +259,7 @@ public class MemberController {
 			httpSession.setAttribute("member", memberInformation);
 			System.out.println("session設定成功");
 			// 檢查會員等級
-			return "ControlUI";
+			return "/good/jsp/EZBuyindex";
 		}
 		return null;
 	}
@@ -292,25 +292,25 @@ public class MemberController {
 		// (Receive idTokenString by HTTPS POST)
 		// 这里验证登录回调的credential完整性
 		GoogleIdToken idToken = verifier.verify(credential);
-		if (idToken != null) {
-			Payload payload = idToken.getPayload();
-
-			// Get profile information from payload
-			String email = payload.getEmail();
-
-			// 紀錄金鑰
-			String thirdPartyId = payload.getSubject();
-
-			// 紀錄何種第三方登入
-			String thirdPartyProvider = "Google";
-
-			String name = (String) payload.get("name");
-			String pictureUrl = (String) payload.get("picture");
+		Payload payload = idToken.getPayload();
+		
+		// Get profile information from payload
+		String email = payload.getEmail();
+		
+		// 紀錄金鑰
+		String thirdPartyId = payload.getSubject();
+		
+		// 紀錄何種第三方登入
+		String thirdPartyProvider = "Google";
+		
+		String name = (String) payload.get("name");
+		String pictureUrl = (String) payload.get("picture");
 //	            String locale = (String) payload.get("locale");
-			String familyName = (String) payload.get("family_name");
-			String givenName = (String) payload.get("given_name");
-			String[] splitAccount = email.split("@");
-			String account = splitAccount[0];
+		String familyName = (String) payload.get("family_name");
+		String givenName = (String) payload.get("given_name");
+		String[] splitAccount = email.split("@");
+		String account = splitAccount[0];
+		if (idToken != null) {
 //	            int level = 1;
 
 			System.out.println("獨家金鑰: " + thirdPartyId);
@@ -322,9 +322,7 @@ public class MemberController {
 			System.out.println("姓氏: " + givenName);
 			System.out.println("名字: " + familyName);
 
-			MemberBean memBean = new MemberBean(account, thirdPartyId, email, name, thirdPartyProvider);
-			System.out.println(memBean.getLevel());
-			if (mService.findByAccount(account) != null) {
+			if (mService.findByAccount(account).isPresent()) {
 				if (mService.checkLogin(account, thirdPartyId)) {
 					System.out.println("登入成功");
 					// 儲存登入會員的bean物件
@@ -334,17 +332,18 @@ public class MemberController {
 					httpSession.setAttribute("member", memberInformation);
 					System.out.println("session設定成功");
 					// 檢查會員等級
-					return "/WEB-INF/member/AdminUI";
+					return "/good/jsp/EZBuyindex";
 				}
 			} else {
+				/* 紀錄當前時間 */
+				LocalDate now = LocalDate.now();
+				System.out.println(now);
+				MemberBean memBean = new MemberBean(account, thirdPartyId, email, name, thirdPartyProvider,now);
 				mService.insert(memBean);
 				System.out.println("有創建帳號");
-				return "/WEB-INF/member/AdminUI";
+				return "/good/jsp/EZBuyindex";
 			}
-
-		} else {
-			System.out.println("Invalid ID token.");
-		}
+		} 
 		return "失敗";
 	}
 

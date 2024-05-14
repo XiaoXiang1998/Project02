@@ -4,9 +4,9 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>超過時效</title>
+<title>憑證錯誤</title>
 </head>
 <body>
-<h5>您的驗證碼時效已過期</h5>
+<h5>請再重新發送一次</h5>
 </body>
 </html>

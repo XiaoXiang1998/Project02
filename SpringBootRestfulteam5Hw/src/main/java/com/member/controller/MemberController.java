@@ -437,8 +437,14 @@ public class MemberController {
 			boolean timeOut = minutesDifference < 15;
 
 			if (timeOut == true) {
-				rtService.deleteForgetPassword(thisID);
-				return "/member/ResetPassword";
+				/*比較TOKEN*/
+				if(token.equals(rtBean.getToken())) {
+					rtService.deleteForgetPassword(thisID);
+					return "/member/ResetPassword";
+				} else {
+					rtService.deleteForgetPassword(thisID);
+					return "/member/tokenErr";
+				}
 			} else {
 				rtService.deleteForgetPassword(thisID);
 				return "/member/TimeOut";

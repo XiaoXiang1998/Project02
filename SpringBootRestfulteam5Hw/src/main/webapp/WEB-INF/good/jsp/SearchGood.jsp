@@ -27,6 +27,11 @@
 
             <!-- Template Stylesheet -->
             <link href="../../frontcss/style.css" rel="stylesheet">
+            <style>
+                .CategotyClick {
+                    cursor: pointer;
+                }
+            </style>
             <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
             <script>
                 var indexPage = 1;
@@ -102,9 +107,10 @@
             </div>
             <!-- Spinner End -->
 
+
             <!-- Navbar start -->
-            <div class="container-fluid fixed-top">
-                <div class="container topbar bg-primary d-none d-lg-block">
+            <div class="container-fluid fixed-top bg-info">
+                <div class="container topbar bg-info d-none d-lg-block mb-3">
                     <div class="d-flex justify-content-between">
                         <div class="top-info ps-2">
                             <small class="me-3"><i class="fas fa-map-marker-alt me-2 text-secondary"></i> <a href="#"
@@ -119,48 +125,30 @@
                         </div>
                     </div>
                 </div>
-                <div class="container px-0">
-                    <nav class="navbar navbar-light bg-white navbar-expand-xl">
-                        <a href="index.html" class="navbar-brand">
-                            <h1 class="text-primary display-6">Fruitables</h1>
-                        </a>
-                        <button class="navbar-toggler py-2 px-3" type="button" data-bs-toggle="collapse"
-                            data-bs-target="#navbarCollapse">
-                            <span class="fa fa-bars text-primary"></span>
-                        </button>
-                        <div class="collapse navbar-collapse bg-white" id="navbarCollapse">
-                            <div class="navbar-nav mx-auto">
-                                <a href="index.html" class="nav-item nav-link">Home</a>
-                                <a href="shop.html" class="nav-item nav-link active">Shop</a>
-                                <a href="shop-detail.html" class="nav-item nav-link">Shop Detail</a>
-                                <div class="nav-item dropdown">
-                                    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
-                                    <div class="dropdown-menu m-0 bg-secondary rounded-0">
-                                        <a href="cart.html" class="dropdown-item">Cart</a>
-                                        <a href="chackout.html" class="dropdown-item">Chackout</a>
-                                        <a href="testimonial.html" class="dropdown-item">Testimonial</a>
-                                        <a href="404.html" class="dropdown-item">404 Page</a>
-                                    </div>
-                                </div>
-                                <a href="contact.html" class="nav-item nav-link">Contact</a>
-                            </div>
-                            <div class="d-flex m-3 me-0">
-                                <button
-                                    class="btn-search btn border border-secondary btn-md-square rounded-circle bg-white me-4"
-                                    data-bs-toggle="modal" data-bs-target="#searchModal"><i
-                                        class="fas fa-search text-primary"></i></button>
-                                <a href="#" class="position-relative me-4 my-auto">
-                                    <i class="fa fa-shopping-bag fa-2x"></i>
-                                    <span
-                                        class="position-absolute bg-secondary rounded-circle d-flex align-items-center justify-content-center text-dark px-1"
-                                        style="top: -5px; left: 15px; height: 20px; min-width: 20px;">3</span>
-                                </a>
-                                <a href="#" class="my-auto">
-                                    <i class="fas fa-user fa-2x"></i>
-                                </a>
-                            </div>
+                <div class="container px-0 d-flex mb-5">
+                    <a href="#" class="navbar-brand">
+                        <h1 class="text-secondary display-6">EZBuy</h1>
+                    </a>
+                    <form class="form-inline d-flex">
+                        <div class="form-group mx-sm-3 mb-2">
+                            <input type="text" class="form-control border-2 border-secondary py-3 px-4 rounded-pill"
+                                style="width: 1000px;height: 60px;" name="GoodName">
                         </div>
-                    </nav>
+                        <button
+                            class="btn btn-primary border-2 border-secondary py-3 px-4 rounded-pill position-relative"
+                            style="left: -80px;height: 60px;" id="GoToSearchGood" type="button">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </form>
+                    <a href="#" class="position-relative me-4 my-auto ms-5">
+                        <i class="fa fa-shopping-bag fa-2x text-secondary"></i>
+                        <span
+                            class="position-absolute bg-white rounded-circle d-flex align-items-center justify-content-center text-dark px-1"
+                            style="top: -5px; left: 15px; height: 20px; min-width: 20px;">3</span>
+                    </a>
+                    <a href="#" class="my-auto">
+                        <i class="fas fa-user fa-2x text-secondary"></i>
+                    </a>
                 </div>
             </div>
             <!-- Navbar End -->
@@ -221,18 +209,21 @@
                                     <div class="row g-4">
                                         <div class="col-lg-12">
                                             <div class="mb-3">
-                                                <h4>Categories</h4>
+                                                <h4>種類</h4>
                                                 <ul class="list-unstyled fruite-categorie">
                                                     <c:forEach var="j" begin="0" end="${CategoryNumber}" step="1"
                                                         items="${CategoryNumberList}">
                                                         <li>
-                                                            <div class="d-flex justify-content-between fruite-name">
+                                                            <div
+                                                                class="form-check d-flex justify-content-between fruite-name CategotyClick">
                                                                 <form action="">
+                                                                    <input class="form-check-input" type="checkbox"
+                                                                        value="${j.goodsType}" id="flexCheckDefault">
                                                                     <input type="text" class="form-control"
                                                                         name="GoodName" value="${goodsName}" hidden>
                                                                     <input type="text" class="form-control"
                                                                         name="GoodType" value="${{j.goodsType}}" hidden>
-                                                                    <i class="fas fa-apple-alt me-2"></i>${j.goodsType}
+                                                                    <span>${j.goodsType}</span>
                                                                     <span>(${j.goodsTypeNumber})</span>
                                                                 </form>
                                                             </div>
@@ -671,7 +662,34 @@
             <script src="../../frontlib/lightbox/js/lightbox.min.js"></script>
             <script src="../../frontlib/owlcarousel/owl.carousel.min.js"></script>
             <!-- Template Javascript -->
-            <script src="../../frontjs/main.js"></script>\
+            <script src="../../frontjs/main.js"></script>
+            <script>
+                $('.CategotyClick').click(function () {//仍須滿足分頁查詢的功能
+                    // <form action="">
+                    //     <input type="text" class="form-control" name="GoodName" value="${goodsName}" hidden>
+                    //     <input type="text" class="form-control" name="GoodType" value="${{j.goodsType}}" hidden>
+                    //     <i class="fas fa-apple-alt me-2"></i>${j.goodsType}
+                    //     <span>(${j.goodsTypeNumber})</span>
+                    // </form>
+                    // console.log($(this).find('form'));
+                    // let form = $(this).find('form');
+                    // form.prop("action", "....");
+                    // form.prop("method", "get");
+                    // let formdata = new FormData(form);
+                    // $.ajax({
+                    //     method: "get",
+                    //     url: "....",
+                    //     contentType: 'application/json',
+                    //     data: formdata,
+                    //     success: function (data) {
+
+                    //     },
+                    // })
+                })
+                function CategotyClick(pageNO) {
+
+                }
+            </script>
         </body>
 
         </html>

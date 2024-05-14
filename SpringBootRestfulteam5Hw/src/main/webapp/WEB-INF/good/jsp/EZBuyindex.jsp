@@ -313,6 +313,7 @@
 
 
             <!-- Navbar start -->
+
             <div class="container-fluid fixed-top bg-info">
                 <div class="container topbar bg-info d-none d-lg-block mb-3">
                     <div class="d-flex justify-content-between">
@@ -329,32 +330,9 @@
                         </div>
                     </div>
                 </div>
-                <div class="container px-0 d-flex mb-5">
-                    <a href="#" class="navbar-brand">
-                        <h1 class="text-secondary display-6">EZBuy</h1>
-                    </a>
-                    <form class="form-inline d-flex">
-                        <div class="form-group mx-sm-3 mb-2">
-                            <input type="text" class="form-control border-2 border-secondary py-3 px-4 rounded-pill"
-                                style="width: 1000px;height: 60px;" name="GoodName">
-                        </div>
-                        <button
-                            class="btn btn-primary border-2 border-secondary py-3 px-4 rounded-pill position-relative"
-                            style="left: -80px;height: 60px;" id="GoToSearchGood" type="button">
-                            <i class="fas fa-search"></i>
-                        </button>
-                    </form>
-                    <a href="#" class="position-relative me-4 my-auto ms-5">
-                        <i class="fa fa-shopping-bag fa-2x text-secondary"></i>
-                        <span
-                            class="position-absolute bg-white rounded-circle d-flex align-items-center justify-content-center text-dark px-1"
-                            style="top: -5px; left: 15px; height: 20px; min-width: 20px;">3</span>
-                    </a>
-                    <a href="#" class="my-auto">
-                        <i class="fas fa-user fa-2x text-secondary"></i>
-                    </a>
-                    <!-- <nav class="navbar navbar-light bg-info navbar-expand-xl">
-                        <a href="#" class="navbar-brand">
+                <div class="container px-0">
+                    <nav class="navbar navbar-light bg-info navbar-expand-xl">
+                        <a href="index.html" class="navbar-brand">
                             <h1 class="text-secondary display-6">EZBuy</h1>
                         </a>
                         <button class="navbar-toggler py-2 px-3" type="button" data-bs-toggle="collapse"
@@ -367,31 +345,48 @@
                                 <a href="#" class="nav-item nav-link">訂單紀錄</a>
                                 <a href="#" class="nav-item nav-link">官方申訴</a>
                             </div>
-                            <div class="d-flex flex-row bd-highlight"> -->
-                    <!--<div class="d-flex m-3 me-0">
-                        <form class="form-inline d-flex">
-                            <div class="form-group mx-sm-3 mb-2">
-                                <input type="text" class="form-control border-2 border-secondary py-3 px-4 rounded-pill"
-                                    style="width: 500px;height: 60px;">
+                            <!-- <div class="d-flex flex-row bd-highlight"> -->
+                            <div class="d-flex m-3 me-0">
+                                <form class="form-inline d-flex">
+                                    <div class="form-group mx-sm-3 mb-2">
+                                        <input type="text"
+                                            class="form-control border-2 border-secondary py-3 px-4 rounded-pill"
+                                            style="width: 500px;height: 60px;">
+                                    </div>
+                                    <button
+                                        class="btn btn-primary border-2 border-secondary py-3 px-4 rounded-pill position-relative"
+                                        style="left: -80px;height: 60px;">
+                                        <i class="fas fa-search"></i>
+                                    </button>
+                                </form>
+                                <a href="#" class="position-relative me-4 my-auto ms-5">
+                                    <i class="fa fa-shopping-bag fa-2x text-secondary"></i>
+                                    <span
+                                        class="position-absolute bg-white rounded-circle d-flex align-items-center justify-content-center text-dark px-1"
+                                        style="top: -5px; left: 15px; height: 20px; min-width: 20px;">3</span>
+                                </a>
+                                <ul class="my-auto" style="list-style-type: none;">
+                                    <li class="nav-item dropdown">
+                                        <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button"
+                                            data-bs-toggle="dropdown" aria-expanded="false">
+                                            <i class="fas fa-user fa-2x text-secondary"></i>
+                                        </a>
+                                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                            <li><a class="dropdown-item" href="#!">會員中心</a></li>
+                                            <li><a class="dropdown-item" href="#!">訂單查詢</a></li>
+                                            <li><a class="dropdown-item" href="#!">評論紀錄</a></li>
+                                            <li><a class="dropdown-item" href="#!">申訴紀錄</a></li>
+                                            <li><a class="dropdown-item" href="#!">活動紀錄</a></li>
+                                            <li>
+                                                <hr class="dropdown-divider" />
+                                            </li>
+                                            <li><a class="dropdown-item" href="#!">登出</a></li>
+                                        </ul>
+                                    </li>
+                                </ul>
                             </div>
-                            <button
-                                class="btn btn-primary border-2 border-secondary py-3 px-4 rounded-pill position-relative"
-                                style="left: -80px;height: 60px;">
-                                <i class="fas fa-search"></i>
-                            </button>
-                        </form>
-                        <a href="#" class="position-relative me-4 my-auto ms-5">
-                            <i class="fa fa-shopping-bag fa-2x text-secondary"></i>
-                            <span
-                                class="position-absolute bg-white rounded-circle d-flex align-items-center justify-content-center text-dark px-1"
-                                style="top: -5px; left: 15px; height: 20px; min-width: 20px;">3</span>
-                        </a>
-                        <a href="#" class="my-auto">
-                            <i class="fas fa-user fa-2x text-secondary"></i>
-                        </a>
-                    </div>
-                </div>
-                </nav> -->
+                        </div>
+                    </nav>
                 </div>
             </div>
             <!-- Navbar End -->
@@ -547,66 +542,7 @@
                     </div>
                 </div>
             </div> -->
-            <div class="container px-0">
-                <nav class="navbar navbar-light bg-info navbar-expand-xl">
-                    <a href="index.html" class="navbar-brand">
-                        <h1 class="text-secondary display-6">EZBuy</h1>
-                    </a>
-                    <button class="navbar-toggler py-2 px-3" type="button" data-bs-toggle="collapse"
-                        data-bs-target="#navbarCollapse">
-                        <span class="fa fa-bars text-secondary"></span>
-                    </button>
-                    <div class="collapse navbar-collapse bg-info" id="navbarCollapse">
-                        <div class="navbar-nav">
-                            <a href="#" class="nav-item nav-link">購物車</a>
-                            <a href="#" class="nav-item nav-link">訂單紀錄</a>
-                            <a href="#" class="nav-item nav-link">官方申訴</a>
-                        </div>
-                        <!-- <div class="d-flex flex-row bd-highlight"> -->
-                        <div class="d-flex m-3 me-0">
-                            <form class="form-inline d-flex">
-                                <div class="form-group mx-sm-3 mb-2">
-                                    <input type="text"
-                                        class="form-control border-2 border-secondary py-3 px-4 rounded-pill"
-                                        style="width: 500px;height: 60px;">
-                                </div>
-                                <button
-                                    class="btn btn-primary border-2 border-secondary py-3 px-4 rounded-pill position-relative"
-                                    style="left: -80px;height: 60px;">
-                                    <i class="fas fa-search"></i>
-                                </button>
-                            </form>
-                            <a href="#" class="position-relative me-4 my-auto ms-5">
-                                <i class="fa fa-shopping-bag fa-2x text-secondary"></i>
-                                <span
-                                    class="position-absolute bg-white rounded-circle d-flex align-items-center justify-content-center text-dark px-1"
-                                    style="top: -5px; left: 15px; height: 20px; min-width: 20px;">3</span>
-                            </a>
-                            <ul class="my-auto" style="list-style-type: none;">
-                                <li class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button"
-                                        data-bs-toggle="dropdown" aria-expanded="false">
-                                        <i class="fas fa-user fa-2x text-secondary"></i>
-                                    </a>
-                                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                        <li><a class="dropdown-item" href="#!">會員中心</a></li>
-                                        <li><a class="dropdown-item" href="#!">訂單查詢</a></li>
-                                        <li><a class="dropdown-item" href="#!">評論紀錄</a></li>
-                                        <li><a class="dropdown-item" href="#!">申訴紀錄</a></li>
-                                        <li><a class="dropdown-item" href="#!">活動紀錄</a></li>
-                                        <li>
-                                            <hr class="dropdown-divider" />
-                                        </li>
-                                        <li><a class="dropdown-item" href="#!">登出</a></li>
-                                    </ul>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </nav>
-            </div>
-            </div>
-            <!-- Navbar End -->
+
 
             <!-- Hero Start -->
             <div class="container-fluid py-5 mb-5 hero-header">

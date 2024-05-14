@@ -86,7 +86,6 @@ public class PostService {
 	public List<Post> findRepliesByRepliedCommentId(Integer repliedCommentId) {
 		return pRepository.findByRepliedcommentid(repliedCommentId);
 	}
-
 	public List<Post> getSellerCommentsForUser(Integer userCommentId) {
 		return pRepository.findSellerCommentsForUser(userCommentId);
 	}

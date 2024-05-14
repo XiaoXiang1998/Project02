@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.apache.commons.io.FilenameUtils;
 import org.hibernate.sql.Insert;
@@ -25,6 +26,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -329,39 +331,39 @@ public class PostController {
 			return "comment/sellerReplay";
 		}	
 
-	@GetMapping("/sellerCommentsForUser")
-	public String getSellerCommentsForUser(Model model, HttpSession session) {
-		MemberBean user = (MemberBean) session.getAttribute("member");
-		int reviewCount = user.getReviewCount();
-		int cumulativeScore = user.getCumulativeScore();
+		@GetMapping("/sellerCommentsForUser")
+		public String getSellerCommentsForUser(Model model, HttpSession session) {
+			MemberBean user = (MemberBean) session.getAttribute("member");
+			int reviewCount = user.getReviewCount();
+			int cumulativeScore = user.getCumulativeScore();
 
-		int avergeScore = cumulativeScore / reviewCount;
+			int avergeScore = cumulativeScore / reviewCount;
 
-		List<Post> userComments = user.getPosts();
+			List<Post> userComments = user.getPosts();
 
-		List<Post> sellerComments = new ArrayList<>();
+			List<Post> sellerComments = new ArrayList<>();
 
-		for (Post comment : userComments) {
-			Integer userCommentId = comment.getCommentid();
-			List<Post> sellerReplies = pService.getSellerCommentsForUser(userCommentId);
-			sellerComments.addAll(sellerReplies);
+			for (Post comment : userComments) {
+				Integer userCommentId = comment.getCommentid();
+				List<Post> sellerReplies = pService.getSellerCommentsForUser(userCommentId);
+				sellerComments.addAll(sellerReplies);
+			}
+			
+		    List<Integer> ratingCounts = new ArrayList<>(Collections.nCopies(6, 0)); 
+		    for (Post comment : sellerComments) {
+		        int rating = comment.getSellerrate();
+		        ratingCounts.set(rating, ratingCounts.get(rating) + 1); 
+		    }
+			
+		    int totalCommentsCount = sellerComments.size();
+		    
+			model.addAttribute("avergeScore", avergeScore);
+			model.addAttribute("sellerComments", sellerComments);
+		    model.addAttribute("ratingCounts", ratingCounts);
+		    model.addAttribute("totalCommentsCount", totalCommentsCount);
+
+			return "comment/sellercommentforuser";
 		}
-		
-	    List<Integer> ratingCounts = new ArrayList<>(Collections.nCopies(6, 0)); 
-	    for (Post comment : sellerComments) {
-	        int rating = comment.getSellerrate();
-	        ratingCounts.set(rating, ratingCounts.get(rating) + 1); 
-	    }
-		
-	    int totalCommentsCount = sellerComments.size();
-	    
-		model.addAttribute("avergeScore", avergeScore);
-		model.addAttribute("sellerComments", sellerComments);
-	    model.addAttribute("ratingCounts", ratingCounts);
-	    model.addAttribute("totalCommentsCount", totalCommentsCount);
-
-		return "comment/sellercommentforuser";
-	}
 	
 	@GetMapping("/repliedComments")
     public String getRepliedComments(Model model, HttpSession session, @RequestParam(defaultValue = "0") int page) {

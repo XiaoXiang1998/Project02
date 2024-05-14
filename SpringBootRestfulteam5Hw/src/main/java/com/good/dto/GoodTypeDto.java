@@ -5,19 +5,19 @@ import jakarta.persistence.ColumnResult;
 import jakarta.persistence.NamedNativeQuery;
 import jakarta.persistence.SqlResultSetMapping;
 
-@SqlResultSetMapping(name = "GoodTypeDto",
-					columns={@ColumnResult(name="goodsType"),@ColumnResult(name="goodsTypeNumber")})
+//@SqlResultSetMapping(name = "GoodTypeDto",
+//					columns={@ColumnResult(name="goodsType"),@ColumnResult(name="goodsTypeNumber")})
 public class GoodTypeDto {
 	
-	private int goodsTypeNumber;
+	private Long goodsTypeNumber;
 	
 	private String goodsType;
 	//
-	public int getGoodsTypeNumber() {
+	public Long getGoodsTypeNumber() {
 		return goodsTypeNumber;
 	}
 
-	public void setGoodsTypeNumber(int goodsTypeNumber) {
+	public void setGoodsTypeNumber(Long goodsTypeNumber) {
 		this.goodsTypeNumber = goodsTypeNumber;
 	}
 

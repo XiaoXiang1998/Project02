@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface GoodRepository extends JpaRepository<GoodsBean2, Integer> {
 
-	@Query(value = "from GoodsBean2 where goodsName like concat('%',?1,'%1')")
+	@Query(value = "from GoodsBean2 where goodsName like concat('%',?1,'%')")
 	public List<GoodsBean2> findGoods(String goodsName);
 
 //	public List<GoodsBean> findByNameLike(String goodsName);

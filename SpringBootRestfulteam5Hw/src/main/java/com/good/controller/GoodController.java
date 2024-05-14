@@ -14,6 +14,7 @@ import java.util.Optional;
 import java.util.Set;
 
 import org.hibernate.internal.build.AllowSysOut;
+import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,6 +30,7 @@ import org.springframework.data.domain.Pageable;
 
 import com.good.dto.GoodBasicDto;
 import com.good.dto.GoodPriceDTO;
+import com.good.dto.GoodTypeDto;
 import com.good.dto.GoodTypeIndexDto;
 import com.good.model.GoodFormat;
 import com.good.model.GoodImageBean;
@@ -55,11 +57,44 @@ public class GoodController {
 	private GoodFormatService gfService;
 	@PersistenceContext
 	private EntityManager entityManager;
+
 /////////////////////////////////////////////////////首頁/////////////////////////////////////////////////
-	@GetMapping("EZBuyIndex")
-	public String EZBuyIndex() {
+	@GetMapping("EZBuyIndex") // 商品封面照、商品名稱、商品種類、商品評分(全給0星)、價格範圍
+	public String EZBuyIndex(HttpServletRequest request, Model m) { // HttpServletRequest request
+		// 透過上架日期取得商品
+		List<GoodsBean2> findGoodByLaunchDate = gService.findGoodByLaunchDate();
+		List<GoodPriceDTO> pricerange = new ArrayList();
+		// 透過商品編號 取得價格最大最小值
+		for (GoodsBean2 item : findGoodByLaunchDate) {
+			int goodID = item.getGoodsID();
+			Query<Object[]> resultList = (Query<Object[]>) entityManager.createQuery(
+					"select min(gf.goodPrice) AS minprice,max(gf.goodPrice) AS maxprice, g.goodsID AS goodsID from GoodsBean2 g join GoodFormat gf on g.goodsID = gf.good.goodsID where g.goodsID = ?1 group by g.goodsID")
+					.setParameter(1, goodID);// 在特定賣家下查詢商品，並取得不同編號下的最大和最小價格
+			List<Object[]> item2 = resultList.getResultList();
+			for (Object[] item3 : item2) {
+				GoodPriceDTO result = new GoodPriceDTO();
+				System.out.println(item.getNumberRatings());
+				if (item.getNumberRatings() == null) {// 沒人評分
+					result.setGoodAVG(0);
+				} else {
+					int AVG = item.getRating() / item.getNumberRatings();
+					result.setGoodAVG(AVG);
+				}
+				result.setGoodType(item.getGoodsType());
+				result.setGoodName(item.getGoodsName());
+				result.setTitleImage(item.getTitleImage());
+				result.setGoodsID((Integer) item3[2]);
+				result.setMaxprice((Integer) item3[1]);
+				result.setMinprice((Integer) item3[0]);
+				pricerange.add(result);
+			}
+		}
+		HttpSession session = request.getSession();
+		m.addAttribute("findGoodPriceRange", pricerange);
+		m.addAttribute("GoodNumber", findGoodByLaunchDate.size());
 		return "good/jsp/EZBuyindex";
 	}
+
 /////////////////////////////////////////////////////新增頁面/////////////////////////////////////////////////
 //	InsertGood.controller
 	@GetMapping("InsertGood.controller")
@@ -332,32 +367,109 @@ public class GoodController {
 		HttpSession session = request.getSession();
 		session.setAttribute("totalPages", totalPages);
 		session.setAttribute("totalElements", totalElement);
-
+		System.out.println("totalPages = "+totalPages);
 		return page.getContent();
 	}
 
 	// 從首頁搜尋商品名稱
 	@GetMapping("/searchGood")
+//	@ResponseBody
 	public String searchGood(@RequestParam("GoodName") String goodsName, HttpServletRequest request) {
-		// @RequestParam("sellerIDforSearch")
-		// Integer
-		// sellerID,@RequestParam("searchGoodName")
-		// String
-		// goodName,
-		//		List<GoodsBean2> findGoods = gService.findGoods("貼圖");
-
 		HttpSession session = request.getSession();
-		session.setAttribute("goodsName", "貼圖");
+		session.setAttribute("goodsName", goodsName);
+		// 查詢商品名稱取得對應的種類集合
+		List<GoodTypeDto> goodTypeNumber= new ArrayList();
+		Query<Object[]> resultList = (Query<Object[]>) entityManager.createQuery("select distinct g.goodsType AS goodsType,count(g.goodsType) AS goodsTypeNumber from GoodsBean2 g where g.goodsName LIKE ?1 GROUP BY g.goodsType").setParameter(1, "%鯊鯊貓%");//在搜尋商品名稱後 取得對應種類的數量
+		List<Object[]> item = resultList.getResultList();
+		for(Object[] item1:item) {
+			GoodTypeDto data = new GoodTypeDto();
+			data.setGoodsType((String) item1[0]);
+			data.setGoodsTypeNumber((Long)item1[1]);
+			goodTypeNumber.add(data);
+		}
+		System.out.println("goodTypeNumber.size() = "+goodTypeNumber.size());
+		session.setAttribute("CategoryNumberList", goodTypeNumber);
+		session.setAttribute("CategoryNumber", goodTypeNumber.size());
 		return "good/jsp/SearchGood";
+//		return goodTypeNumber;
 	}
-	//透過訂單紀錄中找出最近熱賣的商品種類
+
+	// 跳轉頁面後 呈現搜尋結果
+	@GetMapping("/searchGoodResult/{pageNO}")
+	@ResponseBody
+	public List<GoodPriceDTO> searchGoodResult(@PathVariable("pageNO") Integer pageNo,HttpServletRequest request,Model m) {
+		//@RequestParam("GoodName") String goodsName,@PathVariable("pageNO") Integer pageNo, HttpServletRequest request
+		int pageSize = 3;
+		List<GoodsBean2> findGoods = gService.findGoods("鯊鯊貓");
+		
+		List<GoodPriceDTO> pricerange = new ArrayList();
+		/**/
+		// 透過上架日期取得商品
+		// 透過商品編號 取得價格最大最小值
+		for (GoodsBean2 item : findGoods) {
+			int goodID = item.getGoodsID();
+			Query<Object[]> resultList = (Query<Object[]>) entityManager.createQuery("select min(gf.goodPrice) AS minprice,max(gf.goodPrice) AS maxprice, g.goodsID AS goodsID from GoodsBean2 g join GoodFormat gf on g.goodsID = gf.good.goodsID where g.goodsID = ?1 group by g.goodsID").setParameter(1, goodID);// 在特定賣家下查詢商品，並取得不同編號下的最大和最小價格
+			List<Object[]> item2 = resultList.getResultList();
+			for (Object[] item3 : item2) {
+				GoodPriceDTO result = new GoodPriceDTO();
+				System.out.println(item.getNumberRatings());
+				if (item.getNumberRatings() == null) {// 沒人評分
+					result.setGoodAVG(0);
+				} else {
+					int AVG = item.getRating() / item.getNumberRatings();
+					result.setGoodAVG(AVG);
+				}
+				result.setGoodType(item.getGoodsType());
+				result.setGoodName(item.getGoodsName());
+				result.setTitleImage(item.getTitleImage());
+				result.setGoodsID((Integer) item3[2]);
+				result.setMaxprice((Integer) item3[1]);
+				result.setMinprice((Integer) item3[0]);
+				pricerange.add(result);
+			}
+		}
+		Pageable p1 = PageRequest.of(pageNo - 1, pageSize);
+		int start = (int) p1.getOffset();
+		int end = Math.min((start + p1.getPageSize()), findGoods.size());
+
+		List<GoodPriceDTO> pageContent = pricerange.subList(start, end);
+		int pagesnumber;
+		int totalPages;
+
+		if((findGoods.size()/pageSize)%1==0) {
+			pagesnumber = (findGoods.size()/pageSize);
+			totalPages = pagesnumber;
+		}
+		else {
+			pagesnumber = (findGoods.size()/pageSize);
+			totalPages = pagesnumber+1;
+		}
+//		HttpSession session = request.getSession();
+//		session.setAttribute("totalPages", totalPages);
+//		session.setAttribute("totalElements", findGoods.size());
+		m.addAttribute("totalPages", totalPages);
+		m.addAttribute("totalElements", findGoods.size());
+		/**/
+		return pageContent;
+	}
+
+	// 透過訂單紀錄中找出最近熱賣的商品種類
 	@GetMapping("/indexpopulargoodtype")
-	@ResponseBody //程式測試
-	public List<GoodTypeIndexDto> indexpopulargoodtype() {//@RequestParam("sellerIDforSearch") Integer sellerID,@RequestParam("searchGoodName") String goodName
+	@ResponseBody // 程式測試
+	public List<GoodTypeIndexDto> indexpopulargoodtype() {// @RequestParam("sellerIDforSearch") Integer
+															// sellerID,@RequestParam("searchGoodName") String goodName
 //		List<GoodTypeIndexDto> resultList = entityManager.createQuery("select g.goodsType AS goodsType from Orders o join GoodFormat gf on o.formatgoodId = gf.formatID join GoodsBean2 g on gf.good.goodsID = g.goodsID group by g.goodsType order by sum(o.quantity)").getResultList();
-		List<GoodTypeIndexDto> resultList = entityManager.createQuery("select distinct g.goodsType AS goodsType from GoodsBean2 g group by g.goodsType").getResultList();//因為訂單沒資料
-		return resultList;
+		List<GoodTypeIndexDto> resultList = entityManager
+				.createQuery("select distinct g.goodsType AS goodsType from GoodsBean2 g group by g.goodsType")
+				.getResultList();// 因為訂單沒資料
+		Pageable p1 = PageRequest.of(0, 5);
+		int start = (int) p1.getOffset();
+		int end = Math.min((start + p1.getPageSize()), resultList.size());
+		List<GoodTypeIndexDto> pageContent = resultList.subList(start, end);
+
+		return pageContent;
 	}
+
 	// 首頁(再從五種熱賣的商品中各取10個商品)
 	@GetMapping("/indexpopulargood/{goodType}")
 	@ResponseBody // 程式測試
@@ -371,28 +483,31 @@ public class GoodController {
 //				.setParameter(1, goodType).getResultList();
 		List<GoodBasicDto> resultList = entityManager.createQuery(
 				"select distinct g.goodsID AS GoodsID,g.goodsType AS GoodsType,g.goodsName AS GoodsName,g.titleImage AS TitleImage from GoodsBean2 g where g.goodsType=?1")
-				.setParameter(1, goodType).getResultList();//訂單內沒資料 
-		//[GoodsID,GoodsType,GoodsName,TitleImage]
+				.setParameter(1, goodType).getResultList();// 訂單內沒資料
+		// [GoodsID,GoodsType,GoodsName,TitleImage]
 		return resultList;
 	}
-	//首頁(每個商品都有最大價格和最小價格,透過商品編號取出來)
+
+	// 首頁(每個商品都有最大價格和最小價格,透過商品編號取出來)
 	@GetMapping("/indexpopulargoodPrice/{goodID}")
 	@ResponseBody // 程式測試
 	public List<GoodPriceDTO> indexpopulargoodPrice(@PathVariable("goodID") Integer goodID) {
-		List<GoodPriceDTO> resultList1 = entityManager.createQuery("select min(gf.goodPrice) AS minprice,max(gf.goodPrice) AS maxprice, g.goodsID from GoodsBean2 g join GoodFormat gf on g.goodsID = gf.good.goodsID where g.goodsID = ?1 group by g.goodsID")
-			      .setParameter(1, goodID).getResultList();//在特定賣家下查詢商品，並取得不同編號下的最大和最小價格
+		List<GoodPriceDTO> resultList1 = entityManager.createQuery(
+				"select min(gf.goodPrice) AS minprice,max(gf.goodPrice) AS maxprice, g.goodsID from GoodsBean2 g join GoodFormat gf on g.goodsID = gf.good.goodsID where g.goodsID = ?1 group by g.goodsID")
+				.setParameter(1, goodID).getResultList();// 在特定賣家下查詢商品，並取得不同編號下的最大和最小價格
 //		[minprice,maxprice,goodsID]
 		return resultList1;
 	}
-	//首頁(根據上架日期由大到小列出商品)
+
+	// 首頁(根據上架日期由大到小列出商品)
 	@GetMapping("/indexgoodByLaunchDate")
 	@ResponseBody // 程式測試
 	public List<GoodsBean2> indexgoodByLaunchDate() {
 		List<GoodsBean2> findGoodByLaunchDate = gService.findGoodByLaunchDate();
 		return findGoodByLaunchDate;
 	}
-	
-	//在賣家商品下搜尋商品
+
+	// 在賣家商品下搜尋商品
 	@GetMapping("/searchSellerGood")
 	public String searchSellerGood(HttpServletRequest request) {// @RequestParam("sellerIDforSearch") Integer
 																// sellerID,@RequestParam("searchGoodName") String

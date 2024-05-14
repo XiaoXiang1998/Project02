@@ -313,14 +313,14 @@ public class MemberController {
 		if (idToken != null) {
 //	            int level = 1;
 
-			System.out.println("獨家金鑰: " + thirdPartyId);
-			System.out.println("第三方登入方式: " + thirdPartyProvider);
-			System.out.println("信箱: " + email);
-			System.out.println("帳號: " + account);
-			System.out.println("全名: " + name);
-			System.out.println("照片: " + pictureUrl);
-			System.out.println("姓氏: " + givenName);
-			System.out.println("名字: " + familyName);
+//			System.out.println("獨家金鑰: " + thirdPartyId);
+//			System.out.println("第三方登入方式: " + thirdPartyProvider);
+//			System.out.println("信箱: " + email);
+//			System.out.println("帳號: " + account);
+//			System.out.println("全名: " + name);
+//			System.out.println("照片: " + pictureUrl);
+//			System.out.println("姓氏: " + givenName);
+//			System.out.println("名字: " + familyName);
 
 			if (mService.findByAccount(account).isPresent()) {
 				if (mService.checkLogin(account, thirdPartyId)) {
@@ -340,6 +340,7 @@ public class MemberController {
 				System.out.println(now);
 				MemberBean memBean = new MemberBean(account, thirdPartyId, email, name, thirdPartyProvider,now);
 				mService.insert(memBean);
+				httpSession.setAttribute("member", memBean);
 				System.out.println("有創建帳號");
 				return "/good/jsp/EZBuyindex";
 			}
@@ -437,8 +438,14 @@ public class MemberController {
 			boolean timeOut = minutesDifference < 15;
 
 			if (timeOut == true) {
-				rtService.deleteForgetPassword(thisID);
-				return "/member/ResetPassword";
+				/*比較TOKEN*/
+				if(token.equals(rtBean.getToken())) {
+					rtService.deleteForgetPassword(thisID);
+					return "/member/ResetPassword";
+				} else {
+					rtService.deleteForgetPassword(thisID);
+					return "/member/tokenErr";
+				}
 			} else {
 				rtService.deleteForgetPassword(thisID);
 				return "/member/TimeOut";

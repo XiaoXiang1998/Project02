@@ -36,17 +36,41 @@
             <script>
                 var indexPage = 1;
                 $(function () {
-                    loadPage(indexPage);
+                    let target = $('#CategoriesList').find('input[type="checkbox"][name="Category"]:checked');
+                    let Category;
+                    if (target.length == 0) {
+                        Category = "XXX";
+                    }
+                    else {
+                        Category = target.val();
+                    }
+                    let price;
+                    if ($('#rangeInput').val() == 0) {
+                        price = "XXX";
+                    }
+                    else {
+                        price = $('#rangeInput').val();
+                    }
+                    let orderItem;
+                    if ($('#fruits').val() == "NO") {
+                        orderItem = "XXX";
+                    }
+                    else {
+                        orderItem = $('#fruits').val();
+                    }
+                    let hiddenContent = Category + "_" + price + "_" + orderItem;
+                    //
+                    loadPage(indexPage, hiddenContent);//還需檢查額外條件
                 })
                 function change(page) {
                     indexPage = page;
-                    loadPage(indexPage);
+                    loadPage(indexPage, hiddenContent);
                 }
-                function loadPage(indexPage) {
+                function loadPage(indexPage, hiddenContent) {
 
                     $.ajax({
                         type: 'get',
-                        url: '/searchGoodResult/' + indexPage,
+                        url: '/searchGoodResult/' + indexPage + "/" + hiddenContent,
                         contentType: 'application/json',
                         success: function (data) {
                             $('#returnGoodResult').prop("innerHTML", "");
@@ -159,7 +183,7 @@
                 <div class="container py-5">
                     <div class="row mt-5">
                         <div class="col mt-5">
-                            <h1 class="mb-4 mt-2">搜尋"${goodsName}"的結果</h1>
+                            <h1 class="mb-4 mt-2" id="GoodNameResult">搜尋"${goodsName}"的結果</h1>
                         </div>
                         <div class="col-xl-3 mt-5">
                             <div class="bg-light ps-3 py-3 rounded d-flex justify-content-between mb-4">
@@ -167,10 +191,10 @@
                                     <label for="fruits">Default Sorting:</label>
                                     <select id="fruits" name="fruitlist" class="border-0 form-select-sm bg-light me-3"
                                         form="fruitform">
-                                        <option value="volvo">Nothing</option>
-                                        <option value="saab">價格</option>
-                                        <option value="opel">評價</option>
-                                        <option value="audi">商品編號</option>
+                                        <option value="NO">Nothing</option>
+                                        <option value="price">價格</option>
+                                        <option value="score">評價</option>
+                                        <option value="ID">商品編號</option>
                                     </select>
                                 </form>
                             </div>
@@ -210,7 +234,7 @@
                                         <div class="col-lg-12">
                                             <div class="mb-3">
                                                 <h4>種類</h4>
-                                                <ul class="list-unstyled fruite-categorie">
+                                                <ul class="list-unstyled fruite-categorie" id="CategoriesList">
                                                     <c:forEach var="j" begin="0" end="${CategoryNumber}" step="1"
                                                         items="${CategoryNumberList}">
                                                         <li>
@@ -218,7 +242,7 @@
                                                                 class="form-check d-flex justify-content-between fruite-name CategotyClick">
                                                                 <form action="">
                                                                     <input class="form-check-input" type="checkbox"
-                                                                        value="${j.goodsType}" id="flexCheckDefault">
+                                                                        value="${j.goodsType}" name="Category">
                                                                     <input type="text" class="form-control"
                                                                         name="GoodName" value="${goodsName}" hidden>
                                                                     <input type="text" class="form-control"
@@ -236,9 +260,9 @@
                                             <div class="mb-3">
                                                 <h4 class="mb-2">Price</h4>
                                                 <input type="range" class="form-range w-100" id="rangeInput"
-                                                    name="rangeInput" min="0" max="500" value="0"
+                                                    name="rangeInput" min="0" max="50000" value="0"
                                                     oninput="amount.value=rangeInput.value">
-                                                <output id="amount" name="amount" min-velue="0" max-value="500"
+                                                <output id="amount" name="amount" min-velue="0" max-value="50000"
                                                     for="rangeInput">0</output>
                                             </div>
                                         </div>
@@ -664,31 +688,101 @@
             <!-- Template Javascript -->
             <script src="../../frontjs/main.js"></script>
             <script>
-                $('.CategotyClick').click(function () {//仍須滿足分頁查詢的功能
-                    // <form action="">
-                    //     <input type="text" class="form-control" name="GoodName" value="${goodsName}" hidden>
-                    //     <input type="text" class="form-control" name="GoodType" value="${{j.goodsType}}" hidden>
-                    //     <i class="fas fa-apple-alt me-2"></i>${j.goodsType}
-                    //     <span>(${j.goodsTypeNumber})</span>
-                    // </form>
-                    // console.log($(this).find('form'));
-                    // let form = $(this).find('form');
-                    // form.prop("action", "....");
-                    // form.prop("method", "get");
-                    // let formdata = new FormData(form);
-                    // $.ajax({
-                    //     method: "get",
-                    //     url: "....",
-                    //     contentType: 'application/json',
-                    //     data: formdata,
-                    //     success: function (data) {
-
-                    //     },
-                    // })
+                $('input[type="checkbox"][name="Category"]').click(function () {//仍須滿足分頁查詢的功能
+                    let goodNameLength = $('#GoodNameResult').prop("innerHTML").length;
+                    let goodName = $('#GoodNameResult').prop("innerHTML").substring(3, goodNameLength - 4);
+                    console.log(goodName);
+                    // console.log("123123123123123");
+                    // console.log($(this).closest('form').find("span").prop("innerHTML")); //種類
+                    // console.log($('#rangeInput').val()); //價格
+                    // console.log($('#fruits').val()); //用甚麼方式排序
+                    let Category;
+                    if ($(this).prop("checked") == true) {
+                        Category = $(this).closest('form').find("span").prop("innerHTML");
+                    }
+                    else {
+                        Category = "XXX";
+                    }
+                    let price;
+                    if ($('#rangeInput').val() == 0) {
+                        price = "XXX";
+                    }
+                    else {
+                        price = $('#rangeInput').val();
+                    }
+                    let orderItem;
+                    if ($('#fruits').val() == "NO") {
+                        orderItem = "XXX";
+                    }
+                    else {
+                        orderItem = $('#fruits').val();
+                    }
+                    let hiddenContent = goodName + "_" + Category + "_" + price + "_" + orderItem;
+                    console.log("hiddenContent = " + hiddenContent);
                 })
-                function CategotyClick(pageNO) {
 
-                }
+                $('#rangeInput').change(function () {
+                    let goodNameLength = $('#GoodNameResult').prop("innerHTML").length;
+
+                    let target = $('#CategoriesList').find('input[type="checkbox"][name="Category"]:checked');
+                    let goodName = $('#GoodNameResult').prop("innerHTML").substring(3, goodNameLength - 4);
+
+                    let Category;
+                    if (target.length == 0) {
+                        Category = "XXX";
+                    }
+                    else {
+                        Category = target.val();
+                    }
+                    let price;
+                    if ($(this).val() == 0) {
+                        price = "XXX";
+                    }
+                    else {
+                        price = $(this).val();
+                    }
+
+                    let orderItem;
+                    if ($('#fruits').val() == "NO") {
+                        orderItem = "XXX";
+                    }
+                    else {
+                        orderItem = $('#fruits').val();
+                    }
+                    let hiddenContent = goodName + "_" + Category + "_" + price + "_" + orderItem;
+                    console.log("hiddenContent = " + hiddenContent);
+                })
+                $('#fruits').change(function () {
+                    let goodNameLength = $('#GoodNameResult').prop("innerHTML").length;
+
+                    let goodName = $('#GoodNameResult').prop("innerHTML").substring(3, goodNameLength - 4);
+
+                    let orderItem;
+                    if ($(this).val() == "NO") {
+                        orderItem = "XXX";
+                    }
+                    else {
+                        orderItem = $(this).val();
+                    }
+
+                    let target = $('#CategoriesList').find('input[type="checkbox"][name="Category"]:checked');
+                    let Category;
+                    if (target.length == 0) {
+                        Category = "XXX";
+                    }
+                    else {
+                        Category = target.val();
+                    }
+                    let price;
+                    if ($('#rangeInput').val() == 0) {
+                        price = "XXX";
+                    }
+                    else {
+                        price = $('#rangeInput').val();
+                    }
+                    let hiddenContent = goodName + "_" + Category + "_" + price + "_" + orderItem;
+                    console.log("hiddenContent = " + hiddenContent);
+                })
             </script>
         </body>
 

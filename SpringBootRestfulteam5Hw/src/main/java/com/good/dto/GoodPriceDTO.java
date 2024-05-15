@@ -80,4 +80,11 @@ public class GoodPriceDTO {
 		this.goodsID = goodsID;
 	}
 
+	@Override
+	public String toString() {
+		return "GoodPriceDTO [goodAVG=" + goodAVG + ", goodName=" + goodName + ", goodType=" + goodType
+				+ ", titleImage=" + titleImage + ", minprice=" + minprice + ", maxprice=" + maxprice + ", goodsID="
+				+ goodsID + "]";
+	}
+
 }

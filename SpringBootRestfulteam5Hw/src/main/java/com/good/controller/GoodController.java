@@ -29,6 +29,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 import com.good.dto.GoodBasicDto;
+import com.good.dto.GoodIDDto;
 import com.good.dto.GoodPriceDTO;
 import com.good.dto.GoodTypeDto;
 import com.good.dto.GoodTypeIndexDto;
@@ -102,7 +103,6 @@ public class GoodController {
 		return "good/jsp/insertPageTemplete";
 	}
 
-	
 	// another insert page(將時間拿掉)
 	@PostMapping("InsertPage.controller")
 	public String processInsertAction2(@RequestParam(name = "GoodImages") List<MultipartFile> goodImages,
@@ -271,7 +271,7 @@ public class GoodController {
 		HttpSession session = request.getSession();
 		session.setAttribute("totalPages", totalPages);
 		session.setAttribute("totalElements", totalElement);
-		System.out.println("totalPages = "+totalPages);
+		System.out.println("totalPages = " + totalPages);
 		return page.getContent();
 	}
 
@@ -282,16 +282,18 @@ public class GoodController {
 		HttpSession session = request.getSession();
 		session.setAttribute("goodsName", goodsName);
 		// 查詢商品名稱取得對應的種類集合
-		List<GoodTypeDto> goodTypeNumber= new ArrayList();
-		Query<Object[]> resultList = (Query<Object[]>) entityManager.createQuery("select distinct g.goodsType AS goodsType,count(g.goodsType) AS goodsTypeNumber from GoodsBean2 g where g.goodsName LIKE ?1 GROUP BY g.goodsType").setParameter(1, "%鯊鯊貓%");//在搜尋商品名稱後 取得對應種類的數量
+		List<GoodTypeDto> goodTypeNumber = new ArrayList();
+		Query<Object[]> resultList = (Query<Object[]>) entityManager.createQuery(
+				"select distinct g.goodsType AS goodsType,count(g.goodsType) AS goodsTypeNumber from GoodsBean2 g where g.goodsName LIKE ?1 GROUP BY g.goodsType")
+				.setParameter(1, "%鯊鯊貓%");// 在搜尋商品名稱後 取得對應種類的數量
 		List<Object[]> item = resultList.getResultList();
-		for(Object[] item1:item) {
+		for (Object[] item1 : item) {
 			GoodTypeDto data = new GoodTypeDto();
 			data.setGoodsType((String) item1[0]);
-			data.setGoodsTypeNumber((Long)item1[1]);
+			data.setGoodsTypeNumber((Long) item1[1]);
 			goodTypeNumber.add(data);
 		}
-		System.out.println("goodTypeNumber.size() = "+goodTypeNumber.size());
+		System.out.println("goodTypeNumber.size() = " + goodTypeNumber.size());
 		session.setAttribute("CategoryNumberList", goodTypeNumber);
 		session.setAttribute("CategoryNumber", goodTypeNumber.size());
 		return "good/jsp/SearchGood";
@@ -301,85 +303,155 @@ public class GoodController {
 	// 跳轉頁面後 呈現搜尋結果
 	@GetMapping("/searchGoodResult/{pageNO}/{hiddenContent}")
 	@ResponseBody
-	public List<GoodPriceDTO> searchGoodResult(@PathVariable("pageNO") Integer pageNo,HttpServletRequest request,Model m,@PathVariable("hiddenContent") String hiddencontent) {
+	public List<GoodPriceDTO> searchGoodResult(@PathVariable("pageNO") Integer pageNo,
+			@PathVariable("hiddenContent") String hiddencontent, HttpServletRequest request, Model m) {
+		// 外界給定
+//        let hiddenContent = goodName + "_" + Category + "_" + price + "_" + orderItem;
+		// /searchGoodResult/1/鯊鯊貓_娃娃_XXX_XXX
 		String[] split = hiddencontent.split("_");
+		System.out.println("hiddencontent = "+hiddencontent);
 		String goodName = split[0];
 		String category = split[1];
 		String price = split[2];
 		String orderItem = split[3];
-		String hql1;
-		String hql2;
-		String hql3;
-		if(category.equals("XXX")) {//沒有選定種類
-			hql1 = "";
-		}
-		else {
-			hql1 = "from GoodsBean2 g join GoodFormat gf on g.goodsID = gf.good.goodsID where g.goodsID = ?1 AND g.goodsType=?2";
-			if(price.equals("XXX")) {
-				hql2="";
-			}
-			else {
-				hql2 = " AND gf.goodPrice <?3 group by g.goodsID";
-				if(orderItem.equals("XXX")) {
-					
+		// 自己給予(測試用)
+		//
+		String hql0 = "select g.goodsID from GoodsBean2 g join GoodFormat gf on g.goodsID = gf.good.goodsID where g.goodsName LIKE '%"
+				+ goodName + "%' ";
+		String hql1 = "";
+		String hql2 = "";
+		String hql3 = "";
+//		select g.GoodsID
+//		from Goods g join GoodFormat gf on g.goodsID = gf.goodsID 
+//		where g.GoodsName LIKE '%鯊鯊貓%' AND gf.GoodPrice between 0 and 1500 AND g.GoodsType = '貼圖'
+//		order by gf.GoodPrice
+		if (category.equals("XXX")) {// 沒有選定種類
+//			hql1 = "";
+		} else {
+			hql1 = "AND g.goodsType='" + category + "' ";
+			if (price.equals("XXX")) {
+//				hql2 = "";
+			} else {
+				hql2 = "AND gf.goodPrice between 0 AND " + price + " ";
+				if (orderItem.equals("XXX")) {
+//					hql3 = "";
+				} else {
+					switch (orderItem) {
+					case "price":
+						hql3 = "order by gf.goodPrice";
+						break;
+					case "score":
+//						hql3 = "";
+						break;
+					case "ID":
+						hql3 = "order by g.goodsID";
+						break;
+					case "NO":
+//						hql3 = "";
+						break;
+					default:
+//						hql3 = "";
+						System.out.println("something weird");
+					}
 				}
-				else {
-					
-				}
 			}
 		}
-		String hql = "select min(gf.goodPrice) AS minprice,max(gf.goodPrice) AS maxprice, g.goodsID AS goodsID from GoodsBean2 g join GoodFormat gf on g.goodsID = gf.good.goodsID where g.goodsID = ?1 group by g.goodsID";
-		//@RequestParam("GoodName") String goodsName,@PathVariable("pageNO") Integer pageNo, HttpServletRequest request
+		String hql = hql0 + hql1 + hql2 + hql3;
+		System.out.println("hql = " + hql);
+		Query<Integer> resultList0 = (Query<Integer>) entityManager.createQuery(hql);
+		List<Integer> ListObject = resultList0.getResultList();
+		List<Integer> listID = new ArrayList<>();
+		for (Integer item : ListObject) { // 取得滿足要求的商品編號
+			if (listID.contains(item)) {
+				// 有重複元素 不要加進去
+			} else {
+				listID.add(item);
+				System.out.println("itemID=" + item);
+			}
+		}
+		// @RequestParam("GoodName") String goodsName,@PathVariable("pageNO") Integer
+		// pageNo, HttpServletRequest request
 		int pageSize = 3;
-		List<GoodsBean2> findGoods = gService.findGoods("鯊鯊貓");
-		
+
 		List<GoodPriceDTO> pricerange = new ArrayList();
 		/**/
 		// 透過上架日期取得商品
 		// 透過商品編號 取得價格最大最小值
-		for (GoodsBean2 item : findGoods) {
-			int goodID = item.getGoodsID();
-			Query<Object[]> resultList = (Query<Object[]>) entityManager.createQuery("select min(gf.goodPrice) AS minprice,max(gf.goodPrice) AS maxprice, g.goodsID AS goodsID from GoodsBean2 g join GoodFormat gf on g.goodsID = gf.good.goodsID where g.goodsID = ?1 group by g.goodsID").setParameter(1, goodID);// 在特定賣家下查詢商品，並取得不同編號下的最大和最小價格
+//		for (GoodsBean2 item : findGoods) {
+//			int goodID = item.getGoodsID();
+//			Query<Object[]> resultList = (Query<Object[]>) entityManager.createQuery(
+//					"select min(gf.goodPrice) AS minprice,max(gf.goodPrice) AS maxprice, g.goodsID AS goodsID from GoodsBean2 g join GoodFormat gf on g.goodsID = gf.good.goodsID where g.goodsID = ?1 group by g.goodsID")
+//					.setParameter(1, goodID);// 在特定賣家下查詢商品，並取得不同編號下的最大和最小價格
+//			List<Object[]> item2 = resultList.getResultList();
+//			for (Object[] item3 : item2) {
+//				GoodPriceDTO result = new GoodPriceDTO();
+//				System.out.println(item.getNumberRatings());
+//				if (item.getNumberRatings() == null) {// 沒人評分
+//					result.setGoodAVG(0);
+//				} else {
+//					int AVG = item.getRating() / item.getNumberRatings();
+//					result.setGoodAVG(AVG);
+//				}
+//				result.setGoodType(item.getGoodsType());
+//				result.setGoodName(item.getGoodsName());
+//				result.setTitleImage(item.getTitleImage());
+//				result.setGoodsID((Integer) item3[2]);
+//				result.setMaxprice((Integer) item3[1]);
+//				result.setMinprice((Integer) item3[0]);
+//				pricerange.add(result);
+//			}
+//		}
+		/**/
+		for (Integer item : listID) { // 先取得編號
+			GoodsBean2 good = gService.getById(item);
+			Query<Object[]> resultList = (Query<Object[]>) entityManager.createQuery(
+//					select min(gf.GoodPrice) AS minprice,max(gf.GoodPrice) AS maxprice,gf.GoodsID AS 'GoodID'
+//					from Goods g join GoodFormat gf on g.GoodsID = gf.GoodsID
+//					where gf.GoodsID = 4 
+//					group by gf.GoodsID;
+					"select min(gf.goodPrice) AS minprice,max(gf.goodPrice) AS maxprice, g.goodsID AS goodsID from GoodsBean2 g join GoodFormat gf on g.goodsID = gf.good.goodsID where g.goodsID = ?1 group by g.goodsID")
+					.setParameter(1, item);// 在特定賣家下查詢商品，並取得不同編號下的最大和最小價格
 			List<Object[]> item2 = resultList.getResultList();
 			for (Object[] item3 : item2) {
 				GoodPriceDTO result = new GoodPriceDTO();
-				System.out.println(item.getNumberRatings());
-				if (item.getNumberRatings() == null) {// 沒人評分
+				System.out.println(good.getNumberRatings());
+				if (good.getNumberRatings() == null) {// 沒人評分
 					result.setGoodAVG(0);
 				} else {
-					int AVG = item.getRating() / item.getNumberRatings();
+					int AVG = good.getRating() / good.getNumberRatings();
 					result.setGoodAVG(AVG);
 				}
-				result.setGoodType(item.getGoodsType());
-				result.setGoodName(item.getGoodsName());
-				result.setTitleImage(item.getTitleImage());
+				result.setGoodType(good.getGoodsType());
+				result.setGoodName(good.getGoodsName());
+				result.setTitleImage(good.getTitleImage());
 				result.setGoodsID((Integer) item3[2]);
 				result.setMaxprice((Integer) item3[1]);
 				result.setMinprice((Integer) item3[0]);
+				System.out.println(result.toString());
 				pricerange.add(result);
 			}
 		}
+		/**/
 		Pageable p1 = PageRequest.of(pageNo - 1, pageSize);
 		int start = (int) p1.getOffset();
-		int end = Math.min((start + p1.getPageSize()), findGoods.size());
-
+		int end = Math.min((start + p1.getPageSize()), pricerange.size());
+		System.out.println("start = " + start + ",end=" + end);
 		List<GoodPriceDTO> pageContent = pricerange.subList(start, end);
 		int pagesnumber;
 		int totalPages;
 
-		if((findGoods.size()/pageSize)%1==0) {
-			pagesnumber = (findGoods.size()/pageSize);
+		if ((pricerange.size() / pageSize) % 1 == 0) {
+			pagesnumber = (pricerange.size() / pageSize);
 			totalPages = pagesnumber;
-		}
-		else {
-			pagesnumber = (findGoods.size()/pageSize);
-			totalPages = pagesnumber+1;
+		} else {
+			pagesnumber = (pricerange.size() / pageSize);
+			totalPages = pagesnumber + 1;
 		}
 //		HttpSession session = request.getSession();
 //		session.setAttribute("totalPages", totalPages);
 //		session.setAttribute("totalElements", findGoods.size());
 		m.addAttribute("totalPages", totalPages);
-		m.addAttribute("totalElements", findGoods.size());
+		m.addAttribute("totalElements", pricerange.size());
 		/**/
 		return pageContent;
 	}

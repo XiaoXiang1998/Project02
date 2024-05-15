@@ -58,11 +58,43 @@
                     else {
                         orderItem = $('#fruits').val();
                     }
-                    let hiddenContent = Category + "_" + price + "_" + orderItem;
+                    let goodNameLength = $('#GoodNameResult').prop("innerHTML").length;
+
+                    let goodName = $('#GoodNameResult').prop("innerHTML").substring(3, goodNameLength - 4);
+
+                    let hiddenContent = goodName + "_" + Category + "_" + price + "_" + orderItem;
                     //
                     loadPage(indexPage, hiddenContent);//還需檢查額外條件
                 })
                 function change(page) {
+                    let target = $('#CategoriesList').find('input[type="checkbox"][name="Category"]:checked');
+                    let Category;
+                    if (target.length == 0) {
+                        Category = "XXX";
+                    }
+                    else {
+                        Category = target.val();
+                    }
+                    let price;
+                    if ($('#rangeInput').val() == 0) {
+                        price = "XXX";
+                    }
+                    else {
+                        price = $('#rangeInput').val();
+                    }
+                    let orderItem;
+                    if ($('#fruits').val() == "NO") {
+                        orderItem = "XXX";
+                    }
+                    else {
+                        orderItem = $('#fruits').val();
+                    }
+                    let goodNameLength = $('#GoodNameResult').prop("innerHTML").length;
+
+                    let goodName = $('#GoodNameResult').prop("innerHTML").substring(3, goodNameLength - 4);
+
+                    let hiddenContent = goodName + "_" + Category + "_" + price + "_" + orderItem;
+                    //
                     indexPage = page;
                     loadPage(indexPage, hiddenContent);
                 }
@@ -116,7 +148,7 @@
                                 div0.append(div1);
                                 $('#returnGoodResult').append(div0);
                             })
-                            console.log($('#returnGoodResult'));
+                            // console.log($('#returnGoodResult'));
                         }
                     })
                 }
@@ -153,6 +185,7 @@
                     <a href="#" class="navbar-brand">
                         <h1 class="text-secondary display-6">EZBuy</h1>
                     </a>
+                    <!--  -->
                     <form class="form-inline d-flex">
                         <div class="form-group mx-sm-3 mb-2">
                             <input type="text" class="form-control border-2 border-secondary py-3 px-4 rounded-pill"
@@ -164,6 +197,7 @@
                             <i class="fas fa-search"></i>
                         </button>
                     </form>
+                    <!--  -->
                     <a href="#" class="position-relative me-4 my-auto ms-5">
                         <i class="fa fa-shopping-bag fa-2x text-secondary"></i>
                         <span
@@ -691,7 +725,6 @@
                 $('input[type="checkbox"][name="Category"]').click(function () {//仍須滿足分頁查詢的功能
                     let goodNameLength = $('#GoodNameResult').prop("innerHTML").length;
                     let goodName = $('#GoodNameResult').prop("innerHTML").substring(3, goodNameLength - 4);
-                    console.log(goodName);
                     // console.log("123123123123123");
                     // console.log($(this).closest('form').find("span").prop("innerHTML")); //種類
                     // console.log($('#rangeInput').val()); //價格
@@ -719,6 +752,7 @@
                     }
                     let hiddenContent = goodName + "_" + Category + "_" + price + "_" + orderItem;
                     console.log("hiddenContent = " + hiddenContent);
+                    loadPage(1, hiddenContent);
                 })
 
                 $('#rangeInput').change(function () {
@@ -751,6 +785,7 @@
                     }
                     let hiddenContent = goodName + "_" + Category + "_" + price + "_" + orderItem;
                     console.log("hiddenContent = " + hiddenContent);
+                    loadPage(1, hiddenContent);
                 })
                 $('#fruits').change(function () {
                     let goodNameLength = $('#GoodNameResult').prop("innerHTML").length;
@@ -782,6 +817,20 @@
                     }
                     let hiddenContent = goodName + "_" + Category + "_" + price + "_" + orderItem;
                     console.log("hiddenContent = " + hiddenContent);
+                    loadPage(1, hiddenContent);
+                })
+                $('#GoToSearchGood').click(function () {
+                    let searchGoodInput = $(this).closest('form').find('input');
+                    if (searchGoodInput.prop('value') == null) {
+                        console.log(searchGoodInput);
+                    }
+                    else {
+                        let form = $(this).closest('form');
+                        form.attr("action", "/searchGood");
+                        form.attr("method", "get");
+                        // console.log(form.prop("innerHTML"));
+                        form.submit();
+                    }
                 })
             </script>
         </body>

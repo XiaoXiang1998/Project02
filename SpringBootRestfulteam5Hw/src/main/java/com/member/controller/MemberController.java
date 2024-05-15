@@ -38,6 +38,7 @@ import com.member.model.MemberBean;
 import com.member.model.MemberService;
 import com.member.model.ResetTokenBean;
 import com.member.model.ResetTokenService;
+import com.sean.model.CarItemService;
 import com.sean.model.Notifications;
 import com.sean.model.NotificationsService;
 import com.util.tokenGenerator.TokenService;
@@ -62,9 +63,13 @@ public class MemberController {
 
 	@Autowired
 	private TokenService tokenService;
+	
 	@Autowired
 	private NotificationsService nService;
-
+	
+	@Autowired
+	private CarItemService cService;
+	
 	// http://localhost:8081/ezbuy.com
 	@GetMapping("/ezbuy.com")
 	public String loginPage() {
@@ -267,6 +272,9 @@ public class MemberController {
 			Integer count = nService.noReadCounts(memberInformation);
 			httpSession.setAttribute("count", count);
 			httpSession.setAttribute("notifications", notifications);
+			//購物車數量
+			Integer carItemCount = cService.carItemCount(memberInformation);
+			httpSession.setAttribute("carItemCount", carItemCount);
 			// 檢查會員等級
 			return "/good/jsp/EZBuyindex";
 		}
@@ -356,6 +364,9 @@ public class MemberController {
 				Integer count = nService.noReadCounts(memBean);
 				httpSession.setAttribute("count", count);
 				httpSession.setAttribute("notifications", notifications);
+				//購物車數量
+				Integer carItemCount = cService.carItemCount(memBean);
+				httpSession.setAttribute("carItemCount", carItemCount);
 				return "/good/jsp/EZBuyindex";
 			}
 		} 

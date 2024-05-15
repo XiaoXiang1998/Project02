@@ -3,8 +3,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="BIG5">
-<title>Insert title here</title>
+<meta charset="UTF-8">
+<title>EZBUY</title>
 </head>
 <body class="sb-nav-fixed">
 	<nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
@@ -41,7 +41,7 @@
 				<nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
 					<div class="sb-sidenav-menu">
 						<div class="nav">
-							<div class="sb-sidenav-menu-heading">功能列表666</div>
+							<div class="sb-sidenav-menu-heading">全功能列表</div>
 							<a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
 								data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
 								<div class="sb-nav-link-icon"><i class="fa-solid fa-user-pen"></i></div>

@@ -11,7 +11,6 @@
 		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 		<script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
 	</head>
-	</head>
 
 	<body class="sb-nav-fixed">
 		<nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
@@ -48,254 +47,190 @@
 			</ul>
 		</nav>
 		<div id="layoutSidenav">
-			<div id="layoutSidenav_nav">
-				<nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
-					<div class="sb-sidenav-menu">
-						<div class="nav">
-							<div class="sb-sidenav-menu-heading">功能列表</div>
-							<a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
-								data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
-								<div class="sb-nav-link-icon"><i class="fa-solid fa-user-pen"></i></div>
-								人員管理
-								<div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-							</a>
-							<div class="collapse" id="collapsePages" aria-labelledby="headingTwo"
-								data-bs-parent="#sidenavAccordion">
-								<nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
-									<a class="nav-link" href="AdminIndex">
-										會員管理
-									</a>
-									<a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
-										data-bs-target="#pagesCollapseAuth" aria-expanded="false"
-										aria-controls="pagesCollapseAuth">
-										後台人員管理
-										<div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-									</a>
-									<div class="collapse" id="pagesCollapseAuth" aria-labelledby="headingOne"
-										data-bs-parent="#sidenavAccordionPages">
-										<nav class="sb-sidenav-menu-nested nav">
-											<a class="nav-link" href="AdminManagement">檢視後台人員</a>
-											<a class="nav-link" href="AdminInsert">新增後台人員</a>
-										</nav>
+			<%@ include file="../AllNav.jsp" %>
+				<div id="layoutSidenav_content">
+					<main>
+						<div class="container-fluid px-4">
+							<h1 class="mt-4">會員數據</h1>
+							<ol class="breadcrumb mb-4">
+								<li class="breadcrumb-item active">人數總覽</li>
+							</ol>
+							<div class="row">
+								<div class="col-xl-6">
+									<div class="card mb-4">
+										<div class="card-header">
+											<i class="fas fa-chart-area me-1"></i> 註冊時間分布
+										</div>
+										<div class="card-body">
+											<canvas id="myAreaChart" width="100%" height="40"></canvas>
+										</div>
 									</div>
-
-									<a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
-										data-bs-target="#MembershipLevel" aria-expanded="false"
-										aria-controls="pagesCollapseAuth">
-										會員規範管理
-										<div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-									</a>
-									<div class="collapse" id="MembershipLevel" aria-labelledby="headingOne"
-										data-bs-parent="#sidenavAccordionPages">
-										<nav class="sb-sidenav-menu-nested nav">
-											<a class="nav-link" href="MembershipLevelGuidelines">檢視會員等級規範</a>
-											<a class="nav-link" href="InsertMembershipLevel">新增會員等級規範</a>
-										</nav>
-									</div>
-								</nav>
-							</div>
-							<a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#order"
-								aria-expanded="false" aria-controls="collapsePages">
-								<div class="sb-nav-link-icon"><i class="fa-solid fa-sheet-plastic"></i></div>
-								訂單管理
-								<div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-							</a>
-							<div class="collapse" id="order" aria-labelledby="headingTwo"
-								data-bs-parent="#sidenavAccordion">
-								<nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
-									<a class="nav-link" href="queryOrder.controller">
-										訂單詳情
-									</a>
-								</nav>
-							</div>
-						</div>
-					</div>
-					<div class="sb-sidenav-footer">
-						<div class="small">Logged in as:</div>
-						Start Bootstrap
-					</div>
-				</nav>
-			</div>
-			<div id="layoutSidenav_content">
-				<main>
-					<div class="container-fluid px-4">
-						<h1 class="mt-4">會員數據</h1>
-						<ol class="breadcrumb mb-4">
-							<li class="breadcrumb-item active">人數總覽</li>
-						</ol>
-						<div class="row">
-							<div class="col-xl-6">
-								<div class="card mb-4">
-									<div class="card-header">
-										<i class="fas fa-chart-area me-1"></i> 註冊時間分布
-									</div>
-									<div class="card-body">
-										<canvas id="myAreaChart" width="100%" height="40"></canvas>
+								</div>
+								<div class="col-xl-6">
+									<div class="card mb-4">
+										<div class="card-header">
+											<i class="fas fa-chart-bar me-1"></i> 會員等級分布
+										</div>
+										<div class="card-body">
+											<canvas id="myBarChart" width="100%" height="40"></canvas>
+										</div>
 									</div>
 								</div>
 							</div>
-							<div class="col-xl-6">
-								<div class="card mb-4">
-									<div class="card-header">
-										<i class="fas fa-chart-bar me-1"></i> 會員等級分布
-									</div>
-									<div class="card-body">
-										<canvas id="myBarChart" width="100%" height="40"></canvas>
-									</div>
+							<div class="card mb-4">
+								<div class="card-header">
+									<i class="fas fa-table me-1"></i> 會員資料總覽
 								</div>
-							</div>
-						</div>
-						<div class="card mb-4">
-							<div class="card-header">
-								<i class="fas fa-table me-1"></i> 會員資料總覽
-							</div>
-							<div class="card-body">
-								<table id="datatablesSimple">
-									<thead>
-										<tr>
-											<th>會員ID</th>
-											<th>帳號</th>
-											<th>密碼</th>
-											<th>信箱</th>
-											<th>電話</th>
-											<th>姓名</th>
-											<th>性別</th>
-											<th>住址</th>
-											<th>頭貼</th>
-											<th>賣家身分</th>
-											<th>被評論數</th>
-											<th>總評分數</th>
-											<th>總消費金額</th>
-											<th>會員級別</th>
-											<th>登入方式</th>
-											<th>註冊時間</th>
-											<th>操作功能</th>
-										</tr>
-									</thead>
-									<tbody>
-									</tbody>
-								</table>
-								<div class="modal fade" id="exampleModal" tabindex="-1"
-									aria-labelledby="exampleModalLabel" aria-hidden="true">
-									<div class="modal-dialog modal-dialog-centered">
-										<div class="modal-content">
-											<div class="modal-header">
-												<h5 class="modal-title" id="exampleModalLabel">更新會員資料</h5>
-												<button type="button" class="btn-close" data-bs-dismiss="modal"
-													aria-label="Close"></button>
-											</div>
-											<div class="modal-body">
-												<form id="editForm">
-													<div class="form-floating mb-3">
-														<input type="text" id="sid" name="sid" class="form-control"
-															readonly>
-														<label for="sid">會員ID:</label>
-													</div>
-													<div class="form-floating mb-3">
-														<input type="text" id="account" name="account"
-															class="form-control" readonly>
-														<label for="account">帳號:</label>
-													</div>
-													<div class="form-floating mb-3">
-														<input type="text" id="password" name="password"
-															class="form-control">
-														<label for="password">密碼:</label>
-													</div>
-													<div class="form-floating mb-3">
-														<input type="email" id="email" name="email"
-															class="form-control">
-														<label for="email">信箱:</label>
-													</div>
-													<div class="form-floating mb-3">
-														<input type="tel" id="phone" name="phone" class="form-control">
-														<label for="phone">電話:</label>
-													</div>
-													<div class="form-floating mb-3">
-														<input type="text" id="name" name="name" class="form-control">
-														<label for="name">姓名:</label>
-													</div>
-													<div class="form-floating mb-3">
-														<select id="gender" name="gender" class="form-select">
-															<option value="male">男性</option>
-															<option value="female">女性</option>
-														</select>
-														<label for="gender">性別:</label>
-													</div>
-													<div class="form-floating mb-3">
-														<input type="text" id="address" name="address"
-															class="form-control">
-														<label for="address">住址:</label>
-													</div>
-													<div class="form-floating mb-3">
-														<input type="number" id="reviewCount" name="reviewCount"
-															class="form-control" readonly>
-														<label for="reviewCount">被評論數:</label>
-													</div>
-													<div class="form-floating mb-3">
-														<input type="number" id="cumulativeScore" name="cumulativeScore"
-															class="form-control" readonly>
-														<label for="cumulativeScore">總評分數:</label>
-													</div>
-													<div class="form-floating mb-3">
-														<input type="number" id="totalSalesAmount"
-															name="totalSalesAmount" class="form-control" readonly>
-														<label for="totalSalesAmount">總消費金額:</label>
-													</div>
-													<div class="form-floating mb-3">
-														<input type="number" id="level" name="level"
-															class="form-control" readonly>
-														<label for="level">會員級別:</label>
-													</div>
-													<div class="form-floating mb-3">
-														<input type="text" id="thirdPartyProvider"
-															name="thirdPartyProvider" class="form-control" readonly>
-														<label for="thirdPartyProvider">登入方式:</label>
-													</div>
-													<div class="form-floating mb-3">
-														<input type="text" id="registrationTime" name="registrationTime"
-															class="form-control" readonly>
-														<label for="registrationTime">註冊時間:</label>
-													</div>
-													<div class="mb-3">
-														<label for="photoSticker" class="form-label">頭貼:</label> <input
-															type="file" id="photoSticker" name="photoSticker"
-															class="form-control">
-													</div>
-													<input type="text" name="oldPath" style="display: none;">
-													<div class="form-check form-switch">
-														<input class="form-check-input" type="checkbox"
-															id="sellerSwitch" name="seller" data-bs-toggle="toggle"
-															data-bs-on="enabled" data-bs-off="disabled">
-														<label class="form-check-label" for="sellerSwitch">賣家身分</label>
-													</div>
-												</form>
+								<div class="card-body">
+									<table id="datatablesSimple">
+										<thead>
+											<tr>
+												<th>會員ID</th>
+												<th>帳號</th>
+												<th>密碼</th>
+												<th>信箱</th>
+												<th>電話</th>
+												<th>姓名</th>
+												<th>性別</th>
+												<th>住址</th>
+												<th>頭貼</th>
+												<th>賣家身分</th>
+												<th>被評論數</th>
+												<th>總評分數</th>
+												<th>總消費金額</th>
+												<th>會員級別</th>
+												<th>登入方式</th>
+												<th>註冊時間</th>
+												<th>操作功能</th>
+											</tr>
+										</thead>
+										<tbody>
+										</tbody>
+									</table>
+									<div class="modal fade" id="exampleModal" tabindex="-1"
+										aria-labelledby="exampleModalLabel" aria-hidden="true">
+										<div class="modal-dialog modal-dialog-centered">
+											<div class="modal-content">
+												<div class="modal-header">
+													<h5 class="modal-title" id="exampleModalLabel">更新會員資料</h5>
+													<button type="button" class="btn-close" data-bs-dismiss="modal"
+														aria-label="Close"></button>
+												</div>
+												<div class="modal-body">
+													<form id="editForm">
+														<div class="form-floating mb-3">
+															<input type="text" id="sid" name="sid" class="form-control"
+																readonly>
+															<label for="sid">會員ID:</label>
+														</div>
+														<div class="form-floating mb-3">
+															<input type="text" id="account" name="account"
+																class="form-control" readonly>
+															<label for="account">帳號:</label>
+														</div>
+														<div class="form-floating mb-3">
+															<input type="text" id="password" name="password"
+																class="form-control">
+															<label for="password">密碼:</label>
+														</div>
+														<div class="form-floating mb-3">
+															<input type="email" id="email" name="email"
+																class="form-control">
+															<label for="email">信箱:</label>
+														</div>
+														<div class="form-floating mb-3">
+															<input type="tel" id="phone" name="phone"
+																class="form-control">
+															<label for="phone">電話:</label>
+														</div>
+														<div class="form-floating mb-3">
+															<input type="text" id="name" name="name"
+																class="form-control">
+															<label for="name">姓名:</label>
+														</div>
+														<div class="form-floating mb-3">
+															<select id="gender" name="gender" class="form-select">
+																<option value="male">男性</option>
+																<option value="female">女性</option>
+															</select>
+															<label for="gender">性別:</label>
+														</div>
+														<div class="form-floating mb-3">
+															<input type="text" id="address" name="address"
+																class="form-control">
+															<label for="address">住址:</label>
+														</div>
+														<div class="form-floating mb-3">
+															<input type="number" id="reviewCount" name="reviewCount"
+																class="form-control" readonly>
+															<label for="reviewCount">被評論數:</label>
+														</div>
+														<div class="form-floating mb-3">
+															<input type="number" id="cumulativeScore"
+																name="cumulativeScore" class="form-control" readonly>
+															<label for="cumulativeScore">總評分數:</label>
+														</div>
+														<div class="form-floating mb-3">
+															<input type="number" id="totalSalesAmount"
+																name="totalSalesAmount" class="form-control" readonly>
+															<label for="totalSalesAmount">總消費金額:</label>
+														</div>
+														<div class="form-floating mb-3">
+															<input type="number" id="level" name="level"
+																class="form-control" readonly>
+															<label for="level">會員級別:</label>
+														</div>
+														<div class="form-floating mb-3">
+															<input type="text" id="thirdPartyProvider"
+																name="thirdPartyProvider" class="form-control" readonly>
+															<label for="thirdPartyProvider">登入方式:</label>
+														</div>
+														<div class="form-floating mb-3">
+															<input type="text" id="registrationTime"
+																name="registrationTime" class="form-control" readonly>
+															<label for="registrationTime">註冊時間:</label>
+														</div>
+														<div class="mb-3">
+															<label for="photoSticker" class="form-label">頭貼:</label>
+															<input type="file" id="photoSticker" name="photoSticker"
+																class="form-control">
+														</div>
+														<input type="text" name="oldPath" style="display: none;">
+														<div class="form-check form-switch">
+															<input class="form-check-input" type="checkbox"
+																id="sellerSwitch" name="seller" data-bs-toggle="toggle"
+																data-bs-on="enabled" data-bs-off="disabled">
+															<label class="form-check-label"
+																for="sellerSwitch">賣家身分</label>
+														</div>
+													</form>
 
-											</div>
-											<div class="modal-footer">
-												<button type="button" class="btn btn-secondary"
-													data-bs-dismiss="modal">取消</button>
-												<button type="button" class="btn btn-primary"
-													id="saveChangesBtn">確認更新</button>
+												</div>
+												<div class="modal-footer">
+													<button type="button" class="btn btn-secondary"
+														data-bs-dismiss="modal">取消</button>
+													<button type="button" class="btn btn-primary"
+														id="saveChangesBtn">確認更新</button>
+												</div>
 											</div>
 										</div>
 									</div>
 								</div>
 							</div>
 						</div>
-					</div>
-				</main>
-				<footer class="py-4 bg-light mt-auto">
-					<div class="container-fluid px-4">
-						<div class="d-flex align-items-center justify-content-between small">
-							<div class="text-muted">Copyright &copy; Your Website 2023</div>
-							<div>
-								<a href="#">Privacy Policy</a> &middot; <a href="#">Terms
-									&amp; Conditions</a>
+					</main>
+					<footer class="py-4 bg-light mt-auto">
+						<div class="container-fluid px-4">
+							<div class="d-flex align-items-center justify-content-between small">
+								<div class="text-muted">Copyright &copy; Your Website 2023</div>
+								<div>
+									<a href="#">Privacy Policy</a> &middot; <a href="#">Terms
+										&amp; Conditions</a>
+								</div>
 							</div>
 						</div>
-					</div>
-				</footer>
-			</div>
+					</footer>
+				</div>
 		</div>
 		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
 			crossorigin="anonymous"></script>

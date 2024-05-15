@@ -28,5 +28,6 @@ public class GoodTypeDto {
 	public void setGoodsType(String goodsType) {
 		this.goodsType = goodsType;
 	}
+
 	
 }

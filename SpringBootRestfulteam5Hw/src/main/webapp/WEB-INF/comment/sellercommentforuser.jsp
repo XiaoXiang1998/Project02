@@ -110,40 +110,6 @@
     </div>
 </c:forEach>
 
- <!-- 分页部分 -->
-        <nav aria-label="Page navigation" class="mt-5">
-            <ul class="pagination justify-content-center">
-                <li class="page-item">
-                    <c:if test="${page > 0}">
-                        <a class="page-link" href="#" aria-label="Previous" onclick="filterComments('${rating}', ${page - 1})">
-                            <span aria-hidden="true">&laquo;</span>
-                            <span class="sr-only">Previous</span>
-                        </a>
-                    </c:if>
-                </li>
-                <c:forEach var="i" begin="0" end="${totalPages - 1}">
-                    <li class="page-item">
-                        <c:choose>
-                            <c:when test="${i == page}">
-                                <span class="page-link current">${i + 1}</span>
-                            </c:when>
-                            <c:otherwise>
-                                <a class="page-link" href="#" onclick="filterComments('${rating}', ${i})">${i + 1}</a>
-                            </c:otherwise>
-                        </c:choose>
-                    </li>
-                </c:forEach>
-                <li class="page-item">
-                    <c:if test="${page < totalPages - 1}">
-                        <a class="page-link" href="#" aria-label="Next" onclick="filterComments('${rating}', ${page + 1})">
-                            <span aria-hidden="true">&raquo;</span>
-                            <span class="sr-only">Next</span>
-                        </a>
-                    </c:if>
-                </li>
-            </ul>
-        </nav>
-    </div>
 
 <script>
     // 根据评分级别过滤评论

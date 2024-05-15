@@ -38,6 +38,8 @@ import com.member.model.MemberBean;
 import com.member.model.MemberService;
 import com.member.model.ResetTokenBean;
 import com.member.model.ResetTokenService;
+import com.sean.model.Notifications;
+import com.sean.model.NotificationsService;
 import com.util.tokenGenerator.TokenService;
 
 import jakarta.mail.MessagingException;
@@ -60,6 +62,8 @@ public class MemberController {
 
 	@Autowired
 	private TokenService tokenService;
+	@Autowired
+	private NotificationsService nService;
 
 	// http://localhost:8081/ezbuy.com
 	@GetMapping("/ezbuy.com")
@@ -258,6 +262,11 @@ public class MemberController {
 			// 設定session
 			httpSession.setAttribute("member", memberInformation);
 			System.out.println("session設定成功");
+			//通知			
+			List<Notifications> notifications = nService.findByRecipientIdOrderBySendTimeDesc(memberInformation);
+			Integer count = nService.noReadCounts(memberInformation);
+			httpSession.setAttribute("count", count);
+			httpSession.setAttribute("notifications", notifications);
 			// 檢查會員等級
 			return "/good/jsp/EZBuyindex";
 		}

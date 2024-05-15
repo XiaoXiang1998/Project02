@@ -1,5 +1,6 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isErrorPage="true" %>
     <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+    <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
         <!DOCTYPE html>
         <html>
@@ -10,6 +11,7 @@
             <!-- Google Web Fonts -->
             <link rel="preconnect" href="https://fonts.googleapis.com">
             <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+            <script src="https://kit.fontawesome.com/92a295a0cf.js" crossorigin="anonymous"></script>
             <link
                 href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Raleway:wght@600;800&display=swap"
                 rel="stylesheet">
@@ -385,6 +387,33 @@
                                     </li>
                                 </ul>
                             </div>
+						<div class="dropdown position-static">
+							<button class="btn position-relative dropdown-toggle" type="button" id="notificationsDropdown" data-bs-toggle="dropdown" aria-expanded="false" style="color:#ffb524">
+								<i class="fa-solid fa-bell fa-2x"></i>
+								<span
+                                        class="position-absolute bg-white rounded-circle d-flex align-items-center justify-content-center text-dark px-1"
+                                        style="top: 2px; left: 28px; height: 20px; min-width: 20px;">${count}</span>
+							</button>
+							<div class="dropdown-menu dropdown-menu-end" aria-labelledby="notificationsDropdown">
+								<ul class="list-group" style="max-height: 615px; overflow-y: auto;">
+									<c:forEach var="notification" items="${notifications}" varStatus="loop">
+										<c:if test="${loop.index != 0}">
+											<li class="dropdown-divider"></li>
+										</c:if>
+										<li>
+											<a class="nav-link dropdown-item fs-md ${notification.reads == 1 ? 'text-muted' : 'fw-bold'}" href="#" onclick="readNotification(${notification.id})">
+												<img src="${notification.orderId.formatgoodId.goodImagePath}" alt="商品图片" style="max-width: 60px; max-height: 60px; margin-right:10px">
+												${notification.content}
+												<input type="hidden" name="reads" value="${notification.reads}">
+												<div class="text-end">
+													<fmt:formatDate value="${notification.sendTime}" pattern="MM月dd日 HH時mm分" />
+												</div>
+											</a>
+										</li>
+									</c:forEach>
+								</ul>
+							</div>
+						</div>
                         </div>
                     </nav>
                 </div>
@@ -1132,6 +1161,16 @@
                 //             <i class="fas fa-search"></i>
                 //         </button>
                 //     </form>
+            </script>
+            <script>
+            function readNotification(notificationId) {
+                fetch("readMessage?notificationId=" + notificationId, {
+                    method: 'PUT'
+                })
+                    .then(response => {
+                    	location.reload();
+                    })
+            }
             </script>
         </body>
 

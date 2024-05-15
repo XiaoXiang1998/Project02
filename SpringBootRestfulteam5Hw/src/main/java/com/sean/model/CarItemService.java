@@ -5,6 +5,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.member.model.MemberBean;
+
 import jakarta.transaction.Transactional;
 
 @Service
@@ -31,5 +33,8 @@ public class CarItemService {
 
 	public void clearShopCarByMemberId(Integer MemberId) {
 		cRops.clearShopCarByMemberId(MemberId);
+	}
+	public Integer carItemCount(MemberBean member) {
+		return cRops.carItemCount(member);
 	}
 }

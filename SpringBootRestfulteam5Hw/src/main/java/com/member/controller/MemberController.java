@@ -351,6 +351,11 @@ public class MemberController {
 				mService.insert(memBean);
 				httpSession.setAttribute("member", memBean);
 				System.out.println("有創建帳號");
+				//通知			
+				List<Notifications> notifications = nService.findByRecipientIdOrderBySendTimeDesc(memBean);
+				Integer count = nService.noReadCounts(memBean);
+				httpSession.setAttribute("count", count);
+				httpSession.setAttribute("notifications", notifications);
 				return "/good/jsp/EZBuyindex";
 			}
 		} 

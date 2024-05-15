@@ -1,5 +1,6 @@
 package com.comment.model;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -75,15 +76,22 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
     @Query("SELECT p FROM Post p WHERE p.commentid IN (SELECT DISTINCT repliedcommentid FROM Post WHERE repliedcommentid IS NOT NULL)")
     List<Post> findBuyerCommentsRepliedBySeller();
     
-    @Query("SELECT p FROM Post p WHERE " +
-            "p.member.sid = :sellerId " + // 添加对卖家ID的限制条件
+    @Query("SELECT p FROM Post p " +
+            "INNER JOIN p.orders o " +
+            "INNER JOIN o.formatgoodId f " +
+            "INNER JOIN f.good g " +
+            "WHERE g.goodsSellerID.sid = :sellerId " + 
             "AND (:productName IS NULL OR p.orders.formatgoodId.good.goodsName LIKE %:productName%) " +
             "AND (:productSpec IS NULL OR p.orders.formatgoodId.goodSize LIKE %:productSpec%) " +
-            "AND (:userName IS NULL OR p.member.name LIKE %:userName%)")
-    Page<Post> searchByConditions(@Param("sellerId") Integer sellerId, // 添加卖家ID参数
+            "AND (:userName IS NULL OR p.member.name LIKE %:userName%) " +
+            "AND (:commentTimeStart IS NULL OR p.commenttime >= :commentTimeStart) " +
+            "AND (:commentTimeEnd IS NULL OR p.commenttime < :commentTimeEnd)")
+    Page<Post> searchByConditions(@Param("sellerId") Integer sellerId,
                                   @Param("productName") String productName,
                                   @Param("productSpec") String productSpec,
                                   @Param("userName") String userName,
+                                  @Param("commentTimeStart") Timestamp commentTimeStart,
+                                  @Param("commentTimeEnd") Timestamp commentTimeEnd,
                                   Pageable pageable);
     
     

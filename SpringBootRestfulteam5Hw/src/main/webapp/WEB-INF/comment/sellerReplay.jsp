@@ -167,11 +167,43 @@ body {
 
 	<%@ include file="sellercomment.jsp"%>
 	
+	<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="productName">商品名稱</label>
+                <input type="text" class="form-control" id="productName" name="productName" placeholder="商品名稱">
+            </div>
+            <div class="form-group">
+                <label for="productSpec">規格尺寸</label>
+                <input type="text" class="form-control" id="productSpec" name="productSpec" placeholder="規格尺寸">
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="userName">用戶名稱</label>
+                <input type="text" class="form-control" id="userName" name="userName" placeholder="用戶名稱">
+            </div>
+            <div class="form-group">
+                <label for="commentTime">評論時間</label>
+                <input type="date" class="form-control" id="commentTime" name="commentTime">
+            </div>
+        </div>
+    </div>
+    <div class="row mt-3">
+        <div class="col-md-6 offset-md-3 text-center">
+            <button type="button" class="btn btn-primary" onclick="searchComments()">搜索</button>
+                        <button type="button" class="btn btn-secondary" onclick="resetForm()">重置</button>
+            
+        </div>
+    </div>
+</div>
+	
 <!-- 星級篩選按鈕 -->
 <div class="rating-tab" style="text-align: center; margin-top: 20px;">
     <ul class="nav nav-pills justify-content-center">
         <li class="nav-item">
-            <button class="btn ${rating eq 0 ? 'active' : ''}" onclick="filterByRating(0)">全部(${totalComments})</button>
+            <button class="btn ${rating eq 0 ? 'active' : ''}" onclick="viewAllComments()">全部(${totalComments})</button>
         </li>
         <c:forEach begin="1" end="5" var="i">
             <li class="nav-item">
@@ -228,7 +260,7 @@ body {
                         <input type="hidden" name="memberId" value="${comment.member.sid}">
                         <input type="hidden" name="commentId" value="${comment.commentid}">
                         <label><span>回覆內容:</span>
-                            <textarea id="replyContent${comment.commentid}" name="replyContent" rows="10" cols="30" maxlength="100" placeholder="Your Reply" required></textarea>
+                            <textarea id="replyContent${comment.commentid}" name="replyContent" rows="10" cols="30" maxlength="100" placeholder="Your Reply"  required></textarea>
                         </label>
                         <span class="replyContent${comment.commentid}" id="replyContent" data->輸入的字數:0/100</span><br />
                         <div class="bit-com">
@@ -340,76 +372,131 @@ $('body').on(
 </script>
 
 <script>
+//定义变量 rating，初始值为 0
+var rating = 0;
+var currentPage = 1; // 默认选中第一页
+var lastSearch = {}; // 保存上一次搜索的条件
 
-
-
-	var rating = 0;
-	
-	 var currentPage = 1; // 默认选中第一页
-
-	    // 初始化页面
-	    $(document).ready(function() {
-	        filterByRating(0); // 默认选中全部评分
-	    });
-
-    // 篩選評分等級
-    function filterByRating(ratingValue) {
-        rating = ratingValue; 
-        currentPage = 1; // 每次切换评分都回到第一页
-        console.log("Rating: " + rating); // 添加调试信息
-        
-        // 更新选项卡样式
-        $('.nav-pills .btn').removeClass('active'); // 移除所有选项卡的活动状态
-        $('.nav-pills .btn').eq(ratingValue).addClass('active'); // 添加选中选项卡的活动状态
-
-        // 默认选中第一页的分页按钮
-        $('.pagination .page-item').removeClass('active'); // 移除所有分页链接的活动状态
-        $('.pagination .page-btn[data-page="1"]').parent().addClass('active'); // 添加选中分页按钮的活动状态
-
-        
-        $.ajax({
-            type: "GET",
-            url: "/sellerComments",
-            data: {
-                page: currentPage - 1, // 后端分页从0开始
-                rating: rating
-            },
-            success: function (data) {
-                $('#commentContainer').html($(data).find('#commentContainer').html());
-                $('#pagination').html($(data).find('#pagination').html());
-
-            }
-        });
-    }
+// 筛选评分等级
+function filterByRating(ratingValue) {
+    rating = ratingValue; 
+    currentPage = 1; // 每次切换评分都回到第一页
+    console.log("Rating: " + rating); // 添加调试信息
     
-  
+    // 更新选项卡样式
+    $('.nav-pills .btn').removeClass('active'); // 移除所有选项卡的活动状态
+    $('.nav-pills .btn').eq(ratingValue).addClass('active'); // 添加选中选项卡的活动状态
 
-    // 分頁連結
-   // 分頁連結
+    // 默认选中第一页的分页按钮
+    $('.pagination .page-item').removeClass('active'); // 移除所有分页链接的活动状态
+    $('.pagination .page-btn[data-page="1"]').parent().addClass('active'); // 添加选中分页按钮的活动状态
+	
+ 	// 清空搜索条件的输入框内容
+    $('#productName').val('');
+    $('#productSpec').val('');
+    $('#userName').val('');
+    $('#commentTime').val('');
+    lastSearch = {}; // 清空上次搜索的条件
+
+    
+    
+    
+    filterComments(); // 调用 filterComments 函数
+}
+
+// 分页链接
 function filterByPage(pageNumber) {
     console.log("Clicked page " + pageNumber); // 检查是否被调用
-
-	 currentPage = pageNumber;
-	
-	 // 更新分页按钮样式
-	    $('.pagination .page-item').removeClass('active'); // 移除所有分页链接的活动状态
-	    $('.pagination .page-btn[data-page="' + pageNumber + '"]').parent().addClass('active'); // 添加选中分页按钮的活动状态
+    currentPage = pageNumber;
     
+    // 更新分页按钮样式
+    $('.pagination .page-item').removeClass('active'); // 移除所有分页链接的活动状态
+    $('.pagination .page-btn[data-page="' + pageNumber + '"]').parent().addClass('active'); // 添加选中分页按钮的活动状态
+    
+    filterComments(); // 调用 filterComments 函数
+}
+
+// 查看全部按钮点击事件
+function viewAllComments() {
+    rating = 0; // 设置评分为 0，表示查看全部
+    currentPage = 1; // 每次点击查看全部都回到第一页
+
+    // 更新选项卡样式
+    $('.nav-pills .btn').removeClass('active'); // 移除所有选项卡的活动状态
+    $('.nav-pills .btn').eq(0).addClass('active'); // 添加全部选项卡的活动状态
+
+    // 更新分页按钮样式
+    $('.pagination .page-item').removeClass('active'); // 移除所有分页链接的活动状态
+    
+    // 清空搜索条件的输入框内容
+    $('#productName').val('');
+    $('#productSpec').val('');
+    $('#userName').val('');
+    $('#commentTime').val('');
+
+    lastSearch = {}; // 清空上次搜索的条件
+    
+    filterComments(); // 调用 filterComments 函数
+}
+
+// 模糊搜索按钮点击事件
+function searchComments() {
+    currentPage = 1; // 每次搜索都回到第一页
+
+    // 清除所有选项卡的活动状态
+    $('.nav-pills .btn').removeClass('active');
+    
+    lastSearch = { // 保存搜索条件
+        rating: rating,
+        productName: $('#productName').val(),
+        productSpec: $('#productSpec').val(),
+        userName: $('#userName').val(),
+        commentTime: $('#commentTime').val()
+    };
+    
+    filterComments(); // 调用 filterComments 函数
+    
+ // 清空搜索条件的输入框内容
+    $('#productName').val('');
+    $('#productSpec').val('');
+    $('#userName').val('');
+    $('#commentTime').val('');
+}
+
+// 筛选评论
+function filterComments() {
+    var productName = lastSearch.productName || $('#productName').val();
+    var productSpec = lastSearch.productSpec || $('#productSpec').val();
+    var userName = lastSearch.userName || $('#userName').val();
+    console.log("User Name: " + userName); // 新增这行来检查传递的 userName 参数
+    var commentTime = lastSearch.commentTime || $('#commentTime').val();
+
     $.ajax({
         type: "GET",
         url: "/sellerComments",
         data: {
-            page: pageNumber - 1,  // 修改这里
-            rating: rating
+            page: currentPage - 1, // 当前页码
+            rating: lastSearch.rating || rating,
+            productName: productName,
+            productSpec: productSpec,
+            userName: userName,
+            commentTime: commentTime
         },
         success: function (data) {
             $('#commentContainer').html($(data).find('#commentContainer').html());
             $('#pagination').html($(data).find('#pagination').html());
-            
+        },
+        error: function() {
         }
     });
-}	
-    
+}
+
+function resetForm() {
+    $('#productName').val('');
+    $('#productSpec').val('');
+    $('#userName').val('');
+    $('#commentTime').val('');
+}
 
 </script>
 

@@ -27,6 +27,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -288,7 +289,7 @@ public class PostController {
 	
 			return "comment/commentadmin";
 		}
-
+		/*
 		@GetMapping("/sellerComments")
 		public String getsellerComments(Model model, HttpSession session, @RequestParam(defaultValue = "0") int page,
 				@RequestParam(defaultValue = "0") int rating) {
@@ -329,7 +330,72 @@ public class PostController {
 			
 			
 			return "comment/sellerReplay";
-		}	
+		}	*/
+		
+		@GetMapping("/sellerComments")
+		public String getSellerComments(Model model, HttpSession session,
+		                                @RequestParam(defaultValue = "0") int page,
+		                                @RequestParam(defaultValue = "0") int rating,
+		                                @RequestParam(defaultValue = "") String productName,
+		                                @RequestParam(defaultValue = "") String productSpec,
+		                                @RequestParam(defaultValue = "") String userName,
+		                                @RequestParam(defaultValue = "") @DateTimeFormat(pattern = "yyyy-MM-dd") Date commentTime) {
+		    MemberBean seller = (MemberBean) session.getAttribute("member");
+		    System.out.println("ID" + seller.getSid());
+		    System.out.println("Page: " + page);
+		    System.out.println("Rating: " + rating);
+		    System.out.println("Product Name: " + productName);
+		    System.out.println("Product Spec: " + productSpec);
+		    System.out.println("User Name: " + userName);
+		    System.out.println("Comment Time: " + commentTime);
+		    Long totalComments = pService.countCommentsBySellerId(seller.getSid());
+
+		    long[] starCounts = new long[5];
+		    for (int i = 1; i <= 5; i++) {
+		        starCounts[i - 1] = pService.countCommentsBySellerIdAndBuyerrate(seller.getSid(), i);
+		    }
+
+		    int pageSize = 2;
+		    Pageable pageable = PageRequest.of(page, pageSize);
+
+		    Page<Post> sellerComments;
+
+		    if (productName.isEmpty() && productSpec.isEmpty() && userName.isEmpty() && commentTime == null) {
+		        if (rating > 0) {
+		            sellerComments = pService.findPostsBySellerIdAndRating(seller.getSid(), rating, pageable);
+		        } else {
+		            sellerComments = pService.findPostsBySellerId(seller.getSid(), pageable);
+		        }
+		    } else {
+		        Timestamp commentTimeStart = null;
+		        Timestamp commentTimeEnd = null;
+		        if (commentTime != null) {
+		            Calendar cal = Calendar.getInstance();
+		            cal.setTime(commentTime);
+		            cal.set(Calendar.HOUR_OF_DAY, 0);
+		            cal.set(Calendar.MINUTE, 0);
+		            cal.set(Calendar.SECOND, 0);
+		            cal.set(Calendar.MILLISECOND, 0);
+		            commentTimeStart = new Timestamp(cal.getTimeInMillis());
+		            
+		            cal.add(Calendar.DAY_OF_MONTH, 1);
+		            commentTimeEnd = new Timestamp(cal.getTimeInMillis());
+		        }
+		        sellerComments = pService.searchByConditions(seller.getSid(), productName, productSpec, userName, commentTimeStart, commentTimeEnd, pageable);
+		    }
+
+		    model.addAttribute("comments", sellerComments.getContent());
+		    model.addAttribute("currentPage", sellerComments.getNumber()); // 注意: Spring Data JPA的頁碼從0開始
+		    model.addAttribute("totalPages", sellerComments.getTotalPages());
+		    model.addAttribute("rating", rating);
+		    model.addAttribute("totalComments", totalComments);
+		    model.addAttribute("starCounts", starCounts);
+
+		    List<Integer> repliedCommentIds = pService.findRepliedCommentIdsBySellerId(seller.getSid());
+		    model.addAttribute("repliedCommentIds", repliedCommentIds);
+
+		    return "comment/sellerReplay";
+		}
 		
 		@GetMapping("/sellerCommentsForUser")
 		public String getSellerCommentsForUser(Model model, HttpSession session) {
@@ -387,6 +453,6 @@ public class PostController {
         return "comment/repliedComments";
     }
 	
-	
+
 	
 }

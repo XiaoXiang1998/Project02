@@ -1,5 +1,6 @@
 package com.comment.model;
 
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -117,10 +118,7 @@ public class PostService {
     }
     
 
-    public Page<Post> searchCommentsByConditions(int sellerId, String productName, String productSpec, String userName, Pageable pageable) {
-        // 调用自定义的查询方法，包含卖家ID作为查询条件
-        return pRepository.searchByConditions(sellerId, productName, productSpec, userName, pageable);
-    }
+ 
     
    
     public Page<Post> findSellerCommentsForUserWithPagination(MemberBean user, Pageable pageable) {
@@ -129,6 +127,9 @@ public class PostService {
     
     public Page<Post> countCommentsBySellerIdAndSellerrateWithPagination(MemberBean user, Integer sellerrate,Pageable pageable) {
         return pRepository.findCommentsBySellerIdAndSellerrateWithPagination(user, sellerrate,pageable);
+    }
+    public Page<Post> searchByConditions(Integer sellerId, String productName, String productSpec, String userName, Timestamp commentTimeStart, Timestamp commentTimeEnd, Pageable pageable) {
+        return pRepository.searchByConditions(sellerId, productName, productSpec, userName, commentTimeStart, commentTimeEnd, pageable);
     }
    
 }

@@ -38,6 +38,9 @@ import com.member.model.MemberBean;
 import com.member.model.MemberService;
 import com.member.model.ResetTokenBean;
 import com.member.model.ResetTokenService;
+import com.sean.model.CarItemService;
+import com.sean.model.Notifications;
+import com.sean.model.NotificationsService;
 import com.util.tokenGenerator.TokenService;
 
 import jakarta.mail.MessagingException;
@@ -60,7 +63,13 @@ public class MemberController {
 
 	@Autowired
 	private TokenService tokenService;
-
+	
+	@Autowired
+	private NotificationsService nService;
+	
+	@Autowired
+	private CarItemService cService;
+	
 	// http://localhost:8081/ezbuy.com
 	@GetMapping("/ezbuy.com")
 	public String loginPage() {
@@ -258,6 +267,14 @@ public class MemberController {
 			// 設定session
 			httpSession.setAttribute("member", memberInformation);
 			System.out.println("session設定成功");
+			//通知			
+			List<Notifications> notifications = nService.findByRecipientIdOrderBySendTimeDesc(memberInformation);
+			Integer count = nService.noReadCounts(memberInformation);
+			httpSession.setAttribute("count", count);
+			httpSession.setAttribute("notifications", notifications);
+			//購物車數量
+			Integer carItemCount = cService.carItemCount(memberInformation);
+			httpSession.setAttribute("carItemCount", carItemCount);
 			// 檢查會員等級
 			return "/good/jsp/EZBuyindex";
 		}
@@ -342,6 +359,14 @@ public class MemberController {
 				mService.insert(memBean);
 				httpSession.setAttribute("member", memBean);
 				System.out.println("有創建帳號");
+				//通知			
+				List<Notifications> notifications = nService.findByRecipientIdOrderBySendTimeDesc(memBean);
+				Integer count = nService.noReadCounts(memBean);
+				httpSession.setAttribute("count", count);
+				httpSession.setAttribute("notifications", notifications);
+				//購物車數量
+				Integer carItemCount = cService.carItemCount(memBean);
+				httpSession.setAttribute("carItemCount", carItemCount);
 				return "/good/jsp/EZBuyindex";
 			}
 		} 

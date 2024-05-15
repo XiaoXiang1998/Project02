@@ -10,7 +10,13 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10/dist/sweetalert2.min.css">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
-
+<style>
+input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button
+	{
+	-webkit-appearance: none;
+	margin: 0;
+}
+</style>
 </head>
 
 <body>
@@ -30,10 +36,15 @@
 						</div>
 					</c:when>
 					<c:otherwise>
-						<table class="table table-bordered mt-3 text-center align-middle">
+						<table class="table border mt-3 text-center align-middle">
 							<thead>
 								<tr class="bg-primary text-light">
-									<th class="col-2">商品名稱</th>
+									<th class="col-1">
+										<input type="checkbox" id="selectAllCheckbox">
+										全選
+									</th>
+									<th class="col-2">商品</th>
+									<th class="col-2"></th>
 									<th class="col-2">價格</th>
 									<th class="col-2">數量</th>
 									<th class="col-2">總價</th>
@@ -43,16 +54,22 @@
 							<tbody>
 								<c:forEach items="${carItems}" var="item">
 									<tr>
+										<td class="border">
+											<input type="checkbox" name="selectedItems" class="form-check-input">
+										</td>
+										<td>
+											<img src="${item.good.goodImagePath}" class="card-img-top" alt="${item.good.good.goodsName}" style="height: 150px; object-fit: cover;">
+										</td>
 										<td>${item.good.good.goodsName}</td>
 										<td>${item.good.goodPrice}</td>
 										<td class="quantity-adjust">
 											<form id="updateForm_${item.carItemId}" action="updateQuantity.controller" method="post">
 												<input type="hidden" name="_method" value="PUT">
 												<input type="hidden" name="itemId" value="${item.carItemId}">
-												<div class="input-group">
-													<button type="button" class="btn btn-outline-secondary decrement" data-id="${item.carItemId}">-</button>
-													<input type="number" id="quantity_${item.carItemId}" name="quantity" class="form-control input-sm" value="${item.quantity}" min="1" max="10">
-													<button type="button" class="btn btn-outline-secondary increment" data-id="${item.carItemId}">+</button>
+												<div class="input-group input-group-sm" style="width: 114px; height: 32px;">
+													<button type="button" class="btn btn-outline-secondary border border-gray decrement" style="width: 32px; height: 32px;" data-id="${item.carItemId}">-</button>
+													<input type="number" id="quantity_${item.carItemId}" name="quantity" class="form-control text-center border border-gray" style="width: 50px; height: 32px;" value="${item.quantity}" min="1" max="10">
+													<button type="button" class="btn btn-outline-secondary border border-gray increment" style="width: 32px; height: 32px;" data-id="${item.carItemId}">+</button>
 												</div>
 											</form>
 										</td>
@@ -62,23 +79,19 @@
 										</td>
 									</tr>
 								</c:forEach>
+								<tr class="cart-summary m-3 text-center">
+									<td colspan="6">
+										<p>總共金額: $${totalPrice}</p>
+										<a href="payment.controller" class="btn btn-primary">去買單</a>
+									</td>
+								</tr>
 							</tbody>
 						</table>
-						<c:set var="totalPrice" value="0" />
-						<c:forEach items="${carItems}" var="item">
-							<c:set var="subtotal" value="${item.quantity * item.good.goodPrice}" />
-							<c:set var="totalPrice" value="${totalPrice + subtotal}" />
-						</c:forEach>
-						<div class="cart-summary mt-3 text-center">
-							<p>總共金額: $${totalPrice}</p>
-							<a href="payment.controller" class="btn btn-primary">去買單</a>
-						</div>
 					</c:otherwise>
 				</c:choose>
 			</div>
 		</div>
 	</div>
-
 	<script>
                     $(document).ready(function () {
                         $(document).on('click', '.increment, .decrement', function () {
@@ -156,8 +169,20 @@
                                 }
                             });
                         }
+                        
+                        function calculateTotalPrice() {
+                            let totalPrice = 0;
+                            
+                            $('input[name="selectedItems"]:checked').each(function () {
+                                let row = $(this).closest('tr');
+                                let quantity = parseInt(row.find('.form-control').val()); // 數量
+                                let price = parseFloat(row.find('td:eq(3)').text()); // 價格
+                                totalPrice += quantity * price; // 加總價格
+                            });
+                            $('#totalPrice').text('$' + totalPrice.toFixed(2)); // 更新總價顯示
+                        }
                     });
-                </script>
+		</script>
 </body>
 
 </html>

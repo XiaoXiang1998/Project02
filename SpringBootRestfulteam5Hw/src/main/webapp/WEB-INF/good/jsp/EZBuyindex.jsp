@@ -44,110 +44,9 @@
                         }
                     }
                 })
-                // $.ajax({//透過上架日期取得商品基本資訊
-                //     type: 'get',
-                //     url: "indexgoodByLaunchDate",
-                //     contentType: 'application/json',
-                //     success: function (data) {
 
-                //         //<div class="container-fluid vesitable py-5">
-                //         let divcontainer0 = document.createElement("div"); divcontainer0.classList.add("container-fluid"); divcontainer0.classList.add("vesitable"); divcontainer0.classList.add("py-5");
-                //         //<div class="container py-5">
-                //         let divcontainer1 = document.createElement("div"); divcontainer1.classList.add("container"); divcontainer1.classList.add("py-5");
-                //         //     <h1 class="mb-0">Fresh Organic Vegetables</h1>
-                //         let h1container1 = document.createElement("h1"); h1container1.classList.add("mb-0"); h1container1.innerHTML = "近期商品";
-                //         //     <div class="owl-carousel vegetable-carousel justify-content-center owl-loaded owl-drag">
-                //         let divcontainer2 = document.createElement("div"); divcontainer2.classList.add("owl-carousel"); divcontainer2.classList.add("vegetable-carousel"); divcontainer2.classList.add("justify-content-center"); divcontainer2.classList.add("owl-loaded");
-                //         divcontainer2.classList.add("owl-drag");
-                //         //<div class="owl-stage-outer">
-                //         let divcontainer3 = document.createElement("div"); divcontainer3.classList.add("owl-stage-outer");
-                //         //             <div class="owl-stage" style="transform: translate3d(-1442px, 0px, 0px); transition: all 0s ease 0s; width: 5768px;">
-                //         let divcontainer4 = document.createElement("div"); divcontainer3.classList.add("owl-stage"); divcontainer3.setAttribute("style", "transform: translate3d(-1442px, 0px, 0px); transition: all 0s ease 0s; width: 5768px;")
-                //         //         /*上面是前置作業*/
-
-                //         let backdiv1 = document.createElement("div"); backdiv1.classList.add("owl-carousel"); backdiv1.classList.add("vegetable-carousel"); backdiv1.classList.add("justify-content-center");
-                //         $.each(data, function (i, n) {
-                //             let form = document.createElement("form");
-                //             // <div class="border border-primary rounded position-relative vesitable-item">
-                //             let div0 = document.createElement("div"); div0.classList.add("border"); div0.classList.add("border-primary"); div0.classList.add("rounded"); div0.classList.add("position-relative"); div0.classList.add("vesitable-item");
-                //             //<div class="vesitable-img">
-                //             let div1 = document.createElement("div"); div1.classList.add("vesitable-img");
-                //             //<img src="../../frontimg/vegetable-item-1.jpg" class="img-fluid w-100 rounded-top" alt="">
-
-                //             let img0 = document.createElement("img"); img0.setAttribute("src", n.titleImage); img0.classList.add("img-fluid");
-                //             img0.classList.add("w-100"); img0.classList.add("rounded-top"); img0.setAttribute("alt", n.titleImage); div1.append(img0);
-                //             // <div class="text-white bg-primary px-3 py-1 rounded position-absolute" style="top: 10px; right: 10px;">Vegetable</div>
-                //             let div2 = document.createElement("div"); div2.classList.add("text-white"); div2.classList.add("bg-primary");
-                //             div2.classList.add("px-3"); div2.classList.add("py-1"); div2.classList.add("rounded"); div2.classList.add("position-absolute");
-                //             div2.setAttribute("style", "top: 10px; right: 10px;"); div2.innerHTML = n.goodsType;
-                //             //     <div class="p-4 rounded-bottom">
-                //             let div3 = document.createElement("div"); div3.classList.add("p-4"); div3.classList.add("rounded-bottom");
-                //             //         <h4>Parsely</h4>
-                //             let h4 = document.createElement("h4"); h4.innerHTML = n.goodsName;
-                //             //評分
-                //             // <div class="d-flex my-3">
-                //             //     <i class="fas fa-star text-primary"></i>
-                //             //     <i class="fas fa-star text-primary"></i>
-                //             //     <i class="fas fa-star text-primary"></i>
-                //             //     <i class="fas fa-star text-primary"></i>
-                //             //     <i class="fas fa-star"></i>
-                //             // </div>
-                //             let div4 = document.createElement("div"); div4.classList.add("d-flex"); div4.classList.add("my-3");
-                //             console.log(n.numberRatings);
-                //             if (n.numberRatings == 0 || n.numberRatings == null) {//沒人評分
-                //                 for (let i = 0; i < 5; i++) {
-                //                     let star = document.createElement("i"); star.classList.add("fas"); star.classList.add("fa-star");
-                //                     div4.append(star);
-                //                 }
-                //                 console.log(div4);
-                //             }
-                //             else {
-                //                 let score = Math.round(n.rating / n.numberRatings);
-                //                 for (let i = 0; i < 5; i++) {
-                //                     if (i < score) {
-                //                         let star = document.createElement("i"); star.classList.add("fas"); star.classList.add("fa-star"); star.classList.add("text-primary");
-                //                         div4.append(star);
-                //                     }
-                //                     else {
-                //                         let star = document.createElement("i"); star.classList.add("fas"); star.classList.add("fa-star");
-                //                         div4.append(star);
-                //                     }
-                //                 }
-                //             }
-                //             //         <div class="d-flex justify-content-between flex-lg-wrap">
-                //             let div5 = document.createElement("div"); div5.classList.add("d-flex"); div5.classList.add("justify-content-between"); div5.classList.add("flex-lg-wrap");
-                //             let ID = n.goodsID;
-                //             //取該編號的價格範圍
-                //             //             <p class="text-dark fs-5 fw-bold mb-0">$4.99 / kg</p>
-                //             $.ajax({
-                //                 // [minprice,maxprice,goodsID]
-                //                 type: "get",
-                //                 // data: { GoodType: n[0] },
-                //                 url: "/indexpopulargoodPrice/" + ID,
-                //                 contentType: 'application/json',
-                //                 success: function (data) {
-                //                     console.log(data);
-                //                     let content = data[0][0] + "-" + data[0][1] + "$";
-                //                     let p = document.createElement('p'); p.classList.add("text-dark"); p.classList.add("fs-5"); p.classList.add("fw-bold");
-                //                     p.classList.add("mb-0"); p.innerHTML = content;
-                //                     div5.append(p);
-                //                 }
-                //             })
-                //             //
-                //             // <h1 class="mb-0">近期商品</h1 >
-                //             //     <div class="owl-carousel vegetable-carousel justify-content-center">
-                //             let goodinput = document.createElement("input"); goodinput.setAttribute("type", "text"); goodinput.setAttribute("class", "form-control"); goodinput.setAttribute("name", "GoodID"); goodinput.setAttribute("value", ID); goodinput.setAttribute("hidden", true);
-                //             div3.append(h4); div3.append(div4); div3.append(div5);
-                //             div0.append(div1); div0.append(div2); div0.append(div3); form.append(div0); form.append(goodinput);
-                //             backdiv1.append(form);
-                //         })
-                //         let backh1 = document.createElement("h1"); backh1.classList.add("mb-0"); backh1.innerHTML = "近期商品";
-                //         $('#testtarget').append(backh1); $('#testtarget').append(backdiv1);
-
-                //     }
-                // })
                 /*間隔*/
-                // 透過ajax取得活動資料(目前活動功能是未知數)
+                // 透過ajax取得活動資料
                 $.ajax({
                     type: 'get',
                     url: "...(透過活動狀態取得活動資料)",
@@ -204,11 +103,7 @@
                                 span.classList.add("text-dark"); span.setAttribute("style", "width: 130px"); span.setAttribute("data-typeName", n);
                                 span.innerHTML = n;
                                 a.append(span); li.append(a);
-                                // let content = `<li class="nav-item">`+
-                                //     `<a class="d-flex m-2 py-2 bg-light rounded-pill active" data-bs-toggle="pill" href="#tab-`+ (i+1) +`">`+
-                                //         `<span class="text-dark" style="width: 130px;" data-index="`+ n +`">`+ n +`</span>`+
-                                //     `</a>`+
-                                // `</li>`;
+
                                 $('#CategoryList').append(li);
                             })
                         }
@@ -313,7 +208,6 @@
 
 
             <!-- Navbar start -->
-
             <div class="container-fluid fixed-top bg-info">
                 <div class="container topbar bg-info d-none d-lg-block mb-3">
                     <div class="d-flex justify-content-between">
@@ -330,9 +224,32 @@
                         </div>
                     </div>
                 </div>
-                <div class="container px-0">
-                    <nav class="navbar navbar-light bg-info navbar-expand-xl">
-                        <a href="index.html" class="navbar-brand">
+                <div class="container px-0 d-flex mb-5">
+                    <a href="#" class="navbar-brand">
+                        <h1 class="text-secondary display-6">EZBuy</h1>
+                    </a>
+                    <form class="form-inline d-flex">
+                        <div class="form-group mx-sm-3 mb-2">
+                            <input type="text" class="form-control border-2 border-secondary py-3 px-4 rounded-pill"
+                                style="width: 1000px;height: 60px;" name="GoodName">
+                        </div>
+                        <button
+                            class="btn btn-primary border-2 border-secondary py-3 px-4 rounded-pill position-relative"
+                            style="left: -80px;height: 60px;" id="GoToSearchGood" type="button">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </form>
+                    <a href="#" class="position-relative me-4 my-auto ms-5">
+                        <i class="fa fa-shopping-bag fa-2x text-secondary"></i>
+                        <span
+                            class="position-absolute bg-white rounded-circle d-flex align-items-center justify-content-center text-dark px-1"
+                            style="top: -5px; left: 15px; height: 20px; min-width: 20px;">3</span>
+                    </a>
+                    <a href="#" class="my-auto">
+                        <i class="fas fa-user fa-2x text-secondary"></i>
+                    </a>
+                    <!-- <nav class="navbar navbar-light bg-info navbar-expand-xl">
+                        <a href="#" class="navbar-brand">
                             <h1 class="text-secondary display-6">EZBuy</h1>
                         </a>
                         <button class="navbar-toggler py-2 px-3" type="button" data-bs-toggle="collapse"
@@ -345,48 +262,31 @@
                                 <a href="#" class="nav-item nav-link">訂單紀錄</a>
                                 <a href="#" class="nav-item nav-link">官方申訴</a>
                             </div>
-                            <!-- <div class="d-flex flex-row bd-highlight"> -->
-                            <div class="d-flex m-3 me-0">
-                                <form class="form-inline d-flex">
-                                    <div class="form-group mx-sm-3 mb-2">
-                                        <input type="text"
-                                            class="form-control border-2 border-secondary py-3 px-4 rounded-pill"
-                                            style="width: 500px;height: 60px;">
-                                    </div>
-                                    <button
-                                        class="btn btn-primary border-2 border-secondary py-3 px-4 rounded-pill position-relative"
-                                        style="left: -80px;height: 60px;">
-                                        <i class="fas fa-search"></i>
-                                    </button>
-                                </form>
-                                <a href="#" class="position-relative me-4 my-auto ms-5">
-                                    <i class="fa fa-shopping-bag fa-2x text-secondary"></i>
-                                    <span
-                                        class="position-absolute bg-white rounded-circle d-flex align-items-center justify-content-center text-dark px-1"
-                                        style="top: -5px; left: 15px; height: 20px; min-width: 20px;">3</span>
-                                </a>
-                                <ul class="my-auto" style="list-style-type: none;">
-                                    <li class="nav-item dropdown">
-                                        <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button"
-                                            data-bs-toggle="dropdown" aria-expanded="false">
-                                            <i class="fas fa-user fa-2x text-secondary"></i>
-                                        </a>
-                                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                            <li><a class="dropdown-item" href="#!">會員中心</a></li>
-                                            <li><a class="dropdown-item" href="#!">訂單查詢</a></li>
-                                            <li><a class="dropdown-item" href="#!">評論紀錄</a></li>
-                                            <li><a class="dropdown-item" href="#!">申訴紀錄</a></li>
-                                            <li><a class="dropdown-item" href="#!">活動紀錄</a></li>
-                                            <li>
-                                                <hr class="dropdown-divider" />
-                                            </li>
-                                            <li><a class="dropdown-item" href="#!">登出</a></li>
-                                        </ul>
-                                    </li>
-                                </ul>
+                            <div class="d-flex flex-row bd-highlight"> -->
+                    <!--<div class="d-flex m-3 me-0">
+                        <form class="form-inline d-flex">
+                            <div class="form-group mx-sm-3 mb-2">
+                                <input type="text" class="form-control border-2 border-secondary py-3 px-4 rounded-pill"
+                                    style="width: 500px;height: 60px;">
                             </div>
-                        </div>
-                    </nav>
+                            <button
+                                class="btn btn-primary border-2 border-secondary py-3 px-4 rounded-pill position-relative"
+                                style="left: -80px;height: 60px;">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </form>
+                        <a href="#" class="position-relative me-4 my-auto ms-5">
+                            <i class="fa fa-shopping-bag fa-2x text-secondary"></i>
+                            <span
+                                class="position-absolute bg-white rounded-circle d-flex align-items-center justify-content-center text-dark px-1"
+                                style="top: -5px; left: 15px; height: 20px; min-width: 20px;">3</span>
+                        </a>
+                        <a href="#" class="my-auto">
+                            <i class="fas fa-user fa-2x text-secondary"></i>
+                        </a>
+                    </div>
+                </div>
+                </nav> -->
                 </div>
             </div>
             <!-- Navbar End -->
@@ -543,6 +443,8 @@
                 </div>
             </div> -->
 
+            </div>
+            <!-- Navbar End -->
 
             <!-- Hero Start -->
             <div class="container-fluid py-5 mb-5 hero-header">
@@ -1113,7 +1015,6 @@
                         form.attr("action", "/searchGood");
                         form.attr("method", "get");
                         form.submit();
-                        console.log(form.prop("outerHTML"));
                     }
                 })
                 $(document).on('click', 'div[class="border border-primary rounded position-relative vesitable-item"]', function () {

@@ -102,103 +102,7 @@ public class GoodController {
 		return "good/jsp/insertPageTemplete";
 	}
 
-	/*
-	 * @PostMapping("InsertPage.controller") public String
-	 * processInsertAction2(@RequestParam(name = "GoodImages") List<MultipartFile>
-	 * goodImages,
-	 * 
-	 * @RequestParam("GoodsName") String goodsName, @RequestParam("GoodsType")
-	 * String goodsType,
-	 * 
-	 * @RequestParam("LaunchDate") String date, @RequestParam("Brand") String brand,
-	 * 
-	 * @RequestParam("ShipmentPlace") String
-	 * shipmentPlace, @RequestParam("TitleImage") MultipartFile titleImage,
-	 * 
-	 * @RequestParam("GoodDirection") String goodsDirection,
-	 * 
-	 * @RequestParam(name = "hiddenValue") List<String> datakey,
-	 * 
-	 * @RequestParam(name = "GoodFormatImages") List<MultipartFile> formatImages) {
-	 * //建立相對路徑 String dataPath = "../../goodImages/"; // 透過商品編號取得基本商品資訊
-	 * 然後透過get取得編號對應的圖片集合 String patternPath =
-	 * "../../../../../../../../Documents/team5project/SpringBootRestfulteam5Hw/src/main/webapp/WEB-INF/goodImages/";
-	 * // 透過商品編號取得基本商品資訊 // 然後透過get取得編號對應的圖片集合 //建立圖片、規格集合 Set<GoodImageBean>
-	 * Imageset = new LinkedHashSet<>(); Set<GoodFormat> formatset = new
-	 * LinkedHashSet<>(); //建立simpledateformat 一個用來命名 一個用來把字串轉Date SimpleDateFormat
-	 * sdf = new SimpleDateFormat("yyyy-MM-dd"); SimpleDateFormat simpleDateFormat =
-	 * new SimpleDateFormat("yyyyMMddHHmmssSSS"); Date launchDate = null; try {
-	 * launchDate = sdf.parse(date); } catch (ParseException e) {
-	 * e.printStackTrace(); } //將值帶入insertGood類別 連線用的 MemberBean member =
-	 * (MemberBean) session.getAttribute("member"); Integer goodSellerId =
-	 * member.getSid(); Optional<MemberBean> members =
-	 * mService.findById(goodSellerId); MemberBean seller = members.get(); //取得格式
-	 * String filename = titleImage.getOriginalFilename(); int ps =
-	 * filename.lastIndexOf("."); String patternFormat = filename.substring(ps,
-	 * filename.length()); String timeStamp = simpleDateFormat.format(new Date());
-	 * //String ImgRoot = timeStamp + "" + patternFormat; String ImgRoot =
-	 * patternPath + timeStamp + "" + patternFormat; //將檔案上傳到指定位置 File file = new
-	 * File(ImgRoot); try { titleImage.transferTo(file); } catch
-	 * (IllegalStateException e) { e.printStackTrace(); } catch (IOException e) {
-	 * e.printStackTrace(); } // 處理商品基本資訊 String titleImagePath = dataPath +
-	 * timeStamp + "" + patternFormat; GoodsBean2 good = new GoodsBean2(goodsName,
-	 * goodsDirection, goodsType, launchDate, brand, shipmentPlace, seller,
-	 * titleImagePath); good.setImages(Imageset);// 商品基本資訊表 連結 商品圖片表
-	 * good.setFormat(formatset);// 商品基本資訊表 連結 商品規格表 GoodsBean2 insertgood =
-	 * gService.insert(good);// 新增成功(有商品編號) Integer iD = insertgood.getGoodsID(); //
-	 * 處理多個商品規格圖
-	 * 
-	 * for (MultipartFile multipartFile : formatImages) {// 裡面迴圈處理圖片
-	 * //entry.getKey():input標籤中的name屬性
-	 * //multipartFile.getOriginalFilename():上傳檔案的名稱 //1.取得圖片格式 String
-	 * Formatfilename = multipartFile.getOriginalFilename(); int pos =
-	 * filename.lastIndexOf("."); String patternFormatImage =
-	 * Formatfilename.substring(pos, Formatfilename.length()); //2.給予新的名字 String
-	 * timeStampFormat = simpleDateFormat.format(new Date()); //String ImgRoot =
-	 * timeStamp + "" + patternFormat; String ImgRootFormat = patternPath +
-	 * timeStampFormat + "" + patternFormatImage; //3.將圖片上傳 //File file = new
-	 * File(patternPath, ImgRoot); File fileFormat = new File(ImgRootFormat); try {
-	 * multipartFile.transferTo(fileFormat);// 將圖片上傳至指定位置 } catch
-	 * (IllegalStateException e) { e.printStackTrace(); } catch (IOException e) {
-	 * e.printStackTrace(); } //3.5 處理規格表的資料 for (String item : datakey) {//
-	 * 裡面包含上傳的資料 String[] splitdata = item.split("/"); //取得裡面的內容 String size =
-	 * splitdata[0]; String price = splitdata[1]; String stock = splitdata[2];
-	 * String uplaodfilename = splitdata[3]; //
-	 * System.out.println("uplaodfilename = " + uplaodfilename);
-	 * System.out.println("Formatfilename = " + Formatfilename);
-	 * System.out.println("uplaodfilename.equals(Formatfilename)" +
-	 * uplaodfilename.equals(Formatfilename)); if
-	 * (uplaodfilename.equals(Formatfilename)) {// 假如圖片名稱一樣 GoodFormat goodformat =
-	 * new GoodFormat(); goodformat.setGood(insertgood);// 商品規格表連結商品基本資訊表 String
-	 * goodsImg = dataPath + timeStampFormat + "" + patternFormatImage;// dataPath =
-	 * // goodformat.setGoodsID(iD); // "../../goodImages/"
-	 * goodformat.setGoodImagePath(goodsImg);
-	 * goodformat.setGoodPrice(Integer.parseInt(price));
-	 * goodformat.setGoodSize(size);
-	 * goodformat.setGoodsStock(Integer.parseInt(stock)); GoodFormat insertformat =
-	 * gfService.insert(goodformat); formatset.add(insertformat); } } }
-	 * 
-	 * insertgood.setFormat(formatset); //處理商品圖片表
-	 * 
-	 * for (MultipartFile multipartFile : goodImages) {// 裡面迴圈處理圖片
-	 * //entry.getKey():input標籤中的name屬性
-	 * //multipartFile.getOriginalFilename():上傳檔案的名稱 //1.取得圖片格式 String
-	 * ImageFormatfilename = multipartFile.getOriginalFilename(); int pos =
-	 * filename.lastIndexOf("."); String patternImage =
-	 * ImageFormatfilename.substring(pos, ImageFormatfilename.length()); //2.給予新的名字
-	 * String timeStampImage = simpleDateFormat.format(new Date()); String
-	 * ImgRootImage = patternPath + timeStampImage + "" + patternImage; //3.將圖片上傳
-	 * File fileImage = new File(ImgRootImage); try {
-	 * multipartFile.transferTo(fileImage);// 將圖片上傳至指定位置 } catch
-	 * (IllegalStateException e) { e.printStackTrace(); } catch (IOException e) {
-	 * e.printStackTrace(); } //3.5 處理圖片表的資料 String imagePath = dataPath +
-	 * timeStampImage + "" + patternImage; GoodImageBean goodImageBean = new
-	 * GoodImageBean(); // goodImageBean.setGoodID(iD);
-	 * goodImageBean.setGood(insertgood); goodImageBean.setImagePath(imagePath);
-	 * Imageset.add(goodImageBean); giService.insert(goodImageBean); }
-	 * 
-	 * insertgood.setImages(Imageset); gService.update(insertgood); return ""; }
-	 */
+	
 	// another insert page(將時間拿掉)
 	@PostMapping("InsertPage.controller")
 	public String processInsertAction2(@RequestParam(name = "GoodImages") List<MultipartFile> goodImages,
@@ -395,9 +299,36 @@ public class GoodController {
 	}
 
 	// 跳轉頁面後 呈現搜尋結果
-	@GetMapping("/searchGoodResult/{pageNO}")
+	@GetMapping("/searchGoodResult/{pageNO}/{hiddenContent}")
 	@ResponseBody
-	public List<GoodPriceDTO> searchGoodResult(@PathVariable("pageNO") Integer pageNo,HttpServletRequest request,Model m) {
+	public List<GoodPriceDTO> searchGoodResult(@PathVariable("pageNO") Integer pageNo,HttpServletRequest request,Model m,@PathVariable("hiddenContent") String hiddencontent) {
+		String[] split = hiddencontent.split("_");
+		String goodName = split[0];
+		String category = split[1];
+		String price = split[2];
+		String orderItem = split[3];
+		String hql1;
+		String hql2;
+		String hql3;
+		if(category.equals("XXX")) {//沒有選定種類
+			hql1 = "";
+		}
+		else {
+			hql1 = "from GoodsBean2 g join GoodFormat gf on g.goodsID = gf.good.goodsID where g.goodsID = ?1 AND g.goodsType=?2";
+			if(price.equals("XXX")) {
+				hql2="";
+			}
+			else {
+				hql2 = " AND gf.goodPrice <?3 group by g.goodsID";
+				if(orderItem.equals("XXX")) {
+					
+				}
+				else {
+					
+				}
+			}
+		}
+		String hql = "select min(gf.goodPrice) AS minprice,max(gf.goodPrice) AS maxprice, g.goodsID AS goodsID from GoodsBean2 g join GoodFormat gf on g.goodsID = gf.good.goodsID where g.goodsID = ?1 group by g.goodsID";
 		//@RequestParam("GoodName") String goodsName,@PathVariable("pageNO") Integer pageNo, HttpServletRequest request
 		int pageSize = 3;
 		List<GoodsBean2> findGoods = gService.findGoods("鯊鯊貓");

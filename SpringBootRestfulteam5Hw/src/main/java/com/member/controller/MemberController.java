@@ -277,7 +277,6 @@ public class MemberController {
 	}
 
 	/* 第三方登入獲取參數 */
-
 	@PostMapping("/google.login")
 	public String googleLogin(@RequestParam("credential") String credential)
 			throws GeneralSecurityException, IOException {

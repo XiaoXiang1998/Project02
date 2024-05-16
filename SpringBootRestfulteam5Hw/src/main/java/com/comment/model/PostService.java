@@ -117,13 +117,25 @@ public class PostService {
         return pRepository.findBuyerCommentsRepliedBySeller();
     }
     
-
- 
-    
-   
+     
    
     public Page<Post> searchByConditions(Integer sellerId, String productName, String productSpec, String userName, Timestamp commentTimeStart, Timestamp commentTimeEnd, Pageable pageable) {
         return pRepository.searchByConditions(sellerId, productName, productSpec, userName, commentTimeStart, commentTimeEnd, pageable);
     }
-   
+    public Page<Post> findSellerCommentsForUserWithPagination(List<Integer> commentIds, Pageable pageable) {
+        return pRepository.findSellerCommentsForUserWithPagination(commentIds, pageable);
+    }
+
+    public Page<Post> getSellerCommentsByRatingWithPagination(List<Integer> commentIds, Integer rating, Pageable pageable) {
+        return pRepository.getSellerCommentsByRatingWithPagination(commentIds, rating, pageable);
+    }
+    
+    public List<Long> countSellerCommentsByRatings(List<Integer> commentIds) {
+        List<Long> ratingCounts = new ArrayList<>();
+        for (int i = 1; i <= 5; i++) {
+            long count = pRepository.countSellerCommentsByRating(commentIds, i);
+            ratingCounts.add(count);
+        }
+        return ratingCounts;
+    }
 }

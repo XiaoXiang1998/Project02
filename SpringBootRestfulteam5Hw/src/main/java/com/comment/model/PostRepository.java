@@ -33,11 +33,14 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
     @Query("SELECT p FROM Post p WHERE p.repliedcommentid = :commentId")
     List<Post> findSellerCommentsForUser(Integer commentId);
     
-    @Query("SELECT p FROM Post p WHERE p.repliedcommentid = :commentId")
-    Page<Post> findSellerCommentsForUserWithPagination(@Param("commentId") Integer commentId, Pageable pageable);
+    @Query("SELECT p FROM Post p WHERE p.repliedcommentid IN :commentIds")
+    Page<Post> findSellerCommentsForUserWithPagination(@Param("commentIds") List<Integer> commentIds, Pageable pageable);
+
+    @Query("SELECT p FROM Post p WHERE p.repliedcommentid IN :commentIds AND p.sellerrate = :rating")
+    Page<Post> getSellerCommentsByRatingWithPagination(@Param("commentIds") List<Integer> commentIds, @Param("rating") Integer rating, Pageable pageable);
     
-    @Query("SELECT p FROM Post p WHERE p.repliedcommentid = :commentId AND p.sellerrate = :rating")
-    Page<Post> getSellerCommentsByRatingWithPagination(@Param("commentId") Integer commentId, @Param("rating") Integer rating, Pageable pageable);
+    @Query("SELECT COUNT(p) FROM Post p WHERE p.repliedcommentid IN :commentIds AND p.sellerrate = :rating")
+    Integer countSellerCommentsByRating(@Param("commentIds") List<Integer> commentIds, @Param("rating") int rating);
     
     @Query("SELECT p FROM Post p " +
             "INNER JOIN p.orders o " +

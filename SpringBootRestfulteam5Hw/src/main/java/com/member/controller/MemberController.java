@@ -491,5 +491,9 @@ public class MemberController {
 		mService.update(member);
 		return "Login";
 	}
-
+	/*------------------------------------------------測試區-----------------------------------------------------*/
+	@GetMapping("/testinclude")
+	public String test() {
+		return "/member/TEST";
+	}
 }

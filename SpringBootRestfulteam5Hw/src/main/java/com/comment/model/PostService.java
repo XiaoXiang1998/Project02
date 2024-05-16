@@ -121,13 +121,7 @@ public class PostService {
  
     
    
-    public Page<Post> findSellerCommentsForUserWithPagination(MemberBean user, Pageable pageable) {
-        return pRepository.findSellerCommentsForUserWithPagination(user, pageable);
-    }
-    
-    public Page<Post> countCommentsBySellerIdAndSellerrateWithPagination(MemberBean user, Integer sellerrate,Pageable pageable) {
-        return pRepository.findCommentsBySellerIdAndSellerrateWithPagination(user, sellerrate,pageable);
-    }
+   
     public Page<Post> searchByConditions(Integer sellerId, String productName, String productSpec, String userName, Timestamp commentTimeStart, Timestamp commentTimeEnd, Pageable pageable) {
         return pRepository.searchByConditions(sellerId, productName, productSpec, userName, commentTimeStart, commentTimeEnd, pageable);
     }

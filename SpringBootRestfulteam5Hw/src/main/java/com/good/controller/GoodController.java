@@ -96,6 +96,14 @@ public class GoodController {
 //		session.setAttribute("GoodNumber", findGoodByLaunchDate.size());
 		m.addAttribute("findGoodPriceRange", pricerange);
 		m.addAttribute("GoodNumber", findGoodByLaunchDate.size());
+		Object count = session.getAttribute("count");
+		Object attribute = session.getAttribute("notifications");
+		Object attribute2 = session.getAttribute("carItemCount");
+		Object attribute3 = session.getAttribute("member");
+		System.out.println(count);
+		System.out.println(attribute);
+		System.out.println(attribute2);
+		System.out.println(attribute3);
 		for(GoodPriceDTO item:pricerange) {
 			System.out.println(item.toString());
 		}

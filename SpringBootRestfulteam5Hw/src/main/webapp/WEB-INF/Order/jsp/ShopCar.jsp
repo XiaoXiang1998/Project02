@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isErrorPage="true"%>
-<%@ taglib uri="jakarta.tags.core" prefix="c"%>
+<%@ taglib uri="jakarta.tags.core" prefix="b"%>
 <!DOCTYPE html>
 <html>
 
@@ -20,8 +20,8 @@ input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer
 </head>
 
 <body>
-	<%@ include file="Index.jsp"%>
-	<div class="container">
+	<%@ include file="../../FrontDeskNav.jsp"%>
+	<div class="container" style="margin-top: 200px">
 		<div class="row justify-content-center mt-5">
 			<div class="col-md-10">
 				<h3>購物車</h3>
@@ -52,7 +52,7 @@ input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer
 								</tr>
 							</thead>
 							<tbody>
-								<c:forEach items="${carItems}" var="item">
+								<b:forEach items="${carItems}" var="item">
 									<tr>
 										<td class="border">
 											<input type="checkbox" name="selectedItems" class="form-check-input">
@@ -78,10 +78,10 @@ input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer
 											<button type="button" class="btn btn-danger delete" data-id="${item.carItemId}">删除</button>
 										</td>
 									</tr>
-								</c:forEach>
-								<tr class="cart-summary m-3 text-center">
-									<td colspan="6">
-										<p>總共金額: $${totalPrice}</p>
+								</b:forEach>
+								<tr class="cart-summary ">
+									<td colspan="7" class="text-end">
+										<span id="totalPrice" class="m-3">總共金額:$ 0</span>
 										<a href="payment.controller" class="btn btn-primary">去買單</a>
 									</td>
 								</tr>
@@ -103,11 +103,25 @@ input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer
                                 updateQuantity(itemId, newValue);
                             }
                         });
-
+                        
+						
                         $('input[name="quantity"]').on('change', function () {
                             let itemId = $(this).attr('id').split('_')[1];
                             let quantity = $(this).val();
                             updateQuantity(itemId, quantity);
+                        });
+                        
+                        
+                        $('#selectAllCheckbox').on('change', function () {
+                            let isChecked = $(this).prop('checked');
+                            $('input[name="selectedItems"]').prop('checked', isChecked);
+                            calculateTotalPrice();
+                        });
+
+                        $('input[name="selectedItems"]').on('change', function () {
+                            let allChecked = $('input[name="selectedItems"]').length === $('input[name="selectedItems"]:checked').length;
+                            $('#selectAllCheckbox').prop('checked', allChecked);
+                            calculateTotalPrice();
                         });
 
                         $('.delete').on('click', function () {
@@ -158,11 +172,11 @@ input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer
                                 url: "updateQuantity.controller?itemId=" + itemId + "&quantity=" + quantity,
                                 data: { itemId: itemId, quantity: quantity },
                                 success: function (data) {
-                                    console.log("UpdateQuantity response:", data);
                                     let totalPriceElement = $('#totalPrice');
                                     let updatedPrice = data.updatedPrice;
                                     totalPriceElement.text('$' + updatedPrice);
-                                    location.reload();
+                                    totalPriceElement.text('總共金額: $' + updatedPrice);
+                                    calculateTotalPrice();
                                 },
                                 error: function (xhr, status, error) {
                                     console.error("UpdateQuantity error:", xhr.responseText);
@@ -175,12 +189,46 @@ input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer
                             
                             $('input[name="selectedItems"]:checked').each(function () {
                                 let row = $(this).closest('tr');
-                                let quantity = parseInt(row.find('.form-control').val()); // 數量
-                                let price = parseFloat(row.find('td:eq(3)').text()); // 價格
-                                totalPrice += quantity * price; // 加總價格
+                                let price = parseFloat(row.find('td:eq(3)').text());
+                                let quantity = parseInt(row.find('input[name="quantity"]').val());
+                                let itemTotalPrice = price * quantity;
+                                totalPrice += itemTotalPrice;
+                                row.find('td:eq(5)').text(itemTotalPrice);
+                                console.log(price);
+                                console.log(totalPrice);
                             });
-                            $('#totalPrice').text('$' + totalPrice.toFixed(2)); // 更新總價顯示
+                           $('#totalPrice').text('總共金額: $' + totalPrice);
+                           let allChecked = $('input[name="selectedItems"]').length === $('input[name="selectedItems"]:checked').length;
+                           $('#selectAllCheckbox').prop('checked', allChecked);
+                           
                         }
+                        $('a[href="payment.controller"]').on('click', function (e) {
+                            e.preventDefault(); 
+
+                            let checkedItemIds = [];
+                            $('input[name="selectedItems"]:checked').each(function () {
+                                checkedItemIds.push($(this).closest('tr').find('.delete').data('id'));
+                            });
+
+                            if (checkedItemIds.length === 0) {
+                                alert('請至少選一個商品');
+                                return;
+                            }
+
+                            console.log(checkedItemIds)
+                            $.ajax({
+                                type: "GET",
+                                url: "payment.controller",
+                                data: { checkedItemIds: checkedItemIds },
+                                success: function (data) {
+                                	window.location.href = "payment.controller?checkedItemIds="+checkedItemIds;
+                                },
+                                error: function (xhr, status, error) {
+                                    console.error("錯誤:", error);
+                                }
+                            });
+                        });
+                        
                     });
 		</script>
 </body>

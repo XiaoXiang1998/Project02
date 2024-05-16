@@ -585,8 +585,8 @@
                     let ShipmentPlace = data.shipmentPlace; $('#ShipmentPlace').prop("value", ShipmentPlace);
                     let TitleImage = data.titleImage; $('#TitleImageTarget').prop("src", TitleImage); $('#TitleImage').prop("alt", TitleImage);
                     let GoodDirection = data.goodsDirection;
-
-                    $('#editor').append(GoodDirection);
+                    editor.setData(GoodDirection);
+                    // $('#editor').append(GoodDirection);
                     // console.log($('#editor').html());
                 }
             })

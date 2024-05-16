@@ -231,96 +231,118 @@
                         </div>
                     </div>
                     <div class="container px-0">
-			<nav class="navbar navbar-light bg-info navbar-expand-xl">
-				<a href="index.html" class="navbar-brand">
-					<h1 class="text-secondary display-6">EZBuy</h1>
-				</a>
-				<button class="navbar-toggler py-2 px-3" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
-					<span class="fa fa-bars text-secondary"></span>
-				</button>
-				<div class="collapse navbar-collapse bg-info" id="navbarCollapse">
-					<div class="navbar-nav">
-						<a href="#" class="nav-item nav-link">購物車</a>
-						<a href="#" class="nav-item nav-link">訂單紀錄</a>
-						<a href="#" class="nav-item nav-link">官方申訴</a>
-					</div>
-					<!-- <div class="d-flex flex-row bd-highlight"> -->
-					<div class="d-flex m-3 me-0">
-						<form class="form-inline d-flex">
-							<div class="form-group mx-sm-3 mb-2">
-								<input type="text" class="form-control border-2 border-secondary py-3 px-4 rounded-pill" style="width: 500px; height: 60px;">
-							</div>
-							<button class="btn btn-primary border-2 border-secondary py-3 px-4 rounded-pill position-relative" style="left: -80px; height: 60px;">
-								<i class="fas fa-search"></i>
-							</button>
-						</form>
-						<a href="#" class="position-relative me-4 my-auto ms-5">
-							<i class="fa fa-shopping-bag fa-2x text-secondary"></i>
-							<span class="position-absolute bg-white rounded-circle d-flex align-items-center justify-content-center text-dark px-1 ${carItemCount == 0 ? 'd-none' : ''}" style="top: -5px; left: 15px; height: 20px; min-width: 20px;">${carItemCount}</span>
-						</a>
-						<ul class="my-auto" style="list-style-type: none;">
-							<li class="nav-item dropdown">
-								<a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-									<i class="fas fa-user fa-2x text-secondary"></i>
-								</a>
-								<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-									<li>
-										<a class="dropdown-item" href="#!">會員中心</a>
-									</li>
-									<li>
-										<a class="dropdown-item" href="#!">訂單查詢</a>
-									</li>
-									<li>
-										<a class="dropdown-item" href="#!">評論紀錄</a>
-									</li>
-									<li>
-										<a class="dropdown-item" href="#!">申訴紀錄</a>
-									</li>
-									<li>
-										<a class="dropdown-item" href="#!">活動紀錄</a>
-									</li>
-									<li>
-										<hr class="dropdown-divider" />
-									</li>
-									<li>
-										<a class="dropdown-item" href="#!">登出</a>
-									</li>
-								</ul>
-							</li>
-						</ul>
-					</div>
-					<div class="dropdown position-static">
-						<button class="btn position-relative dropdown-toggle" type="button" id="notificationsDropdown" data-bs-toggle="dropdown" aria-expanded="false" style="color: #ffb524">
-							<i class="fa-solid fa-bell fa-2x"></i>
-							<span class="position-absolute bg-white rounded-circle d-flex align-items-center justify-content-center text-dark px-1 ${count == 0 ? 'd-none' : ''}" style="top: 2px; left: 28px; height: 20px; min-width: 20px; ">${count}</span>
-						</button>
-						<div class="dropdown-menu dropdown-menu-end" aria-labelledby="notificationsDropdown">
-							<ul class="list-group" style="max-height: 615px; overflow-y: auto;">
-								<c:forEach var="notification" items="${notifications}" varStatus="loop">
-									<c:if test="${loop.index != 0}">
-										<li class="dropdown-divider"></li>
-									</c:if>
-									<li>
-										<a class="nav-link dropdown-item fs-md ${notification.reads == 1 ? 'text-muted' : 'fw-bold'}" href="#" 
-										<c:if test="${notification.reads == 0}">
-      										 onclick="readNotification(${notification.id})"
-  										</c:if>>>
-											<img src="${notification.orderId.formatgoodId.goodImagePath}" alt="商品图片" style="max-width: 60px; max-height: 60px; margin-right: 10px">
-											${notification.content}
-											<input type="hidden" name="reads" value="${notification.reads}">
-											<div class="text-end">
-												<fmt:formatDate value="${notification.sendTime}" pattern="MM月dd日 HH時mm分" />
-											</div>
-										</a>
-									</li>
-								</c:forEach>
-							</ul>
-						</div>
-					</div>
-				</div>
-			</nav>
-		</div>
-	</div>
+                        <nav class="navbar navbar-light bg-info navbar-expand-xl">
+                            <a href="index.html" class="navbar-brand">
+                                <h1 class="text-secondary display-6">EZBuy</h1>
+                            </a>
+                            <button class="navbar-toggler py-2 px-3" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#navbarCollapse">
+                                <span class="fa fa-bars text-secondary"></span>
+                            </button>
+                            <div class="collapse navbar-collapse bg-info" id="navbarCollapse">
+                                <div class="navbar-nav">
+                                    <a href="#" class="nav-item nav-link">購物車</a>
+                                    <a href="#" class="nav-item nav-link">訂單紀錄</a>
+                                    <a href="#" class="nav-item nav-link">官方申訴</a>
+                                </div>
+                                <!-- <div class="d-flex flex-row bd-highlight"> -->
+                                <div class="d-flex m-3 me-0">
+                                    <form class="form-inline d-flex">
+                                        <div class="form-group mx-sm-3 mb-2">
+                                            <input type="text"
+                                                class="form-control border-2 border-secondary py-3 px-4 rounded-pill"
+                                                style="width: 500px; height: 60px;" name="GoodName" id="GoodSearch">
+                                        </div>
+                                        <button
+                                            class="btn btn-primary border-2 border-secondary py-3 px-4 rounded-pill position-relative"
+                                            style="left: -80px; height: 60px;" id="GoToSearchGood" type="button">
+                                            <i class="fas fa-search"></i>
+                                        </button>
+                                        <div id="resultList">
+                                            <ul id="result">
+
+                                            </ul>
+                                        </div>
+                                    </form>
+                                    <a href="#" class="position-relative me-4 my-auto ms-5">
+                                        <i class="fa fa-shopping-bag fa-2x text-secondary"></i>
+                                        <span
+                                            class="position-absolute bg-white rounded-circle d-flex align-items-center justify-content-center text-dark px-1 ${carItemCount == 0 ? 'd-none' : ''}"
+                                            style="top: -5px; left: 15px; height: 20px; min-width: 20px;">${carItemCount}</span>
+                                    </a>
+                                    <ul class="my-auto" style="list-style-type: none;">
+                                        <li class="nav-item dropdown">
+                                            <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#"
+                                                role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                <i class="fas fa-user fa-2x text-secondary"></i>
+                                            </a>
+                                            <ul class="dropdown-menu dropdown-menu-end"
+                                                aria-labelledby="navbarDropdown">
+                                                <li>
+                                                    <a class="dropdown-item" href="#!">會員中心</a>
+                                                </li>
+                                                <li>
+                                                    <a class="dropdown-item" href="#!">訂單查詢</a>
+                                                </li>
+                                                <li>
+                                                    <a class="dropdown-item" href="#!">評論紀錄</a>
+                                                </li>
+                                                <li>
+                                                    <a class="dropdown-item" href="#!">申訴紀錄</a>
+                                                </li>
+                                                <li>
+                                                    <a class="dropdown-item" href="#!">活動紀錄</a>
+                                                </li>
+                                                <li>
+                                                    <hr class="dropdown-divider" />
+                                                </li>
+                                                <li>
+                                                    <a class="dropdown-item" href="#!">登出</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="dropdown position-static">
+                                    <button class="btn position-relative dropdown-toggle" type="button"
+                                        id="notificationsDropdown" data-bs-toggle="dropdown" aria-expanded="false"
+                                        style="color: #ffb524">
+                                        <i class="fa-solid fa-bell fa-2x"></i>
+                                        <span
+                                            class="position-absolute bg-white rounded-circle d-flex align-items-center justify-content-center text-dark px-1 ${count == 0 ? 'd-none' : ''}"
+                                            style="top: 2px; left: 28px; height: 20px; min-width: 20px; ">${count}</span>
+                                    </button>
+                                    <div class="dropdown-menu dropdown-menu-end"
+                                        aria-labelledby="notificationsDropdown">
+                                        <ul class="list-group" style="max-height: 615px; overflow-y: auto;">
+                                            <c:forEach var="notification" items="${notifications}" varStatus="loop">
+                                                <c:if test="${loop.index != 0}">
+                                                    <li class="dropdown-divider"></li>
+                                                </c:if>
+                                                <li>
+                                                    <a class="nav-link dropdown-item fs-md ${notification.reads == 1 ? 'text-muted' : 'fw-bold'}"
+                                                        href="#" <c:if test="${notification.reads == 0}">
+                                                        onclick="readNotification(${notification.id})"
+                                                        </c:if>>>
+                                                        <img src="${notification.orderId.formatgoodId.goodImagePath}"
+                                                            alt="商品图片"
+                                                            style="max-width: 60px; max-height: 60px; margin-right: 10px">
+                                                        ${notification.content}
+                                                        <input type="hidden" name="reads" value="${notification.reads}">
+                                                        <div class="text-end">
+                                                            <fmt:formatDate value="${notification.sendTime}"
+                                                                pattern="MM月dd日 HH時mm分" />
+                                                        </div>
+                                                    </a>
+                                                </li>
+                                            </c:forEach>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </nav>
+                    </div>
+                </div>
                 <!-- Navbar End -->
 
                 <!-- Hero Start -->
@@ -410,6 +432,8 @@
                                                 style="top: 10px; right: 10px;">${j.goodType}</div>
                                             <div class="p-4 rounded-bottom">
                                                 <h4>${j.goodName}</h4>
+                                                <input type="text" name="GoodID" class="form-control"
+                                                    value="${j.goodsID}">
                                                 <p>${j.minprice}-${j.maxprice}$</p>
                                                 <div class="d-flex justify-content-between flex-lg-wrap">
                                                     <div class="d-flex my-3">
@@ -432,40 +456,6 @@
                     </div>
                 </div>
                 <!-- Vesitable Shop End -->
-
-
-                <!-- Banner Section Start-->
-                <!-- <div class="container-fluid banner bg-secondary my-5">
-                <div class="container py-5">
-                    <div class="row g-4 align-items-center">
-                        <div class="col-lg-6">
-                            <div class="py-4">
-                                <h1 class="display-3 text-white">Fresh Exotic Fruits</h1>
-                                <p class="fw-normal display-3 text-dark mb-4">in Our Store</p>
-                                <p class="mb-4 text-dark">The generated Lorem Ipsum is therefore always free
-                                    from repetition
-                                    injected humour, or non-characteristic words etc.</p>
-                                <a href="#"
-                                    class="banner-btn btn border-2 border-white rounded-pill text-dark py-3 px-5">BUY</a>
-                            </div>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="position-relative">
-                                <img src="../../frontimg/baner-1.png" class="img-fluid w-100 rounded" alt="">
-                                <div class="d-flex align-items-center justify-content-center bg-white rounded-circle position-absolute"
-                                    style="width: 140px; height: 140px; top: 0; left: 0;">
-                                    <h1 style="font-size: 100px;">1</h1>
-                                    <div class="d-flex flex-column">
-                                        <span class="h2 mb-0">50$</span>
-                                        <span class="h4 text-muted mb-0">kg</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div> -->
-
                 </div>
                 <!-- Navbar End -->
 
@@ -663,22 +653,32 @@
                             form.submit();
                         }
                     })
-                    $(document).on('click', 'div[class="border border-primary rounded position-relative vesitable-item"]', function () {
-                        console.log("123123123123123");
+                    $(document).on('click', 'div[class="border border-primary rounded position-relative vesitable-item"]',
+                        function () {
+                            //檢視商品頁面(需要頁面跳轉)
+                            console.log("123123123123123");
+                            let form = $(this).closest("form");
+                            form.prop("action", "/goodDetail.controller");
+                            form.prop("method", "get");
+                            form.submit();
+                        })
 
-                        console.log($(this).find('input'));
+                    $('#GoodSearch').keyup(function () {
+                        let inputresult = $(this).val();
+                        $.ajax({
+                            method: "get",
+                            url: "/keywordsearch",
+                            data: { "inputresult": inputresult },
+                            success: function (data) {
+                                $('#result').prop("innerHTML", "");
+                                $.each(data, function (i, n) {
+                                    let resli = document.createElement("li");
+                                    resli.innerHTML = n.goodsName;
+                                    $('#result').append(resli);
+                                })
+                            }
+                        })
                     })
-                    // <form class="form-inline d-flex">
-                    //         <div class="form-group mx-sm-3 mb-2">
-                    //             <input type="text" class="form-control border-2 border-secondary py-3 px-4 rounded-pill"
-                    //                 style="width: 1000px;height: 60px;" name="GoodName">
-                    //         </div>
-                    //         <button
-                    //             class="btn btn-primary border-2 border-secondary py-3 px-4 rounded-pill position-relative"
-                    //             style="left: -80px;height: 60px;">
-                    //             <i class="fas fa-search"></i>
-                    //         </button>
-                    //     </form>
                 </script>
             </body>
 

@@ -240,12 +240,56 @@ public class GoodController {
 	// another insert page(將時間拿掉)
 
 	///////////////////////////////////////////////////// 查詢全部的頁面/////////////////////////////////////////////////
-
+	
+	//模糊化查詢
+	@GetMapping("/keywordsearch")
+	@ResponseBody
+	public List<GoodsBean2> keywordsearch(@RequestParam("inputresult") String keyinput){
+		List<GoodsBean2> findGoods = gService.findGoods(keyinput);
+		return findGoods;
+	}
 	// 檢視商品的詳細資訊
 	@GetMapping("/goodDetail.controller")
-	public String processGoodDetailAction(@RequestParam("GoodID") Integer goodID, HttpServletRequest request) {
-		HttpSession session = request.getSession();
-		session.setAttribute("GoodID", goodID);
+	public String processGoodDetailAction(@RequestParam("GoodID") Integer goodID, HttpServletRequest request,Model m) {
+//		HttpSession session = request.getSession();
+//		session.setAttribute("GoodID", goodID);\
+		//商品詳細資料需要(商品名稱、商品種類、商品價格範圍、商品平均評分)
+		GoodsBean2 good = gService.getById(goodID); //取得對應商品編號
+		//
+		Query<Object[]> resultList = (Query<Object[]>) entityManager.createQuery(
+//				select min(gf.GoodPrice) AS minprice,max(gf.GoodPrice) AS maxprice,gf.GoodsID AS 'GoodID'
+//				from Goods g join GoodFormat gf on g.GoodsID = gf.GoodsID
+//				where gf.GoodsID = 4 
+//				group by gf.GoodsID;
+				"select min(gf.goodPrice) AS minprice,max(gf.goodPrice) AS maxprice, g.goodsID AS goodsID from GoodsBean2 g join GoodFormat gf on g.goodsID = gf.good.goodsID where g.goodsID = ?1 group by g.goodsID")
+				.setParameter(1, good.getGoodsID());// 在特定賣家下查詢商品，並取得不同編號下的最大和最小價格
+		List<Object[]> item2 = resultList.getResultList();
+//		List<GoodPriceDTO> pricerange = new ArrayList();
+		GoodPriceDTO result = new GoodPriceDTO();
+		for (Object[] item3 : item2) {
+			System.out.println(good.getNumberRatings());
+			if (good.getNumberRatings() == null) {// 沒人評分
+				result.setGoodAVG(0);
+			} else {
+				int AVG = good.getRating() / good.getNumberRatings();
+				result.setGoodAVG(AVG);
+			}
+			result.setGoodType(good.getGoodsType());
+			result.setGoodName(good.getGoodsName());
+			result.setTitleImage(good.getTitleImage());
+			result.setGoodsID((Integer) item3[2]);
+			result.setMaxprice((Integer) item3[1]);
+			result.setMinprice((Integer) item3[0]);
+		}
+		//
+		List<GoodFormat> byIDOrderByFormatImage = gfService.getByIDOrderByFormatImage(goodID);
+		List<GoodImageBean> findImagesByID = giService.findImagesByID(goodID);
+		m.addAttribute("Good", good);
+		m.addAttribute("GoodFormat", byIDOrderByFormatImage);
+		m.addAttribute("GoodFormatNumber", byIDOrderByFormatImage.size());
+		m.addAttribute("GoodImage", findImagesByID);
+		m.addAttribute("GoodImageNumber", findImagesByID.size());
+		m.addAttribute("GoodBasicInfo", result);
 		return "good/jsp/goodDetail";
 	}
 
@@ -450,6 +494,8 @@ public class GoodController {
 //		HttpSession session = request.getSession();
 //		session.setAttribute("totalPages", totalPages);
 //		session.setAttribute("totalElements", findGoods.size());
+		System.out.println("totalPages = "+totalPages);
+		System.out.println("totalElements = "+pricerange.size());
 		m.addAttribute("totalPages", totalPages);
 		m.addAttribute("totalElements", pricerange.size());
 		/**/

@@ -1,5 +1,7 @@
 package com.good.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -35,7 +37,7 @@ public class GoodImageService {
 	public GoodImageBean getByID(int goodImageID){
 		return goodimageRepos.getById(goodImageID);
 	}
-	public GoodImageBean findImagesByID(Integer goodID) {
+	public List<GoodImageBean> findImagesByID(Integer goodID) {
 		return goodimageRepos.findImagesByID(goodID);
 	}
 }

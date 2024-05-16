@@ -18,6 +18,10 @@ public class CarItemService {
 	public List<CarItem> findByMemberId(int MemberId) {
 		return cRops.findByMemberId(MemberId);
 	}
+	
+	public List<CarItem> findByIdList(Integer id){
+		return cRops.findByCarItemId(id);
+	}
 
 	public CarItem insertToShopCar(CarItem carItem) {
 		return cRops.save(carItem);
@@ -31,8 +35,8 @@ public class CarItemService {
 		cRops.deleteById(id);
 	}
 
-	public void clearShopCarByMemberId(Integer MemberId) {
-		cRops.clearShopCarByMemberId(MemberId);
+	public void clearShopCarByMemberId(Integer carItemId) {
+		cRops.clearShopCarByMemberId(carItemId);
 	}
 	public Integer carItemCount(MemberBean member) {
 		return cRops.carItemCount(member);

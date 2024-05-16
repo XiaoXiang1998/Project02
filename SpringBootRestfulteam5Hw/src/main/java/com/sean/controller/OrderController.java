@@ -4,6 +4,7 @@ import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedHashMap;
@@ -147,10 +148,17 @@ public class OrderController {
 	}
 
 	@GetMapping("/payment.controller")
-	public String Payment(Model m) {
+	public String Payment(@RequestParam("checkedItemIds") Integer[] checkedItemIds,Model m) {
 		MemberBean memberb =(MemberBean)session.getAttribute("member");
 		Integer memberId = memberb.getSid();
-		List<CarItem> cartItems = cService.findByMemberId(memberId);
+		List<CarItem> cartItems = new ArrayList<>();
+	    for (Integer itemId : checkedItemIds) {
+	    	 List<CarItem> items = cService.findByIdList(itemId);
+	        if (items != null) {
+	        	cartItems.addAll(items);
+	        }
+	        System.out.println(cartItems);
+	    }
 		m.addAttribute("cartItems", cartItems);
 		m.addAttribute("memberId", memberId);
 		m.addAttribute("page","shopcar");
@@ -180,7 +188,7 @@ public class OrderController {
 				@RequestParam("shippingFee") Integer[] shippingFees, @RequestParam("totalPrices") Integer[] totalPrices,
 				@RequestParam("originalPrices") Integer[] oringinalPrices, @RequestParam("totalPrice") Integer AlltotalPrice,
 				@RequestParam("paymentMethod") short paymentMethod, @RequestParam("statusValue") short statusValue,
-				@RequestParam("itemId") String[] itemIds,Model m) {
+				@RequestParam("itemId") Integer[] itemIds,Model m) {
 			
 			
 			System.out.println(memberId.getClass());
@@ -243,8 +251,8 @@ public class OrderController {
 				n2.setSendTime(currentDate);
 				n2.setReads(0);
 				nService.sendMessage(n2);
+				cService.clearShopCarByMemberId(itemIds[i]);
 			}
-				cService.clearShopCarByMemberId(memberId);
 				if(paymentMethod == 1) {
 					StringBuilder concatenatedGoodsNames = new StringBuilder();
 					for (Integer productId : productIds) {

@@ -26,7 +26,7 @@ public class CarItem {
 	@Column(name = "CARITEMID")
 	private Integer carItemId;
 
-	@ManyToOne
+	@ManyToOne(fetch= FetchType.LAZY)
 	@JoinColumn(name = "FK_FORMATGOODID")
 	private GoodFormat good;
 

@@ -217,7 +217,7 @@
 								<i class="fas fa-search"></i>
 							</button>
 						</form>
-						<a href="#" class="position-relative me-4 my-auto ms-5">
+						<a href="shopcar.controller" class="position-relative me-4 my-auto ms-5">
 							<i class="fa fa-shopping-bag fa-2x text-secondary"></i>
 							<span class="position-absolute bg-white rounded-circle d-flex align-items-center justify-content-center text-dark px-1 ${carItemCount == 0 ? 'd-none' : ''}" style="top: -5px; left: 15px; height: 20px; min-width: 20px;">${carItemCount}</span>
 						</a>
@@ -264,7 +264,6 @@
 											<a class="nav-link dropdown-item fs-md ${notification.reads == 1 ? 'text-muted' : 'fw-bold'}" href="#" <c:if test="${notification.reads == 0}">
                                                             onclick="readNotification(${notification.id})"
                                                             </c:if>>
-												>
 												<img src="${notification.orderId.formatgoodId.goodImagePath}" alt="商品图片" style="max-width: 60px; max-height: 60px; margin-right: 10px">
 												${notification.content}
 												<input type="hidden" name="reads" value="${notification.reads}">

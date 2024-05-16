@@ -21,7 +21,7 @@ input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer
 
 <body>
 	<%@ include file="../../FrontDeskNav.jsp"%>
-	<div class="container" style="margin-top: 200px">
+	<div class="container" style="margin-top: 100px">
 		<div class="row justify-content-center mt-5">
 			<div class="col-md-10">
 				<h3>購物車</h3>

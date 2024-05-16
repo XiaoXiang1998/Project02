@@ -182,7 +182,7 @@
                     </div>
                 </div>
                 <div class="container px-0 d-flex mb-5">
-                    <a href="#" class="navbar-brand">
+                    <a href="MemberLogin.controller" class="navbar-brand">
                         <h1 class="text-secondary display-6">EZBuy</h1>
                     </a>
                     <!--  -->
@@ -234,7 +234,7 @@
                             </div>
                         </div>
                     </div>
-                    <!-- <h1 class="mb-4 mt-5">搜尋"${goodsName}"的結果</h1> -->
+                    <h1 class="mb-4 mt-5" id="test">123456789</h1>
                     <div class="row g-4">
                         <div class="col-lg-12">
                             <div class="row g-4">
@@ -584,12 +584,15 @@
                                     <div class="col-12">
                                         <div class="pagination d-flex justify-content-center mt-5">
                                             <!-- <a href="#" class="rounded">&laquo;</a> -->
-                                            Previous
-                                            <c:forEach var="i" begin="0" end="${totalPages+1}" step="1">
+                                            <!-- Previous -->
+                                            <!-- <c:forEach var="i" begin="0" end="${totalPages+1}" step="1">
                                                 <button id="myPage" type="button"
                                                     onclick="change(${i}+1)">${i+1}</button>
-                                            </c:forEach>
-                                            Next
+                                            </c:forEach> -->
+                                            <div class="row" id="PageList">
+
+                                            </div>
+                                            <!-- Next -->
                                         </div>
                                     </div>
                                 </div>
@@ -832,6 +835,11 @@
                         form.submit();
                     }
                 })
+                // $('#PageList')放入頁面的地方
+                for (let i = 0; i < ${ totalPages+ 1}; i++) {
+                    console.log(i);
+                }
+                // $('#test').prop("innerHTML", "${totalPages+1}");
             </script>
         </body>
 

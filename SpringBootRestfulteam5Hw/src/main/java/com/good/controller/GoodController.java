@@ -63,6 +63,7 @@ public class GoodController {
 	@GetMapping("EZBuyIndex") // 商品封面照、商品名稱、商品種類、商品評分(全給0星)、價格範圍
 	public String EZBuyIndex(HttpServletRequest request, Model m) { // HttpServletRequest request
 		// 透過上架日期取得商品
+		System.out.println("我要進來了!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 		List<GoodsBean2> findGoodByLaunchDate = gService.findGoodByLaunchDate();
 		List<GoodPriceDTO> pricerange = new ArrayList();
 		// 透過商品編號 取得價格最大最小值
@@ -90,9 +91,16 @@ public class GoodController {
 				pricerange.add(result);
 			}
 		}
-		HttpSession session = request.getSession();
+//		HttpSession session = request.getSession();
+//		session.setAttribute("findGoodPriceRange", pricerange);
+//		session.setAttribute("GoodNumber", findGoodByLaunchDate.size());
 		m.addAttribute("findGoodPriceRange", pricerange);
 		m.addAttribute("GoodNumber", findGoodByLaunchDate.size());
+		for(GoodPriceDTO item:pricerange) {
+			System.out.println(item.toString());
+		}
+		System.out.println("我要出來了!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+
 		return "good/jsp/EZBuyindex";
 	}
 

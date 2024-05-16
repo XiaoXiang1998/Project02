@@ -33,45 +33,6 @@
                 <link href="../../frontcss/style.css" rel="stylesheet">
                 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
                 <script>
-                    // 透過ajax檢查該使用者購物車內有幾筆商品
-                    $.ajax({
-                        type: 'get',
-                        url: "...(要加入使用者編號)",
-                        contentType: 'application/json',
-                        success: function (data) {
-                            if (data.length == 0) {
-
-                            }
-                            else {
-                                $('#numberGoodInCart').html(data.length)
-                            }
-                        }
-                    })
-
-                    /*間隔*/
-                    // 透過ajax取得活動資料
-                    $.ajax({
-                        type: 'get',
-                        url: "...(透過活動狀態取得活動資料)",
-                        contentType: 'application/json',
-                        success: function (data) {
-                            if (data.length == 0) {
-                                //沒有活動 敬請期待
-                            }
-                            else {
-                                $.each(data, function (i, n) {
-                                    let content = `<div class="carousel-item rounded">
-                                        <img src="`+ n.activityImage + `" class="img-fluid w-100 h-100 rounded"
-                                            alt="Second slide"> 
-                                            <form action="">
-                                                <input type="text" value="`+ n.activityID + `" name="activityID">
-                                            </form>
-                                    </div>`
-                                })
-                            }
-                        }
-                    })
-
                     $.ajax({// 透過ajax取得商品基本資料表中所有種類商品(目前order資料表中沒有資料)
                         // select TOP 5 GoodType 
                         // from Orders o join GoodFormat gf on o.FK_FORMATGOODID = gf.goodFormatID
@@ -230,7 +191,7 @@
                     </div>
                     <div class="container px-0">
                         <nav class="navbar navbar-light bg-info navbar-expand-xl">
-                            <a href="index.html" class="navbar-brand">
+                            <a href="MemberLogin.controller" class="navbar-brand">
                                 <h1 class="text-secondary display-6">EZBuy</h1>
                             </a>
                             <button class="navbar-toggler py-2 px-3" type="button" data-bs-toggle="collapse"
@@ -238,22 +199,22 @@
                                 <span class="fa fa-bars text-secondary"></span>
                             </button>
                             <div class="collapse navbar-collapse bg-info" id="navbarCollapse">
-                                <div class="navbar-nav">
+                                <!-- <div class="navbar-nav">
                                     <a href="#" class="nav-item nav-link">購物車</a>
                                     <a href="#" class="nav-item nav-link">訂單紀錄</a>
                                     <a href="#" class="nav-item nav-link">官方申訴</a>
-                                </div>
+                                </div> -->
                                 <!-- <div class="d-flex flex-row bd-highlight"> -->
                                 <div class="d-flex m-3 me-0">
                                     <form class="form-inline d-flex">
                                         <div class="form-group mx-sm-3 mb-2">
                                             <input type="text"
                                                 class="form-control border-2 border-secondary py-3 px-4 rounded-pill"
-                                                style="width: 500px; height: 60px;">
+                                                style="width: 850px; height: 60px;" name="GoodName">
                                         </div>
                                         <button
                                             class="btn btn-primary border-2 border-secondary py-3 px-4 rounded-pill position-relative"
-                                            style="left: -80px; height: 60px;">
+                                            style="left: -80px; height: 60px;" type="button" id="GoToSearchGood">
                                             <i class="fas fa-search"></i>
                                         </button>
                                     </form>
@@ -324,48 +285,7 @@
                 </div>
                 <!-- Navbar End -->
 
-                <!-- Hero Start -->
-                <div class="container-fluid py-5 mb-5 hero-header">
-                    <div class="container py-5">
-                        <div class="row g-5 align-items-center">
-                            <div class="col-md-12 col-lg-7">
-                                <h4 class="mb-3 text-secondary">100% Organic Foods</h4>
-                                <h1 class="mb-5 display-3 text-primary">Organic Veggies & Fruits Foods</h1>
 
-                            </div>
-                            <div class="col-md-12 col-lg-5">
-                                <!-- 放置活動圖片(透過ajax取得近期活動圖片、活動內容) -->
-                                <div id="carouselId" class="carousel slide position-relative" data-bs-ride="carousel">
-                                    <div class="carousel-inner" role="listbox">
-                                        <div class="carousel-item active rounded">
-                                            <img src="../../frontimg/hero-img-1.png"
-                                                class="img-fluid w-100 h-100 bg-secondary rounded" alt="First slide">
-                                            <a href="#" class="btn px-4 py-2 text-white rounded">Fruites</a>
-                                        </div>
-                                        <div class="carousel-item rounded">
-                                            <img src="../../frontimg/hero-img-2.jpg"
-                                                class="img-fluid w-100 h-100 rounded" alt="Second slide"> <!-- 活動圖片 -->
-                                            <a href="#" class="btn px-4 py-2 text-white rounded">Vesitables</a>
-                                            <!-- 透過點擊圖片檢閱活動內文[<a></a>拿掉] -->
-                                        </div>
-                                    </div>
-                                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselId"
-                                        data-bs-slide="prev">
-                                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                        <span class="visually-hidden">Previous</span>
-                                    </button>
-                                    <button class="carousel-control-next" type="button" data-bs-target="#carouselId"
-                                        data-bs-slide="next">
-                                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                        <span class="visually-hidden">Next</span>
-                                    </button>
-                                </div>
-                                <!-- 放置活動圖片 -->
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- Hero End -->
                 <!-- Fruits Shop Start-->
                 <div class="container-fluid fruite py-5">
                     <div class="container py-5">
@@ -435,61 +355,10 @@
                     </div>
                 </div>
                 <!-- Vesitable Shop End -->
-                </div>
+
                 <!-- Navbar End -->
 
-                <!-- Hero Start -->
-                <div class="container-fluid py-5 mb-5 hero-header">
-                    <div class="container py-5">
-                        <div class="row g-5 align-items-center">
-                            <div class="col-md-12 col-lg-7">
-                                <h4 class="mb-3 text-secondary">100% Organic Foods</h4>
-                                <h1 class="mb-5 display-3 text-primary">Organic Veggies & Fruits Foods</h1>
-                                <div class="position-relative mx-auto"> <!-- 商品查詢(需要引入關鍵字查詢) -->
-                                    <form id="gotoSearchGoodForm">
-                                        <input
-                                            class="form-control border-2 border-secondary w-75 py-3 px-4 rounded-pill"
-                                            type="number" placeholder="Search" id="SearchGood">
-                                        <button type="button"
-                                            class="btn btn-primary border-2 border-secondary py-3 px-4 position-absolute rounded-pill text-white h-100"
-                                            style="top: 0; right: 25%;" id="gotoSearchGood"><i
-                                                class="fas fa-search"></i></button>
-                                    </form>
-                                </div>
-                            </div>
-                            <div class="col-md-12 col-lg-5">
-                                <!-- 放置活動圖片(透過ajax取得近期活動圖片、活動內容) -->
-                                <div id="carouselId" class="carousel slide position-relative" data-bs-ride="carousel">
-                                    <div class="carousel-inner" role="listbox">
-                                        <div class="carousel-item active rounded">
-                                            <img src="../../frontimg/hero-img-1.png"
-                                                class="img-fluid w-100 h-100 bg-secondary rounded" alt="First slide">
-                                            <a href="#" class="btn px-4 py-2 text-white rounded">Fruites</a>
-                                        </div>
-                                        <div class="carousel-item rounded">
-                                            <img src="../../frontimg/hero-img-2.jpg"
-                                                class="img-fluid w-100 h-100 rounded" alt="Second slide"> <!-- 活動圖片 -->
-                                            <a href="#" class="btn px-4 py-2 text-white rounded">Vesitables</a>
-                                            <!-- 透過點擊圖片檢閱活動內文[<a></a>拿掉] -->
-                                        </div>
-                                    </div>
-                                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselId"
-                                        data-bs-slide="prev">
-                                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                        <span class="visually-hidden">Previous</span>
-                                    </button>
-                                    <button class="carousel-control-next" type="button" data-bs-target="#carouselId"
-                                        data-bs-slide="next">
-                                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                        <span class="visually-hidden">Next</span>
-                                    </button>
-                                </div>
-                                <!-- 放置活動圖片 -->
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- Hero End -->
+
 
 
 
@@ -621,6 +490,7 @@
                 <script>
                     $('#GoToSearchGood').click(function () {
                         let searchGoodInput = $(this).closest('form').find('input');
+                        console.log(searchGoodInput.prop('value'));
                         if (searchGoodInput.prop('value') == null) {
                             console.log(searchGoodInput);
                         }

@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.good.dto.GoodPriceDTO;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken.Payload;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
@@ -258,7 +259,7 @@ public class MemberController {
 
 	/* 登入機制 */
 	@PostMapping("/MemberLogin.controller")
-	public String LoginReponse(@RequestParam("username") String account, @RequestParam("password") String userPwd) {
+	public String LoginReponse(@RequestParam("username") String account, @RequestParam("password") String userPwd,Model m) {
 		if (mService.checkLogin(account, userPwd)) {
 			System.out.println("登入成功");
 			// 儲存登入會員的bean物件
@@ -276,7 +277,7 @@ public class MemberController {
 			Integer carItemCount = cService.carItemCount(memberInformation);
 			httpSession.setAttribute("carItemCount", carItemCount);
 			// 檢查會員等級
-			return "/good/jsp/EZBuyindex";
+			return "redirect:EZBuyIndex";
 		}
 		return null;
 	}

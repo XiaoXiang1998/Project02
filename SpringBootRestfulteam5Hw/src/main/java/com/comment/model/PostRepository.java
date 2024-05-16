@@ -33,6 +33,11 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
     @Query("SELECT p FROM Post p WHERE p.repliedcommentid = :commentId")
     List<Post> findSellerCommentsForUser(Integer commentId);
     
+    @Query("SELECT p FROM Post p WHERE p.repliedcommentid = :commentId")
+    Page<Post> findSellerCommentsForUserWithPagination(@Param("commentId") Integer commentId, Pageable pageable);
+    
+    @Query("SELECT p FROM Post p WHERE p.repliedcommentid = :commentId AND p.sellerrate = :rating")
+    Page<Post> getSellerCommentsByRatingWithPagination(@Param("commentId") Integer commentId, @Param("rating") Integer rating, Pageable pageable);
     
     @Query("SELECT p FROM Post p " +
             "INNER JOIN p.orders o " +
@@ -94,11 +99,8 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
                                   @Param("commentTimeEnd") Timestamp commentTimeEnd,
                                   Pageable pageable);
     
+   
     
     
-    @Query("SELECT p FROM Post p WHERE p.repliedcommentid IN (SELECT post.commentid FROM Post post WHERE post.member = :user) AND p.sellerrate IS NOT NULL")
-    Page<Post> findSellerCommentsForUserWithPagination(@Param("user") MemberBean user, Pageable pageable);
     
-    @Query("SELECT p FROM Post p WHERE p.repliedcommentid IN (SELECT post.commentid FROM Post post WHERE post.member = :user) AND p.sellerrate = :sellerrate")
-    Page<Post> findCommentsBySellerIdAndSellerrateWithPagination(@Param("user") MemberBean user, @Param("sellerrate") Integer sellerrate, Pageable pageable);
 }

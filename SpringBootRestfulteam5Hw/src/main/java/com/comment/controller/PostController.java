@@ -396,7 +396,7 @@ public class PostController {
 
 		    return "comment/sellerReplay";
 		}
-		
+		/*
 		@GetMapping("/sellerCommentsForUser")
 		public String getSellerCommentsForUser(Model model, HttpSession session) {
 			MemberBean user = (MemberBean) session.getAttribute("member");
@@ -429,7 +429,7 @@ public class PostController {
 		    model.addAttribute("totalCommentsCount", totalCommentsCount);
 
 			return "comment/sellercommentforuser";
-		}
+		}*/
 		
 		
 	

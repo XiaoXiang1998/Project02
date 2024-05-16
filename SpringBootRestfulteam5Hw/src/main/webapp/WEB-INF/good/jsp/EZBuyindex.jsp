@@ -216,10 +216,8 @@
                     <div class="container topbar bg-info d-none d-lg-block mb-3">
                         <div class="d-flex justify-content-between">
                             <div class="top-info ps-2">
-                                <small class="me-3"><i class="fas fa-map-marker-alt me-2 text-secondary"></i> <a
-                                        href="#" class="text-white">123 Street, New York</a></small>
                                 <small class="me-3"><i class="fas fa-envelope me-2 text-secondary"></i><a href="#"
-                                        class="text-white">Email@Example.com</a></small>
+                                        class="text-white">ezbuycompany@gmail.com</a></small>
                             </div>
                             <div class="top-link pe-2">
                                 <a href="#" class="text-white"><small class="text-white mx-2">Privacy
@@ -251,18 +249,13 @@
                                         <div class="form-group mx-sm-3 mb-2">
                                             <input type="text"
                                                 class="form-control border-2 border-secondary py-3 px-4 rounded-pill"
-                                                style="width: 500px; height: 60px;" name="GoodName" id="GoodSearch">
+                                                style="width: 500px; height: 60px;">
                                         </div>
                                         <button
                                             class="btn btn-primary border-2 border-secondary py-3 px-4 rounded-pill position-relative"
-                                            style="left: -80px; height: 60px;" id="GoToSearchGood" type="button">
+                                            style="left: -80px; height: 60px;">
                                             <i class="fas fa-search"></i>
                                         </button>
-                                        <div id="resultList">
-                                            <ul id="result">
-
-                                            </ul>
-                                        </div>
                                     </form>
                                     <a href="#" class="position-relative me-4 my-auto ms-5">
                                         <i class="fa fa-shopping-bag fa-2x text-secondary"></i>
@@ -270,73 +263,59 @@
                                             class="position-absolute bg-white rounded-circle d-flex align-items-center justify-content-center text-dark px-1 ${carItemCount == 0 ? 'd-none' : ''}"
                                             style="top: -5px; left: 15px; height: 20px; min-width: 20px;">${carItemCount}</span>
                                     </a>
-                                    <ul class="my-auto" style="list-style-type: none;">
-                                        <li class="nav-item dropdown">
-                                            <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#"
-                                                role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                                <i class="fas fa-user fa-2x text-secondary"></i>
-                                            </a>
-                                            <ul class="dropdown-menu dropdown-menu-end"
-                                                aria-labelledby="navbarDropdown">
-                                                <li>
-                                                    <a class="dropdown-item" href="#!">會員中心</a>
-                                                </li>
-                                                <li>
-                                                    <a class="dropdown-item" href="#!">訂單查詢</a>
-                                                </li>
-                                                <li>
-                                                    <a class="dropdown-item" href="#!">評論紀錄</a>
-                                                </li>
-                                                <li>
-                                                    <a class="dropdown-item" href="#!">申訴紀錄</a>
-                                                </li>
-                                                <li>
-                                                    <a class="dropdown-item" href="#!">活動紀錄</a>
-                                                </li>
-                                                <li>
-                                                    <hr class="dropdown-divider" />
-                                                </li>
-                                                <li>
-                                                    <a class="dropdown-item" href="#!">登出</a>
-                                                </li>
-                                            </ul>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div class="dropdown position-static">
-                                    <button class="btn position-relative dropdown-toggle" type="button"
-                                        id="notificationsDropdown" data-bs-toggle="dropdown" aria-expanded="false"
-                                        style="color: #ffb524">
-                                        <i class="fa-solid fa-bell fa-2x"></i>
-                                        <span
-                                            class="position-absolute bg-white rounded-circle d-flex align-items-center justify-content-center text-dark px-1 ${count == 0 ? 'd-none' : ''}"
-                                            style="top: 2px; left: 28px; height: 20px; min-width: 20px; ">${count}</span>
-                                    </button>
-                                    <div class="dropdown-menu dropdown-menu-end"
-                                        aria-labelledby="notificationsDropdown">
-                                        <ul class="list-group" style="max-height: 615px; overflow-y: auto;">
-                                            <c:forEach var="notification" items="${notifications}" varStatus="loop">
-                                                <c:if test="${loop.index != 0}">
-                                                    <li class="dropdown-divider"></li>
-                                                </c:if>
-                                                <li>
-                                                    <a class="nav-link dropdown-item fs-md ${notification.reads == 1 ? 'text-muted' : 'fw-bold'}"
-                                                        href="#" <c:if test="${notification.reads == 0}">
-                                                        onclick="readNotification(${notification.id})"
-                                                        </c:if>>>
-                                                        <img src="${notification.orderId.formatgoodId.goodImagePath}"
-                                                            alt="商品图片"
-                                                            style="max-width: 60px; max-height: 60px; margin-right: 10px">
-                                                        ${notification.content}
-                                                        <input type="hidden" name="reads" value="${notification.reads}">
-                                                        <div class="text-end">
-                                                            <fmt:formatDate value="${notification.sendTime}"
-                                                                pattern="MM月dd日 HH時mm分" />
-                                                        </div>
-                                                    </a>
-                                                </li>
-                                            </c:forEach>
+                                    <div class="my-auto nav-item dropdown">
+                                        <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton1"
+                                            data-bs-toggle="dropdown" aria-expanded="false" style="color: #ffb524">
+                                            <i class="fas fa-user fa-2x"></i>
+                                        </button>
+                                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                            <li><a class="dropdown-item" href="#!">會員中心</a></li>
+                                            <li><a class="dropdown-item" href="#!">訂單查詢</a></li>
+                                            <li><a class="dropdown-item" href="#!">評論紀錄</a></li>
+                                            <li><a class="dropdown-item" href="#!">申訴紀錄</a></li>
+                                            <li><a class="dropdown-item" href="#!">活動紀錄</a></li>
+                                            <li>
+                                                <hr class="dropdown-divider" />
+                                            </li>
+                                            <li><a class="dropdown-item" href="#!">登出</a></li>
                                         </ul>
+                                    </div>
+                                    <div class="dropdown position-relative my-auto">
+                                        <button class="btn position-relative dropdown-toggle" type="button"
+                                            id="notificationsDropdown" data-bs-toggle="dropdown" aria-expanded="false"
+                                            style="color: #ffb524">
+                                            <i class="fa-solid fa-bell fa-2x"></i>
+                                            <span
+                                                class="position-absolute bg-white rounded-circle d-flex align-items-center justify-content-center text-dark px-1 ${count == 0 ? 'd-none' : ''}"
+                                                style="top: 2px; left: 28px; height: 20px; min-width: 20px; ">${count}</span>
+                                        </button>
+                                        <div class="dropdown-menu dropdown-menu-end"
+                                            aria-labelledby="notificationsDropdown">
+                                            <ul class="list-group" style="max-height: 615px; overflow-y: auto;">
+                                                <c:forEach var="notification" items="${notifications}" varStatus="loop">
+                                                    <c:if test="${loop.index != 0}">
+                                                        <li class="dropdown-divider"></li>
+                                                    </c:if>
+                                                    <li>
+                                                        <a class="nav-link dropdown-item fs-md ${notification.reads == 1 ? 'text-muted' : 'fw-bold'}"
+                                                            href="#" <c:if test="${notification.reads == 0}">
+                                                            onclick="readNotification(${notification.id})"
+                                                            </c:if>>>
+                                                            <img src="${notification.orderId.formatgoodId.goodImagePath}"
+                                                                alt="商品图片"
+                                                                style="max-width: 60px; max-height: 60px; margin-right: 10px">
+                                                            ${notification.content}
+                                                            <input type="hidden" name="reads"
+                                                                value="${notification.reads}">
+                                                            <div class="text-end">
+                                                                <fmt:formatDate value="${notification.sendTime}"
+                                                                    pattern="MM月dd日 HH時mm分" />
+                                                            </div>
+                                                        </a>
+                                                    </li>
+                                                </c:forEach>
+                                            </ul>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

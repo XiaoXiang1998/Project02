@@ -29,6 +29,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 import com.good.dto.GoodBasicDto;
+import com.good.dto.GoodFormatImageDto;
 import com.good.dto.GoodIDDto;
 import com.good.dto.GoodPriceDTO;
 import com.good.dto.GoodTypeDto;
@@ -60,10 +61,9 @@ public class GoodController {
 	private EntityManager entityManager;
 
 /////////////////////////////////////////////////////首頁/////////////////////////////////////////////////
-	@GetMapping("EZBuyIndex") // 商品封面照、商品名稱、商品種類、商品評分(全給0星)、價格範圍
+	@PostMapping("EZBuyIndex") // 商品封面照、商品名稱、商品種類、商品評分(全給0星)、價格範圍
 	public String EZBuyIndex(HttpServletRequest request, Model m) { // HttpServletRequest request
 		// 透過上架日期取得商品
-		System.out.println("我要進來了!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 		List<GoodsBean2> findGoodByLaunchDate = gService.findGoodByLaunchDate();
 		List<GoodPriceDTO> pricerange = new ArrayList();
 		// 透過商品編號 取得價格最大最小值
@@ -99,7 +99,6 @@ public class GoodController {
 		for(GoodPriceDTO item:pricerange) {
 			System.out.println(item.toString());
 		}
-		System.out.println("我要出來了!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 
 		return "good/jsp/EZBuyindex";
 	}
@@ -258,19 +257,18 @@ public class GoodController {
 	}
 	// 檢視商品的詳細資訊
 	@GetMapping("/goodDetail.controller")
-	public String processGoodDetailAction(@RequestParam("GoodID") Integer goodID, HttpServletRequest request,Model m) {
+	public String processGoodDetailAction(@RequestParam("GoodID") Integer goodID,Model m) {
 //		HttpSession session = request.getSession();
 //		session.setAttribute("GoodID", goodID);\
 		//商品詳細資料需要(商品名稱、商品種類、商品價格範圍、商品平均評分)
 		GoodsBean2 good = gService.getById(goodID); //取得對應商品編號
 		//
 		Query<Object[]> resultList = (Query<Object[]>) entityManager.createQuery(
-//				select min(gf.GoodPrice) AS minprice,max(gf.GoodPrice) AS maxprice,gf.GoodsID AS 'GoodID'
-//				from Goods g join GoodFormat gf on g.GoodsID = gf.GoodsID
-//				where gf.GoodsID = 4 
-//				group by gf.GoodsID;
-				"select min(gf.goodPrice) AS minprice,max(gf.goodPrice) AS maxprice, g.goodsID AS goodsID from GoodsBean2 g join GoodFormat gf on g.goodsID = gf.good.goodsID where g.goodsID = ?1 group by g.goodsID")
-				.setParameter(1, good.getGoodsID());// 在特定賣家下查詢商品，並取得不同編號下的最大和最小價格
+//				select min(gf.goodPrice) AS minprice,max(gf.goodPrice) AS maxprice, g.goodsID AS goodsID 
+//				from Goods g join GoodFormat gf on g.GoodsID = gf.GoodsID 
+//				where g.GoodsID = 1 
+//				group by g.GoodsID
+				"select min(gf.goodPrice) AS minprice,max(gf.goodPrice) AS maxprice, g.goodsID AS goodsID from GoodsBean2 g join GoodFormat gf on g.goodsID = gf.good.goodsID where g.goodsID = "+ good.getGoodsID() +" group by g.goodsID");// 在特定賣家下查詢商品，並取得不同編號下的最大和最小價格
 		List<Object[]> item2 = resultList.getResultList();
 //		List<GoodPriceDTO> pricerange = new ArrayList();
 		GoodPriceDTO result = new GoodPriceDTO();
@@ -292,9 +290,19 @@ public class GoodController {
 		//
 		List<GoodFormat> byIDOrderByFormatImage = gfService.getByIDOrderByFormatImage(goodID);
 		List<GoodImageBean> findImagesByID = giService.findImagesByID(goodID);
+		List<String> distinctFormatImage = gfService.getDistinctFormatImage(goodID);
+		List<GoodFormatImageDto> goodformatimagelist = new ArrayList();
+		for(String item:distinctFormatImage) {
+			GoodFormatImageDto goodformatimage = new GoodFormatImageDto();
+			goodformatimage.setGoodImagePath(item);
+			goodformatimagelist.add(goodformatimage);
+		}
+		
 		m.addAttribute("Good", good);
 		m.addAttribute("GoodFormat", byIDOrderByFormatImage);
 		m.addAttribute("GoodFormatNumber", byIDOrderByFormatImage.size());
+		m.addAttribute("GoodFormatImagePath", goodformatimagelist);
+		m.addAttribute("GoodFormatImagePathNumber", distinctFormatImage.size());
 		m.addAttribute("GoodImage", findImagesByID);
 		m.addAttribute("GoodImageNumber", findImagesByID.size());
 		m.addAttribute("GoodBasicInfo", result);
@@ -500,12 +508,12 @@ public class GoodController {
 			totalPages = pagesnumber + 1;
 		}
 //		HttpSession session = request.getSession();
-//		session.setAttribute("totalPages", totalPages);
-//		session.setAttribute("totalElements", findGoods.size());
+		session.setAttribute("totalPages", totalPages);
+		session.setAttribute("totalElements", pricerange.size());
 		System.out.println("totalPages = "+totalPages);
 		System.out.println("totalElements = "+pricerange.size());
-		m.addAttribute("totalPages", totalPages);
-		m.addAttribute("totalElements", pricerange.size());
+//		m.addAttribute("totalPages", totalPages);
+//		m.addAttribute("totalElements", pricerange.size());
 		/**/
 		return pageContent;
 	}

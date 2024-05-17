@@ -12,7 +12,9 @@
             <link
                 href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Raleway:wght@600;800&display=swap"
                 rel="stylesheet">
-
+            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet"
+                integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU"
+                crossorigin="anonymous">
             <!-- Icon Font Stylesheet -->
             <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" />
             <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
@@ -24,18 +26,20 @@
             <link href="../../frontcss/bootstrap.min.css" rel="stylesheet">
 
             <link href="../../frontcss/style.css" rel="stylesheet">
+            <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
             <script>
-                $.ajax({ //會用到多次ajax去抓評論、訂單(透過檢查訂單是否完成來開放評論)
-                    type: 'get',
+                // $.ajax({ //會用到多次ajax去抓評論、訂單(透過檢查訂單是否完成來開放評論)
+                //     type: 'get',
 
-                    url: '/good/' + ID,
+                //     url: '/good/' + ID,
 
-                    contentType: 'application/json',
+                //     contentType: 'application/json',
 
-                    success: function (data) { //將基本商品資訊鑲嵌在本網頁上
+                //     success: function (data) { //將基本商品資訊鑲嵌在本網頁上
 
-                    }
-                })
+                //     }
+                // })
             </script>
         </head>
         <!-- 建立個人賣場太花時間 拿掉 -->
@@ -51,55 +55,112 @@
             <!-- Spinner End -->
 
 
-            <!-- Navbar start -->
-            <div class="container-fluid fixed-top">
 
+            <!-- Navbar start -->
+            <div class="container-fluid fixed-top bg-info">
+                <div class="container topbar bg-info d-none d-lg-block mb-3">
+                    <div class="d-flex justify-content-between">
+                        <div class="top-info ps-2">
+                            <small class="me-3"><i class="fas fa-envelope me-2 text-secondary"></i><a href="#"
+                                    class="text-white">ezbuycompany@gmail.com</a></small>
+                        </div>
+                        <div class="top-link pe-2">
+                            <a href="#" class="text-white"><small class="text-white mx-2">Privacy
+                                    Policy</small>/</a>
+                            <a href="#" class="text-white"><small class="text-white mx-2">Terms of Use</small>/</a>
+                            <a href="#" class="text-white"><small class="text-white ms-2">Sales and
+                                    Refunds</small></a>
+                        </div>
+                    </div>
+                </div>
                 <div class="container px-0">
-                    <nav class="navbar navbar-light bg-white navbar-expand-xl">
-                        <a href="index.html" class="navbar-brand">
-                            <h1 class="text-primary display-6">EZBuy</h1> <!-- 前往商城首頁 -->
+                    <nav class="navbar navbar-light bg-info navbar-expand-xl">
+                        <a href="MemberLogin.controller" class="navbar-brand">
+                            <h1 class="text-secondary display-6">EZBuy</h1>
                         </a>
                         <button class="navbar-toggler py-2 px-3" type="button" data-bs-toggle="collapse"
                             data-bs-target="#navbarCollapse">
-                            <span class="fa fa-bars text-primary"></span>
+                            <span class="fa fa-bars text-secondary"></span>
                         </button>
-                        <div class="collapse navbar-collapse bg-white" id="navbarCollapse">
-                            <!-- <div class="navbar-nav mx-auto"> -->
-                            <!-- <a href="index.html" class="nav-item nav-link">首頁</a>  -->
-                            <!-- 首頁 -->
-                            <!-- <form action="" method="" id="SellerMarket1">  -->
-                            <!-- 個人賣場(用賣家編號去找)JSP[頁面跳轉] -->
-                            <!-- <input type="text" readonly class="form-control-plaintext" value="" name=""> -->
-                            <!-- <span class="badge badge-primary" id="goToSellerMarket1">前往賣家賣場</span> -->
-                            <!-- <a href="shop.html" class="nav-item nav-link">個人賣場</a>   -->
-                            <!-- </form> -->
-                            <!-- <a href="#" class="nav-item nav-link active">商品介紹</a> -->
-                            <!-- <a href="contact.html" class="nav-item nav-link">聯絡賣家</a>  -->
-                            <!-- 可以傳訊息給賣家[頁面跳轉] -->
-                            <!-- </div> -->
-
+                        <div class="collapse navbar-collapse bg-info" id="navbarCollapse">
+                            <!-- <div class="navbar-nav">
+                           <a href="#" class="nav-item nav-link">購物車</a>
+                           <a href="#" class="nav-item nav-link">訂單紀錄</a>
+                           <a href="#" class="nav-item nav-link">官方申訴</a>
+                       </div> -->
+                            <!-- <div class="d-flex flex-row bd-highlight"> -->
                             <div class="d-flex m-3 me-0">
-                                <button
-                                    class="btn-search btn border border-secondary btn-md-square rounded-circle bg-white me-4"
-                                    data-bs-toggle="modal" data-bs-target="#searchModal"><i
-                                        class="fas fa-search text-primary"></i></button>
-                                <!-- 搜尋該賣家的某一商品名稱[搜尋成功後頁面跳轉] -->
-                                <form action="" method="get" id="MyCart"> <!-- 前往個人購物車(買家編號)[頁面跳轉] -->
-                                    <i class="fa fa-shopping-bag fa-2x" id="MyCartMark"></i>
+                                <form class="form-inline d-flex">
+                                    <div class="form-group mx-sm-3 mb-2">
+                                        <input type="text"
+                                            class="form-control border-2 border-secondary py-3 px-4 rounded-pill"
+                                            style="width: 850px; height: 60px;" name="GoodName">
+                                    </div>
+                                    <button
+                                        class="btn btn-primary border-2 border-secondary py-3 px-4 rounded-pill position-relative"
+                                        style="left: -80px; height: 60px;" type="button" id="GoToSearchGood">
+                                        <i class="fas fa-search"></i>
+                                    </button>
+                                </form>
+                                <a href="#" class="position-relative me-4 my-auto ms-5">
+                                    <i class="fa fa-shopping-bag fa-2x text-secondary"></i>
                                     <span
-                                        class="position-absolute bg-secondary rounded-circle d-flex align-items-center justify-content-center text-dark px-1"
-                                        style="top: -5px; left: 15px; height: 20px; min-width: 20px;"
-                                        id="CartItemNumber">3</span> <!-- 透過ajax搜尋購物車內有幾種商品(買家編號) -->
-
-                                    <input type="text" readonly class="form-control-plaintext" value="" name="">
-                                    <!-- 買家編號 -->
-                                </form>
-
-                                <form action="" method="get"> <!-- 透過買家編號前往個人首頁[頁面跳轉] -->
-                                    <input type="text" readonly class="form-control-plaintext" value="" name="">
-                                    <!-- 買家編號 -->
-                                    <i class="fas fa-user fa-2x" id="MyIndex"></i>
-                                </form>
+                                        class="position-absolute bg-white rounded-circle d-flex align-items-center justify-content-center text-dark px-1 ${carItemCount == 0 ? 'd-none' : ''}"
+                                        style="top: -5px; left: 15px; height: 20px; min-width: 20px;">${carItemCount}</span>
+                                </a>
+                                <div class="my-auto nav-item dropdown">
+                                    <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton1"
+                                        data-bs-toggle="dropdown" aria-expanded="false" style="color: #ffb524">
+                                        <i class="fas fa-user fa-2x"></i>
+                                    </button>
+                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                        <li><a class="dropdown-item" href="#!">會員中心</a></li>
+                                        <li><a class="dropdown-item" href="#!">訂單查詢</a></li>
+                                        <li><a class="dropdown-item" href="#!">評論紀錄</a></li>
+                                        <li><a class="dropdown-item" href="#!">申訴紀錄</a></li>
+                                        <li><a class="dropdown-item" href="#!">活動紀錄</a></li>
+                                        <li>
+                                            <hr class="dropdown-divider" />
+                                        </li>
+                                        <li><a class="dropdown-item" href="#!">登出</a></li>
+                                    </ul>
+                                </div>
+                                <div class="dropdown position-relative my-auto">
+                                    <button class="btn position-relative dropdown-toggle" type="button"
+                                        id="notificationsDropdown" data-bs-toggle="dropdown" aria-expanded="false"
+                                        style="color: #ffb524">
+                                        <i class="fa-solid fa-bell fa-2x"></i>
+                                        <span
+                                            class="position-absolute bg-white rounded-circle d-flex align-items-center justify-content-center text-dark px-1 ${count == 0 ? 'd-none' : ''}"
+                                            style="top: 2px; left: 28px; height: 20px; min-width: 20px; ">${count}</span>
+                                    </button>
+                                    <div class="dropdown-menu dropdown-menu-end"
+                                        aria-labelledby="notificationsDropdown">
+                                        <ul class="list-group" style="max-height: 615px; overflow-y: auto;">
+                                            <c:forEach var="notification" items="${notifications}" varStatus="loop">
+                                                <c:if test="${loop.index != 0}">
+                                                    <li class="dropdown-divider"></li>
+                                                </c:if>
+                                                <li>
+                                                    <a class="nav-link dropdown-item fs-md ${notification.reads == 1 ? 'text-muted' : 'fw-bold'}"
+                                                        href="#" <c:if test="${notification.reads == 0}">
+                                                        onclick="readNotification(${notification.id})"
+                                                        </c:if>>>
+                                                        <img src="${notification.orderId.formatgoodId.goodImagePath}"
+                                                            alt="商品图片"
+                                                            style="max-width: 60px; max-height: 60px; margin-right: 10px">
+                                                        ${notification.content}
+                                                        <input type="hidden" name="reads" value="${notification.reads}">
+                                                        <div class="text-end">
+                                                            <fmt:formatDate value="${notification.sendTime}"
+                                                                pattern="MM月dd日 HH時mm分" />
+                                                        </div>
+                                                    </a>
+                                                </li>
+                                            </c:forEach>
+                                        </ul>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </nav>
@@ -110,224 +171,216 @@
             <!-- Single Product Start -->
             <div class="container-fluid py-5 mt-5">
                 <div class="container py-5">
-                    <div class="row g-4 mb-5">
+                    <div class="row g-4 mt-5">
                         <div class="col-lg-8 col-xl-9">
                             <div class="row g-4">
                                 <div class="col-lg-6">
-                                    <div class="border rounded">
-                                        <!-- 商品圖片(用輪播呈現) -->
-                                        <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
-                                            <!-- 透過迴圈去寫[需要塞入所有圖片(封面照、圖片表、規格表圖片)] -->
-                                            <div class="carousel-inner">
-                                                <div class="carousel-item active">
-                                                    <img class="d-block w-100" src="${Good}" alt="${Good.titleImage}">
-                                                </div>
-                                                <c:forEach var="j" begin="0" end="${GoodImageNumber}" step="1"
-                                                    items="${GoodImage}" varStatus="loop">
-                                                    <div class="carousel-item">
-                                                        <img class="d-block w-100" src="${j.imagePath}"
-                                                            alt="${j.imagePath}">
-                                                    </div>
-                                                </c:forEach>
-                                                <!-- <div class="carousel-item active">
-                                                    <img class="d-block w-100" src="..." alt="First slide">
-                                                </div>
+                                    <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+                                        <div class="carousel-inner">
+                                            <div class="carousel-item active">
+                                                <img class="img-fluid" src="${Good.titleImage}"
+                                                    alt="${Good.titleImage}">
+                                            </div>
+                                            <c:forEach var="j" begin="0" end="${GoodImageNumber}" step="1"
+                                                items="${GoodImage}" varStatus="loop">
                                                 <div class="carousel-item">
-                                                    <img class="d-block w-100" src="..." alt="Second slide">
+                                                    <img class="img-fluid" src="${j.imagePath}" alt="${j.imagePath}">
                                                 </div>
+                                            </c:forEach>
+                                            <c:forEach var="j" begin="0" end="${GoodFormatImagePathNumber}" step="1"
+                                                items="${GoodFormatImagePath}" varStatus="loop">
                                                 <div class="carousel-item">
-                                                    <img class="d-block w-100" src="..." alt="Third slide">
-                                                </div> -->
-                                            </div>
-                                            <!-- 透過迴圈去寫 -->
-                                            <a class="carousel-control-prev" href="#carouselExampleControls"
-                                                role="button" data-slide="prev">
-                                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                                <span class="sr-only">Previous</span>
-                                            </a>
-                                            <a class="carousel-control-next" href="#carouselExampleControls"
-                                                role="button" data-slide="next">
-                                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                                <span class="sr-only">Next</span>
-                                            </a>
+                                                    <img class="img-fluid" src="${j.goodImagePath}"
+                                                        alt="${j.goodImagePath}">
+                                                </div>
+                                            </c:forEach>
                                         </div>
-                                        <!-- 商品圖片(用輪播呈現) -->
+                                        <a class="carousel-control-prev" href="#carouselExampleControls" role="button"
+                                            data-slide="prev">
+                                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                            <span class="sr-only">Previous</span>
+                                        </a>
+                                        <a class="carousel-control-next" href="#carouselExampleControls" role="button"
+                                            data-slide="next">
+                                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                            <span class="sr-only">Next</span>
+                                        </a>
                                     </div>
                                 </div>
-                                <div class="col-lg-6">
-                                    <h4 class="fw-bold mb-3" id="GoodName">${GoodBasicInfo.goodName}</h4> <!-- 商品名稱 -->
-                                    <p class="mb-3" id="GoodType">Category: ${GoodBasicInfo.goodType}</p> <!-- 商品種類 -->
-                                    <h5 class="fw-bold mb-3" id="GoodPriceRange">
-                                        ${GoodBasicInfo.minprice}-${GoodBasicInfo.maxprice}$</h5> <!-- 商品價格(以範圍表示) -->
-                                    <div class="d-flex mb-4" id="GoodRate"> <!-- 平均分數 EX(3.5/5) -->
-                                        <c:forEach var="j" begin="1" end="5" step="1" items="${GoodBasicInfo.goodAVG}"
-                                            varStatus="loop">
-                                            <c:if test="${GoodBasicInfo.goodAVG>=loop.index}">
-                                                <i class="fa fa-star text-secondary"></i>
-                                            </c:if>
-                                            <c:if test="${loop.index>GoodBasicInfo.goodAVG}">
-                                                <i class="fa fa-star"></i>
-                                            </c:if>
-                                        </c:forEach>
-                                    </div>
-                                    <!-- 商品規格(呈現該商品編號下對應的所有規格) -->
-                                    <div class="row col-2">
-                                        <c:forEach var="j" begin="0" end="${GoodFormatNumber}" step="1"
-                                            items="${GoodFormat}" varStatus="loop">
-                                            <div class="col-6">
-                                                <button class="CategoryItem">
-                                                    <img src="${j.goodImagePath}" alt="${j.goodImagePath}">
-                                                    <span>${j.goodSize}</span>
-                                                    <span hidden class="CategoryNumber">${j.goodsStock}</span>
-                                                </button>
-                                            </div>
-                                        </c:forEach>
-                                    </div>
-                                    <!-- 當某一規格被點擊時 會出現剩餘的數量(輪播的部分呈現該張圖片) -->
-                                    <div class="input-group quantity mb-5" style="width: 100px;" id="BuyItemNumber"
-                                        hidden>
-                                        <!--買入數量  -->
-                                        <div class="input-group-btn">
-                                            <button class="btn btn-sm btn-minus rounded-circle bg-light border">
-                                                <i class="fa fa-minus"></i> <!-- 降低數量按鈕 -->
-                                            </button>
-                                        </div>
-                                        <input type="text" class="form-control form-control-sm text-center border-0"
-                                            value="1" id="BuyNumber"> <!-- 當點擊到庫存上限時 會出現紅字 -->
-                                        <p id="errormsg"></p>
-                                        <div class="input-group-btn">
-                                            <button class="btn btn-sm btn-plus rounded-circle bg-light border">
-                                                <i class="fa fa-plus"></i> <!-- 增加數量按鈕 -->
-                                            </button>
-                                        </div>
-                                        <p id="remainingNumber"></p>
-                                    </div>
-                                    <!-- 一個是直接購買(直接進入訂單環節) 另一個是加入購物車(將購買的商品放入購物車內) -->
-                                    <!-- 在購買之前需要選擇特定規格 -->
-                                    <form action="" id="orderDetail"> <!-- 進入訂單環節(跳轉頁面) -->
-                                        <!-- 下單後對應規格的庫存量會下降 -->
-                                        <input type="text" class="form-control" id="orderNumber" name="orderNumber">
-                                        <!-- 購買數量 -->
-                                        <input type="text" class="form-control" id="formatID" name="formatID">
-                                        <!-- 規格表編號 -->
-                                        <input type="text" class="form-control" id="formatID" name="formatID">
-                                        <!-- 買家編號 -->
-                                        <button></button>
-                                    </form>
-                                    <form action="" id="cartDetail"> <!-- 進入購物車(透過ajax將值傳到後端) -->
-                                        <input type="text"> <!-- 購買數量 -->
-                                        <input type="text"> <!-- 規格表編號 -->
-                                        <input type="text"> <!-- 買家編號 -->
-                                        <button></button>
-                                    </form>
-                                    <!-- <a href="#"
-                                    class="btn border border-secondary rounded-pill px-4 py-2 mb-4 text-primary"><i
-                                        class="fa fa-shopping-bag me-2 text-primary"></i></a> -->
-                                </div>
-                                <div class="col-lg-12">
-                                    <nav>
-                                        <div class="nav nav-tabs mb-3">
-                                            <button class="nav-link active border-white border-bottom-0" type="button"
-                                                role="tab" id="nav-about-tab" data-bs-toggle="tab"
-                                                data-bs-target="#nav-about" aria-controls="nav-about"
-                                                aria-selected="true">商品使用說明</button>
-                                            <button class="nav-link border-white border-bottom-0" type="button"
-                                                role="tab" id="nav-mission-tab" data-bs-toggle="tab"
-                                                data-bs-target="#nav-mission" aria-controls="nav-mission"
-                                                aria-selected="false">評論</button>
-                                        </div>
-                                    </nav>
-                                    <div class="tab-content mb-5">
-                                        <div class="tab-pane active" id="nav-about" role="tabpanel"
-                                            aria-labelledby="nav-about-tab">
-                                            <div class="px-2">
-                                                <div class="row g-4">
-                                                    <div class="col-6" id="GoodDirectionContent">
-                                                        <!-- 裡面放入商品描述 -->
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="tab-pane" id="nav-mission" role="tabpanel"
-                                            aria-labelledby="nav-mission-tab"> <!-- 所有評論 -->
-                                            <!-- 透過商品編號查詢有幾筆評論(使用迴圈寫) -->
-                                            <!-- 將每一筆評論呈現出來 -->
-                                            <div class="d-flex">
-                                                <img src="img/avatar.jpg" class="img-fluid rounded-circle p-3"
-                                                    style="width: 100px; height: 100px;" alt=""> <!-- 評論用戶的大頭貼 -->
-                                                <div class="">
-                                                    <p class="mb-2" style="font-size: 14px;">April 12, 2024</p>
-                                                    <!-- 評論日期 -->
-                                                    <div class="d-flex justify-content-between"> <!-- 評論用戶名 + 評論星數 -->
-                                                        <h5>Jason Smith</h5> <!-- 評論用戶名 -->
-                                                        <div class="d-flex mb-3"> <!-- 評論星數(星星數可用迴圈去寫) -->
-                                                            <i class="fa fa-star text-secondary"></i>
-                                                            <i class="fa fa-star text-secondary"></i>
-                                                            <i class="fa fa-star text-secondary"></i>
-                                                            <i class="fa fa-star text-secondary"></i>
-                                                            <i class="fa fa-star"></i>
-                                                        </div>
-                                                    </div>
-                                                    <p>The generated Lorem Ipsum is therefore always free from
-                                                        repetition
-                                                        injected humour, or non-characteristic
-                                                        words etc. Susp endisse ultricies nisi vel quam suscipit </p>
-                                                    <!-- 評論內容 -->
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <form action="#" method="post"> <!-- 評論(會先檢查該用戶所有已完成的訂單(如果有滿足該商品編號即可撰寫評論)) -->
-                                    <h4 class="mb-5 fw-bold">Leave a Reply</h4>
-                                    <div class="row g-4">
-                                        <div class="col-lg-12"> <!-- 評論內容 -->
-                                            <div class="border-bottom rounded my-4">
-                                                <textarea name="" id="" class="form-control border-0" cols="30" rows="8"
-                                                    placeholder="Your Review *" spellcheck="false"></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-12"> <!-- 星星數(交給隊員處理) -->
-                                            <div class="d-flex justify-content-between py-3 mb-5">
-                                                <div class="d-flex align-items-center">
-                                                    <p class="mb-0 me-3">Please rate:</p>
-                                                    <div class="d-flex align-items-center" style="font-size: 12px;">
-                                                        <i class="fa fa-star text-muted"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                    </div>
-                                                </div>
-                                                <button>送出評論</button>
-                                                <!-- <a href="#"
-                                                class="btn border border-secondary text-primary rounded-pill px-4 py-3">
-                                                Post Comment</a> 送出評論 -->
-                                            </div>
-                                        </div>
-                                    </div>
-                                </form>
+                                <!-- 商品圖片(用輪播呈現) -->
                             </div>
                         </div>
-
-                    </div>
-                    <h1 class="fw-bold mb-0">Related products</h1>
-                    <!-- 透過商品種類去查詢商品基本資料表 -->
-                    <div class="vesitable">
-                        <div class="owl-carousel vegetable-carousel justify-content-center"> <!-- 透過迴圈去寫 -->
-                            <form action="" method="">
-                                <div class="border border-primary rounded position-relative vesitable-item">
-                                    <div class="vesitable-img"> <!-- 商品封面圖片 -->
-                                        <img src="img/vegetable-item-6.jpg" class="img-fluid w-100 rounded-top" alt="">
+                        <div class="col-lg-6">
+                            <h4 class="fw-bold mb-3" id="GoodName">${GoodBasicInfo.goodName}</h4> <!-- 商品名稱 -->
+                            <p class="mb-3" id="GoodType">Category: ${GoodBasicInfo.goodType}</p> <!-- 商品種類 -->
+                            <h5 class="fw-bold mb-3" id="GoodPriceRange">
+                                ${GoodBasicInfo.minprice}-${GoodBasicInfo.maxprice}$</h5> <!-- 商品價格(以範圍表示) -->
+                            <div class="d-flex mb-4" id="GoodRate"> <!-- 平均分數 EX(3.5/5) -->
+                                <c:forEach var="j" begin="1" end="5" step="1" varStatus="loop">
+                                    <c:if test="${GoodBasicInfo.goodAVG>=loop.index}">
+                                        <i class="fa fa-star text-secondary"></i>
+                                    </c:if>
+                                    <c:if test="${loop.index>GoodBasicInfo.goodAVG}">
+                                        <i class="fa fa-star"></i>
+                                    </c:if>
+                                </c:forEach>
+                            </div>
+                            <!-- 商品規格(呈現該商品編號下對應的所有規格) -->
+                            <div class="row">
+                                <c:forEach var="j" begin="0" end="${GoodFormatNumber}" step="1" items="${GoodFormat}"
+                                    varStatus="loop">
+                                    <div class="col-6">
+                                        <button class="CategoryItem">
+                                            <img src="${j.goodImagePath}" alt="${j.goodImagePath}"
+                                                style="width: 150px;height: 250px;">
+                                            <span>${j.goodSize}</span>
+                                            <span hidden class="CategoryNumber">${j.goodsStock}</span>
+                                        </button>
                                     </div>
-                                    <div class="text-white bg-primary px-3 py-1 rounded position-absolute"
-                                        style="top: 10px; right: 10px;">Vegetable
-                                    </div><!-- 商品名稱 -->
+                                </c:forEach>
+                            </div>
+                            <!-- 當某一規格被點擊時 會出現剩餘的數量(輪播的部分呈現該張圖片) -->
+                            <div class="input-group quantity mb-5" style="width: 100px;" id="BuyItemNumber" hidden>
+                                <!--買入數量  -->
+                                <div class="input-group-btn">
+                                    <button class="btn btn-sm btn-minus rounded-circle bg-light border">
+                                        <i class="fa fa-minus"></i> <!-- 降低數量按鈕 -->
+                                    </button>
                                 </div>
+                                <input type="text" class="form-control form-control-sm text-center border-0" value="1"
+                                    id="BuyNumber"> <!-- 當點擊到庫存上限時 會出現紅字 -->
+                                <p id="errormsg"></p>
+                                <div class="input-group-btn">
+                                    <button class="btn btn-sm btn-plus rounded-circle bg-light border">
+                                        <i class="fa fa-plus"></i> <!-- 增加數量按鈕 -->
+                                    </button>
+                                </div>
+                                <p id="remainingNumber"></p>
+                            </div>
+                            <!-- 一個是直接購買(直接進入訂單環節) 另一個是加入購物車(將購買的商品放入購物車內) -->
+                            <!-- 在購買之前需要選擇特定規格 -->
+                            <form action="" id="orderDetail"> <!-- 進入訂單環節(跳轉頁面) -->
+                                <!-- 下單後對應規格的庫存量會下降 -->
+                                <input type="text" class="form-control" id="orderNumber" name="orderNumber" hidden>
+                                <!-- 購買數量 -->
+                                <input type="text" class="form-control" id="formatID" name="formatID" hidden>
+                                <!-- 規格表編號 -->
+                                <input type="text" class="form-control" id="formatID" name="formatID" hidden>
+                                <!-- 買家編號 -->
+                                <button>去結帳</button>
                             </form>
+                            <form action="" id="cartDetail"> <!-- 進入購物車(透過ajax將值傳到後端) -->
+                                <input type="text" hidden> <!-- 購買數量 -->
+                                <input type="text" hidden> <!-- 規格表編號 -->
+                                <input type="text" hidden> <!-- 買家編號 -->
+                                <button>加入購物車</button>
+                            </form>
+                            <!-- <a href="#"
+                                    class="btn border border-secondary rounded-pill px-4 py-2 mb-4 text-primary"><i
+                                        class="fa fa-shopping-bag me-2 text-primary"></i></a> -->
                         </div>
+                        <div class="col-lg-12">
+                            <nav>
+                                <div class="nav nav-tabs mb-3">
+                                    <button class="nav-link active border-white border-bottom-0" type="button"
+                                        role="tab" id="nav-about-tab" data-bs-toggle="tab" data-bs-target="#nav-about"
+                                        aria-controls="nav-about" aria-selected="true">商品使用說明</button>
+                                    <button class="nav-link border-white border-bottom-0" type="button" role="tab"
+                                        id="nav-mission-tab" data-bs-toggle="tab" data-bs-target="#nav-mission"
+                                        aria-controls="nav-mission" aria-selected="false">評論</button>
+                                </div>
+                            </nav>
+                            <div class="tab-content mb-5">
+                                <div class="tab-pane active" id="nav-about" role="tabpanel"
+                                    aria-labelledby="nav-about-tab">
+                                    <div class="px-2">
+                                        <div class="row g-4">
+                                            <div class="col-6" id="GoodDirectionContent">
+                                                <!-- 裡面放入商品描述 -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane" id="nav-mission" role="tabpanel"
+                                    aria-labelledby="nav-mission-tab"> <!-- 所有評論 -->
+                                    <!-- 透過商品編號查詢有幾筆評論(使用迴圈寫) -->
+                                    <!-- 將每一筆評論呈現出來 -->
+                                    <div class="d-flex">
+                                        <img src="img/avatar.jpg" class="img-fluid rounded-circle p-3"
+                                            style="width: 100px; height: 100px;" alt=""> <!-- 評論用戶的大頭貼 -->
+                                        <div class="">
+                                            <p class="mb-2" style="font-size: 14px;">April 12, 2024</p>
+                                            <!-- 評論日期 -->
+                                            <div class="d-flex justify-content-between"> <!-- 評論用戶名 + 評論星數 -->
+                                                <h5>Jason Smith</h5> <!-- 評論用戶名 -->
+                                                <div class="d-flex mb-3"> <!-- 評論星數(星星數可用迴圈去寫) -->
+                                                    <i class="fa fa-star text-secondary"></i>
+                                                    <i class="fa fa-star text-secondary"></i>
+                                                    <i class="fa fa-star text-secondary"></i>
+                                                    <i class="fa fa-star text-secondary"></i>
+                                                    <i class="fa fa-star"></i>
+                                                </div>
+                                            </div>
+                                            <p>The generated Lorem Ipsum is therefore always free from
+                                                repetition
+                                                injected humour, or non-characteristic
+                                                words etc. Susp endisse ultricies nisi vel quam suscipit </p>
+                                            <!-- 評論內容 -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <form action="#" method="post"> <!-- 評論(會先檢查該用戶所有已完成的訂單(如果有滿足該商品編號即可撰寫評論)) -->
+                            <h4 class="mb-5 fw-bold">Leave a Reply</h4>
+                            <div class="row g-4">
+                                <div class="col-lg-12"> <!-- 評論內容 -->
+                                    <div class="border-bottom rounded my-4">
+                                        <textarea name="" id="" class="form-control border-0" cols="30" rows="8"
+                                            placeholder="Your Review *" spellcheck="false"></textarea>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12"> <!-- 星星數(交給隊員處理) -->
+                                    <div class="d-flex justify-content-between py-3 mb-5">
+                                        <div class="d-flex align-items-center">
+                                            <p class="mb-0 me-3">Please rate:</p>
+                                            <div class="d-flex align-items-center" style="font-size: 12px;">
+                                                <i class="fa fa-star text-muted"></i>
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                            </div>
+                                        </div>
+                                        <button>送出評論</button>
+                                        <!-- <a href="#"
+                                                class="btn border border-secondary text-primary rounded-pill px-4 py-3">
+                                                Post Comment</a> 送出評論 -->
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
                     </div>
                 </div>
+
+            </div>
+            <h1 class="fw-bold mb-0">Related products</h1>
+            <!-- 透過商品種類去查詢商品基本資料表 -->
+            <div class="vesitable">
+                <div class="owl-carousel vegetable-carousel justify-content-center"> <!-- 透過迴圈去寫 -->
+                    <form action="" method="">
+                        <div class="border border-primary rounded position-relative vesitable-item">
+                            <div class="vesitable-img"> <!-- 商品封面圖片 -->
+                                <img src="img/vegetable-item-6.jpg" class="img-fluid w-100 rounded-top" alt="">
+                            </div>
+                            <div class="text-white bg-primary px-3 py-1 rounded position-absolute"
+                                style="top: 10px; right: 10px;">Vegetable
+                            </div><!-- 商品名稱 -->
+                        </div>
+                    </form>
+                </div>
+            </div>
+            </div>
             </div>
             <!-- Single Product End -->
 
@@ -443,6 +496,10 @@
 
 
             <!-- JavaScript Libraries -->
+
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"
+                integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ"
+                crossorigin="anonymous"></script>
             <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
             <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
             <!--  -->

@@ -15,6 +15,7 @@
             <link href="/frontcss/bootstrap.min.css" rel="stylesheet">
             <link href="frontcss/style.css" rel="stylesheet">
             <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
             <style>
                 .list-group {
                     border-radius: 10px;
@@ -85,7 +86,7 @@
                                                     style="width: 100%; height: 100%; object-fit: cover; object-position: center;">
                                             </div>
                                         </div>
-                                        <form action="#" class="mt-3" id="#editForm">
+                                        <form action="#" class="mt-3" id="editForm">
                                             <div class="form-floating mb-3">
                                                 <input type="text" class="form-control" id="floatingUsername"
                                                     placeholder="帳號名稱" name="account" readonly>
@@ -127,7 +128,7 @@
                                             <!-- 新增送出和取消按鈕，預設隱藏 -->
                                             <div class="d-flex justify-content-center mt-2" id="actionButtons"
                                                 style="display: none;">
-                                                <button type="submit" class="btn btn-success mx-2 controlButton"
+                                                <button type="button" class="btn btn-success mx-2 controlButton"
                                                     style="display: none;" id="updateButton">送出</button>
                                                 <button type="button" class="btn btn-danger mx-2 controlButton"
                                                     style="display: none;" id="cancelButton">取消</button>
@@ -210,15 +211,9 @@
                     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"
                         integrity="sha384-p34f1UUtsS3wqzfto5wAAmdvj+osOnFyQFpp4Ua3gs/ZVWx6oOypYoCJhGGScy+8"
                         crossorigin="anonymous"></script>
+                    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
                     <script>
                         var userData = {};
-                        var imgElement = document.querySelector('img');
-
-                        // 檢查圖片的 src 是否為空
-                        if (imgElement.src === '') {
-                            // 如果是空，則將 src 屬性設置為預設的 icon 圖片
-                            imgElement.src = '預設icon的路徑';
-                        }
 
                         $('#editButton').click(function () {
                             userData.username = $('#floatingUsername').val();
@@ -243,35 +238,44 @@
                             $('#floatingGender').prop('disabled', false);
                         });
 
-                        $('#editForm').on('submit', function (event) {
-                            event.preventDefault(); // 阻止表单的默认提交行为
-                        });
-
                         $('#updateButton').click(function () {
                             let form = $('#editForm')[0];
                             let formData = new FormData(form);
-                            for (let [key, value] of formData.entries()) {
-                                console.log(key, value);
-                            }
+
                             fetch('UpdateMember', {
                                 method: 'PUT',
                                 body: formData
-                            })
-                                .then(response => {
-                                    if (response.ok) {
-                                        return response.json(); // 假设服务器返回JSON
-                                    } else {
-                                        throw new Error('网络响应失败');
-                                    }
-                                })
-                                .then(data => {
-                                    console.log('成功:', data);
-                                    // 可以在这里处理成功的响应，例如显示提示信息
-                                })
-                                .catch(error => {
-                                    console.error('错误:', error);
-                                    // 可以在这里处理错误，例如显示错误信息
+                            }).then(response => {
+                                if (!response.ok) {
+                                    throw new Error('網路響應失敗');
+                                }
+                                return response.json(); // 解析 JSON
+                            }).then(data => {
+                                if (data.success) {
+                                    Swal.fire({
+                                        title: "成功",
+                                        text: "新增成功",
+                                        icon: "success"
+                                    }).then((result) => {
+                                        if (result.value) {
+                                            location.reload();
+                                        }
+                                    });
+                                } else {
+                                    Swal.fire({
+                                        title: "錯誤",
+                                        text: "新增失敗",
+                                        icon: "error"
+                                    });
+                                }
+                            }).catch(error => {
+                                console.error('Error:', error);
+                                Swal.fire({
+                                    title: "錯誤",
+                                    text: "發生了一個錯誤",
+                                    icon: "error"
                                 });
+                            });
                         });
 
                         $('#cancelButton').click(function () {

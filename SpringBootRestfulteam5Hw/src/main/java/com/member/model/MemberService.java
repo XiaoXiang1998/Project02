@@ -30,8 +30,14 @@ public class MemberService {
 	}
 	
 	/*更新會員*/
-	public MemberBean update(MemberBean mem) {
-		return memRepos.save(mem);
+	public boolean update(MemberBean mem) {
+		try {
+			memRepos.save(mem);
+	        return true;
+	    } catch (Exception e) {
+	    	 e.printStackTrace();
+	    	return false;
+	    }
 	} 
 	
 	/*刪除會員*/

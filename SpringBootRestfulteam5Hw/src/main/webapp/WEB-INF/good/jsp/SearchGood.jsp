@@ -253,29 +253,9 @@
                     <div class="row g-4">
                         <div class="col-lg-12">
                             <div class="row g-4">
-                                <!-- <div class="col-xl-3">
-                                    <div class="input-group w-100 mx-auto d-flex">
-                                        <input type="search" class="form-control p-3" placeholder="keywords"
-                                            aria-describedby="search-icon-1">
-                                        <span id="search-icon-1" class="input-group-text p-3"><i
-                                                class="fa fa-search"></i></span>
-                                    </div>
-                                </div> -->
+
                                 <div class="col-6"></div>
-                                <!-- <div class="col-xl-3">
-                                    <div class="bg-light ps-3 py-3 rounded d-flex justify-content-between mb-4">
-                                        <form action="" id="GoodOrderByItem">
-                                            <label for="fruits">Default Sorting:</label>
-                                            <select id="fruits" name="fruitlist"
-                                                class="border-0 form-select-sm bg-light me-3" form="fruitform">
-                                                <option value="volvo">Nothing</option>
-                                                <option value="saab">價格</option>
-                                                <option value="opel">評價</option>
-                                                <option value="audi">商品編號</option>
-                                            </select>
-                                        </form>
-                                    </div>
-                                </div> -->
+
                             </div>
                             <div class="row g-4">
                                 <div class="col-lg-3">
@@ -316,7 +296,53 @@
                                             </div>
                                         </div>
                                         <div class="col-lg-12">
-                                            <h4 class="mb-3">Featured products</h4>
+                                            <h4 class="mb-3">暢銷商品</h4>
+                                            <!-- PopularGoodBasicInfo -->
+                                            <c:forEach var="j" begin="0" step="1" items="${PopularGoodBasicInfo}">
+                                                <div class="d-flex align-items-center justify-content-start mb-3">
+                                                    <div class="rounded me-4" style="width: 100px; height: 100px;">
+                                                        <img src="${j.titleImage}" class="img-fluid rounded w-100 h-100"
+                                                            alt="" style="width: 50px;height: 50px;">
+                                                    </div>
+                                                    <div>
+                                                        <h6 class="mb-2">${j.goodName}</h6>
+                                                        <div class="d-flex mb-2">
+                                                            <c:forEach var="i" begin="1" end="5" step="1"
+                                                                varStatus="loop">
+                                                                <c:if test="${j.goodAVG>=loop.index}">
+                                                                    <i class="fa fa-star text-secondary"></i>
+                                                                </c:if>
+                                                                <c:if test="${loop.index>j.goodAVG}">
+                                                                    <i class="fa fa-star"></i>
+                                                                </c:if>
+                                                            </c:forEach>
+                                                        </div>
+                                                        <div class="d-flex mb-2">
+                                                            <h5 class="fw-bold me-2">${j.minprice}-${j.maxprice} $</h5>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </c:forEach>
+                                            <!-- <div class="d-flex align-items-center justify-content-start">
+                                                <div class="rounded me-4" style="width: 100px; height: 100px;">
+                                                    <img src="" class="img-fluid rounded" alt="">
+                                                </div>
+                                                <div>
+                                                    <h6 class="mb-2">Big Banana</h6>
+                                                    <div class="d-flex mb-2">
+                                                        <i class="fa fa-star text-secondary"></i>
+                                                        <i class="fa fa-star text-secondary"></i>
+                                                        <i class="fa fa-star text-secondary"></i>
+                                                        <i class="fa fa-star text-secondary"></i>
+                                                        <i class="fa fa-star"></i>
+                                                    </div>
+                                                    <div class="d-flex mb-2">
+                                                        <h5 class="fw-bold me-2">2.99 $</h5>
+                                                        <h5 class="text-danger text-decoration-line-through">4.11 $
+                                                        </h5>
+                                                    </div>
+                                                </div>
+                                            </div>
                                             <div class="d-flex align-items-center justify-content-start">
                                                 <div class="rounded me-4" style="width: 100px; height: 100px;">
                                                     <img src="img/featur-1.jpg" class="img-fluid rounded" alt="">
@@ -376,9 +402,8 @@
                                                         </h5>
                                                     </div>
                                                 </div>
-                                            </div>
+                                            </div> -->
                                             <div class="d-flex justify-content-center my-4">
-
                                                 <a href="#"
                                                     class="btn border border-secondary px-4 py-3 rounded-pill text-primary w-100">View
                                                     More</a>
@@ -872,6 +897,7 @@
                     form.prop("action", "goodDetail.controller");
                     form.submit();
                 })
+
             </script>
         </body>
 

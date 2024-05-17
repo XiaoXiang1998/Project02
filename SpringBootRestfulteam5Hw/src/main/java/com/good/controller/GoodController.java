@@ -317,10 +317,10 @@ public class GoodController {
 	// 檢視商品的詳細資訊
 	@GetMapping("/goodDetail.controller")
 	public String processGoodDetailAction(@RequestParam("GoodID") Integer goodID,Model m) {
-//		HttpSession session = request.getSession();
-//		session.setAttribute("GoodID", goodID);\
 		//商品詳細資料需要(商品名稱、商品種類、商品價格範圍、商品平均評分)
 		GoodsBean2 good = gService.getById(goodID); //取得對應商品編號
+		// 取得對應商品的種類(related good) 只取商品編號
+		
 		//
 		Query<Object[]> resultList = (Query<Object[]>) entityManager.createQuery(
 //				select min(gf.goodPrice) AS minprice,max(gf.goodPrice) AS maxprice, g.goodsID AS goodsID 
@@ -402,6 +402,40 @@ public class GoodController {
 	// 從首頁搜尋商品名稱
 	@GetMapping("/searchGood")
 	public String searchGood(@RequestParam("GoodName") String goodsName, HttpServletRequest request) {
+		//熱門商品(對應名稱下的熱銷商品)
+		Query<Integer> popularListID = (Query<Integer>) entityManager.createQuery(
+				"select g.goodsID from GoodsBean2 g where g.goodsName LIKE ?1 ORDER BY g.rating/g.numberRatings")
+				.setParameter(1, "%"+ goodsName +"%");// 在搜尋商品名稱後 取得對應種類的數量
+//		Query<Integer> resultList0 = (Query<Integer>) entityManager.createQuery(hql);
+		List<Integer> ListObject = popularListID.getResultList();
+		List<GoodPriceDTO> pricerange = new ArrayList();
+
+		for (Integer item : ListObject) { // 取得滿足要求的商品編號
+			 // 先取得編號
+			GoodsBean2 good = gService.getById(item);
+			Query<Object[]> resultList = (Query<Object[]>) entityManager.createQuery(
+					"select min(gf.goodPrice) AS minprice,max(gf.goodPrice) AS maxprice, g.goodsID AS goodsID from GoodsBean2 g join GoodFormat gf on g.goodsID = gf.good.goodsID where g.goodsID = ?1 group by g.goodsID")
+					.setParameter(1, item);// 在特定賣家下查詢商品，並取得不同編號下的最大和最小價格
+			List<Object[]> item2 = resultList.getResultList();
+			for (Object[] item3 : item2) {
+				GoodPriceDTO result = new GoodPriceDTO();
+				System.out.println(good.getNumberRatings());
+				if (good.getNumberRatings() == null) {// 沒人評分
+					result.setGoodAVG(0);
+				} else {
+					int AVG = good.getRating() / good.getNumberRatings();
+					result.setGoodAVG(AVG);
+				}
+				result.setGoodType(good.getGoodsType());
+				result.setGoodName(good.getGoodsName());
+				result.setTitleImage(good.getTitleImage());
+				result.setGoodsID((Integer) item3[2]);
+				result.setMaxprice((Integer) item3[1]);
+				result.setMinprice((Integer) item3[0]);
+				System.out.println(result.toString());
+				pricerange.add(result);
+			}
+		}
 		//取得商品種類對應的數量
 		HttpSession session = request.getSession();
 		session.setAttribute("goodsName", goodsName);
@@ -409,7 +443,7 @@ public class GoodController {
 		List<GoodTypeDto> goodTypeNumber = new ArrayList();
 		Query<Object[]> resultList = (Query<Object[]>) entityManager.createQuery(
 				"select distinct g.goodsType AS goodsType,count(g.goodsType) AS goodsTypeNumber from GoodsBean2 g where g.goodsName LIKE ?1 GROUP BY g.goodsType")
-				.setParameter(1, "%鯊鯊貓%");// 在搜尋商品名稱後 取得對應種類的數量
+				.setParameter(1, "%"+ goodsName +"%");// 在搜尋商品名稱後 取得對應種類的數量
 		List<Object[]> item = resultList.getResultList();
 		for (Object[] item1 : item) {
 			GoodTypeDto data = new GoodTypeDto();
@@ -420,6 +454,8 @@ public class GoodController {
 		System.out.println("goodTypeNumber.size() = " + goodTypeNumber.size());
 		session.setAttribute("CategoryNumberList", goodTypeNumber);
 		session.setAttribute("CategoryNumber", goodTypeNumber.size());
+		session.setAttribute("PopularGoodBasicInfo", pricerange);
+
 		return "good/jsp/SearchGood";
 	}
 

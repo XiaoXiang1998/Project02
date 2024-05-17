@@ -16,6 +16,8 @@
                 integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU"
                 crossorigin="anonymous">
             <!-- Icon Font Stylesheet -->
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick.css" />
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick-theme.css" />
             <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" />
             <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
             <link href="../../frontlib/lightbox/css/lightbox.min.css" rel="stylesheet">
@@ -167,9 +169,29 @@
                         <div class="col-lg-12 col-xl-12">
                             <div class="row g-4">
                                 <div class="col-lg-6">
-                                    <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
-                                        <!-- 圖片輪播功能癱瘓中 -->
-                                        <div class="carousel-inner">
+                                    <!-- <div id="carouselExampleControls" class="carousel slide" data-ride="carousel"> -->
+                                    <!-- 圖片輪播功能癱瘓中 -->
+                                    <div class="your-class">
+                                        <div><img class="img-fluid w-100" src="${Good.titleImage}"
+                                                alt="${Good.titleImage}" style="height: 400px;">
+                                        </div>
+                                        <c:forEach var="j" begin="0" end="${GoodImageNumber}" step="1"
+                                            items="${GoodImage}" varStatus="loop">
+                                            <div>
+                                                <img class="img-fluid w-100" src="${j.imagePath}" alt="${j.imagePath}"
+                                                    style="height: 400px;">
+                                            </div>
+                                        </c:forEach>
+                                        <c:forEach var="j" begin="0" end="${GoodFormatImagePathNumber}" step="1"
+                                            items="${GoodFormatImagePath}" varStatus="loop">
+                                            <div>
+                                                <img class="img-fluid w-100" src="${j.goodImagePath}"
+                                                    alt="${j.goodImagePath}" style="height: 400px;">
+                                            </div>
+                                        </c:forEach>
+                                    </div>
+                                    <!--  -->
+                                    <!-- <div class="carousel-inner">
                                             <div class="carousel-item active">
                                                 <img class="img-fluid" src="${Good.titleImage}"
                                                     alt="${Good.titleImage}">
@@ -198,7 +220,7 @@
                                             <span class="carousel-control-next-icon" aria-hidden="true"></span>
                                             <span class="sr-only">Next</span>
                                         </a>
-                                    </div>
+                                    </div> -->
                                     <!-- 商品規格(呈現該商品編號下對應的所有規格) -->
 
                                 </div>
@@ -230,6 +252,7 @@
                                                     <span>${j.goodSize}</span>
                                                     <span hidden class="CategoryPrice">${j.goodPrice}</span>
                                                     <span hidden class="CategoryNumber">${j.goodsStock}</span>
+                                                    <span hidden class="formatID">${j.good.goodsID}</span>
                                                 </button>
                                             </div>
                                         </c:forEach>
@@ -265,21 +288,24 @@
                                                 <input type="text" class="form-control" id="orderNumber"
                                                     name="orderNumber" hidden>
                                                 <!-- 購買數量 -->
-                                                <input type="text" class="form-control" id="formatID" name="formatID"
-                                                    hidden>
+                                                <input type="text" class="form-control" id="orderformatID"
+                                                    name="orderformatID" hidden>
                                                 <!-- 規格表編號 -->
-                                                <input type="text" class="form-control" id="formatID" name="formatID"
-                                                    hidden>
+                                                <input type="text" class="form-control" id="buyerorderID"
+                                                    name="buyerorderID" hidden>
                                                 <!-- 買家編號 -->
-                                                <button>去結帳</button>
+                                                <button type="button" id="GoToOrder">去結帳</button>
                                             </form>
                                         </div>
                                         <div class="col">
                                             <form action="" id="cartDetail"> <!-- 進入購物車(透過ajax將值傳到後端) -->
-                                                <input type="text" hidden> <!-- 購買數量 -->
-                                                <input type="text" hidden> <!-- 規格表編號 -->
-                                                <input type="text" hidden> <!-- 買家編號 -->
-                                                <button>加入購物車</button>
+                                                <input type="text" class="form-control" id="cartNumber"
+                                                    name="cartNumber" hidden> <!-- 購買數量 -->
+                                                <input type="text" class="form-control" id="cartformatID"
+                                                    name="cartformatID" hidden> <!-- 規格表編號 -->
+                                                <input type="text" class="form-control" id="buyercartID"
+                                                    name="buyercartID" hidden> <!-- 買家編號 -->
+                                                <button type="button" id="GoToCart">加入購物車</button>
                                             </form>
                                         </div>
                                         <!-- 商品圖片(用輪播呈現) -->
@@ -493,6 +519,8 @@
             <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
             <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
             <!--  -->
+            <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick.js"></script>
             <script src="../../frontlib/easing/easing.js"></script>
             <script src="../../frontlib/waypoints/waypoints.min.js"></script>
 
@@ -508,12 +536,18 @@
                     form.prop("action", "....");//目標網址
                     form.submit();
                 })
-                $('.CategoryItem').click(function () {
+
+                $('.CategoryItem').click(function () {//取得對應規格編號
                     if ($('#BuyItemNumber').prop("hidden") == true) {//假若欄位被影藏
                         $('#BuyItemNumber').prop("hidden", false);//取消影藏
                     }
                     else {
-
+                        //假若從規格A按成規格B 數量直接回到1
+                        let formatID = $(this).find('span[class="formatID"]').prop("innerHTML");//取得規格編號
+                        $('#BuyNumber').prop("value", 1);
+                        $('#orderformatID').prop("value", formatID);
+                        $('#cartformatID').prop("value", formatID);
+                        // 將規格編號塞入form標籤內
                     }
                     let goodstock = $(this).find('span[class="CategoryNumber"]').prop("innerHTML");
                     let formatprice = $(this).find('span[class="CategoryPrice"]').prop("innerHTML");
@@ -522,27 +556,67 @@
                     $('#BuyItemNumber').find('span[id="CategoryPrice"]').prop("innerHTML", formatprice + "$");
 
                 })
+
+                $('#BuyNumber').change(function () {
+                    let InputNumber = $(this).prop("value");
+                    let goodstockmsg = $('#BuyItemNumber').find('span[id="remainingNumber"]').prop("innerHTML");
+                    let goodstock = goodstockmsg.substring(2, goodstockmsg.length - 1);
+                    if (Number(goodstock) > InputNumber && InputNumber >= 1) {
+                        $('#errormsg').prop("innerHTML", "");
+                    } else {
+                        if (InputNumber > Number(goodstock)) {
+                            $('#errormsg').prop("innerHTML", "操作不當");//最多只能購買剩餘的數量
+                            $(this).closest('div').find('input[id="BuyNumber"]').prop("value", 1);//不讓數字增加
+                        }
+                        if (InputNumber < 1) {
+                            $(this).closest('div').find('input[id="BuyNumber"]').prop("value", 1);//最少購買一筆
+                        }
+                    }
+
+                })
+
                 $('button[class="btn btn-sm btn-plus rounded-circle bg-light border"]').click(function () {
                     let InputNumber = $(this).closest('div').find('input[id="BuyNumber"]').prop("value");
                     let goodstockmsg = $('#BuyItemNumber').find('span[id="remainingNumber"]').prop("innerHTML");
-                    console.log($('#BuyItemNumber').find('span[id="remainingNumber"]'));
                     let goodstock = goodstockmsg.substring(2, goodstockmsg.length - 1);
-                    if (ItemNumber > Number(goodstock)) {
+                    if (InputNumber > Number(goodstock)) {
                         $('#errormsg').prop("innerHTML", "操作不當");//最多只能購買剩餘的數量
                         $(this).closest('div').find('input[id="BuyNumber"]').prop("value", Number(goodstock));//不讓數字增加
                     }
                 })
+
                 $('button[class="btn btn-sm btn-minus rounded-circle bg-light border"]').click(function () {
                     let InputNumber = $(this).closest('div').find('input[id="BuyNumber"]').prop("value");
                     let goodstockmsg = $('#BuyItemNumber').find('span[id="remainingNumber"]').prop("innerHTML");//
                     let goodstock = goodstockmsg.substring(2, goodstockmsg.length - 1);//取得剩餘數量
-                    if (ItemNumber <= Number(goodstock)) {
+                    if (InputNumber <= Number(goodstock)) {
                         $('#errormsg').prop("innerHTML", "");//將錯誤訊息抹消
                     }
-                    if (ItemNumber <= 1) {
+                    if (InputNumber <= 1) {
                         $(this).closest('div').find('input[id="BuyNumber"]').prop("value", 1);//最少購買一筆
                     }
                 })
+
+                $('#GoToCart').click(function () {
+                    let buynumber = $('#BuyNumber').val();
+                    $('#cartNumber').prop("value", buynumber);
+                    // 透過ajax傳資料
+                    let form = $(this).closest('form');
+
+                })
+
+                $('#GoToOrder').click(function () {
+                    let buynumber = $('#BuyNumber').val();
+                    $('#orderNumber').prop("value", buynumber);
+                    // 頁面跳轉
+                    let form = $(this).closest('form');
+
+                })
+                $(document).ready(function () {
+                    $('.your-class').slick({
+                        arrows: true
+                    });
+                });
             </script>
         </body>
 

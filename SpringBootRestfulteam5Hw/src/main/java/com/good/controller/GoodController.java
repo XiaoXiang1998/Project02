@@ -21,6 +21,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
@@ -63,7 +65,7 @@ public class GoodController {
 	private EntityManager entityManager;
 
 /////////////////////////////////////////////////////首頁/////////////////////////////////////////////////
-	@PostMapping("EZBuyIndex") // 商品封面照、商品名稱、商品種類、商品評分(全給0星)、價格範圍
+	@RequestMapping(value = "/EZBuyIndex", method = {RequestMethod.GET, RequestMethod.POST})// 商品封面照、商品名稱、商品種類、商品評分(全給0星)、價格範圍
 	public String EZBuyIndex(HttpServletRequest request, Model m) { // HttpServletRequest request
 		// 透過上架日期取得商品
 		List<GoodsBean2> findGoodByLaunchDate = gService.findGoodByLaunchDate();

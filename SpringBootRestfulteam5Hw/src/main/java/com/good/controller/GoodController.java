@@ -22,6 +22,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
@@ -37,6 +39,7 @@ import com.good.dto.GoodFormatImageDto;
 import com.good.dto.GoodIDDto;
 import com.good.dto.GoodPriceDTO;
 import com.good.dto.GoodPriceDetailDTO;
+import com.good.dto.GoodPricePageDto;
 import com.good.dto.GoodTypeDto;
 import com.good.dto.GoodTypeIndexDto;
 import com.good.model.GoodFormat;
@@ -71,7 +74,7 @@ public class GoodController {
 	private PostService pService;
 	
 /////////////////////////////////////////////////////首頁/////////////////////////////////////////////////
-	@PostMapping("EZBuyIndex") // 商品封面照、商品名稱、商品種類、商品評分(全給0星)、價格範圍
+	@RequestMapping(value = "/EZBuyIndex", method = {RequestMethod.GET, RequestMethod.POST})// 商品封面照、商品名稱、商品種類、商品評分(全給0星)、價格範圍
 	public String EZBuyIndex(HttpServletRequest request, Model m) { // HttpServletRequest request
 		// 透過上架日期取得商品
 		List<GoodsBean2> findGoodByLaunchDate = gService.findGoodByLaunchDate();
@@ -426,6 +429,8 @@ public class GoodController {
 		    m.addAttribute("contentCount", contentCount);
 		    m.addAttribute("photosCount", photosCount);
 		    m.addAttribute("totalPostsCount", totalPostsCount);
+		m.addAttribute("GoodImageNumber", findImagesByID.size()); //
+		m.addAttribute("GoodBasicInfo", result); //商品詳細資訊
 		return "good/jsp/goodDetail";
 	}
 
@@ -483,7 +488,7 @@ public class GoodController {
 	// 跳轉頁面後 呈現搜尋結果
 	@GetMapping("/searchGoodResult/{pageNO}/{hiddenContent}")
 	@ResponseBody
-	public List<GoodPriceDTO> searchGoodResult(@PathVariable("pageNO") Integer pageNo,
+	public GoodPricePageDto searchGoodResult(@PathVariable("pageNO") Integer pageNo,
 			@PathVariable("hiddenContent") String hiddencontent, HttpServletRequest request) {
 		// 外界給定
 //        let hiddenContent = goodName + "_" + Category + "_" + price + "_" + orderItem;
@@ -602,6 +607,7 @@ public class GoodController {
 		int pageSize = 3;
 
 		List<GoodPriceDTO> pricerange = new ArrayList();
+		GoodPricePageDto pricerangePage= new GoodPricePageDto();
 		
 		for (Integer item : listID) { // 先取得編號
 			GoodsBean2 good = gService.getById(item);
@@ -648,8 +654,11 @@ public class GoodController {
 			pagesnumber = (pricerange.size() / pageSize);
 			totalPages = pagesnumber + 1;
 		}
+		//
+		pricerangePage.setGoodPriceDtoList(pageContent);
+		pricerangePage.setPage(totalPages);
+		//
 		HttpSession session = request.getSession();
-		session.setAttribute("totalPages", totalPages);
 		System.err.println(session.getAttribute("totalPages"));
 		session.setAttribute("totalElements", pricerange.size());
 		System.err.println("totalPages = "+totalPages);
@@ -657,7 +666,8 @@ public class GoodController {
 //		m.addAttribute("totalPages", totalPages);
 //		m.addAttribute("totalElements", pricerange.size());
 		/**/
-		return pageContent;
+//		return pageContent;
+		return pricerangePage;
 	}
 
 	// 透過訂單紀錄中找出最近熱賣的商品種類

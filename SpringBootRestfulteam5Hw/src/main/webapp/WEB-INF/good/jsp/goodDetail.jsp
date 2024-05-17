@@ -38,22 +38,22 @@
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <style>
 .time-and-details {
-        flex-grow: 1; /* 彈性增長，以填滿可用空間 */
-        display: flex;
-        flex-direction: row;
-    }
-    .order-details {
-        margin-right: 10px; /* 增加右邊距，使得各項目之間有一定間距 */
-    }
-    
-    .time{
-	    margin-right: 5px; /* 調整時間和 | 之間的間距 */
-	
+	flex-grow: 1; /* 彈性增長，以填滿可用空間 */
+	display: flex;
+	flex-direction: row;
+}
+
+.order-details {
+	margin-right: 10px; /* 增加右邊距，使得各項目之間有一定間距 */
+}
+
+.time {
+	margin-right: 5px; /* 調整時間和 | 之間的間距 */
 }
 
 .separator {
-    margin-right: 5px; /* 調整右側間距 */
-    margin-left: 5px; /* 調整左側間距 */
+	margin-right: 5px; /* 調整右側間距 */
+	margin-left: 5px; /* 調整左側間距 */
 }
 </style>
 <script>
@@ -397,7 +397,7 @@
 											style="width: 100px; height: 100px;" alt="">
 										<!-- 評論用戶的大頭貼 -->
 										<div class="">
-										
+
 											<!-- 評論日期 -->
 											<div class="d-flex justify-content-between">
 												<!-- 評論用戶名 + 評論星數 -->
@@ -406,29 +406,34 @@
 												</h5>
 												<!-- 評論用戶名 -->
 												<div class="d-flex mb-3">
-													
+
 													<!-- 評論星數(星星數可用迴圈去寫) -->
 													<c:forEach begin="1" end="${post.buyerrate}">
-													<p>
-														<i class="fa fa-star text-secondary"></i>
+														<p>
+															<i class="fa fa-star text-secondary"></i>
 														</p>
 													</c:forEach>
 													<c:forEach begin="${post.buyerrate + 1}" end="5">
-													<p>
-														<i class="fa fa-star text-secondary"></i>
+														<p>
+															<i class="fa fa-star text-secondary"></i>
 														</p>
 													</c:forEach>
-												
 												</div>
-														<div class="time-and-details">
-                <c:if test="${not empty post.commenttime}">
-                        <fmt:formatDate value="${post.commenttime}" pattern="yyyy-MM-dd HH:mm" var="formattedCommentTime" />
-                        <p class="time">${formattedCommentTime}</p>
-                    </c:if>
-                    <p class="order-details"><span class="separator">|</span>訂單編號: ${post.orders.orderId}</p>
-                    <p class="order-details">規格尺寸: ${post.orders.formatgoodId.goodSize}</p>
-                    <p class="order-details">商品名稱: ${post.orders.formatgoodId.good.goodsName}</p>
-                </div>
+												<div class="time-and-details">
+													<c:if test="${not empty post.commenttime}">
+														<fmt:formatDate value="${post.commenttime}"
+															pattern="yyyy-MM-dd HH:mm" var="formattedCommentTime" />
+														<p class="time">${formattedCommentTime}</p>
+													</c:if>
+													<p class="order-details">
+														<span class="separator">|</span>訂單編號:
+														${post.orders.orderId}
+													</p>
+													<p class="order-details">規格尺寸:
+														${post.orders.formatgoodId.goodSize}</p>
+													<p class="order-details">商品名稱:
+														${post.orders.formatgoodId.good.goodsName}</p>
+												</div>
 											</div>
 											<p>
 												<c:out value="${post.commentcontent}" />

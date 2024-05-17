@@ -24,7 +24,6 @@ public class GoodPriceDetailDTO {
 	private String goodDirection;
 	
 	private Integer goodsold;
-
 	
 	public Integer getGoodsold() {
 		return goodsold;

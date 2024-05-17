@@ -64,13 +64,13 @@ public class MemberController {
 
 	@Autowired
 	private TokenService tokenService;
-	
+
 	@Autowired
 	private NotificationsService nService;
-	
+
 	@Autowired
 	private CarItemService cService;
-	
+
 	// http://localhost:8081/ezbuy.com
 	@GetMapping("/ezbuy.com")
 	public String loginPage() {
@@ -82,18 +82,18 @@ public class MemberController {
 	public String backStage() {
 		return "BackStageLogin";
 	}
-	
+
 	@GetMapping("/membercenter")
 	public String MemberCenter() {
 		return "/member/MemberCenter";
 	}
-	
+
 	@GetMapping("/logout")
 	public String logout() {
 		httpSession.invalidate();
 		return "/good/jsp/EZBuyindex";
 	}
-	
+
 	/*------------------------------------------------基本資料操作-----------------------------------------------------*/
 
 	/* 新增會員資料 */
@@ -147,16 +147,13 @@ public class MemberController {
 
 	/* 修改會員資料 */
 	@PutMapping("/UpdateMember")
-	public ResponseEntity<String> updateAction(@RequestParam("sid") Integer sid,
-			@RequestParam("account") String account, @RequestParam("password") String password,
+	public ResponseEntity<String> updateAction(@RequestParam("account") String account,
 			@RequestParam("email") String email, @RequestParam("phone") String phone, @RequestParam("name") String name,
 			@RequestParam("gender") String gender, @RequestParam("address") String address,
-			@RequestParam("photoSticker") MultipartFile mf, @RequestParam("seller") boolean seller,
-			@RequestParam("reviewCount") Integer reviewCount, @RequestParam("cumulativeScore") Integer cumulativeScore,
-			@RequestParam("totalSalesAmount") Integer totalSalesAmount, @RequestParam("level") Integer level,
-			@RequestParam("thirdPartyProvider") String thirdPartyProvider,
-			@RequestParam("registrationTime") LocalDate registrationTime,
-			@RequestParam(name = "oldPath", required = false) String op) throws IllegalStateException, IOException {
+			@RequestParam("photoSticker") MultipartFile mf, HttpSession session)
+			throws IllegalStateException, IOException {
+		System.out.println("進入更新會員");
+		MemberBean member = (MemberBean) session.getAttribute("member");
 
 		String fileDir = "C:/team5project/SpringBootRestfulteam5Hw/src/main/resources/static/UsersPic";
 
@@ -165,11 +162,19 @@ public class MemberController {
 		System.out.println("filename: " + fileName);
 
 		/* 獲取舊路徑 */
-		String realOldPath = "C:/team5project/SpringBootRestfulteam5Hw/src/main/resources/static/UsersPic/" + op;
+		String realOldPath = "C:/team5project/SpringBootRestfulteam5Hw/src/main/resources/static/UsersPic/"
+				+ member.getPhotoSticker();
+
+		member.setAccount(account);
+		member.setEmail(email);
+		member.setPhone(phone);
+		member.setName(name);
+		member.setGender(gender);
+		member.setAddress(address);
 
 		/* 檢查是否有上傳檔案 */
 		if (fileName != null && fileName.length() > 0) {
-			System.out.println("有更新圖片");
+			System.out.println("有更新會員頭貼");
 			File file = new File(realOldPath);
 			/* 刪除舊有檔案 */
 			file.delete();
@@ -178,56 +183,20 @@ public class MemberController {
 			/* 設定完整路徑 */
 			File fileDirPath = new File(fileDir, newFileName);
 			String photo_sticker = "UsersPic/" + newFileName;
-
-			/*------------------------------------------------------------------------------------------------------------------------------*/
-			System.out.println("ID: " + sid);
-			System.out.println("帳號: " + account);
-			System.out.println("密碼: " + password);
-			System.out.println("信箱: " + email);
-			System.out.println("電話: " + phone);
-			System.out.println("賣家: " + seller);
-			System.out.println("姓名: " + name);
-			System.out.println("性別: " + gender);
-			System.out.println("住址: " + address);
-			System.out.println("被評論數: " + reviewCount);
-			System.out.println("總評分數: " + cumulativeScore);
-			System.out.println("總消費金額: " + totalSalesAmount);
-			System.out.println("會員級別: " + level);
-			System.out.println("登入方式: " + thirdPartyProvider);
-			System.out.println("註冊時間: " + registrationTime);
-			System.out.println("舊路徑: " + op);
-			/*------------------------------------------------------------------------------------------------------------------------------*/
-			MemberBean memBean = new MemberBean(sid, account, password, email, phone, name, gender, address,
-					photo_sticker, seller, reviewCount, cumulativeScore, totalSalesAmount, level, thirdPartyProvider,
-					registrationTime);
-			mService.update(memBean);
+			member.setPhotoSticker(photo_sticker);
+			mService.update(member);
 			mf.transferTo(fileDirPath);
-			System.out.println("有更新圖片版本更新完成");
+			
 		} else {
-			/*------------------------------------------------------------------------------------------------------------------------------*/
-			System.out.println("ID: " + sid);
-			System.out.println("帳號: " + account);
-			System.out.println("密碼: " + password);
-			System.out.println("信箱: " + email);
-			System.out.println("電話: " + phone);
-			System.out.println("姓名: " + name);
-			System.out.println("性別: " + gender);
-			System.out.println("賣家: " + seller);
-			System.out.println("住址: " + address);
-			System.out.println("被評論數: " + reviewCount);
-			System.out.println("總評分數: " + cumulativeScore);
-			System.out.println("總消費金額: " + totalSalesAmount);
-			System.out.println("會員級別: " + level);
-			System.out.println("登入方式: " + thirdPartyProvider);
-			System.out.println("註冊時間: " + registrationTime);
-			System.out.println("舊路徑: " + op);
-			/*------------------------------------------------------------------------------------------------------------------------------*/
-			System.out.println("無更新圖片");
-			MemberBean memBean = new MemberBean(sid, account, password, email, phone, name, gender, address, op, seller,
-					reviewCount, cumulativeScore, totalSalesAmount, level, thirdPartyProvider, registrationTime);
-			mService.update(memBean);
-			System.out.println("無更新圖片版本更新完成");
+			System.out.println("無更新會員頭貼");
+			mService.update(member);
 		}
+		System.out.println("刪除session");
+		session.removeAttribute("member");
+		MemberBean memberInformation = mService.selectByAccountBean(account);
+		httpSession.setAttribute("member", memberInformation);
+		System.out.println("創建session");
+		
 		return ResponseEntity.ok("更新成功");
 	}
 
@@ -271,7 +240,8 @@ public class MemberController {
 
 	/* 登入機制 */
 	@PostMapping("/MemberLogin.controller")
-	public String LoginReponse(@RequestParam("username") String account, @RequestParam("password") String userPwd,Model m) {
+	public String LoginReponse(@RequestParam("username") String account, @RequestParam("password") String userPwd,
+			Model m) {
 		if (mService.checkLogin(account, userPwd)) {
 			System.out.println("登入成功");
 			// 儲存登入會員的bean物件
@@ -280,12 +250,12 @@ public class MemberController {
 			// 設定session
 			httpSession.setAttribute("member", memberInformation);
 			System.out.println("session設定成功");
-			//通知			
+			// 通知
 			List<Notifications> notifications = nService.findByRecipientIdOrderBySendTimeDesc(memberInformation);
 			Integer count = nService.noReadCounts(memberInformation);
 			httpSession.setAttribute("count", count);
 			httpSession.setAttribute("notifications", notifications);
-			//購物車數量
+			// 購物車數量
 			Integer carItemCount = cService.carItemCount(memberInformation);
 			httpSession.setAttribute("carItemCount", carItemCount);
 			// 檢查會員等級
@@ -323,16 +293,16 @@ public class MemberController {
 		// 这里验证登录回调的credential完整性
 		GoogleIdToken idToken = verifier.verify(credential);
 		Payload payload = idToken.getPayload();
-		
+
 		// Get profile information from payload
 		String email = payload.getEmail();
-		
+
 		// 紀錄金鑰
 		String thirdPartyId = payload.getSubject();
-		
+
 		// 紀錄何種第三方登入
 		String thirdPartyProvider = "Google";
-		
+
 		String name = (String) payload.get("name");
 		String pictureUrl = (String) payload.get("picture");
 //	            String locale = (String) payload.get("locale");
@@ -368,21 +338,21 @@ public class MemberController {
 				/* 紀錄當前時間 */
 				LocalDate now = LocalDate.now();
 				System.out.println(now);
-				MemberBean memBean = new MemberBean(account, thirdPartyId, email, name, thirdPartyProvider,now);
+				MemberBean memBean = new MemberBean(account, thirdPartyId, email, name, thirdPartyProvider, now);
 				mService.insert(memBean);
 				httpSession.setAttribute("member", memBean);
 				System.out.println("有創建帳號");
-				//通知			
+				// 通知
 				List<Notifications> notifications = nService.findByRecipientIdOrderBySendTimeDesc(memBean);
 				Integer count = nService.noReadCounts(memBean);
 				httpSession.setAttribute("count", count);
 				httpSession.setAttribute("notifications", notifications);
-				//購物車數量
+				// 購物車數量
 				Integer carItemCount = cService.carItemCount(memBean);
 				httpSession.setAttribute("carItemCount", carItemCount);
 				return "/good/jsp/EZBuyindex";
 			}
-		} 
+		}
 		return "失敗";
 	}
 
@@ -390,8 +360,7 @@ public class MemberController {
 
 	/* 創建忘記密碼的紀錄發送mail且紀錄資料庫 */
 	@PostMapping("/forgot-password")
-	public ResponseEntity<Map<String, Object>> forgetPassword(String email)
-			throws MessagingException {
+	public ResponseEntity<Map<String, Object>> forgetPassword(String email) throws MessagingException {
 		System.out.println(email);
 		Map<String, Object> response = new HashMap<>();
 
@@ -405,7 +374,7 @@ public class MemberController {
 		boolean exist = optionalMember.isPresent();
 
 		if (exist) {
-			
+
 			/* 取得token */
 			String token = tokenService.generateToken();
 
@@ -414,7 +383,7 @@ public class MemberController {
 
 			/* 創建一個忘記密碼的物件 */
 			ResetTokenBean rtBean = new ResetTokenBean();
-			
+
 			/* 存入用戶id */
 			rtBean.setUser_id(member.getSid());
 
@@ -474,8 +443,8 @@ public class MemberController {
 			boolean timeOut = minutesDifference < 15;
 
 			if (timeOut == true) {
-				/*比較TOKEN*/
-				if(token.equals(rtBean.getToken())) {
+				/* 比較TOKEN */
+				if (token.equals(rtBean.getToken())) {
 					rtService.deleteForgetPassword(thisID);
 					return "/member/ResetPassword";
 				} else {
@@ -491,9 +460,10 @@ public class MemberController {
 		}
 
 	}
-	
+
 	@PostMapping("/memberResetPassword")
-	public String memberResetPassword(@RequestParam("password") String password,@SessionAttribute("forgetMember") ResetTokenBean forgetMember) {
+	public String memberResetPassword(@RequestParam("password") String password,
+			@SessionAttribute("forgetMember") ResetTokenBean forgetMember) {
 		Integer sid = forgetMember.getUser_id();
 		System.out.println("會員ID: " + sid);
 		Optional<MemberBean> forgetPasswordMember = mService.findById(sid);
@@ -502,6 +472,7 @@ public class MemberController {
 		mService.update(member);
 		return "Login";
 	}
+
 	/*------------------------------------------------測試區-----------------------------------------------------*/
 	@GetMapping("/testinclude")
 	public String test() {

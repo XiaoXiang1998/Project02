@@ -31,7 +31,7 @@
                     /* 內部間隔 */
                     overflow-y: auto;
                     /* 若內容超過高度，自動顯示滾動條 */
-                    max-height: 100vh;
+                    max-height: 850px;
                     /* 最大高度，避免整體內容過高 */
                     border-radius: 10px;
                     /* 邊框圓角 */
@@ -81,35 +81,34 @@
                                         <div class="d-flex justify-content-center mt-3 w-100">
                                             <div
                                                 style="width: 100px; height: 100px; border-radius: 50%; overflow: hidden;">
-                                                <img src="https://tbuccsports.com/wp-content/uploads/2024/01/usatsi_22122941_168397563_lowres.jpeg"
-                                                    alt="沒有頭貼"
+                                                <img src="<%= member.getPhotoSticker() %>" alt="沒有頭貼"
                                                     style="width: 100%; height: 100%; object-fit: cover; object-position: center;">
                                             </div>
                                         </div>
-                                        <form action="#" class="mt-3">
+                                        <form action="#" class="mt-3" id="#editForm">
                                             <div class="form-floating mb-3">
                                                 <input type="text" class="form-control" id="floatingUsername"
-                                                    placeholder="帳號名稱" readonly>
+                                                    placeholder="帳號名稱" name="account" readonly>
                                                 <label for="floatingUsername">帳號名稱</label>
                                             </div>
                                             <div class="form-floating mb-3">
                                                 <input type="email" class="form-control" id="floatingEmail"
-                                                    placeholder="電子信箱" readonly>
+                                                    placeholder="電子信箱" name="email" readonly>
                                                 <label for="floatingEmail">電子信箱</label>
                                             </div>
                                             <div class="form-floating mb-3">
                                                 <input type="text" class="form-control" id="floatingPhone"
-                                                    placeholder="手機號碼" readonly>
+                                                    placeholder="手機號碼" name="phone" readonly>
                                                 <label for="floatingPhone">手機號碼</label>
                                             </div>
                                             <div class="form-floating mb-3">
                                                 <input type="text" class="form-control" id="floatingName"
-                                                    placeholder="會員姓名" readonly>
+                                                    placeholder="會員姓名" name="name" readonly>
                                                 <label for="floatingName">會員姓名</label>
                                             </div>
                                             <div class="form-floating mb-3">
                                                 <select class="form-select" id="floatingGender" aria-label="會員性別"
-                                                    disabled>
+                                                    name="gender" disabled>
                                                     <option selected>選擇性別</option>
                                                     <option value="male">男</option>
                                                     <option value="female">女</option>
@@ -118,7 +117,7 @@
                                             </div>
                                             <div class="form-floating mb-3">
                                                 <input type="text" class="form-control" id="floatingAddress"
-                                                    placeholder="會員住址" readonly>
+                                                    placeholder="會員住址" name="address" readonly>
                                                 <label for="floatingAddress">會員住址</label>
                                             </div>
                                             <div class="d-flex justify-content-center">
@@ -129,7 +128,7 @@
                                             <div class="d-flex justify-content-center mt-2" id="actionButtons"
                                                 style="display: none;">
                                                 <button type="submit" class="btn btn-success mx-2 controlButton"
-                                                    style="display: none;">送出</button>
+                                                    style="display: none;" id="updateButton">送出</button>
                                                 <button type="button" class="btn btn-danger mx-2 controlButton"
                                                     style="display: none;" id="cancelButton">取消</button>
                                             </div>
@@ -187,7 +186,8 @@
                                             </div>
                                             <div id="error-message" class="error-message"></div>
                                             <div class="d-flex justify-content-center">
-                                                <button type="submit" class="btn btn-primary mt-3">送出</button>
+                                                <button type="submit" class="btn btn-primary mt-3"
+                                                    id="changePassword">送出</button>
                                             </div>
                                         </form>
                                     </div>
@@ -243,6 +243,37 @@
                             $('#floatingGender').prop('disabled', false);
                         });
 
+                        $('#editForm').on('submit', function (event) {
+                            event.preventDefault(); // 阻止表单的默认提交行为
+                        });
+
+                        $('#updateButton').click(function () {
+                            let form = $('#editForm')[0];
+                            let formData = new FormData(form);
+                            for (let [key, value] of formData.entries()) {
+                                console.log(key, value);
+                            }
+                            fetch('UpdateMember', {
+                                method: 'PUT',
+                                body: formData
+                            })
+                                .then(response => {
+                                    if (response.ok) {
+                                        return response.json(); // 假设服务器返回JSON
+                                    } else {
+                                        throw new Error('网络响应失败');
+                                    }
+                                })
+                                .then(data => {
+                                    console.log('成功:', data);
+                                    // 可以在这里处理成功的响应，例如显示提示信息
+                                })
+                                .catch(error => {
+                                    console.error('错误:', error);
+                                    // 可以在这里处理错误，例如显示错误信息
+                                });
+                        });
+
                         $('#cancelButton').click(function () {
                             $('#fileUpload').remove();
                             $('.controlButton').hide();
@@ -258,7 +289,7 @@
                             $('#floatingGender').val(userData.gender);
                         })
 
-                        function validateForm() {
+                        $('#changePassword').click(function () {
                             var password = document.getElementById("floatingPassword").value;
                             var confirmPassword = document.getElementById("floatingCheckPassword").value;
                             var errorMessage = document.getElementById("error-message");
@@ -267,7 +298,8 @@
                                 return false;
                             }
                             return true;
-                        }
+                        })
+
                         //初始化給值
                         $(document).ready(function () {
                             // 從JSP獲取UserBean資料

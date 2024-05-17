@@ -138,7 +138,6 @@ public class AdminController {
 
 		/* 檢查是否有上傳檔案 */
 		if (fileName != null && fileName.length() > 0) {
-			System.out.println("有更新圖片");
 			File file = new File(realOldPath);
 			/* 刪除舊有檔案 */
 			file.delete();
@@ -147,41 +146,14 @@ public class AdminController {
 			/* 設定完整路徑 */
 			File fileDirPath = new File(fileDir, newFileName);
 			String photo_sticker = "AdminsPic/" + newFileName;
-			/*------------------------------------------------------------------------------------------------------------------------------*/
-			System.out.println("ID: " + aid);
-			System.out.println("帳號: " + account);
-			System.out.println("密碼: " + password);
-			System.out.println("信箱: " + email);
-			System.out.println("電話: " + phone);
-			System.out.println("姓名: " + name);
-			System.out.println("性別: " + gender);
-			System.out.println("住址: " + address);
-			System.out.println("註冊時間: " + hiredate);
-			System.out.println("舊路徑: " + op);
-			/*------------------------------------------------------------------------------------------------------------------------------*/
 			AdminBean adBean = new AdminBean(aid, account, password, email, phone, name, gender, address, photo_sticker,
 					hiredate);
 			adService.update(adBean);
 
 			mf.transferTo(fileDirPath);
-			System.out.println("有更新圖片版本更新完成");
 		} else {
-			/*------------------------------------------------------------------------------------------------------------------------------*/
-			System.out.println("ID: " + aid);
-			System.out.println("帳號: " + account);
-			System.out.println("密碼: " + password);
-			System.out.println("信箱: " + email);
-			System.out.println("電話: " + phone);
-			System.out.println("姓名: " + name);
-			System.out.println("性別: " + gender);
-			System.out.println("住址: " + address);
-			System.out.println("註冊時間: " + hiredate);
-			System.out.println("舊路徑: " + op);
-			/*------------------------------------------------------------------------------------------------------------------------------*/
-			System.out.println("無更新圖片");
 			AdminBean adBean = new AdminBean(aid, account, password, email, phone, name, gender, address, op, hiredate);
 			adService.update(adBean);
-			System.out.println("無更新圖片版本更新完成");
 		}
 		return ResponseEntity.ok("更新成功");
 	}

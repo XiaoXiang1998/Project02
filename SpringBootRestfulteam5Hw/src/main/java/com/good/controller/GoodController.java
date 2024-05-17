@@ -403,7 +403,7 @@ public class GoodController {
 	    if (rate != null) {
 	        resultPage = pService.getPostsByGoodIdAndRate(goodID, rate, pageable);
 	    } else if (content != null && content) {
-	        resultPage = pService.findPostsByGoodIdWithContent(goodID, pageable);
+	        resultPage = pService.f	indPostsByGoodIdWithContent(goodID, pageable);
 	    } else if (photos != null && photos) {
 	        resultPage = pService.findPostsByGoodIdWithPhotos(goodID, pageable);
 	    } else {
@@ -430,7 +430,7 @@ public class GoodController {
 		    m.addAttribute("rateCounts", rateCounts);
 		    m.addAttribute("contentCount", contentCount);
 		    m.addAttribute("photosCount", photosCount);
-		    m.addAttribute("totalPostsCount", totalPostsCount);
+		    m.addAttribute("txotalPostsCount", totalPostsCount);
 		m.addAttribute("GoodImageNumber", findImagesByID.size()); //
 		m.addAttribute("GoodBasicInfo", result); //商品詳細資訊
 		return "good/jsp/goodDetail";

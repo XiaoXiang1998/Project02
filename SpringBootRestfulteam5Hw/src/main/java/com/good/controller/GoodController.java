@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
@@ -21,13 +22,18 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
+import com.comment.model.Post;
+import com.comment.model.PostService;
 import com.good.dto.GoodBasicDto;
 import com.good.dto.GoodFormatImageDto;
 import com.good.dto.GoodIDDto;
@@ -61,9 +67,14 @@ public class GoodController {
 	private GoodFormatService gfService;
 	@PersistenceContext
 	private EntityManager entityManager;
-
+	@Autowired
+	private Post post;
+	
+	@Autowired
+	private PostService pService;
+	
 /////////////////////////////////////////////////////首頁/////////////////////////////////////////////////
-	@PostMapping("EZBuyIndex") // 商品封面照、商品名稱、商品種類、商品評分(全給0星)、價格範圍
+	@RequestMapping(value = "/EZBuyIndex", method = {RequestMethod.GET, RequestMethod.POST})// 商品封面照、商品名稱、商品種類、商品評分(全給0星)、價格範圍
 	public String EZBuyIndex(HttpServletRequest request, Model m) { // HttpServletRequest request
 		// 透過上架日期取得商品
 		List<GoodsBean2> findGoodByLaunchDate = gService.findGoodByLaunchDate();
@@ -316,7 +327,13 @@ public class GoodController {
 	}
 	// 檢視商品的詳細資訊
 	@GetMapping("/goodDetail.controller")
-	public String processGoodDetailAction(@RequestParam("GoodID") Integer goodID,Model m) {
+	public String processGoodDetailAction(@RequestParam("GoodID") Integer goodID,@RequestParam(defaultValue = "0") Integer page,
+		    @RequestParam(defaultValue = "2") Integer size,
+		    @RequestParam(required = false) Integer rate,
+		    @RequestParam(required = false) Boolean content,
+		    @RequestParam(required = false) Boolean photos,Model m) {
+//		HttpSession session = request.getSession();
+//		session.setAttribute("GoodID", goodID);\
 		//商品詳細資料需要(商品名稱、商品種類、商品價格範圍、商品平均評分)
 		GoodsBean2 good = gService.getById(goodID); //取得對應商品編號
 		// 取得對應商品的種類(related good) 只取商品編號
@@ -361,12 +378,59 @@ public class GoodController {
 			goodformatimagelist.add(goodformatimage);
 		}
 		
+		
+		Pageable pageable = PageRequest.of(page, size);
+	    Page<Post> resultPage;
+
+	    // 查询所有评分对应的数量
+	    List<Long> rateCounts = new ArrayList<>();
+	    if (rate == null) {
+	        for (int i = 5; i >= 1; i--) {
+	            long count = pService.getPostsByGoodIdAndRate(goodID, i, Pageable.unpaged()).getTotalElements();
+	            rateCounts.add(count);
+	        }
+	    }
+
+	    // 查询有留言内容的数量
+	    long contentCount = content != null && content ? pService.findPostsByGoodIdWithContent(goodID, Pageable.unpaged()).getTotalElements() : 0;
+
+	    // 查询附上照片的数量
+	    long photosCount = photos != null && photos ? pService.findPostsByGoodIdWithPhotos(goodID, Pageable.unpaged()).getTotalElements() : 0;
+
+	    // 查询全部评价的数量
+	    long totalPostsCount = pService.getPostsByGoodId(goodID, Pageable.unpaged()).getTotalElements();
+
+	    if (rate != null) {
+	        resultPage = pService.getPostsByGoodIdAndRate(goodID, rate, pageable);
+	    } else if (content != null && content) {
+	        resultPage = pService.findPostsByGoodIdWithContent(goodID, pageable);
+	    } else if (photos != null && photos) {
+	        resultPage = pService.findPostsByGoodIdWithPhotos(goodID, pageable);
+	    } else {
+	        resultPage = pService.getPostsByGoodId(goodID, pageable);
+	    }
+	    
+	    // 檢查 resultPage 是否為空，如果是，則設置為一個空的 Page 對象
+	    if (resultPage.isEmpty()) {
+	        resultPage = new PageImpl<>(Collections.emptyList());
+	    }
+		
+		
 		m.addAttribute("Good", good);
 		m.addAttribute("GoodFormat", byIDOrderByFormatImage);
 		m.addAttribute("GoodFormatNumber", byIDOrderByFormatImage.size());
 		m.addAttribute("GoodFormatImagePath", goodformatimagelist);
 		m.addAttribute("GoodFormatImagePathNumber", distinctFormatImage.size());
 		m.addAttribute("GoodImage", findImagesByID);
+		m.addAttribute("GoodImageNumber", findImagesByID.size());
+		m.addAttribute("GoodBasicInfo", result);
+		 m.addAttribute("posts", resultPage.getContent());
+		    m.addAttribute("currentPage", resultPage.getNumber());
+		    m.addAttribute("totalPages", resultPage.getTotalPages());
+		    m.addAttribute("rateCounts", rateCounts);
+		    m.addAttribute("contentCount", contentCount);
+		    m.addAttribute("photosCount", photosCount);
+		    m.addAttribute("totalPostsCount", totalPostsCount);
 		m.addAttribute("GoodImageNumber", findImagesByID.size()); //
 		m.addAttribute("GoodBasicInfo", result); //商品詳細資訊
 		return "good/jsp/goodDetail";

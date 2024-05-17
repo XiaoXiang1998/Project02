@@ -87,6 +87,13 @@ public class MemberController {
 	public String MemberCenter() {
 		return "/member/MemberCenter";
 	}
+	
+	@GetMapping("/logout")
+	public String logout() {
+		httpSession.invalidate();
+		return "/good/jsp/EZBuyindex";
+	}
+	
 	/*------------------------------------------------基本資料操作-----------------------------------------------------*/
 
 	/* 新增會員資料 */
@@ -383,8 +390,9 @@ public class MemberController {
 
 	/* 創建忘記密碼的紀錄發送mail且紀錄資料庫 */
 	@PostMapping("/forgot-password")
-	public ResponseEntity<Map<String, Object>> forgetPassword(@RequestParam("email") String email)
+	public ResponseEntity<Map<String, Object>> forgetPassword(String email)
 			throws MessagingException {
+		System.out.println(email);
 		Map<String, Object> response = new HashMap<>();
 
 		/* 紀錄當前時間 */
@@ -396,18 +404,16 @@ public class MemberController {
 		/* 驗證此email是否存在並回傳布林值 */
 		boolean exist = optionalMember.isPresent();
 
-		/* 取得token */
-		String token = tokenService.generateToken();
-
 		if (exist) {
+			
+			/* 取得token */
+			String token = tokenService.generateToken();
 
 			/* 如果此電子信箱有人使用，順便建立memberBean物件以利後續作業 */
 			MemberBean member = optionalMember.get();
 
 			/* 創建一個忘記密碼的物件 */
 			ResetTokenBean rtBean = new ResetTokenBean();
-
-			System.out.println("忘記密碼的會員編號: " + member.getSid());
 			
 			/* 存入用戶id */
 			rtBean.setUser_id(member.getSid());
@@ -422,7 +428,6 @@ public class MemberController {
 			rtService.inserForgetPassword(rtBean);
 
 			mailService.sendResetPasswordEmail(email, token);
-			System.out.println("信件已傳送");
 
 			response.put("success", true);
 			response.put("message", "重置密碼信件已發送到您的信箱");

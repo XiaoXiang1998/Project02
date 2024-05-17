@@ -147,12 +147,14 @@ public class MemberController {
 
 	/* 修改會員資料 */
 	@PutMapping("/UpdateMember")
-	public ResponseEntity<String> updateAction(@RequestParam("account") String account,
+	public ResponseEntity<Map<String, Object>> updateAction(@RequestParam("account") String account,
 			@RequestParam("email") String email, @RequestParam("phone") String phone, @RequestParam("name") String name,
 			@RequestParam("gender") String gender, @RequestParam("address") String address,
 			@RequestParam("photoSticker") MultipartFile mf, HttpSession session)
 			throws IllegalStateException, IOException {
-		System.out.println("進入更新會員");
+		
+		Map<String, Object> response = new HashMap<>();
+		
 		MemberBean member = (MemberBean) session.getAttribute("member");
 
 		String fileDir = "C:/team5project/SpringBootRestfulteam5Hw/src/main/resources/static/UsersPic";
@@ -184,20 +186,31 @@ public class MemberController {
 			File fileDirPath = new File(fileDir, newFileName);
 			String photo_sticker = "UsersPic/" + newFileName;
 			member.setPhotoSticker(photo_sticker);
-			mService.update(member);
 			mf.transferTo(fileDirPath);
 			
+			if(mService.update(member)) {
+				updateSession(account, session);
+				System.out.println("有圖片版更新成功");
+				 response.put("success", true);
+				return ResponseEntity.ok(response);
+			} else {
+				System.out.println("有圖片版更新失敗");
+				response.put("success", false);
+				return ResponseEntity.badRequest().body(response);
+			}
+			
 		} else {
-			System.out.println("無更新會員頭貼");
-			mService.update(member);
+			if(mService.update(member)) {
+				updateSession(account, session);
+				System.out.println("無圖片版更新成功");
+				 response.put("success", true);
+				return ResponseEntity.ok(response);
+			} else {
+				System.out.println("無圖片版更新失敗");
+				response.put("success", false);
+				return ResponseEntity.badRequest().body(response);
+			}
 		}
-		System.out.println("刪除session");
-		session.removeAttribute("member");
-		MemberBean memberInformation = mService.selectByAccountBean(account);
-		httpSession.setAttribute("member", memberInformation);
-		System.out.println("創建session");
-		
-		return ResponseEntity.ok("更新成功");
 	}
 
 	/* 顯示所有會員資料 */
@@ -477,5 +490,11 @@ public class MemberController {
 	@GetMapping("/testinclude")
 	public String test() {
 		return "/member/TEST";
+	}
+	/*------------------------------------------------內斂區-----------------------------------------------------*/
+	private void updateSession(String account, HttpSession session) {
+	    session.removeAttribute("member");
+	    MemberBean memberInformation = mService.selectByAccountBean(account);
+	    session.setAttribute("member", memberInformation);
 	}
 }

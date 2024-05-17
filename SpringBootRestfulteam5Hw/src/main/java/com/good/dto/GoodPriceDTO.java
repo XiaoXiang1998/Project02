@@ -20,12 +20,22 @@ public class GoodPriceDTO {
 	private Integer maxprice;
 
 	private Integer goodsID;
+	
+	private Integer totalPage;
 //
 	
 	
 
 	public String getTitleImage() {
 		return titleImage;
+	}
+
+	public Integer getTotalPage() {
+		return totalPage;
+	}
+
+	public void setTotalPage(Integer totalPage) {
+		this.totalPage = totalPage;
 	}
 
 	public Integer getGoodAVG() {

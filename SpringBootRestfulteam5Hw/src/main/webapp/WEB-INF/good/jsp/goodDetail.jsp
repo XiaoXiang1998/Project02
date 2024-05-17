@@ -54,8 +54,6 @@
             </div>
             <!-- Spinner End -->
 
-
-
             <!-- Navbar start -->
             <div class="container-fluid fixed-top bg-info">
                 <div class="container topbar bg-info d-none d-lg-block mb-3">
@@ -260,126 +258,118 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                                <!-- 商品圖片(用輪播呈現) -->
-                            </div>
-                        </div>
-                        <div class="col-lg-6">
-
-
-                            <!-- 商品規格(呈現該商品編號下對應的所有規格) -->
-                            <!-- <div class="row">
-                                <c:forEach var="j" begin="0" end="${GoodFormatNumber}" step="1" items="${GoodFormat}"
-                                    varStatus="loop">
-                                    <div class="col-6">
-                                        <button class="CategoryItem">
-                                            <img src="${j.goodImagePath}" alt="${j.goodImagePath}"
-                                                style="width: 150px;height: 250px;">
-                                            <span>${j.goodSize}</span>
-                                            <span hidden class="CategoryPrice">${j.goodPrice}</span>
-                                            <span hidden class="CategoryNumber">${j.goodsStock}</span>
-                                        </button>
-                                    </div>
-                                </c:forEach>
-                            </div> -->
-                            <!-- 當某一規格被點擊時 會出現剩餘的數量(輪播的部分呈現該張圖片) -->
-
-                            <!-- 一個是直接購買(直接進入訂單環節) 另一個是加入購物車(將購買的商品放入購物車內) -->
-                            <!-- 在購買之前需要選擇特定規格 -->
-                            <form action="" id="orderDetail"> <!-- 進入訂單環節(跳轉頁面) -->
-                                <!-- 下單後對應規格的庫存量會下降 -->
-                                <input type="text" class="form-control" id="orderNumber" name="orderNumber" hidden>
-                                <!-- 購買數量 -->
-                                <input type="text" class="form-control" id="formatID" name="formatID" hidden>
-                                <!-- 規格表編號 -->
-                                <input type="text" class="form-control" id="formatID" name="formatID" hidden>
-                                <!-- 買家編號 -->
-                                <button>去結帳</button>
-                            </form>
-                            <form action="" id="cartDetail"> <!-- 進入購物車(透過ajax將值傳到後端) -->
-                                <input type="text" hidden> <!-- 購買數量 -->
-                                <input type="text" hidden> <!-- 規格表編號 -->
-                                <input type="text" hidden> <!-- 買家編號 -->
-                                <button>加入購物車</button>
-                            </form>
-                            <!-- <a href="#"
-                                    class="btn border border-secondary rounded-pill px-4 py-2 mb-4 text-primary"><i
-                                        class="fa fa-shopping-bag me-2 text-primary"></i></a> -->
-                        </div>
-                        <div class="col-lg-12">
-                            <nav>
-                                <div class="nav nav-tabs mb-3">
-                                    <button class="nav-link active border-white border-bottom-0" type="button"
-                                        role="tab" id="nav-about-tab" data-bs-toggle="tab" data-bs-target="#nav-about"
-                                        aria-controls="nav-about" aria-selected="true">商品使用說明</button>
-                                    <button class="nav-link border-white border-bottom-0" type="button" role="tab"
-                                        id="nav-mission-tab" data-bs-toggle="tab" data-bs-target="#nav-mission"
-                                        aria-controls="nav-mission" aria-selected="false">評論</button>
-                                </div>
-                            </nav>
-                            <div class="tab-content mb-5">
-                                <div class="tab-pane active" id="nav-about" role="tabpanel"
-                                    aria-labelledby="nav-about-tab">
-                                    <div class="px-2">
-                                        <div class="row g-4">
-                                            <div class="col-6" id="GoodDirectionContent">
-                                                <!-- 裡面放入商品描述 -->
-                                                ${GoodBasicInfo.goodDirection}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="tab-pane" id="nav-mission" role="tabpanel"
-                                    aria-labelledby="nav-mission-tab"> <!-- 所有評論 -->
-                                    <!-- 透過商品編號查詢有幾筆評論(使用迴圈寫) -->
-                                    <!-- 將每一筆評論呈現出來 -->
                                     <div class="d-flex">
-                                        <img src="img/avatar.jpg" class="img-fluid rounded-circle p-3"
-                                            style="width: 100px; height: 100px;" alt=""> <!-- 評論用戶的大頭貼 -->
-                                        <div class="">
-                                            <p class="mb-2" style="font-size: 14px;">April 12, 2024</p>
-                                            <!-- 評論日期 -->
-                                            <div class="d-flex justify-content-between"> <!-- 評論用戶名 + 評論星數 -->
-                                                <h5>Jason Smith</h5> <!-- 評論用戶名 -->
-                                                <div class="d-flex mb-3"> <!-- 評論星數(星星數可用迴圈去寫) -->
-                                                    <i class="fa fa-star text-secondary"></i>
-                                                    <i class="fa fa-star text-secondary"></i>
-                                                    <i class="fa fa-star text-secondary"></i>
-                                                    <i class="fa fa-star text-secondary"></i>
-                                                    <i class="fa fa-star"></i>
+                                        <div class="col">
+                                            <form action="" id="orderDetail"> <!-- 進入訂單環節(跳轉頁面) -->
+                                                <!-- 下單後對應規格的庫存量會下降 -->
+                                                <input type="text" class="form-control" id="orderNumber"
+                                                    name="orderNumber" hidden>
+                                                <!-- 購買數量 -->
+                                                <input type="text" class="form-control" id="formatID" name="formatID"
+                                                    hidden>
+                                                <!-- 規格表編號 -->
+                                                <input type="text" class="form-control" id="formatID" name="formatID"
+                                                    hidden>
+                                                <!-- 買家編號 -->
+                                                <button>去結帳</button>
+                                            </form>
+                                        </div>
+                                        <div class="col">
+                                            <form action="" id="cartDetail"> <!-- 進入購物車(透過ajax將值傳到後端) -->
+                                                <input type="text" hidden> <!-- 購買數量 -->
+                                                <input type="text" hidden> <!-- 規格表編號 -->
+                                                <input type="text" hidden> <!-- 買家編號 -->
+                                                <button>加入購物車</button>
+                                            </form>
+                                        </div>
+                                        <!-- 商品圖片(用輪播呈現) -->
+
+                                        <!-- 一個是直接購買(直接進入訂單環節) 另一個是加入購物車(將購買的商品放入購物車內) -->
+                                        <!-- 在購買之前需要選擇特定規格 -->
+
+                                        <!-- <a href="#"
+                                            class="btn border border-secondary rounded-pill px-4 py-2 mb-4 text-primary"><i
+                                                class="fa fa-shopping-bag me-2 text-primary"></i></a> -->
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-12">
+                                <nav>
+                                    <div class="nav nav-tabs mb-3">
+                                        <button class="nav-link active border-white border-bottom-0" type="button"
+                                            role="tab" id="nav-about-tab" data-bs-toggle="tab"
+                                            data-bs-target="#nav-about" aria-controls="nav-about"
+                                            aria-selected="true">商品使用說明</button>
+                                        <button class="nav-link border-white border-bottom-0" type="button" role="tab"
+                                            id="nav-mission-tab" data-bs-toggle="tab" data-bs-target="#nav-mission"
+                                            aria-controls="nav-mission" aria-selected="false">評論</button>
+                                    </div>
+                                </nav>
+                                <div class="tab-content mb-5">
+                                    <div class="tab-pane active" id="nav-about" role="tabpanel"
+                                        aria-labelledby="nav-about-tab">
+                                        <div class="px-2">
+                                            <div class="row g-4">
+                                                <div class="col-6" id="GoodDirectionContent">
+                                                    <!-- 裡面放入商品描述 -->
+                                                    ${GoodBasicInfo.goodDirection}
                                                 </div>
                                             </div>
-                                            <p>The generated Lorem Ipsum is therefore always free from
-                                                repetition
-                                                injected humour, or non-characteristic
-                                                words etc. Susp endisse ultricies nisi vel quam suscipit </p>
-                                            <!-- 評論內容 -->
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane" id="nav-mission" role="tabpanel"
+                                        aria-labelledby="nav-mission-tab">
+                                        <!-- 所有評論 -->
+                                        <!-- 透過商品編號查詢有幾筆評論(使用迴圈寫) -->
+                                        <!-- 將每一筆評論呈現出來 -->
+                                        <div class="d-flex">
+                                            <img src="img/avatar.jpg" class="img-fluid rounded-circle p-3"
+                                                style="width: 100px; height: 100px;" alt=""> <!-- 評論用戶的大頭貼 -->
+                                            <div class="">
+                                                <p class="mb-2" style="font-size: 14px;">April 12, 2024</p>
+                                                <!-- 評論日期 -->
+                                                <div class="d-flex justify-content-between"> <!-- 評論用戶名 + 評論星數 -->
+                                                    <h5>Jason Smith</h5> <!-- 評論用戶名 -->
+                                                    <div class="d-flex mb-3"> <!-- 評論星數(星星數可用迴圈去寫) -->
+                                                        <i class="fa fa-star text-secondary"></i>
+                                                        <i class="fa fa-star text-secondary"></i>
+                                                        <i class="fa fa-star text-secondary"></i>
+                                                        <i class="fa fa-star text-secondary"></i>
+                                                        <i class="fa fa-star"></i>
+                                                    </div>
+                                                </div>
+                                                <p>The generated Lorem Ipsum is therefore always free from
+                                                    repetition
+                                                    injected humour, or non-characteristic
+                                                    words etc. Susp endisse ultricies nisi vel quam suscipit </p>
+                                                <!-- 評論內容 -->
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
 
+                        </div>
+                    </div>
+
+                </div>
+                <h1 class="fw-bold mb-0">Related products</h1>
+                <!-- 透過商品種類去查詢商品基本資料表(透過session.setattribute將值丟入) -->
+                <div class="vesitable">
+                    <div class="owl-carousel vegetable-carousel justify-content-center"> <!-- 透過迴圈去寫 -->
+                        <form action="" method="">
+                            <div class="border border-primary rounded position-relative vesitable-item">
+                                <div class="vesitable-img"> <!-- 商品封面圖片 -->
+                                    <img src="img/vegetable-item-6.jpg" class="img-fluid w-100 rounded-top" alt="">
+                                </div>
+                                <div class="text-white bg-primary px-3 py-1 rounded position-absolute"
+                                    style="top: 10px; right: 10px;">Vegetable
+                                </div><!-- 商品名稱 -->
+                            </div>
+                        </form>
                     </div>
                 </div>
-
-            </div>
-            <h1 class="fw-bold mb-0">Related products</h1>
-            <!-- 透過商品種類去查詢商品基本資料表 -->
-            <div class="vesitable">
-                <div class="owl-carousel vegetable-carousel justify-content-center"> <!-- 透過迴圈去寫 -->
-                    <form action="" method="">
-                        <div class="border border-primary rounded position-relative vesitable-item">
-                            <div class="vesitable-img"> <!-- 商品封面圖片 -->
-                                <img src="img/vegetable-item-6.jpg" class="img-fluid w-100 rounded-top" alt="">
-                            </div>
-                            <div class="text-white bg-primary px-3 py-1 rounded position-absolute"
-                                style="top: 10px; right: 10px;">Vegetable
-                            </div><!-- 商品名稱 -->
-                        </div>
-                    </form>
-                </div>
-            </div>
             </div>
             </div>
             <!-- Single Product End -->
@@ -534,7 +524,8 @@
                 })
                 $('button[class="btn btn-sm btn-plus rounded-circle bg-light border"]').click(function () {
                     let InputNumber = $(this).closest('div').find('input[id="BuyNumber"]').prop("value");
-                    let goodstockmsg = $('#BuyItemNumber').find('p[id="remainingNumber"]').prop("innerHTML");
+                    let goodstockmsg = $('#BuyItemNumber').find('span[id="remainingNumber"]').prop("innerHTML");
+                    console.log($('#BuyItemNumber').find('span[id="remainingNumber"]'));
                     let goodstock = goodstockmsg.substring(2, goodstockmsg.length - 1);
                     if (ItemNumber > Number(goodstock)) {
                         $('#errormsg').prop("innerHTML", "操作不當");//最多只能購買剩餘的數量
@@ -543,7 +534,7 @@
                 })
                 $('button[class="btn btn-sm btn-minus rounded-circle bg-light border"]').click(function () {
                     let InputNumber = $(this).closest('div').find('input[id="BuyNumber"]').prop("value");
-                    let goodstockmsg = $('#BuyItemNumber').find('p[id="remainingNumber"]').prop("innerHTML");//
+                    let goodstockmsg = $('#BuyItemNumber').find('span[id="remainingNumber"]').prop("innerHTML");//
                     let goodstock = goodstockmsg.substring(2, goodstockmsg.length - 1);//取得剩餘數量
                     if (ItemNumber <= Number(goodstock)) {
                         $('#errormsg').prop("innerHTML", "");//將錯誤訊息抹消

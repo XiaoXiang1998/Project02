@@ -799,115 +799,85 @@
                                         }
                                         let goodstock = $(this).find('span[class="CategoryNumber"]').prop("innerHTML");
                                         let formatprice = $(this).find('span[class="CategoryPrice"]').prop("innerHTML");
+                                    })
 
 
-
-                                        $('#search-icon-1').click(function () {//查詢賣家底下的商品
-                                            // action="" method="get" id="gotoSearchGoodForm"
-                                            let form = $(this).closest('form');
-                                            form.prop("action", "....");//目標網址
-                                            form.submit();
-                                        })
-                                        $('.CategoryItem').click(
-                                            function () {
-                                                if ($('#BuyItemNumber').prop("hidden") == true) {//假若欄位被影藏
-                                                    $('#BuyItemNumber').prop("hidden", false);//取消影藏
-                                                } else {
-
-                                                }
-                                                let goodstock = $(this)
-                                                    .find('span[class="CategoryNumber"]').prop(
-                                                        "innerHTML");
-                                                let formatprice = $(this).find(
-                                                    'span[class="CategoryPrice"]').prop("innerHTML");
-
-
-                                                $('#BuyItemNumber').find('span[id="remainingNumber"]')
-                                                    .prop("innerHTML", "還剩" + goodstock + "個");
-                                                $('#BuyItemNumber').find('span[id="CategoryPrice"]').prop(
-                                                    "innerHTML", formatprice + "$");
-
-
-                                            })
-
-                                        $('#BuyNumber').change(function () {
-                                            let InputNumber = $(this).prop("value");
-                                            let goodstockmsg = $('#BuyItemNumber').find('span[id="remainingNumber"]').prop("innerHTML");
-                                            let goodstock = goodstockmsg.substring(2, goodstockmsg.length - 1);
-                                            if (Number(goodstock) > InputNumber && InputNumber >= 1) {
-                                                $('#errormsg').prop("innerHTML", "");
-                                            } else {
-                                                if (InputNumber > Number(goodstock)) {
-                                                    $('#errormsg').prop("innerHTML", "操作不當");//最多只能購買剩餘的數量
-                                                    $(this).closest('div').find('input[id="BuyNumber"]').prop("value", 1);//不讓數字增加
-                                                }
-                                                if (InputNumber < 1) {
-                                                    $(this).closest('div').find('input[id="BuyNumber"]').prop("value", 1);//最少購買一筆
-                                                }
-                                            }
-
-                                        })
-
-                                        $('button[class="btn btn-sm btn-plus rounded-circle bg-light border"]').click(function () {
-                                            let InputNumber = $(this).closest('div').find('input[id="BuyNumber"]').prop("value");
-                                            let goodstockmsg = $('#BuyItemNumber').find('span[id="remainingNumber"]').prop("innerHTML");
-                                            let goodstock = goodstockmsg.substring(2, goodstockmsg.length - 1);
+                                    $('#BuyNumber').change(function () {
+                                        let InputNumber = $(this).prop("value");
+                                        let goodstockmsg = $('#BuyItemNumber').find('span[id="remainingNumber"]').prop("innerHTML");
+                                        let goodstock = goodstockmsg.substring(2, goodstockmsg.length - 1);
+                                        if (Number(goodstock) > InputNumber && InputNumber >= 1) {
+                                            $('#errormsg').prop("innerHTML", "");
+                                        } else {
                                             if (InputNumber > Number(goodstock)) {
                                                 $('#errormsg').prop("innerHTML", "操作不當");//最多只能購買剩餘的數量
-                                                $(this).closest('div').find('input[id="BuyNumber"]').prop("value", Number(goodstock));//不讓數字增加
+                                                $(this).closest('div').find('input[id="BuyNumber"]').prop("value", 1);//不讓數字增加
                                             }
-                                        })
-
-                                        $('button[class="btn btn-sm btn-minus rounded-circle bg-light border"]').click(function () {
-                                            let InputNumber = $(this).closest('div').find('input[id="BuyNumber"]').prop("value");
-                                            let goodstockmsg = $('#BuyItemNumber').find('span[id="remainingNumber"]').prop("innerHTML");//
-                                            let goodstock = goodstockmsg.substring(2, goodstockmsg.length - 1);//取得剩餘數量
-                                            if (InputNumber <= Number(goodstock)) {
-                                                $('#errormsg').prop("innerHTML", "");//將錯誤訊息抹消
-                                            }
-                                            if (InputNumber <= 1) {
+                                            if (InputNumber < 1) {
                                                 $(this).closest('div').find('input[id="BuyNumber"]').prop("value", 1);//最少購買一筆
                                             }
-                                        })
+                                        }
 
-                                        $('#GoToCart').click(function () {
-                                            let buynumber = $('#BuyNumber').val();
-                                            $('#cartNumber').prop("value", buynumber);
-                                            // 透過ajax傳資料
-                                            let form = $(this).closest('form');
-
-                                        })
-
-                                        $('#GoToOrder').click(function () {
-                                            let buynumber = $('#BuyNumber').val();
-                                            $('#orderNumber').prop("value", buynumber);
-                                            // 頁面跳轉
-                                            let form = $(this).closest('form');
-
-                                        })
-                                        $(document).ready(function () {
-                                            $('.your-class').slick({
-                                                arrows: true
-                                            });
-                                        });
                                     })
-                                    $('button[class="btn btn-sm btn-plus rounded-circle bg-light border"]')
-                                        .click(
-                                            function () {
-                                                let InputNumber = $(this).closest('div').find(
-                                                    'input[id="BuyNumber"]').prop("value");
-                                                let goodstockmsg = $('#BuyItemNumber').find(
-                                                    'p[id="remainingNumber"]')
-                                                    .prop("innerHTML");
-                                                let goodstock = goodstockmsg.substring(2,
-                                                    goodstockmsg.length - 1);
-                                                if (ItemNumber > Number(goodstock)) {
-                                                    $('#errormsg').prop("innerHTML", "操作不當");//最多只能購買剩餘的數量
-                                                    $(this).closest('div').find(
-                                                        'input[id="BuyNumber"]').prop("value",
-                                                            Number(goodstock));//不讓數字增加
-                                                }
-                                            })
+
+                                    $('button[class="btn btn-sm btn-plus rounded-circle bg-light border"]').click(function () {
+                                        let InputNumber = $(this).closest('div').find('input[id="BuyNumber"]').prop("value");
+                                        let goodstockmsg = $('#BuyItemNumber').find('span[id="remainingNumber"]').prop("innerHTML");
+                                        let goodstock = goodstockmsg.substring(2, goodstockmsg.length - 1);
+                                        if (InputNumber > Number(goodstock)) {
+                                            $('#errormsg').prop("innerHTML", "操作不當");//最多只能購買剩餘的數量
+                                            $(this).closest('div').find('input[id="BuyNumber"]').prop("value", Number(goodstock));//不讓數字增加
+                                        }
+                                    })
+
+                                    $('button[class="btn btn-sm btn-minus rounded-circle bg-light border"]').click(function () {
+                                        let InputNumber = $(this).closest('div').find('input[id="BuyNumber"]').prop("value");
+                                        let goodstockmsg = $('#BuyItemNumber').find('span[id="remainingNumber"]').prop("innerHTML");//
+                                        let goodstock = goodstockmsg.substring(2, goodstockmsg.length - 1);//取得剩餘數量
+                                        if (InputNumber <= Number(goodstock)) {
+                                            $('#errormsg').prop("innerHTML", "");//將錯誤訊息抹消
+                                        }
+                                        if (InputNumber <= 1) {
+                                            $(this).closest('div').find('input[id="BuyNumber"]').prop("value", 1);//最少購買一筆
+                                        }
+                                    })
+
+                                    $('#GoToCart').click(function () {
+                                        let buynumber = $('#BuyNumber').val();
+                                        $('#cartNumber').prop("value", buynumber);
+                                        // 透過ajax傳資料
+                                        let form = $(this).closest('form');
+
+                                    })
+
+                                    $('#GoToOrder').click(function () {
+                                        let buynumber = $('#BuyNumber').val();
+                                        $('#orderNumber').prop("value", buynumber);
+                                        // 頁面跳轉
+                                        let form = $(this).closest('form');
+
+                                    })
+                                    $(document).ready(function () {
+                                        $('.your-class').slick({
+                                            arrows: true
+                                        });
+                                    });
+                                    $('button[class="btn btn-sm btn-plus rounded-circle bg-light border"]').click(
+                                        function () {
+                                            let InputNumber = $(this).closest('div').find(
+                                                'input[id="BuyNumber"]').prop("value");
+                                            let goodstockmsg = $('#BuyItemNumber').find(
+                                                'p[id="remainingNumber"]')
+                                                .prop("innerHTML");
+                                            let goodstock = goodstockmsg.substring(2,
+                                                goodstockmsg.length - 1);
+                                            if (ItemNumber > Number(goodstock)) {
+                                                $('#errormsg').prop("innerHTML", "操作不當");//最多只能購買剩餘的數量
+                                                $(this).closest('div').find(
+                                                    'input[id="BuyNumber"]').prop("value",
+                                                        Number(goodstock));//不讓數字增加
+                                            }
+                                        })
                                     $('button[class="btn btn-sm btn-minus rounded-circle bg-light border"]')
                                         .click(
                                             function () {

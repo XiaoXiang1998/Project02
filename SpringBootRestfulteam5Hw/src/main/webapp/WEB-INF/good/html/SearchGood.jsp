@@ -148,7 +148,8 @@
                                 div0.append(div1);
                                 $('#returnGoodResult').append(div0);
                             })
-                            // console.log($('#returnGoodResult'));
+
+                            changePaheNumber(${ totalPages });
                         }
                     })
                 }
@@ -234,7 +235,7 @@
                             </div>
                         </div>
                     </div>
-                    <h1 class="mb-4 mt-5" id="test">123456789</h1>
+                    <h1 class="mb-4 mt-5" id="test">${totalPages}</h1>
                     <div class="row g-4">
                         <div class="col-lg-12">
                             <div class="row g-4">
@@ -362,7 +363,7 @@
                                             <div class="d-flex justify-content-center my-4">
 
                                                 <a href="#"
-                                                    class="btn border border-secondary px-4 py-3 rounded-pill text-primary w-100">Vew
+                                                    class="btn border border-secondary px-4 py-3 rounded-pill text-primary w-100">View
                                                     More</a>
                                             </div>
                                         </div>
@@ -836,10 +837,19 @@
                     }
                 })
                 // $('#PageList')放入頁面的地方
-                for (let i = 0; i < ${ totalPages+ 1}; i++) {
-                    console.log(i);
+                function changePaheNumber(pageNumber) {//pageNumber = ${ totalPages+ 1}
+                    console.log("pageNumber = " + pageNumber);
+                    $('#PageList').prop("innerHTML", "");
+                    for (let i = 0; i <= pageNumber; i++) {
+                        let btn1 = document.createElement("button");
+                        btn1.setAttribute("type", "button");
+                        btn1.innerHTML = i + 1;
+                        btn1.setAttribute("onclick", "change(" + (i + 1) + ")");
+                        btn1.classList.add("col");
+                        $('#PageList').append(btn1);
+                    }
+                    $('#test').prop("innerHTML", pageNumber + 1);
                 }
-                // $('#test').prop("innerHTML", "${totalPages+1}");
             </script>
         </body>
 

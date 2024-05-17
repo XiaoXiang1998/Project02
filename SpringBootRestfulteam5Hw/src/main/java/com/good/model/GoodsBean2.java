@@ -58,6 +58,9 @@ public class GoodsBean2 implements java.io.Serializable {
 	//
 	@Column(name="TITLEIMAGE")
 	private String titleImage;
+	@Column(name="GOODSSOLD")
+	private Integer goodsold;
+	
 	//
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "good", cascade = CascadeType.ALL)
 	@JsonManagedReference
@@ -198,11 +201,13 @@ public class GoodsBean2 implements java.io.Serializable {
 	public void setRating(Integer rating) {
 		this.rating = rating;
 	}
-	@Override
-	public String toString() {
-		return "GoodsBean2 [goodsID=" + goodsID + ", goodsName=" + goodsName + ", goodsDirection=" + goodsDirection
-				+ ", goodsType=" + goodsType + ", launchDate=" + launchDate + ", brand=" + brand + ", shipmentPlace="
-				+ shipmentPlace + ", goodsSellerID=" + goodsSellerID + ", titleImage=" + titleImage + "]";
+
+	public Integer getGoodsold() {
+		return goodsold;
+	}
+
+	public void setGoodsold(Integer goodsold) {
+		this.goodsold = goodsold;
 	}
 	
 

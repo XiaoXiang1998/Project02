@@ -29,8 +29,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 import com.good.dto.GoodBasicDto;
+import com.good.dto.GoodFormatImageDto;
 import com.good.dto.GoodIDDto;
 import com.good.dto.GoodPriceDTO;
+import com.good.dto.GoodPriceDetailDTO;
 import com.good.dto.GoodTypeDto;
 import com.good.dto.GoodTypeIndexDto;
 import com.good.model.GoodFormat;
@@ -63,7 +65,6 @@ public class GoodController {
 	@PostMapping("EZBuyIndex") // 商品封面照、商品名稱、商品種類、商品評分(全給0星)、價格範圍
 	public String EZBuyIndex(HttpServletRequest request, Model m) { // HttpServletRequest request
 		// 透過上架日期取得商品
-		System.out.println("我要進來了!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 		List<GoodsBean2> findGoodByLaunchDate = gService.findGoodByLaunchDate();
 		List<GoodPriceDTO> pricerange = new ArrayList();
 		// 透過商品編號 取得價格最大最小值
@@ -107,11 +108,59 @@ public class GoodController {
 		for(GoodPriceDTO item:pricerange) {
 			System.out.println(item.toString());
 		}
-		System.out.println("我要出來了!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 
 		return "good/jsp/EZBuyindex";
 	}
 
+	@GetMapping("EZBuyIndexWithoutLogin") // 商品封面照、商品名稱、商品種類、商品評分(全給0星)、價格範圍
+	public String EZBuyIndexWithoutLogin(HttpServletRequest request, Model m) { // HttpServletRequest request
+		// 透過上架日期取得商品
+		List<GoodsBean2> findGoodByLaunchDate = gService.findGoodByLaunchDate();
+		List<GoodPriceDTO> pricerange = new ArrayList();
+		// 透過商品編號 取得價格最大最小值
+		for (GoodsBean2 item : findGoodByLaunchDate) {
+			int goodID = item.getGoodsID();
+			Query<Object[]> resultList = (Query<Object[]>) entityManager.createQuery(
+					"select min(gf.goodPrice) AS minprice,max(gf.goodPrice) AS maxprice, g.goodsID AS goodsID from GoodsBean2 g join GoodFormat gf on g.goodsID = gf.good.goodsID where g.goodsID = ?1 group by g.goodsID")
+					.setParameter(1, goodID);// 在特定賣家下查詢商品，並取得不同編號下的最大和最小價格
+			List<Object[]> item2 = resultList.getResultList();
+			for (Object[] item3 : item2) {
+				GoodPriceDTO result = new GoodPriceDTO();
+				System.out.println(item.getNumberRatings());
+				if (item.getNumberRatings() == null) {// 沒人評分
+					result.setGoodAVG(0);
+				} else {
+					int AVG = item.getRating() / item.getNumberRatings();
+					result.setGoodAVG(AVG);
+				}
+				result.setGoodType(item.getGoodsType());
+				result.setGoodName(item.getGoodsName());
+				result.setTitleImage(item.getTitleImage());
+				result.setGoodsID((Integer) item3[2]);
+				result.setMaxprice((Integer) item3[1]);
+				result.setMinprice((Integer) item3[0]);
+				pricerange.add(result);
+			}
+		}
+//		HttpSession session = request.getSession();
+//		session.setAttribute("findGoodPriceRange", pricerange);
+//		session.setAttribute("GoodNumber", findGoodByLaunchDate.size());
+		m.addAttribute("findGoodPriceRange", pricerange);
+		m.addAttribute("GoodNumber", findGoodByLaunchDate.size());
+		Object count = session.getAttribute("count");
+		Object attribute = session.getAttribute("notifications");
+		Object attribute2 = session.getAttribute("carItemCount");
+		Object attribute3 = session.getAttribute("member");
+		System.out.println(count);
+		System.out.println(attribute);
+		System.out.println(attribute2);
+		System.out.println(attribute3);
+		for(GoodPriceDTO item:pricerange) {
+			System.out.println(item.toString());
+		}
+
+		return "good/jsp/EZBuyindex";
+	}
 /////////////////////////////////////////////////////新增頁面/////////////////////////////////////////////////
 //	InsertGood.controller
 	@GetMapping("InsertGood.controller")
@@ -266,22 +315,21 @@ public class GoodController {
 	}
 	// 檢視商品的詳細資訊
 	@GetMapping("/goodDetail.controller")
-	public String processGoodDetailAction(@RequestParam("GoodID") Integer goodID, HttpServletRequest request,Model m) {
+	public String processGoodDetailAction(@RequestParam("GoodID") Integer goodID,Model m) {
 //		HttpSession session = request.getSession();
 //		session.setAttribute("GoodID", goodID);\
 		//商品詳細資料需要(商品名稱、商品種類、商品價格範圍、商品平均評分)
 		GoodsBean2 good = gService.getById(goodID); //取得對應商品編號
 		//
 		Query<Object[]> resultList = (Query<Object[]>) entityManager.createQuery(
-//				select min(gf.GoodPrice) AS minprice,max(gf.GoodPrice) AS maxprice,gf.GoodsID AS 'GoodID'
-//				from Goods g join GoodFormat gf on g.GoodsID = gf.GoodsID
-//				where gf.GoodsID = 4 
-//				group by gf.GoodsID;
-				"select min(gf.goodPrice) AS minprice,max(gf.goodPrice) AS maxprice, g.goodsID AS goodsID from GoodsBean2 g join GoodFormat gf on g.goodsID = gf.good.goodsID where g.goodsID = ?1 group by g.goodsID")
-				.setParameter(1, good.getGoodsID());// 在特定賣家下查詢商品，並取得不同編號下的最大和最小價格
+//				select min(gf.goodPrice) AS minprice,max(gf.goodPrice) AS maxprice, g.goodsID AS goodsID 
+//				from Goods g join GoodFormat gf on g.GoodsID = gf.GoodsID 
+//				where g.GoodsID = 1 
+//				group by g.GoodsID
+				"select min(gf.goodPrice) AS minprice,max(gf.goodPrice) AS maxprice, g.goodsID AS goodsID from GoodsBean2 g join GoodFormat gf on g.goodsID = gf.good.goodsID where g.goodsID = "+ good.getGoodsID() +" group by g.goodsID");// 在特定賣家下查詢商品，並取得不同編號下的最大和最小價格
 		List<Object[]> item2 = resultList.getResultList();
 //		List<GoodPriceDTO> pricerange = new ArrayList();
-		GoodPriceDTO result = new GoodPriceDTO();
+		GoodPriceDetailDTO result = new GoodPriceDetailDTO();
 		for (Object[] item3 : item2) {
 			System.out.println(good.getNumberRatings());
 			if (good.getNumberRatings() == null) {// 沒人評分
@@ -290,19 +338,33 @@ public class GoodController {
 				int AVG = good.getRating() / good.getNumberRatings();
 				result.setGoodAVG(AVG);
 			}
+			if(good.getGoodsold()==null || good.getGoodsold()==0) {
+				result.setGoodsold(0);
+			}
 			result.setGoodType(good.getGoodsType());
 			result.setGoodName(good.getGoodsName());
 			result.setTitleImage(good.getTitleImage());
 			result.setGoodsID((Integer) item3[2]);
 			result.setMaxprice((Integer) item3[1]);
 			result.setMinprice((Integer) item3[0]);
+			result.setGoodDirection(good.getGoodsDirection());
 		}
 		//
 		List<GoodFormat> byIDOrderByFormatImage = gfService.getByIDOrderByFormatImage(goodID);
 		List<GoodImageBean> findImagesByID = giService.findImagesByID(goodID);
+		List<String> distinctFormatImage = gfService.getDistinctFormatImage(goodID);
+		List<GoodFormatImageDto> goodformatimagelist = new ArrayList();
+		for(String item:distinctFormatImage) {
+			GoodFormatImageDto goodformatimage = new GoodFormatImageDto();
+			goodformatimage.setGoodImagePath(item);
+			goodformatimagelist.add(goodformatimage);
+		}
+		
 		m.addAttribute("Good", good);
 		m.addAttribute("GoodFormat", byIDOrderByFormatImage);
 		m.addAttribute("GoodFormatNumber", byIDOrderByFormatImage.size());
+		m.addAttribute("GoodFormatImagePath", goodformatimagelist);
+		m.addAttribute("GoodFormatImagePathNumber", distinctFormatImage.size());
 		m.addAttribute("GoodImage", findImagesByID);
 		m.addAttribute("GoodImageNumber", findImagesByID.size());
 		m.addAttribute("GoodBasicInfo", result);
@@ -323,8 +385,9 @@ public class GoodController {
 		//
 		int pageSize = 3;
 		Pageable p1 = PageRequest.of(pageNo - 1, pageSize);
+		System.err.println("pageNo = "+pageNo+",pageSize = "+pageSize);
 		Page<GoodsBean2> page = gService.findAllByPage(p1);
-
+		System.err.println("page.getTotalPages()  ="+page.getTotalPages());
 		int totalPages = page.getTotalPages();
 		long totalElement = page.getTotalElements();
 
@@ -337,8 +400,8 @@ public class GoodController {
 
 	// 從首頁搜尋商品名稱
 	@GetMapping("/searchGood")
-//	@ResponseBody
 	public String searchGood(@RequestParam("GoodName") String goodsName, HttpServletRequest request) {
+		//取得商品種類對應的數量
 		HttpSession session = request.getSession();
 		session.setAttribute("goodsName", goodsName);
 		// 查詢商品名稱取得對應的種類集合
@@ -357,14 +420,13 @@ public class GoodController {
 		session.setAttribute("CategoryNumberList", goodTypeNumber);
 		session.setAttribute("CategoryNumber", goodTypeNumber.size());
 		return "good/jsp/SearchGood";
-//		return goodTypeNumber;
 	}
 
 	// 跳轉頁面後 呈現搜尋結果
 	@GetMapping("/searchGoodResult/{pageNO}/{hiddenContent}")
 	@ResponseBody
 	public List<GoodPriceDTO> searchGoodResult(@PathVariable("pageNO") Integer pageNo,
-			@PathVariable("hiddenContent") String hiddencontent, HttpServletRequest request, Model m) {
+			@PathVariable("hiddenContent") String hiddencontent, HttpServletRequest request) {
 		// 外界給定
 //        let hiddenContent = goodName + "_" + Category + "_" + price + "_" + orderItem;
 		// /searchGoodResult/1/鯊鯊貓_娃娃_XXX_XXX
@@ -385,16 +447,63 @@ public class GoodController {
 //		from Goods g join GoodFormat gf on g.goodsID = gf.goodsID 
 //		where g.GoodsName LIKE '%鯊鯊貓%' AND gf.GoodPrice between 0 and 1500 AND g.GoodsType = '貼圖'
 //		order by gf.GoodPrice
+		System.out.println("goodName="+goodName+",category="+category+",price="+price+",orderItem="+orderItem);
 		if (category.equals("XXX")) {// 沒有選定種類
-//			hql1 = "";
-		} else {
-			hql1 = "AND g.goodsType='" + category + "' ";
 			if (price.equals("XXX")) {
-//				hql2 = "";
+				System.out.println("price = XXX");
+				if (orderItem.equals("XXX")) {
+					System.out.println("orderItem = XXX");
+				} else {
+					switch (orderItem) {
+					case "price":
+						hql3 = "order by gf.goodPrice";
+						break;
+					case "score":
+//						hql3 = "";
+						break;
+					case "ID":
+						hql3 = "order by g.goodsID";
+						break;
+					case "NO":
+//						hql3 = "";
+						break;
+					default:
+//						hql3 = "";
+						System.out.println("something weird");
+					}
+				}
 			} else {
 				hql2 = "AND gf.goodPrice between 0 AND " + price + " ";
 				if (orderItem.equals("XXX")) {
-//					hql3 = "";
+					System.out.println("orderItem = XXX");
+				} else {
+					switch (orderItem) {
+					case "price":
+						hql3 = "order by gf.goodPrice";
+						break;
+					case "score":
+//						hql3 = "";
+						break;
+					case "ID":
+						hql3 = "order by g.goodsID";
+						break;
+					case "NO":
+//						hql3 = "";
+						break;
+					default:
+//						hql3 = "";
+						System.out.println("something weird");
+					}
+				}
+			}
+		} else {
+			hql1 = "AND g.goodsType='" + category + "' ";
+			if (price.equals("XXX")) {
+				System.out.println("price = XXX");
+			} else {
+				hql2 = "AND gf.goodPrice between 0 AND " + price + " ";
+				if (orderItem.equals("XXX")) {
+					System.out.println("orderItem = XXX");
 				} else {
 					switch (orderItem) {
 					case "price":
@@ -417,6 +526,7 @@ public class GoodController {
 			}
 		}
 		String hql = hql0 + hql1 + hql2 + hql3;
+		System.out.println("要顯示價格喔!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 		System.out.println("hql = " + hql);
 		Query<Integer> resultList0 = (Query<Integer>) entityManager.createQuery(hql);
 		List<Integer> ListObject = resultList0.getResultList();
@@ -434,34 +544,7 @@ public class GoodController {
 		int pageSize = 3;
 
 		List<GoodPriceDTO> pricerange = new ArrayList();
-		/**/
-		// 透過上架日期取得商品
-		// 透過商品編號 取得價格最大最小值
-//		for (GoodsBean2 item : findGoods) {
-//			int goodID = item.getGoodsID();
-//			Query<Object[]> resultList = (Query<Object[]>) entityManager.createQuery(
-//					"select min(gf.goodPrice) AS minprice,max(gf.goodPrice) AS maxprice, g.goodsID AS goodsID from GoodsBean2 g join GoodFormat gf on g.goodsID = gf.good.goodsID where g.goodsID = ?1 group by g.goodsID")
-//					.setParameter(1, goodID);// 在特定賣家下查詢商品，並取得不同編號下的最大和最小價格
-//			List<Object[]> item2 = resultList.getResultList();
-//			for (Object[] item3 : item2) {
-//				GoodPriceDTO result = new GoodPriceDTO();
-//				System.out.println(item.getNumberRatings());
-//				if (item.getNumberRatings() == null) {// 沒人評分
-//					result.setGoodAVG(0);
-//				} else {
-//					int AVG = item.getRating() / item.getNumberRatings();
-//					result.setGoodAVG(AVG);
-//				}
-//				result.setGoodType(item.getGoodsType());
-//				result.setGoodName(item.getGoodsName());
-//				result.setTitleImage(item.getTitleImage());
-//				result.setGoodsID((Integer) item3[2]);
-//				result.setMaxprice((Integer) item3[1]);
-//				result.setMinprice((Integer) item3[0]);
-//				pricerange.add(result);
-//			}
-//		}
-		/**/
+		
 		for (Integer item : listID) { // 先取得編號
 			GoodsBean2 good = gService.getById(item);
 			Query<Object[]> resultList = (Query<Object[]>) entityManager.createQuery(
@@ -495,7 +578,7 @@ public class GoodController {
 		Pageable p1 = PageRequest.of(pageNo - 1, pageSize);
 		int start = (int) p1.getOffset();
 		int end = Math.min((start + p1.getPageSize()), pricerange.size());
-		System.out.println("start = " + start + ",end=" + end);
+		System.err.println("start = " + start + ",end=" + end);
 		List<GoodPriceDTO> pageContent = pricerange.subList(start, end);
 		int pagesnumber;
 		int totalPages;
@@ -507,13 +590,14 @@ public class GoodController {
 			pagesnumber = (pricerange.size() / pageSize);
 			totalPages = pagesnumber + 1;
 		}
-//		HttpSession session = request.getSession();
-//		session.setAttribute("totalPages", totalPages);
-//		session.setAttribute("totalElements", findGoods.size());
-		System.out.println("totalPages = "+totalPages);
-		System.out.println("totalElements = "+pricerange.size());
-		m.addAttribute("totalPages", totalPages);
-		m.addAttribute("totalElements", pricerange.size());
+		HttpSession session = request.getSession();
+		session.setAttribute("totalPages", totalPages);
+		System.err.println(session.getAttribute("totalPages"));
+		session.setAttribute("totalElements", pricerange.size());
+		System.err.println("totalPages = "+totalPages);
+		System.err.println("totalElements = "+pricerange.size());
+//		m.addAttribute("totalPages", totalPages);
+//		m.addAttribute("totalElements", pricerange.size());
 		/**/
 		return pageContent;
 	}

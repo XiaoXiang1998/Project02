@@ -82,6 +82,11 @@ public class MemberController {
 	public String backStage() {
 		return "BackStageLogin";
 	}
+	
+	@GetMapping("/membercenter")
+	public String MemberCenter() {
+		return "/member/MemberCenter";
+	}
 	/*------------------------------------------------基本資料操作-----------------------------------------------------*/
 
 	/* 新增會員資料 */
@@ -277,6 +282,7 @@ public class MemberController {
 			Integer carItemCount = cService.carItemCount(memberInformation);
 			httpSession.setAttribute("carItemCount", carItemCount);
 			// 檢查會員等級
+
 			return "forward:EZBuyIndex";
 		}
 		return null;

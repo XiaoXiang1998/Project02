@@ -40,4 +40,5 @@ public class GoodImageService {
 	public List<GoodImageBean> findImagesByID(Integer goodID) {
 		return goodimageRepos.findImagesByID(goodID);
 	}
+
 }

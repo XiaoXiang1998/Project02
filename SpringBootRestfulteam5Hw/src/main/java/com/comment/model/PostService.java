@@ -138,4 +138,22 @@ public class PostService {
         }
         return ratingCounts;
     }
+    
+    public Page<Post> getPostsByGoodId(Integer goodId, Pageable pageable) {
+        return pRepository.getPostsByGoodId(goodId, pageable);
+    }
+
+    public Page<Post> getPostsByGoodIdAndRate(Integer goodId, Integer rate, Pageable pageable) {
+        return pRepository.getPostsByGoodIdAndRate(goodId, rate, pageable);
+    }
+    
+    // 查询有留言内容的评价
+    public Page<Post> findPostsByGoodIdWithContent(Integer goodId, Pageable pageable) {
+        return pRepository.getPostsByGoodIdWithContent(goodId, pageable);
+    }
+
+    // 查询附带照片的评价
+    public Page<Post> findPostsByGoodIdWithPhotos(Integer goodId, Pageable pageable) {
+        return pRepository.getPostsByGoodIdWithPhotos(goodId, pageable);
+    }
 }

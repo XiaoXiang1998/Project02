@@ -140,20 +140,20 @@ public class PostService {
     }
     
     public Page<Post> getPostsByGoodId(Integer goodId, Pageable pageable) {
-        return pRepository.getPostsByGoodId(goodId, pageable);
+        return pRepository.productPostsByGoodId(goodId, pageable);
     }
 
     public Page<Post> getPostsByGoodIdAndRate(Integer goodId, Integer rate, Pageable pageable) {
-        return pRepository.getPostsByGoodIdAndRate(goodId, rate, pageable);
+        return pRepository.productPostsByGoodIdAndRate(goodId, rate, pageable);
     }
     
     // 查询有留言内容的评价
     public Page<Post> findPostsByGoodIdWithContent(Integer goodId, Pageable pageable) {
-        return pRepository.getPostsByGoodIdWithContent(goodId, pageable);
+        return pRepository.productPostsByGoodIdWithContent(goodId, pageable);
     }
 
     // 查询附带照片的评价
     public Page<Post> findPostsByGoodIdWithPhotos(Integer goodId, Pageable pageable) {
-        return pRepository.getPostsByGoodIdWithPhotos(goodId, pageable);
+        return pRepository.productPostsByGoodIdWithPhotos(goodId, pageable);
     }
 }

@@ -102,17 +102,17 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
                                   @Param("commentTimeEnd") Timestamp commentTimeEnd,
                                   Pageable pageable);
     
-    @Query(value = "SELECT p FROM Post p INNER JOIN p.orders o INNER JOIN o.formatgoodId f INNER JOIN f.good g WHERE g.goodsID = :goodId", nativeQuery = true)
-    Page<Post> getPostsByGoodId(@Param("goodId") Integer goodId, Pageable pageable);
+    @Query(value = "SELECT p FROM Post p INNER JOIN p.orders o INNER JOIN o.formatgoodId f INNER JOIN f.good g WHERE g.goodsID = :goodId")
+    Page<Post> productPostsByGoodId(@Param("goodId") Integer goodId, Pageable pageable);
 
-    @Query(value = "SELECT p FROM Post p INNER JOIN p.orders o INNER JOIN o.formatgoodId f INNER JOIN f.good g WHERE g.goodsID= :goodId AND p.buyerrate = :rate", nativeQuery = true)
-    Page<Post> getPostsByGoodIdAndRate(@Param("goodId") Integer goodId, @Param("rate") Integer rate, Pageable pageable);
+    @Query(value = "SELECT p FROM Post p INNER JOIN p.orders o INNER JOIN o.formatgoodId f INNER JOIN f.good g WHERE g.goodsID= :goodId AND p.buyerrate = :rate")
+    Page<Post> productPostsByGoodIdAndRate(@Param("goodId") Integer goodId, @Param("rate") Integer rate, Pageable pageable);
 
-    @Query(value = "SELECT p FROM Post p INNER JOIN p.orders o INNER JOIN o.formatgoodId f INNER JOIN f.good g WHERE g.goodsID = :goodId AND p.commentcontent IS NOT NULL AND p.content <> ''", nativeQuery = true)
-    Page<Post> getPostsByGoodIdWithContent(@Param("goodId") Integer goodId, Pageable pageable);
+    @Query(value = "SELECT p FROM Post p INNER JOIN p.orders o INNER JOIN o.formatgoodId f INNER JOIN f.good g WHERE g.goodsID = :goodId AND p.commentcontent IS NOT NULL AND p.commentcontent <> ''")
+    Page<Post> productPostsByGoodIdWithContent(@Param("goodId") Integer goodId, Pageable pageable);
 
-    @Query(value = "SELECT p FROM Post p INNER JOIN p.orders o INNER JOIN o.formatgoodId f INNER JOIN f.good g WHERE g.goodsID = :goodId AND p.productphoto IS NOT EMPTY", nativeQuery = true)
-    Page<Post> getPostsByGoodIdWithPhotos(@Param("goodId") Integer goodId, Pageable pageable);
+    @Query(value = "SELECT p FROM Post p INNER JOIN p.orders o INNER JOIN o.formatgoodId f INNER JOIN f.good g WHERE g.goodsID = :goodId AND p.productphoto IS NOT NULL")
+    Page<Post> productPostsByGoodIdWithPhotos(@Param("goodId") Integer goodId, Pageable pageable);
 }
     
     

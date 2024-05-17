@@ -476,8 +476,8 @@ public class PostController {
 		return "comment/repliedComments";
 	}
 
-	@GetMapping("/good/{goodId}")
-	public Page<Post> getPostsByGoodId(@PathVariable Integer goodId,
+	@GetMapping("/goodDetailposts")
+	public String  getPostsByGoodId(@RequestParam("GoodID") Integer goodID,
 	                                   @RequestParam(defaultValue = "0") Integer page,
 	                                   @RequestParam(defaultValue = "2") Integer size,
 	                                   @RequestParam(required = false) Integer rate,
@@ -491,28 +491,28 @@ public class PostController {
 	    List<Long> rateCounts = new ArrayList<>();
 	    if (rate == null) {
 	        for (int i = 5; i >= 1; i--) {
-	            long count = pService.getPostsByGoodIdAndRate(goodId, i, Pageable.unpaged()).getTotalElements();
+	            long count = pService.getPostsByGoodIdAndRate(goodID, i, Pageable.unpaged()).getTotalElements();
 	            rateCounts.add(count);
 	        }
 	    }
 
 	    // 查询有留言内容的数量
-	    long contentCount = content != null && content ? pService.findPostsByGoodIdWithContent(goodId, Pageable.unpaged()).getTotalElements() : 0;
+	    long contentCount = content != null && content ? pService.findPostsByGoodIdWithContent(goodID, Pageable.unpaged()).getTotalElements() : 0;
 
 	    // 查询附上照片的数量
-	    long photosCount = photos != null && photos ? pService.findPostsByGoodIdWithPhotos(goodId, Pageable.unpaged()).getTotalElements() : 0;
+	    long photosCount = photos != null && photos ? pService.findPostsByGoodIdWithPhotos(goodID, Pageable.unpaged()).getTotalElements() : 0;
 
 	    // 查询全部评价的数量
-	    long totalPostsCount = pService.getPostsByGoodId(goodId, Pageable.unpaged()).getTotalElements();
+	    long totalPostsCount = pService.getPostsByGoodId(goodID, Pageable.unpaged()).getTotalElements();
 
 	    if (rate != null) {
-	        resultPage = pService.getPostsByGoodIdAndRate(goodId, rate, pageable);
+	        resultPage = pService.getPostsByGoodIdAndRate(goodID, rate, pageable);
 	    } else if (content != null && content) {
-	        resultPage = pService.findPostsByGoodIdWithContent(goodId, pageable);
+	        resultPage = pService.findPostsByGoodIdWithContent(goodID, pageable);
 	    } else if (photos != null && photos) {
-	        resultPage = pService.findPostsByGoodIdWithPhotos(goodId, pageable);
+	        resultPage = pService.findPostsByGoodIdWithPhotos(goodID, pageable);
 	    } else {
-	        resultPage = pService.getPostsByGoodId(goodId, pageable);
+	        resultPage = pService.getPostsByGoodId(goodID, pageable);
 	    }
 
 	    model.addAttribute("posts", resultPage.getContent()); // 将查询结果存入 Model 对象中
@@ -524,7 +524,7 @@ public class PostController {
 	    model.addAttribute("photosCount", photosCount);
 	    model.addAttribute("totalPostsCount", totalPostsCount);
 
-	    return resultPage;
+		return "good/jsp/goodDetail";
 	}
 
 }

@@ -43,7 +43,6 @@
 						// select TOP 5 GoodType 
 						// from Good g 
 						// group by g.goodType
-
 						type: 'get',
 						url: "indexpopulargoodtype",
 						contentType: 'application/json',
@@ -199,7 +198,7 @@
 					</div>
 					<div class="container px-0">
 						<nav class="navbar navbar-light bg-info navbar-expand-xl">
-							<a href="MemberLogin.controller" class="navbar-brand">
+							<a href="EZBuyIndexWithoutLogin" class="navbar-brand">
 								<h1 class="text-secondary display-6">EZBuy</h1>
 							</a>
 							<button class="navbar-toggler py-2 px-3" type="button" data-bs-toggle="collapse"

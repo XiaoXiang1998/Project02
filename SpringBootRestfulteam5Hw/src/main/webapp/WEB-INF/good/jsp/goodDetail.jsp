@@ -83,12 +83,6 @@
                             <span class="fa fa-bars text-secondary"></span>
                         </button>
                         <div class="collapse navbar-collapse bg-info" id="navbarCollapse">
-                            <!-- <div class="navbar-nav">
-                           <a href="#" class="nav-item nav-link">購物車</a>
-                           <a href="#" class="nav-item nav-link">訂單紀錄</a>
-                           <a href="#" class="nav-item nav-link">官方申訴</a>
-                       </div> -->
-                            <!-- <div class="d-flex flex-row bd-highlight"> -->
                             <div class="d-flex m-3 me-0">
                                 <form class="form-inline d-flex">
                                     <div class="form-group mx-sm-3 mb-2">
@@ -172,10 +166,11 @@
             <div class="container-fluid py-5 mt-5">
                 <div class="container py-5">
                     <div class="row g-4 mt-5">
-                        <div class="col-lg-8 col-xl-9">
+                        <div class="col-lg-12 col-xl-12">
                             <div class="row g-4">
                                 <div class="col-lg-6">
                                     <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+                                        <!-- 圖片輪播功能癱瘓中 -->
                                         <div class="carousel-inner">
                                             <div class="carousel-item active">
                                                 <img class="img-fluid" src="${Good.titleImage}"
@@ -206,27 +201,74 @@
                                             <span class="sr-only">Next</span>
                                         </a>
                                     </div>
+                                    <!-- 商品規格(呈現該商品編號下對應的所有規格) -->
+
+                                </div>
+                                <div class="col-lg-6">
+                                    <h4 class="fw-bold mb-3" id="GoodName">${GoodBasicInfo.goodName}</h4> <!-- 商品名稱 -->
+                                    <div class="d-flex mb-4" id="GoodRate"> <!-- 平均分數 EX(3.5/5) -->
+                                        <c:forEach var="j" begin="1" end="5" step="1" varStatus="loop">
+                                            <c:if test="${GoodBasicInfo.goodAVG>=loop.index}">
+                                                <i class="fa fa-star text-secondary py-1"></i>
+                                            </c:if>
+                                            <c:if test="${loop.index>GoodBasicInfo.goodAVG}">
+                                                <i class="fa fa-star py-1"></i>
+                                            </c:if>
+                                        </c:forEach>
+                                        <p class="mx-3 mb-1" id="GoodSold">已售出: ${GoodBasicInfo.goodsold}</p>
+                                        <!-- 商品售出量 -->
+                                    </div>
+                                    <p class="mb-3" id="GoodType">Category: ${GoodBasicInfo.goodType}</p> <!-- 商品種類 -->
+                                    <h5 class="fw-bold mb-3" id="GoodPriceRange">
+                                        ${GoodBasicInfo.minprice}-${GoodBasicInfo.maxprice}$</h5> <!-- 商品價格(以範圍表示) -->
+                                    <div class="row row-cols-2">
+                                        <c:forEach var="j" begin="0" end="${GoodFormatNumber}" step="1"
+                                            items="${GoodFormat}" varStatus="loop">
+                                            <div class="col">
+                                                <button
+                                                    class="btn btn-outline-primary round-pill CategoryItem w-100 mb-1">
+                                                    <img src="${j.goodImagePath}" alt="${j.goodImagePath}"
+                                                        style="width: 20px;height: 20px;">
+                                                    <span>${j.goodSize}</span>
+                                                    <span hidden class="CategoryPrice">${j.goodPrice}</span>
+                                                    <span hidden class="CategoryNumber">${j.goodsStock}</span>
+                                                </button>
+                                            </div>
+                                        </c:forEach>
+                                    </div>
+                                    <div class="input-group quantity mb-5 d-flex" id="BuyItemNumber" hidden>
+                                        <!--買入數量  -->
+                                        <div class="input-group-btn">
+                                            <button class="btn btn-sm btn-minus rounded-circle bg-light border">
+                                                <i class="fa fa-minus"></i> <!-- 降低數量按鈕 -->
+                                            </button>
+                                        </div>
+                                        <input type="text" class="form-control form-control-sm text-center border-0"
+                                            value="1" id="BuyNumber" style="width: 10px;"> <!-- 當點擊到庫存上限時 會出現紅字 -->
+                                        <p id="errormsg"></p>
+                                        <div class="input-group-btn">
+                                            <button class="btn btn-sm btn-plus rounded-circle bg-light border">
+                                                <i class="fa fa-plus"></i> <!-- 增加數量按鈕 -->
+                                            </button>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <span id="remainingNumber"></span>
+                                            </div>
+                                            <div class="col-6">
+                                                <span id="CategoryPrice"></span>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                                 <!-- 商品圖片(用輪播呈現) -->
                             </div>
                         </div>
                         <div class="col-lg-6">
-                            <h4 class="fw-bold mb-3" id="GoodName">${GoodBasicInfo.goodName}</h4> <!-- 商品名稱 -->
-                            <p class="mb-3" id="GoodType">Category: ${GoodBasicInfo.goodType}</p> <!-- 商品種類 -->
-                            <h5 class="fw-bold mb-3" id="GoodPriceRange">
-                                ${GoodBasicInfo.minprice}-${GoodBasicInfo.maxprice}$</h5> <!-- 商品價格(以範圍表示) -->
-                            <div class="d-flex mb-4" id="GoodRate"> <!-- 平均分數 EX(3.5/5) -->
-                                <c:forEach var="j" begin="1" end="5" step="1" varStatus="loop">
-                                    <c:if test="${GoodBasicInfo.goodAVG>=loop.index}">
-                                        <i class="fa fa-star text-secondary"></i>
-                                    </c:if>
-                                    <c:if test="${loop.index>GoodBasicInfo.goodAVG}">
-                                        <i class="fa fa-star"></i>
-                                    </c:if>
-                                </c:forEach>
-                            </div>
+
+
                             <!-- 商品規格(呈現該商品編號下對應的所有規格) -->
-                            <div class="row">
+                            <!-- <div class="row">
                                 <c:forEach var="j" begin="0" end="${GoodFormatNumber}" step="1" items="${GoodFormat}"
                                     varStatus="loop">
                                     <div class="col-6">
@@ -234,29 +276,14 @@
                                             <img src="${j.goodImagePath}" alt="${j.goodImagePath}"
                                                 style="width: 150px;height: 250px;">
                                             <span>${j.goodSize}</span>
+                                            <span hidden class="CategoryPrice">${j.goodPrice}</span>
                                             <span hidden class="CategoryNumber">${j.goodsStock}</span>
                                         </button>
                                     </div>
                                 </c:forEach>
-                            </div>
+                            </div> -->
                             <!-- 當某一規格被點擊時 會出現剩餘的數量(輪播的部分呈現該張圖片) -->
-                            <div class="input-group quantity mb-5" style="width: 100px;" id="BuyItemNumber" hidden>
-                                <!--買入數量  -->
-                                <div class="input-group-btn">
-                                    <button class="btn btn-sm btn-minus rounded-circle bg-light border">
-                                        <i class="fa fa-minus"></i> <!-- 降低數量按鈕 -->
-                                    </button>
-                                </div>
-                                <input type="text" class="form-control form-control-sm text-center border-0" value="1"
-                                    id="BuyNumber"> <!-- 當點擊到庫存上限時 會出現紅字 -->
-                                <p id="errormsg"></p>
-                                <div class="input-group-btn">
-                                    <button class="btn btn-sm btn-plus rounded-circle bg-light border">
-                                        <i class="fa fa-plus"></i> <!-- 增加數量按鈕 -->
-                                    </button>
-                                </div>
-                                <p id="remainingNumber"></p>
-                            </div>
+
                             <!-- 一個是直接購買(直接進入訂單環節) 另一個是加入購物車(將購買的商品放入購物車內) -->
                             <!-- 在購買之前需要選擇特定規格 -->
                             <form action="" id="orderDetail"> <!-- 進入訂單環節(跳轉頁面) -->
@@ -297,6 +324,7 @@
                                         <div class="row g-4">
                                             <div class="col-6" id="GoodDirectionContent">
                                                 <!-- 裡面放入商品描述 -->
+                                                ${GoodBasicInfo.goodDirection}
                                             </div>
                                         </div>
                                     </div>
@@ -331,35 +359,7 @@
                                 </div>
                             </div>
                         </div>
-                        <form action="#" method="post"> <!-- 評論(會先檢查該用戶所有已完成的訂單(如果有滿足該商品編號即可撰寫評論)) -->
-                            <h4 class="mb-5 fw-bold">Leave a Reply</h4>
-                            <div class="row g-4">
-                                <div class="col-lg-12"> <!-- 評論內容 -->
-                                    <div class="border-bottom rounded my-4">
-                                        <textarea name="" id="" class="form-control border-0" cols="30" rows="8"
-                                            placeholder="Your Review *" spellcheck="false"></textarea>
-                                    </div>
-                                </div>
-                                <div class="col-lg-12"> <!-- 星星數(交給隊員處理) -->
-                                    <div class="d-flex justify-content-between py-3 mb-5">
-                                        <div class="d-flex align-items-center">
-                                            <p class="mb-0 me-3">Please rate:</p>
-                                            <div class="d-flex align-items-center" style="font-size: 12px;">
-                                                <i class="fa fa-star text-muted"></i>
-                                                <i class="fa fa-star"></i>
-                                                <i class="fa fa-star"></i>
-                                                <i class="fa fa-star"></i>
-                                                <i class="fa fa-star"></i>
-                                            </div>
-                                        </div>
-                                        <button>送出評論</button>
-                                        <!-- <a href="#"
-                                                class="btn border border-secondary text-primary rounded-pill px-4 py-3">
-                                                Post Comment</a> 送出評論 -->
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
+
                     </div>
                 </div>
 
@@ -526,7 +526,11 @@
 
                     }
                     let goodstock = $(this).find('span[class="CategoryNumber"]').prop("innerHTML");
-                    $('#BuyItemNumber').find('p[id="remainingNumber"]').prop("innerHTML", "還剩" + goodstock + "個");
+                    let formatprice = $(this).find('span[class="CategoryPrice"]').prop("innerHTML");
+
+                    $('#BuyItemNumber').find('span[id="remainingNumber"]').prop("innerHTML", "還剩" + goodstock + "個");
+                    $('#BuyItemNumber').find('span[id="CategoryPrice"]').prop("innerHTML", formatprice + "$");
+
                 })
                 $('button[class="btn btn-sm btn-plus rounded-circle bg-light border"]').click(function () {
                     let InputNumber = $(this).closest('div').find('input[id="BuyNumber"]').prop("value");
@@ -534,8 +538,8 @@
                     let goodstock = goodstockmsg.substring(2, goodstockmsg.length - 1);
                     if (ItemNumber > Number(goodstock)) {
                         $('#errormsg').prop("innerHTML", "操作不當");//最多只能購買剩餘的數量
+                        $(this).closest('div').find('input[id="BuyNumber"]').prop("value", Number(goodstock));//不讓數字增加
                     }
-                    $(this).closest('div').find('input[id="BuyNumber"]').prop("value", Number(goodstock));//不讓數字增加
                 })
                 $('button[class="btn btn-sm btn-minus rounded-circle bg-light border"]').click(function () {
                     let InputNumber = $(this).closest('div').find('input[id="BuyNumber"]').prop("value");

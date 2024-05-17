@@ -16,8 +16,8 @@
 <%@ include file="Index.jsp" %>
 	<form id="orderForm" method="post" action="order.controller">
     <div class="container">
-        <h3 class="text-center m-3">訂單商品</h3>
-        <div class="border border-secondary p-3">
+        <h3 class="text-center m-3">商品結帳</h3>
+        <div class=" p-3">
     <div class="table-responsive">
         <table class="table table-bordered text-center align-middle">
             <c:forEach items="${cartItems}" var="item">

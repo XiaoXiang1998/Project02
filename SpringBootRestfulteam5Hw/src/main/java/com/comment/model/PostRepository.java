@@ -33,6 +33,14 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
     @Query("SELECT p FROM Post p WHERE p.repliedcommentid = :commentId")
     List<Post> findSellerCommentsForUser(Integer commentId);
     
+    @Query("SELECT p FROM Post p WHERE p.repliedcommentid IN :commentIds")
+    Page<Post> findSellerCommentsForUserWithPagination(@Param("commentIds") List<Integer> commentIds, Pageable pageable);
+
+    @Query("SELECT p FROM Post p WHERE p.repliedcommentid IN :commentIds AND p.sellerrate = :rating")
+    Page<Post> getSellerCommentsByRatingWithPagination(@Param("commentIds") List<Integer> commentIds, @Param("rating") Integer rating, Pageable pageable);
+    
+    @Query("SELECT COUNT(p) FROM Post p WHERE p.repliedcommentid IN :commentIds AND p.sellerrate = :rating")
+    Integer countSellerCommentsByRating(@Param("commentIds") List<Integer> commentIds, @Param("rating") int rating);
     
     @Query("SELECT p FROM Post p " +
             "INNER JOIN p.orders o " +
@@ -94,11 +102,8 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
                                   @Param("commentTimeEnd") Timestamp commentTimeEnd,
                                   Pageable pageable);
     
+   
     
     
-    @Query("SELECT p FROM Post p WHERE p.repliedcommentid IN (SELECT post.commentid FROM Post post WHERE post.member = :user) AND p.sellerrate IS NOT NULL")
-    Page<Post> findSellerCommentsForUserWithPagination(@Param("user") MemberBean user, Pageable pageable);
     
-    @Query("SELECT p FROM Post p WHERE p.repliedcommentid IN (SELECT post.commentid FROM Post post WHERE post.member = :user) AND p.sellerrate = :sellerrate")
-    Page<Post> findCommentsBySellerIdAndSellerrateWithPagination(@Param("user") MemberBean user, @Param("sellerrate") Integer sellerrate, Pageable pageable);
 }

@@ -10,6 +10,7 @@ import com.member.model.MemberBean;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -27,7 +28,7 @@ public class PaymentDetails {
 	@Column(name = "PAYMENT_DETAILSID")
 	private int paymentDetailsId;
 
-	@ManyToOne
+	@ManyToOne(fetch= FetchType.LAZY)
 	@JoinColumn(name = "FK_PAYUSERID")
 	private MemberBean payUserId;
 
@@ -46,7 +47,7 @@ public class PaymentDetails {
 	@Column(name = "TOTALPRICE")
 	private Integer totalPrice;
 
-	@OneToMany(mappedBy = "paymentId", cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+	@OneToMany(fetch= FetchType.LAZY,mappedBy = "paymentId", cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	private List<Orders> orders;
 
 	public PaymentDetails() {

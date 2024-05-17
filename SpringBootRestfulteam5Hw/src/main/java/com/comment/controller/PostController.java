@@ -396,7 +396,7 @@ public class PostController {
 
 		    return "comment/sellerReplay";
 		}
-		
+		/*
 		@GetMapping("/sellerCommentsForUser")
 		public String getSellerCommentsForUser(Model model, HttpSession session) {
 			MemberBean user = (MemberBean) session.getAttribute("member");
@@ -429,8 +429,50 @@ public class PostController {
 		    model.addAttribute("totalCommentsCount", totalCommentsCount);
 
 			return "comment/sellercommentforuser";
+		}*/
+		@GetMapping("/sellerCommentsForUser")
+		public String getSellerCommentsForUser(Model model, HttpSession session,
+		                                       @RequestParam(defaultValue = "0") int page,
+		                                       @RequestParam(defaultValue = "0") int rating) {
+		    // 從會話中獲取用戶信息
+		    MemberBean user = (MemberBean) session.getAttribute("member");
+
+		    // 設置每頁顯示的記錄數
+		    int pageSize = 2;
+
+		    // 定義用戶評論的評論ID列表
+		    List<Post> userComments = user.getPosts();	
+		    List<Integer> commentIds = userComments.stream().map(Post::getCommentid).collect(Collectors.toList());
+		    
+		    // 根據評分獲取相應的評論資料
+		    Page<Post> sellerComments;
+		    
+		    // 获取各个评分级别的评论数量
+		    List<Long> ratingCounts = pService.countSellerCommentsByRatings(commentIds);
+		    long totalElements=0;
+		    if (rating > 0) {
+		        // 如果評分大於 0，則根據評分獲取相應評論
+		        sellerComments = pService.getSellerCommentsByRatingWithPagination(commentIds, rating, PageRequest.of(page, pageSize));
+		    } else {
+		        // 如果評分等於 0，則獲取全部評論
+		        sellerComments = pService.findSellerCommentsForUserWithPagination(commentIds, PageRequest.of(page, pageSize));
+		        totalElements = sellerComments.getTotalElements();
+		    }
+
+		   
+
+		    // 将数据添加到模型中以便在 JSP 中显示
+		    model.addAttribute("comments", sellerComments.getContent());
+		    model.addAttribute("currentPage", sellerComments.getNumber()); // 注意: Spring Data JPA的页码从0开始
+		    model.addAttribute("totalPages", sellerComments.getTotalPages());
+		    model.addAttribute("ratingCounts", ratingCounts);
+		    model.addAttribute("selectedRating", rating); // 用于在页面中高亮显示当前选中的评分级别
+		    model.addAttribute("totalCommentsCount", totalElements);
+
+		    // 其他模型數據的設置，比如評分分布等
+
+		    return "comment/replyforbuyer";
 		}
-		
 		
 	
 	@GetMapping("/repliedComments")

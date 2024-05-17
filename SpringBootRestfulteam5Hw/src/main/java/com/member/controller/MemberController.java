@@ -277,7 +277,7 @@ public class MemberController {
 			Integer carItemCount = cService.carItemCount(memberInformation);
 			httpSession.setAttribute("carItemCount", carItemCount);
 			// 檢查會員等級
-//			return "redirect:EZBuyIndex";
+
 			return "forward:EZBuyIndex";
 		}
 		return null;
@@ -492,5 +492,9 @@ public class MemberController {
 		mService.update(member);
 		return "Login";
 	}
-
+	/*------------------------------------------------測試區-----------------------------------------------------*/
+	@GetMapping("/testinclude")
+	public String test() {
+		return "/member/TEST";
+	}
 }

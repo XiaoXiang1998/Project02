@@ -238,19 +238,7 @@
 										</button>
 										<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
 											<li>
-												<a class="dropdown-item" href="#!">會員中心</a>
-											</li>
-											<li>
-												<a class="dropdown-item" href="#!">訂單查詢</a>
-											</li>
-											<li>
-												<a class="dropdown-item" href="#!">評論紀錄</a>
-											</li>
-											<li>
-												<a class="dropdown-item" href="#!">申訴紀錄</a>
-											</li>
-											<li>
-												<a class="dropdown-item" href="#!">活動紀錄</a>
+												<a class="dropdown-item" href="membercenter">會員中心</a>
 											</li>
 											<li>
 												<hr class="dropdown-divider" />

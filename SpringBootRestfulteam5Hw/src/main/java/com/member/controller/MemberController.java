@@ -82,6 +82,11 @@ public class MemberController {
 	public String backStage() {
 		return "BackStageLogin";
 	}
+	
+	@GetMapping("/membercenter")
+	public String MemberCenter() {
+		return "/member/MemberCenter";
+	}
 	/*------------------------------------------------基本資料操作-----------------------------------------------------*/
 
 	/* 新增會員資料 */

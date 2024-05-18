@@ -14,9 +14,12 @@
 }
 
 .comment {
-    border: 1px solid #ccc;
-    padding: 10px;
-    margin-bottom: 10px;
+    border: none; /* 移除评论框的实线边框 */
+    background-color: #f9f9f9; /* 设置评论框的背景颜色 */
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: 5px; /* 添加评论框的圆角边框 */
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1); /* 添加评论框的阴影效果 */
 }
 
 .comment p {

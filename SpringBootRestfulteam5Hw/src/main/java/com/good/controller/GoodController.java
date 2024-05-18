@@ -392,10 +392,10 @@ public class GoodController {
 	    }
 
 	    // 查询有留言内容的数量
-	    long contentCount = content != null && content ? pService.findPostsByGoodIdWithContent(goodID, Pageable.unpaged()).getTotalElements() : 0;
+	    long contentCount = pService.findPostsByGoodIdWithContent(goodID, Pageable.unpaged()).getTotalElements();
 
 	    // 查询附上照片的数量
-	    long photosCount = photos != null && photos ? pService.findPostsByGoodIdWithPhotos(goodID, Pageable.unpaged()).getTotalElements() : 0;
+	    long photosCount = pService.findPostsByGoodIdWithPhotos(goodID, Pageable.unpaged()).getTotalElements();
 
 	    // 查询全部评价的数量
 	    long totalPostsCount = pService.getPostsByGoodId(goodID, Pageable.unpaged()).getTotalElements();
@@ -403,7 +403,7 @@ public class GoodController {
 	    if (rate != null) {
 	        resultPage = pService.getPostsByGoodIdAndRate(goodID, rate, pageable);
 	    } else if (content != null && content) {
-	        resultPage = pService.f	indPostsByGoodIdWithContent(goodID, pageable);
+	        resultPage = pService.findPostsByGoodIdWithContent(goodID, pageable);
 	    } else if (photos != null && photos) {
 	        resultPage = pService.findPostsByGoodIdWithPhotos(goodID, pageable);
 	    } else {

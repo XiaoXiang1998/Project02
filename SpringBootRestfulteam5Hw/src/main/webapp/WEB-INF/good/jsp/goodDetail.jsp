@@ -533,12 +533,40 @@
 															</div>
 														</div>
 													</div>
+
 													<div class="tab-pane" id="nav-mission" role="tabpanel"
 														aria-labelledby="nav-mission-tab">
-														
+														<div class="nav nav-tabs" id="nav-tab" role="tablist">
+															<button class="nav-link active" id="all-tab"
+																data-bs-toggle="tab" data-bs-target="#all" role="tab"
+																aria-controls="all" aria-selected="true">全部(${txotalPostsCount})</button>
+															<button class="nav-link" id="star5-tab"
+																data-bs-toggle="tab" data-bs-target="#star5" role="tab"
+																aria-controls="star5" aria-selected="false">5顆星(${rateCounts[0]})</button>
+															<button class="nav-link" id="star4-tab"
+																data-bs-toggle="tab" data-bs-target="#star4" role="tab"
+																aria-controls="star4" aria-selected="false">4顆星(${rateCounts[1]})</button>
+															<button class="nav-link" id="star3-tab"
+																data-bs-toggle="tab" data-bs-target="#star3" role="tab"
+																aria-controls="star3" aria-selected="false">3顆星(${rateCounts[2]})</button>
+															<button class="nav-link" id="star2-tab"
+																data-bs-toggle="tab" data-bs-target="#star2" role="tab"
+																aria-controls="star2" aria-selected="false">2顆星(${rateCounts[3]})</button>
+															<button class="nav-link" id="star1-tab"
+																data-bs-toggle="tab" data-bs-target="#star1" role="tab"
+																aria-controls="star1" aria-selected="false">1顆星(${rateCounts[4]})</button>
+															<button class="nav-link" id="photo-tab"
+																data-bs-toggle="tab" data-bs-target="#photo" role="tab"
+																aria-controls="photo" aria-selected="false">附上照片(${photosCount})</button>
+															<!-- 添加缺少的标签 -->
+															<button class="nav-link" id="comment-tab"
+																data-bs-toggle="tab" data-bs-target="#comment"
+																role="tab" aria-controls="comment" aria-selected="false">附上評論(${contentCount})</button>
+														</div>
+
 														<c:if test="${not empty posts}">
 															<c:forEach var="post" items="${posts}">
-																<div class="d-flex mb-4" >
+																<div class="d-flex mb-4" id="comment-container">
 																	<img src="" class="img-fluid rounded-circle p-3"
 																		style="width: 100px; height: 100px;" alt="">
 																	<!-- 評論用戶的大頭貼 -->
@@ -1014,43 +1042,124 @@
 												}
 											})
 						</script>
+	<script>
+    $(document).ready(function() {
+        var goodId = ${Good.goodsID}; // 你的商品ID
+        var page = 0;
+        var currentRate = null; // 当前选定的星级
+        var currentTabId = 'all-tab'; // 当前选定的标签页ID
 
-						<script type="text/javascript">
-						$(document).ready(function () {
-						    loadComments(0);
+        // 定义一个函数用于加载评论
+        function loadComments(goodId, rate, content, photos, page) {
+            $.ajax({
+                type: "GET",
+                url: "/goodDetail.controller",
+                data: {
+                    "GoodID": goodId,
+                    "rate": rate,
+                    "content": content,
+                    "photos": photos,
+                    "page": page // 传递当前页数
+                },
+                success: function(data) {
+                    // 请求成功时，将返回的评论数据加载到页面中
+                    $('#nav-mission').html($(data).find('#nav-mission').html());
 
-						    // 点击分页链接时加载对应页码的评论数据
-						    $(document).on('click', '.pagination-link', function (e) {
-						        e.preventDefault();
-						        var page = $(this).data('page');
-						        loadComments(page);
-						    });
-						});
+                    // 在每次成功载入后重新绑定事件处理程序
+                    bindClickHandlers();
+                    bindPaginationClickHandlers(); // 绑定分页链接点击事件处理程序
+                    // 更新星级评估数量
+                    updateTabCounts(data);
+                },
+                error: function(xhr, status, error) {
+                    // 请求失败时的处理
+                    console.error("Error:", error);
+                }
+            });
+        }
+        
+        // 更新星级评估数量
+        function updateTabCounts(data) {
+            var rateCounts = data.rateCounts; // 确保服务器返回的数据包含rateCounts
+            $('#all-tab').text(`全部(${txotalPostsCount})`);
+            $('#star5-tab').text(`5顆星(${rateCounts[0]})`);
+            $('#star4-tab').text(`4顆星(${rateCounts[1]})`);
+            $('#star3-tab').text(`3顆星(${rateCounts[2]})`);
+            $('#star2-tab').text(`2顆星(${rateCounts[3]})`);
+            $('#star1-tab').text(`1顆星(${rateCounts[4]})`);
+            $('#photo-tab').text(`附上照片(${photosCount})`);
+            $('#comment-tab').text(`附上評論(${contentCount})`);
+        }
 
-						function loadComments(page) {
-						    console.log(page);
-						    $.ajax({
-						        url: '/goodDetail.controller', // 控制器路径
-						        type: 'GET',
-						        data: {
-						            GoodID: ${Good.goodsID},
-						            page: page
-						        },
-						        success: function (data) {
-						            console.log(data);
-						            // 清空评论容器内容
-						            $('#nav-mission').empty();
-						            // 更新评论部分
-						            $('#nav-mission').html($(data).find('#nav-mission').html());
-						            
-						            // 更新分页链接
-						            $('#pagination-links').html($(data).find('#pagination-links').html());
-						        },
-						        error: function () {
-						            console.error('Failed to fetch comments data.');
-						        }
-						    });
-						}	
+        // 点击事件处理程序
+        function handleClick(event) {
+            console.log("handleClick triggered");
+            page = 0;
+            currentRate = null; // 重置当前选定的星级
+            currentTabId = $(this).attr('id'); // 更新当前选定的标签页ID
+            console.log("Clicked tabId:", currentTabId);
+            var rate = null;
+            var content = null;
+            var photos = null;
+
+            // 根据点击的标签来确定参数
+            if (currentTabId === 'star5-tab') {
+                rate = 5;
+            } else if (currentTabId === 'star4-tab') {
+                rate = 4;
+            } else if (currentTabId === 'star3-tab') {
+                rate = 3;
+            } else if (currentTabId === 'star2-tab') {
+                rate = 2;
+            } else if (currentTabId === 'star1-tab') {
+                rate = 1;
+            } else if (currentTabId === 'photo-tab') {
+                photos = true;
+            } else if (currentTabId === 'comment-tab') {
+                content = true;
+            }
+            console.log("Selected rate:", rate);
+            currentRate = rate;
+
+            loadComments(goodId, rate, content, photos, page);
+        }
+
+        // 解绑已有的点击事件处理程序，然后重新绑定到父元素
+        function bindClickHandlers() {
+            console.log("Binding click handlers");
+            $('#nav-tab').off('click').on('click', '.nav-link', handleClick);
+        }
+
+        // 分页链接点击事件处理程序
+        function handlePaginationClick(event) {
+            event.preventDefault(); // 阻止默认行为
+            var newPage = $(this).data('page');
+            console.log("Current active tabId:", currentTabId);
+
+            if (newPage !== page) { // 只有当点击的页码不等于当前页码时才加载新数据
+                page = newPage;
+                if (currentRate !== null) {
+                    loadComments(goodId, currentRate, null, null, page); // 加载对应星级的评论
+                } else if (currentTabId === 'photo-tab') {
+                    loadComments(goodId, null, null, true, page); // 加载带有照片的评论
+                } else if (currentTabId === 'comment-tab') {
+                    loadComments(goodId, null, true, null, page); // 加载带有评论的评论
+                } else {
+                    loadComments(goodId, null, null, null, page); // 加载全部评论
+                }
+            }
+        }
+
+        // 解绑并重新绑定分页链接的点击事件处理程序
+        function bindPaginationClickHandlers() {
+            console.log("Binding pagination click handlers");
+            $('.pagination-link').off('click').on('click', handlePaginationClick);
+        }
+
+        // 初次加载页面时绑定点击事件处理程序
+        bindClickHandlers();
+        bindPaginationClickHandlers();
+    });
 </script>
 </body>
 

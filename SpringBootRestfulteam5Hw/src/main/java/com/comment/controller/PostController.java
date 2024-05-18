@@ -476,18 +476,18 @@ public class PostController {
 		return "comment/repliedComments";
 	}
 
-	@GetMapping("/goodDetailposts")
-	public String  getPostsByGoodId(@RequestParam("GoodID") Integer goodID,
-	                                   @RequestParam(defaultValue = "0") Integer page,
-	                                   @RequestParam(defaultValue = "2") Integer size,
-	                                   @RequestParam(required = false) Integer rate,
-	                                   @RequestParam(required = false) Boolean content,
-	                                   @RequestParam(required = false) Boolean photos,
-	                                   Model model) {
+	@GetMapping("/goodDetailPosts")
+	@ResponseBody
+	public ResponseEntity<Map<String, Object>> getGoodDetailPosts(@RequestParam("GoodID") Integer goodID,
+	                                                              @RequestParam(defaultValue = "0") Integer page,
+	                                                              @RequestParam(defaultValue = "2") Integer size,
+	                                                              @RequestParam(required = false) Integer rate,
+	                                                              @RequestParam(required = false) Boolean content,
+	                                                              @RequestParam(required = false) Boolean photos) {
 	    Pageable pageable = PageRequest.of(page, size);
 	    Page<Post> resultPage;
 
-	    // 查询所有评分对应的数量
+	    // 查詢所有評分對應的數量
 	    List<Long> rateCounts = new ArrayList<>();
 	    if (rate == null) {
 	        for (int i = 5; i >= 1; i--) {
@@ -496,15 +496,16 @@ public class PostController {
 	        }
 	    }
 
-	    // 查询有留言内容的数量
-	    long contentCount = content != null && content ? pService.findPostsByGoodIdWithContent(goodID, Pageable.unpaged()).getTotalElements() : 0;
+	    // 查詢有留言內容的數量
+	    long contentCount = pService.findPostsByGoodIdWithContent(goodID, Pageable.unpaged()).getTotalElements();
 
-	    // 查询附上照片的数量
-	    long photosCount = photos != null && photos ? pService.findPostsByGoodIdWithPhotos(goodID, Pageable.unpaged()).getTotalElements() : 0;
+	    // 查詢附上照片的數量
+	    long photosCount = pService.findPostsByGoodIdWithPhotos(goodID, Pageable.unpaged()).getTotalElements();
 
-	    // 查询全部评价的数量
+	    // 查詢全部評價的數量
 	    long totalPostsCount = pService.getPostsByGoodId(goodID, Pageable.unpaged()).getTotalElements();
 
+	    // 根據條件篩選評論
 	    if (rate != null) {
 	        resultPage = pService.getPostsByGoodIdAndRate(goodID, rate, pageable);
 	    } else if (content != null && content) {
@@ -515,16 +516,16 @@ public class PostController {
 	        resultPage = pService.getPostsByGoodId(goodID, pageable);
 	    }
 
-	    model.addAttribute("posts", resultPage.getContent()); // 将查询结果存入 Model 对象中
-	    model.addAttribute("currentPage", resultPage.getNumber());
-	    model.addAttribute("totalPages", resultPage.getTotalPages());
-
-	    model.addAttribute("rateCounts", rateCounts);
-	    model.addAttribute("contentCount", contentCount);
-	    model.addAttribute("photosCount", photosCount);
-	    model.addAttribute("totalPostsCount", totalPostsCount);
-
-		return "good/jsp/goodDetail";
+	    Map<String, Object> response = new HashMap<>();
+	    response.put("posts", resultPage.getContent());
+	    response.put("totalPages", resultPage.getTotalPages());
+	    response.put("currentPage", resultPage.getNumber());
+	    response.put("rateCounts", rateCounts);
+	    response.put("contentCount", contentCount);
+	    response.put("photosCount", photosCount);
+	    response.put("totalPostsCount", totalPostsCount);
+	    
+	    return ResponseEntity.ok(response);
 	}
 
 }

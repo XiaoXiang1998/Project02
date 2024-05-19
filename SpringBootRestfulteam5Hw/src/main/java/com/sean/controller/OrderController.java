@@ -221,7 +221,7 @@ public class OrderController {
 				order.setShippingMethod(shippingMethods[i]);
 				order.setShippingFee(shippingFees[i]);
 				order.setOriginalPrice(oringinalPrices[i]);
-				order.setTotalPrice(totalPrices[i]+shippingFees[i]);
+				order.setTotalPrice(totalPrices[i]);
 				order.setPaymentId(pBean);
 				if(paymentMethod == 1) {
 					order.setPayStatus((short)1);				

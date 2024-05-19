@@ -22,32 +22,33 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
 	
 	List<Post> findByRepliedcommentid(Integer repliedCommentId);
 	
-	 // 根據商品的賣家ID查詢相關的評論
-    @Query("SELECT p FROM Post p " +
-          "INNER JOIN p.orders o " +
-           "INNER JOIN o.formatgoodId f " +
-          "INNER JOIN f.good g " +
-           "WHERE g.goodsSellerID.sid = :sellerId")
+	@Query("SELECT p FROM Post p " +
+		       "INNER JOIN p.orders o " +
+		       "INNER JOIN o.formatgoodId f " +
+		       "INNER JOIN f.good g " +
+		       "WHERE g.goodsSellerID.sid = :sellerId " +
+		       "ORDER BY p.commenttime DESC")
     Page<Post> findPostsBySellerId(@Param("sellerId") Integer sellerId, Pageable pageable);
     
     @Query("SELECT p FROM Post p WHERE p.repliedcommentid = :commentId")
     List<Post> findSellerCommentsForUser(Integer commentId);
     
-    @Query("SELECT p FROM Post p WHERE p.repliedcommentid IN :commentIds")
+    @Query("SELECT p FROM Post p WHERE p.repliedcommentid IN :commentIds ORDER BY p.replaytime DESC")
     Page<Post> findSellerCommentsForUserWithPagination(@Param("commentIds") List<Integer> commentIds, Pageable pageable);
 
-    @Query("SELECT p FROM Post p WHERE p.repliedcommentid IN :commentIds AND p.sellerrate = :rating")
+    @Query("SELECT p FROM Post p WHERE p.repliedcommentid IN :commentIds AND p.sellerrate = :rating ORDER BY p.replaytime DESC")
     Page<Post> getSellerCommentsByRatingWithPagination(@Param("commentIds") List<Integer> commentIds, @Param("rating") Integer rating, Pageable pageable);
     
     @Query("SELECT COUNT(p) FROM Post p WHERE p.repliedcommentid IN :commentIds AND p.sellerrate = :rating")
     Integer countSellerCommentsByRating(@Param("commentIds") List<Integer> commentIds, @Param("rating") int rating);
     
     @Query("SELECT p FROM Post p " +
-            "INNER JOIN p.orders o " +
-            "INNER JOIN o.formatgoodId f " +
-            "INNER JOIN f.good g " +
-            "WHERE g.goodsSellerID.sid = :sellerId " +
-            "AND p.buyerrate = :rating")
+    	       "INNER JOIN p.orders o " +
+    	       "INNER JOIN o.formatgoodId f " +
+    	       "INNER JOIN f.good g " +
+    	       "WHERE g.goodsSellerID.sid = :sellerId " +
+    	       "AND p.buyerrate = :rating " +
+    	       "ORDER BY p.commenttime DESC")
     Page<Post> findPostsBySellerIdAndRating(@Param("sellerId") Integer sellerId,
                                             @Param("rating") Integer rating,
                                             Pageable pageable);
@@ -85,15 +86,16 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
     List<Post> findBuyerCommentsRepliedBySeller();
     
     @Query("SELECT p FROM Post p " +
-            "INNER JOIN p.orders o " +
-            "INNER JOIN o.formatgoodId f " +
-            "INNER JOIN f.good g " +
-            "WHERE g.goodsSellerID.sid = :sellerId " + 
-            "AND (:productName IS NULL OR p.orders.formatgoodId.good.goodsName LIKE %:productName%) " +
-            "AND (:productSpec IS NULL OR p.orders.formatgoodId.goodSize LIKE %:productSpec%) " +
-            "AND (:userName IS NULL OR p.member.name LIKE %:userName%) " +
-            "AND (:commentTimeStart IS NULL OR p.commenttime >= :commentTimeStart) " +
-            "AND (:commentTimeEnd IS NULL OR p.commenttime < :commentTimeEnd)")
+    	       "INNER JOIN p.orders o " +
+    	       "INNER JOIN o.formatgoodId f " +
+    	       "INNER JOIN f.good g " +
+    	       "WHERE g.goodsSellerID.sid = :sellerId " + 
+    	       "AND (:productName IS NULL OR p.orders.formatgoodId.good.goodsName LIKE %:productName%) " +
+    	       "AND (:productSpec IS NULL OR p.orders.formatgoodId.goodSize LIKE %:productSpec%) " +
+    	       "AND (:userName IS NULL OR p.member.name LIKE %:userName%) " +
+    	       "AND (:commentTimeStart IS NULL OR p.commenttime >= :commentTimeStart) " +
+    	       "AND (:commentTimeEnd IS NULL OR p.commenttime < :commentTimeEnd) " +
+    	       "ORDER BY p.commenttime DESC")
     Page<Post> searchByConditions(@Param("sellerId") Integer sellerId,
                                   @Param("productName") String productName,
                                   @Param("productSpec") String productSpec,
@@ -102,16 +104,16 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
                                   @Param("commentTimeEnd") Timestamp commentTimeEnd,
                                   Pageable pageable);
     
-    @Query(value = "SELECT p FROM Post p INNER JOIN p.orders o INNER JOIN o.formatgoodId f INNER JOIN f.good g WHERE g.goodsID = :goodId")
+    @Query(value = "SELECT p FROM Post p INNER JOIN p.orders o INNER JOIN o.formatgoodId f INNER JOIN f.good g WHERE g.goodsID = :goodId ORDER BY p.commenttime DESC")
     Page<Post> productPostsByGoodId(@Param("goodId") Integer goodId, Pageable pageable);
 
-    @Query(value = "SELECT p FROM Post p INNER JOIN p.orders o INNER JOIN o.formatgoodId f INNER JOIN f.good g WHERE g.goodsID= :goodId AND p.buyerrate = :rate")
+    @Query(value = "SELECT p FROM Post p INNER JOIN p.orders o INNER JOIN o.formatgoodId f INNER JOIN f.good g WHERE g.goodsID= :goodId AND p.buyerrate = :rate ORDER BY p.commenttime DESC")
     Page<Post> productPostsByGoodIdAndRate(@Param("goodId") Integer goodId, @Param("rate") Integer rate, Pageable pageable);
 
-    @Query(value = "SELECT p FROM Post p INNER JOIN p.orders o INNER JOIN o.formatgoodId f INNER JOIN f.good g WHERE g.goodsID = :goodId AND p.commentcontent IS NOT NULL AND p.commentcontent <> ''")
+    @Query(value = "SELECT p FROM Post p INNER JOIN p.orders o INNER JOIN o.formatgoodId f INNER JOIN f.good g WHERE g.goodsID = :goodId AND p.commentcontent IS NOT NULL AND p.commentcontent <> '' ORDER BY p.commenttime DESC")
     Page<Post> productPostsByGoodIdWithContent(@Param("goodId") Integer goodId, Pageable pageable);
 
-    @Query(value = "SELECT p FROM Post p INNER JOIN p.orders o INNER JOIN o.formatgoodId f INNER JOIN f.good g WHERE g.goodsID = :goodId AND p.productphoto IS NOT NULL")
+    @Query(value = "SELECT p FROM Post p INNER JOIN p.orders o INNER JOIN o.formatgoodId f INNER JOIN f.good g WHERE g.goodsID = :goodId AND p.productphoto IS NOT NULL ORDER BY p.commenttime DESC")
     Page<Post> productPostsByGoodIdWithPhotos(@Param("goodId") Integer goodId, Pageable pageable);
 }
     

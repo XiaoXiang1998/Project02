@@ -102,8 +102,6 @@ public class PostController {
 		}
 		Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
 
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-		String formattedDateTime = sdf.format(currentTimestamp);
 		post.setCommentcontent(commentContent);
 		post.setBuyerrate(rate);
 		post.setCommenttime(currentTimestamp);
@@ -259,8 +257,7 @@ public class PostController {
 		reply.setReplayconetnt(replyContent);
 		Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
 
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-		String formattedDateTime = sdf.format(currentTimestamp);
+	
 		reply.setReplaytime(currentTimestamp);
 		reply.setSellerrate(sellerRate);
 		reply.setMember(member);
@@ -445,6 +442,14 @@ public class PostController {
 					PageRequest.of(page, pageSize));
 			totalElements = sellerComments.getTotalElements();
 		}
+		
+		 // 計算平均分數
+	    double averageScore = 0.0;
+	    if (user.getReviewCount() != null && user.getReviewCount() != 0) {
+	        averageScore = (double) user.getCumulativeScore() / user.getReviewCount();
+	    }
+	    // 四捨五入到小數點第一位
+	    averageScore = Math.round(averageScore * 10.0) / 10.0;
 
 		model.addAttribute("comments", sellerComments.getContent());
 		model.addAttribute("currentPage", sellerComments.getNumber()); // 注意: Spring Data JPA的页码从0开始
@@ -452,6 +457,7 @@ public class PostController {
 		model.addAttribute("ratingCounts", ratingCounts);
 		model.addAttribute("selectedRating", rating);
 		model.addAttribute("totalCommentsCount", totalElements);
+	    model.addAttribute("averageScore", averageScore);
 
 		return "comment/replyforbuyer";
 	}

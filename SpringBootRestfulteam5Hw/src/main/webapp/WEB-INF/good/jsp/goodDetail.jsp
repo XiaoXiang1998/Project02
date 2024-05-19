@@ -536,8 +536,11 @@
 
 													<div class="tab-pane" id="nav-mission" role="tabpanel"
 														aria-labelledby="nav-mission-tab">
+														
+
+														<c:if test="${not empty posts}">
 														<div class="nav nav-tabs" id="nav-tab" role="tablist">
-															<button class="nav-link active" id="all-tab"
+															<button class="nav-link " id="all-tab"
 																data-bs-toggle="tab" data-bs-target="#all" role="tab"
 																aria-controls="all" aria-selected="true">全部(${txotalPostsCount})</button>
 															<button class="nav-link" id="star5-tab"
@@ -555,16 +558,14 @@
 															<button class="nav-link" id="star1-tab"
 																data-bs-toggle="tab" data-bs-target="#star1" role="tab"
 																aria-controls="star1" aria-selected="false">1顆星(${rateCounts[4]})</button>
+															<button class="nav-link" id="comment-tab"
+																data-bs-toggle="tab" data-bs-target="#comment"
+																role="tab" aria-controls="comment" aria-selected="false">附上評論(${contentCount})</button>
 															<button class="nav-link" id="photo-tab"
 																data-bs-toggle="tab" data-bs-target="#photo" role="tab"
 																aria-controls="photo" aria-selected="false">附上照片(${photosCount})</button>
 															<!-- 添加缺少的标签 -->
-															<button class="nav-link" id="comment-tab"
-																data-bs-toggle="tab" data-bs-target="#comment"
-																role="tab" aria-controls="comment" aria-selected="false">附上評論(${contentCount})</button>
 														</div>
-
-														<c:if test="${not empty posts}">
 															<c:forEach var="post" items="${posts}">
 																<div class="d-flex mb-4" id="comment-container">
 																	<img src="" class="img-fluid rounded-circle p-3"
@@ -612,13 +613,7 @@
 																	</div>
 																</div>
 															</c:forEach>
-														</c:if>
-														<!-- 如果沒有評論，顯示提示信息 -->
-														<c:if test="${empty posts}">
-															<p>還沒有任何相關的評論喔!</p>
-														</c:if>
-														<div>
-															<h2>Pagination</h2>
+															<div>
 															<div id="pagination-links">
 																<!-- 这里是您现有的分页链接 -->
 																<c:forEach var="i" begin="0" end="${totalPages - 1}">
@@ -626,6 +621,12 @@
 																</c:forEach>
 															</div>
 														</div>
+														</c:if>
+														<!-- 如果沒有評論，顯示提示信息 -->
+														<c:if test="${empty posts}">
+															<p>還沒有任何相關的評論喔!</p>
+														</c:if>
+														
 													</div>
 
 												</div>

@@ -67,7 +67,10 @@
                                         aria-controls="password">修改密碼</a>
                                     <a class="list-group-item list-group-item-action" id="list-orders-list"
                                         data-bs-toggle="list" href="#list-orders" role="tab"
-                                        aria-controls="orders">歷史訂單</a>
+                                        aria-controls="orders">買家訂單</a>
+                                    <a class="list-group-item list-group-item-action" id="list-orders-list"
+                                        data-bs-toggle="list" href="#list-orders" role="tab"
+                                        aria-controls="orders">賣家訂單</a>
                                     <a class="list-group-item list-group-item-action" id="list-coupons-list"
                                         data-bs-toggle="list" href="#list-coupons" role="tab"
                                         aria-controls="coupons">我的優惠券</a>

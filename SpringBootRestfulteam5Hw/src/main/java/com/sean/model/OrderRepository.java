@@ -20,6 +20,8 @@ public interface OrderRepository extends JpaRepository<Orders, Integer> {
 	
 	public List<Orders> findByBuyerIdAndOrderStatus(MemberBean BuyerId,Integer status);
 	
+	public List<Orders> findByBuyerId(MemberBean BuyerId);
+	
 	public List<Orders> findBySellerIdAndOrderStatus(MemberBean SellerId,Integer status);
 	@Modifying
 	@Query(value = "update Orders set orderStatus = 5 where orderId = ?1")

@@ -1,6 +1,6 @@
 
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib uri="jakarta.tags.core" prefix="c"%>
+<%@ taglib uri="jakarta.tags.core" prefix="b"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -13,7 +13,7 @@
 </style>
 </head>
 <body>
-	<%@ include file="Index.jsp"%>
+	<%@ include file="../../FrontDeskNav.jsp"%>
 	<form id="orderForm" method="post" action="order.controller">
 		<div class="container ">
 			<div class="row justify-content-center mt-5">
@@ -31,7 +31,7 @@
 								</tr>
 							</thead>
 						</table>
-						<c:forEach items="${cartItems}" var="item">
+						<b:forEach items="${cartItems}" var="item">
 							<input type="hidden" name="itemId" value="${item.carItemId}">
 							<input type="hidden" name="productId" value="${item.good.formatID}">
 							<input type="hidden" name="sellerId" value="${item.good.good.goodsSellerID.sid}">
@@ -90,7 +90,7 @@
 
 								</div>
 							</div>
-						</c:forEach>
+						</b:forEach>
 						<fieldset>
 							<input type="hidden" name="memberId" value="${memberId}">
 							<div class="form-group row  mt-2" style="padding-left: 20px">
@@ -333,5 +333,6 @@
 	        });
 	    });
 	    </script>
+	    <%@ include file="../../FrontDeskFooter.jsp" %>
 </body>
 </html>

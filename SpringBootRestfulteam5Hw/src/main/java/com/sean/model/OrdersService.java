@@ -40,6 +40,10 @@ public class OrdersService {
 		return oRops.findByOrderIdAndOrderStatusNot(orderId, orderStatus);
 	}
 	
+	public List<Orders> findByBuyerId(MemberBean BuyerId){
+		return oRops.findByBuyerId(BuyerId);
+	}
+	
 	public List<Orders> findByCreatedAtBetweenAndOrderStatusNot(Date startDate, Date endDate, int orderStatus){
 		return oRops.findByCreatedAtBetweenAndOrderStatusNot(startDate, endDate, orderStatus);
 	}

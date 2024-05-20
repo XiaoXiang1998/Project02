@@ -9,14 +9,16 @@
 <meta charset="UTF-8">
 <title>Replied Comments</title>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/css/lightbox.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/js/lightbox.min.js"></script>
+
 <style>
 /* 卖家回复内容 */
 .seller-reply {
     background-color: #f9f9f9;
-    padding: 10px;
+    padding: 20px;
     margin-bottom: 20px;
 }
 
@@ -67,18 +69,24 @@
     margin-right: 5px; /* 調整右側間距 */
     margin-left: 5px; /* 調整左側間距 */
 }
+.name {
+	color: #FB7299;
+	font-size: 16px;
+	font-weight: bold;
+	margin: 0 0 10px 0;
+}
 
 </style>
 </head>
 <body>
 
-		<%@ include file="sellercomment.jsp"%>
+				<%@ include file="../FrontDeskNav.jsp"%>
 	
 <!-- 遍历卖家回复的评论 -->
 <c:forEach items="${repliedComments}" var="seller">
     <div class="seller-reply">
         <!-- 显示卖家回复内容 -->
-        <p>${seller.member.name}</p>
+        <p class="name">${seller.member.name}</p>
         <p>${seller.replayconetnt}</p>
         <p>
             <c:forEach begin="1" end="${seller.sellerrate}">
@@ -95,7 +103,7 @@
             <!-- 如果买家评论与当前卖家回复匹配，则显示买家评论信息 -->
             <c:if test="${buyer.commentid eq seller.repliedcommentid}">
                 <div class="buyer-comment">
-                    <p> ${buyer.member.name}</p>
+                    <p class="name"> ${buyer.member.name}</p>
                     <p> ${buyer.commentcontent}</p>
                    <div class="time-and-details">
                 <c:if test="${not empty buyer.commenttime}">
@@ -132,10 +140,6 @@
     <!-- 显示分页按钮 -->
     <c:if test="${totalPages > 1}">
         <div  class="pagination-container">
-            <c:if test="${currentPage > 0}">
-                <a href="?page=${currentPage - 1}">上一頁</a>
-            </c:if>
-
             <c:forEach begin="0" end="${totalPages - 1}" var="i">
                 <c:choose>
                     <c:when test="${i == currentPage}">
@@ -147,10 +151,10 @@
                 </c:choose>
             </c:forEach>
 
-            <c:if test="${currentPage < totalPages - 1}">
-                <a href="?page=${currentPage + 1}">下一頁</a>
-            </c:if>
+           
         </div>
     </c:if>
+			<%@ include file="../FrontDeskFooter.jsp"%>
+
 </body>
 </html>

@@ -45,8 +45,8 @@ button {
 </style>
 </head>
 <body>
-	<%@ include file="indexcomment.jsp"%>
-
+				<%@ include file="../FrontDeskNav.jsp"%>
+	
 	<form action="post" method="post" class="basic-grey" id="commentForm"
 		enctype="multipart/form-data">
 		<h1 id="alter">
@@ -67,6 +67,7 @@ button {
 			<span>&nbsp;</span> <input type="submit" class="button" value="Send" />
 		</label> <input type="hidden" id="comment" name="commentId" value="${orderId}">
 	</form>
+			<%@ include file="../FrontDeskFooter.jsp"%>
 
 	<script>
 		$(document).ready(function() {

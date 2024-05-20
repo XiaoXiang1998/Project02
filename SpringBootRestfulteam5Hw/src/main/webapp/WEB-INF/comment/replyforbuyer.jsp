@@ -109,7 +109,7 @@
 </head>
 <body>
 
-	<%@ include file="indexcomment.jsp"%>
+		<%@ include file="../FrontDeskNav.jsp"%>
 
 
 	<div class="row">
@@ -189,6 +189,9 @@
 			</c:forEach>
 		</ul>
 	</div>
+	
+			<%@ include file="../FrontDeskFooter.jsp"%>
+	
 	<script>
 		document.addEventListener("DOMContentLoaded", function() {
 			document.querySelectorAll('.name').forEach(function(nameElement) {

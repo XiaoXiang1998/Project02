@@ -59,8 +59,16 @@
 		<div class="row">
 			<div class="col-md-3">
 				<div class="list-group" id="list-tab" role="tablist">
-					<a class="list-group-item list-group-item-action active" id="list-info-list" data-bs-toggle="list" href="#list-info" role="tab" aria-controls="info">個人資訊</a> <a class="list-group-item list-group-item-action" id="list-account-list" data-bs-toggle="list" href="#list-account" role="tab" aria-controls="account">帳號詳情</a> <a class="list-group-item list-group-item-action" id="list-password-list" data-bs-toggle="list" href="#list-password" role="tab" aria-controls="password">修改密碼</a> <a class="list-group-item list-group-item-action" id="Buy-list-orders-list" data-bs-toggle="list" href="#Buy-list-orders" role="tab" aria-controls="orders">買家訂單</a> <a class="list-group-item list-group-item-action"
-						id="Sell-list-orders-list" data-bs-toggle="list" href="#Sell-list-orders" role="tab" aria-controls="orders">賣家訂單</a> <a class="list-group-item list-group-item-action" id="list-coupons-list" data-bs-toggle="list" href="#list-coupons" role="tab" aria-controls="coupons">我的優惠券</a>
+					<a class="list-group-item list-group-item-action active" id="list-info-list" data-bs-toggle="list" href="#list-info" role="tab" aria-controls="info">個人資訊</a> 
+					<a class="list-group-item list-group-item-action" id="list-account-list" data-bs-toggle="list" href="#list-account" role="tab" aria-controls="account">帳號詳情</a> 
+					<a class="list-group-item list-group-item-action" id="list-password-list" data-bs-toggle="list" href="#list-password" role="tab" aria-controls="password">修改密碼</a> 
+					<a class="list-group-item list-group-item-action" id="Buy-list-orders-list" data-bs-toggle="list" href="#Buy-list-orders" role="tab" aria-controls="orders">買家訂單</a> 
+					<a class="list-group-item list-group-item-action"id="Sell-list-orders-list" data-bs-toggle="list" href="#Sell-list-orders" role="tab" aria-controls="orders">賣家訂單</a> 
+						<a class="list-group-item list-group-item-action" id="list-coupons-list" data-bs-toggle="list" href="#list-coupons" role="tab" aria-controls="coupons">我的優惠券</a>
+						<a class="list-group-item list-group-item-action" id="list-comments-list"  href="userComments" role="tab" >查看評論</a>
+						<a class="list-group-item list-group-item-action" id="list-buyerreviews-list"  href="sellerCommentsForUser" role="tab" >買家評價</a>
+						<a class="list-group-item list-group-item-action" id="list-managereplies-list"  href="sellerComments" role="tab" >管理回覆</a>
+						<a class="list-group-item list-group-item-action" id="list-myreply-list"  href="repliedComments" role="tab" >查看回覆</a>
 				</div>
 			</div>
 			<div class="col-md-9">

@@ -231,6 +231,7 @@ input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer
                         
                     });
 		</script>
+		<%@ include file="../../FrontDeskFooter.jsp" %>
 </body>
 
 </html>

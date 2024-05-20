@@ -90,3 +90,13 @@
 		</nav>
 	</div>
 </div>
+<script>
+function readNotification(notificationId) {
+    fetch("readMessage?notificationId=" + notificationId, {
+        method: 'PUT'
+    })
+        .then(response => {
+        	location.reload();
+        })
+}
+</script>

@@ -4,6 +4,8 @@ package com.sean.model;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -18,11 +20,13 @@ public interface OrderRepository extends JpaRepository<Orders, Integer> {
 
 	public List<Orders> findByCreatedAtBetweenAndOrderStatusNot(Date startDate, Date endDate, int orderStatus);
 	
-	public List<Orders> findByBuyerIdAndOrderStatus(MemberBean BuyerId,Integer status);
+	public Page<Orders> findByBuyerIdAndOrderStatusOrderByOrderIdDesc(MemberBean BuyerId,Integer status,Pageable pageable);
 	
-	public List<Orders> findByBuyerId(MemberBean BuyerId);
+	public Page<Orders> findByBuyerIdOrderByOrderIdDesc(MemberBean BuyerId,Pageable pageable);
 	
-	public List<Orders> findBySellerIdAndOrderStatus(MemberBean SellerId,Integer status);
+	public Page<Orders> findBySellerIdAndOrderStatusOrderByOrderIdDesc(MemberBean SellerId,Integer status,Pageable pageable);
+
+	public Page<Orders> findBySellerIdOrderByOrderIdDesc(MemberBean SellerId,Pageable pageable);
 	@Modifying
 	@Query(value = "update Orders set orderStatus = 5 where orderId = ?1")
 	public void cancelOrderById(Integer orderId);

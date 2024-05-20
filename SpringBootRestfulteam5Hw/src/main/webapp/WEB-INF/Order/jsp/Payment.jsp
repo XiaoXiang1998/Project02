@@ -117,7 +117,7 @@
 									<p class="mb-0" style="margin-left: 80%">總付款金額</p>
 									<span class="3" style="margin-left: 35px"></span>
 								</div>
-								<input type="hidden" id="statusValue" name="statusValue" value="0">
+								<input type="hidden" id="statusValue" name="statusValue" value="1">
 								<div class="text-end" style="padding-right: 50px">
 									<button type="submit" class="btn btn-primary m-3 " id="placeOrderButton">下訂單</button>
 								</div>

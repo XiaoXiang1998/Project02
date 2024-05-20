@@ -6,9 +6,10 @@ import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import com.comment.model.Post;
 import com.member.model.MemberBean;
 
 import ecpay.payment.integration.AllInOne;
@@ -29,19 +30,22 @@ public class OrdersService {
 	public List<Orders> findByOrderStatusNot(Integer orderStatus){
 		return oRops.findByOrderStatusNot(orderStatus);
 	}
-	public List<Orders> findByBuyerIdAndOrderStatus(MemberBean BuyerId,Integer status){
-		return oRops.findByBuyerIdAndOrderStatus(BuyerId,status);
+	public Page<Orders> findByBuyerIdAndOrderStatus(MemberBean BuyerId,Integer status,Pageable pageable){
+		return oRops.findByBuyerIdAndOrderStatusOrderByOrderIdDesc(BuyerId,status,pageable);
 	}
-	public List<Orders> findBySellerIdAndOrderStatus(MemberBean SellerId,Integer status){
-		return oRops.findBySellerIdAndOrderStatus(SellerId, status);
+	public Page<Orders> findBySellerIdAndOrderStatus(MemberBean SellerId,Integer status,Pageable pageable){
+		return oRops.findBySellerIdAndOrderStatusOrderByOrderIdDesc(SellerId, status, pageable);
 	}
 	
 	public Orders findByOrderIdAndOrderStatusNot(Integer orderId,Integer orderStatus) {
 		return oRops.findByOrderIdAndOrderStatusNot(orderId, orderStatus);
 	}
 	
-	public List<Orders> findByBuyerId(MemberBean BuyerId){
-		return oRops.findByBuyerId(BuyerId);
+	public Page<Orders> findByBuyerId(MemberBean BuyerId,Pageable pageable){
+		return oRops.findByBuyerIdOrderByOrderIdDesc(BuyerId,pageable);
+	}
+	public Page<Orders> findBySellerId(MemberBean SellerId,Pageable pageable){
+		return oRops.findBySellerIdOrderByOrderIdDesc(SellerId,pageable);
 	}
 	
 	public List<Orders> findByCreatedAtBetweenAndOrderStatusNot(Date startDate, Date endDate, int orderStatus){

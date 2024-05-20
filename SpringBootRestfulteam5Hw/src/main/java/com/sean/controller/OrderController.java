@@ -1,11 +1,15 @@
 package com.sean.controller;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
+
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -13,26 +17,16 @@ import java.util.Map;
 import java.util.Optional;
 import java.net.URLEncoder;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
 import com.good.controller.GoodFormatService;
-import com.good.controller.GoodService;
 import com.good.model.GoodFormat;
-import com.good.model.GoodsBean2;
 import com.member.model.MemberBean;
 import com.member.model.MemberService;
 import com.sean.model.CarItem;
@@ -286,14 +280,156 @@ public class OrderController {
 					return "redirect:/goindex.controller";
 		}
 	
-	@GetMapping("BuyAllOrder")
-	@ResponseBody
-	public String BuyAllOrder(Model m) {
+	@GetMapping("BuyAllOrderall")
+	public String BuyAllOrder(@RequestParam(defaultValue = "0") int page,Model m) {
 		MemberBean member =(MemberBean)session.getAttribute("member");
-		List<Orders> BuyAllorders = oService.findByBuyerId(member);
-		m.addAttribute(BuyAllorders);
-		return "fragments/allOrdersFragment";
+		Pageable pageable = PageRequest.of(page, 5);
+		Page<Orders> BuyAllorders = oService.findByBuyerId(member,pageable);
+		m.addAttribute("BuyAllorders",BuyAllorders);
+		m.addAttribute("currentPage",page);
+		m.addAttribute("totalPages",BuyAllorders.getTotalPages());
+		m.addAttribute("button","all");
+		return "Order/jsp/BuyAllOrder";
+		
 	}
+	@GetMapping("BuyAllOrder1")
+	public String BuyAllOrder1(@RequestParam(defaultValue = "0") int page,Model m) {
+		MemberBean member =(MemberBean)session.getAttribute("member");
+		Pageable pageable = PageRequest.of(page, 5);
+		Page<Orders> BuyAllorders = oService.findByBuyerIdAndOrderStatus(member,1,pageable);
+		m.addAttribute("BuyAllorders",BuyAllorders);
+		m.addAttribute("currentPage",page);
+		m.addAttribute("totalPages",BuyAllorders.getTotalPages());
+		m.addAttribute("button",1);
+		return "Order/jsp/BuyAllOrder";
+		
+	}
+	@GetMapping("BuyAllOrder2")
+	public String BuyAllOrder2(@RequestParam(defaultValue = "0") int page,Model m) {
+		MemberBean member =(MemberBean)session.getAttribute("member");
+		Pageable pageable = PageRequest.of(page, 5);
+		Page<Orders> BuyAllorders = oService.findByBuyerIdAndOrderStatus(member,2,pageable);
+		m.addAttribute("BuyAllorders",BuyAllorders);
+		m.addAttribute("currentPage",page);
+		m.addAttribute("totalPages",BuyAllorders.getTotalPages());
+		m.addAttribute("button",2);
+		return "Order/jsp/BuyAllOrder";
+		
+	}
+	@GetMapping("BuyAllOrder3")
+	public String BuyAllOrder3(@RequestParam(defaultValue = "0") int page,Model m) {
+		MemberBean member =(MemberBean)session.getAttribute("member");
+		Pageable pageable = PageRequest.of(page, 5);
+		System.out.println(page);
+		System.out.println(pageable);
+		Page<Orders> BuyAllorders = oService.findByBuyerIdAndOrderStatus(member,3,pageable);
+		m.addAttribute("BuyAllorders",BuyAllorders);
+		m.addAttribute("currentPage",page);
+		m.addAttribute("totalPages",BuyAllorders.getTotalPages());
+		m.addAttribute("button",3);
+		return "Order/jsp/BuyAllOrder";
+		
+	}
+	@GetMapping("BuyAllOrder4")
+	public String BuyAllOrder4(@RequestParam(defaultValue = "0") int page,Model m) {
+		MemberBean member =(MemberBean)session.getAttribute("member");
+		Pageable pageable = PageRequest.of(page, 5);
+		Page<Orders> BuyAllorders = oService.findByBuyerIdAndOrderStatus(member,4,pageable);
+		m.addAttribute("BuyAllorders",BuyAllorders);
+		m.addAttribute("currentPage",page);
+		m.addAttribute("totalPages",BuyAllorders.getTotalPages());
+		m.addAttribute("button",4);
+		return "Order/jsp/BuyAllOrder";
+		
+	}
+	@GetMapping("BuyAllOrder5")
+	public String BuyAllOrder5(@RequestParam(defaultValue = "0") int page,Model m) {
+		MemberBean member =(MemberBean)session.getAttribute("member");
+		Pageable pageable = PageRequest.of(page, 5);
+		Page<Orders> BuyAllorders = oService.findByBuyerIdAndOrderStatus(member,5,pageable);
+		m.addAttribute("BuyAllorders",BuyAllorders);
+		m.addAttribute("currentPage",page);
+		m.addAttribute("totalPages",BuyAllorders.getTotalPages());
+		m.addAttribute("button",5);
+		
+		return "Order/jsp/BuyAllOrder";
+		
+	}
+	
+	@GetMapping("SellAllOrderall")
+	public String SellAllOrderall(@RequestParam(defaultValue = "0") int page,Model m) {
+		MemberBean member =(MemberBean)session.getAttribute("member");
+		Pageable pageable = PageRequest.of(page, 5);
+		Page<Orders> SellAllorders = oService.findBySellerId(member,pageable);
+		m.addAttribute("SellAllorders",SellAllorders);
+		m.addAttribute("currentPage",page);
+		m.addAttribute("totalPages",SellAllorders.getTotalPages());
+		m.addAttribute("button","all");
+		
+		return "Order/jsp/SellAllOrder";
+		
+	}
+	@GetMapping("SellAllOrder1")
+	public String SellAllOrder1(@RequestParam(defaultValue = "0") int page,Model m) {
+		MemberBean member =(MemberBean)session.getAttribute("member");
+		Pageable pageable = PageRequest.of(page, 5);
+		Page<Orders> SellAllorders = oService.findBySellerIdAndOrderStatus(member,1,pageable);
+		m.addAttribute("SellAllorders",SellAllorders);
+		m.addAttribute("currentPage",page);
+		m.addAttribute("totalPages",SellAllorders.getTotalPages());
+		m.addAttribute("button",1);
+		
+		return "Order/jsp/SellAllOrder";
+	}
+	@GetMapping("SellAllOrder2")
+	public String SellAllOrder2(@RequestParam(defaultValue = "0") int page,Model m) {
+		MemberBean member =(MemberBean)session.getAttribute("member");
+		Pageable pageable = PageRequest.of(page, 5);
+		Page<Orders> SellAllorders = oService.findBySellerIdAndOrderStatus(member,2,pageable);
+		m.addAttribute("SellAllorders",SellAllorders);
+		m.addAttribute("currentPage",page);
+		m.addAttribute("totalPages",SellAllorders.getTotalPages());
+		m.addAttribute("button",2);
+		
+		return "Order/jsp/SellAllOrder";
+	}
+	@GetMapping("SellAllOrder3")
+	public String SellAllOrder3(@RequestParam(defaultValue = "0") int page,Model m) {
+		MemberBean member =(MemberBean)session.getAttribute("member");
+		Pageable pageable = PageRequest.of(page, 5);
+		Page<Orders> SellAllorders = oService.findBySellerIdAndOrderStatus(member,3,pageable);
+		m.addAttribute("SellAllorders",SellAllorders);
+		m.addAttribute("currentPage",page);
+		m.addAttribute("totalPages",SellAllorders.getTotalPages());
+		m.addAttribute("button",3);
+		
+		return "Order/jsp/SellAllOrder";
+	}
+	@GetMapping("SellAllOrder4")
+	public String SellAllOrder4(@RequestParam(defaultValue = "0") int page,Model m) {
+		MemberBean member =(MemberBean)session.getAttribute("member");
+		Pageable pageable = PageRequest.of(page, 5);
+		Page<Orders> SellAllorders = oService.findBySellerIdAndOrderStatus(member,4,pageable);
+		m.addAttribute("SellAllorders",SellAllorders);
+		m.addAttribute("currentPage",page);
+		m.addAttribute("totalPages",SellAllorders.getTotalPages());
+		m.addAttribute("button",4);
+		
+		return "Order/jsp/SellAllOrder";
+	}
+	@GetMapping("SellAllOrder5")
+	public String SellAllOrder5(@RequestParam(defaultValue = "0") int page,Model m) {
+		MemberBean member =(MemberBean)session.getAttribute("member");
+		Pageable pageable = PageRequest.of(page, 5);
+		Page<Orders> SellAllorders = oService.findBySellerIdAndOrderStatus(member,5,pageable);
+		m.addAttribute("SellAllorders",SellAllorders);
+		m.addAttribute("currentPage",page);
+		m.addAttribute("totalPages",SellAllorders.getTotalPages());
+		m.addAttribute("button",5);
+		
+		return "Order/jsp/SellAllOrder";
+	}
+	
 	
 	@GetMapping("queryOrder.controller")
 	public String QueryOrder(Model m ) {

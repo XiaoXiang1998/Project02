@@ -59,8 +59,12 @@
 		<div class="row">
 			<div class="col-md-3">
 				<div class="list-group" id="list-tab" role="tablist">
-					<a class="list-group-item list-group-item-action active" id="list-info-list" data-bs-toggle="list" href="#list-info" role="tab" aria-controls="info">個人資訊</a> <a class="list-group-item list-group-item-action" id="list-account-list" data-bs-toggle="list" href="#list-account" role="tab" aria-controls="account">帳號詳情</a> <a class="list-group-item list-group-item-action" id="list-password-list" data-bs-toggle="list" href="#list-password" role="tab" aria-controls="password">修改密碼</a> <a class="list-group-item list-group-item-action" id="Buy-list-orders-list" data-bs-toggle="list" href="#Buy-list-orders" role="tab" aria-controls="orders">買家訂單</a> <a class="list-group-item list-group-item-action"
-						id="Sell-list-orders-list" data-bs-toggle="list" href="#Sell-list-orders" role="tab" aria-controls="orders">賣家訂單</a> <a class="list-group-item list-group-item-action" id="list-coupons-list" data-bs-toggle="list" href="#list-coupons" role="tab" aria-controls="coupons">我的優惠券</a>
+					<a class="list-group-item list-group-item-action active" id="list-info-list" data-bs-toggle="list" href="#list-info" role="tab" aria-controls="info">個人資訊</a>
+					<a class="list-group-item list-group-item-action" id="list-account-list" data-bs-toggle="list" href="#list-account" role="tab" aria-controls="account">帳號詳情</a>
+					<a class="list-group-item list-group-item-action" id="list-password-list" data-bs-toggle="list" href="#list-password" role="tab" aria-controls="password">修改密碼</a>
+					<a class="list-group-item list-group-item-action" id="Buy-list-orders-list" data-bs-toggle="list" href="#Buy-list-orders" role="tab" aria-controls="orders">買家訂單</a>
+					<a class="list-group-item list-group-item-action" id="Sell-list-orders-list" data-bs-toggle="list" href="#Sell-list-orders" role="tab" aria-controls="orders">賣家訂單</a>
+					<a class="list-group-item list-group-item-action" id="list-coupons-list" data-bs-toggle="list" href="#list-coupons" role="tab" aria-controls="coupons">我的優惠券</a>
 				</div>
 			</div>
 			<div class="col-md-9">
@@ -75,26 +79,32 @@
 						</div>
 						<form action="#" class="mt-3" id="editForm">
 							<div class="form-floating mb-3">
-								<input type="text" class="form-control" id="floatingUsername" placeholder="帳號名稱" name="account" readonly> <label for="floatingUsername">帳號名稱</label>
+								<input type="text" class="form-control" id="floatingUsername" placeholder="帳號名稱" name="account" readonly>
+								<label for="floatingUsername">帳號名稱</label>
 							</div>
 							<div class="form-floating mb-3">
-								<input type="email" class="form-control" id="floatingEmail" placeholder="電子信箱" name="email" readonly> <label for="floatingEmail">電子信箱</label>
+								<input type="email" class="form-control" id="floatingEmail" placeholder="電子信箱" name="email" readonly>
+								<label for="floatingEmail">電子信箱</label>
 							</div>
 							<div class="form-floating mb-3">
-								<input type="text" class="form-control" id="floatingPhone" placeholder="手機號碼" name="phone" readonly> <label for="floatingPhone">手機號碼</label>
+								<input type="text" class="form-control" id="floatingPhone" placeholder="手機號碼" name="phone" readonly>
+								<label for="floatingPhone">手機號碼</label>
 							</div>
 							<div class="form-floating mb-3">
-								<input type="text" class="form-control" id="floatingName" placeholder="會員姓名" name="name" readonly> <label for="floatingName">會員姓名</label>
+								<input type="text" class="form-control" id="floatingName" placeholder="會員姓名" name="name" readonly>
+								<label for="floatingName">會員姓名</label>
 							</div>
 							<div class="form-floating mb-3">
 								<select class="form-select" id="floatingGender" aria-label="會員性別" name="gender" disabled>
 									<option selected>選擇性別</option>
 									<option value="male">男</option>
 									<option value="female">女</option>
-								</select> <label for="floatingGender">會員性別</label>
+								</select>
+								<label for="floatingGender">會員性別</label>
 							</div>
 							<div class="form-floating mb-3">
-								<input type="text" class="form-control" id="floatingAddress" placeholder="會員住址" name="address" readonly> <label for="floatingAddress">會員住址</label>
+								<input type="text" class="form-control" id="floatingAddress" placeholder="會員住址" name="address" readonly>
+								<label for="floatingAddress">會員住址</label>
 							</div>
 							<div class="d-flex justify-content-center">
 								<button type="button" class="btn btn-primary" id="editButton">修改會員資料</button>
@@ -110,22 +120,28 @@
 					<div class="tab-pane fade bordered-pane" id="list-account" role="tabpanel" aria-labelledby="list-account-list">
 						<h3>帳號詳情</h3>
 						<div class="form-floating mb-3 mt-5">
-							<input type="text" class="form-control" id="isSeller" placeholder="是否具有賣家身分" readonly> <label for="isSeller">是否具有賣家身分</label>
+							<input type="text" class="form-control" id="isSeller" placeholder="是否具有賣家身分" readonly>
+							<label for="isSeller">是否具有賣家身分</label>
 						</div>
 						<div class="form-floating mb-3 mt-3">
-							<input type="text" class="form-control" id="reviewCount" placeholder="被評論總數" readonly> <label for="reviewCount">被評論總數</label>
+							<input type="text" class="form-control" id="reviewCount" placeholder="被評論總數" readonly>
+							<label for="reviewCount">被評論總數</label>
 						</div>
 						<div class="form-floating mb-3 mt-3">
-							<input type="text" class="form-control" id="cumulativeScore" placeholder="當前平均評分數" readonly> <label for="cumulativeScore">當前平均評分數</label>
+							<input type="text" class="form-control" id="cumulativeScore" placeholder="當前平均評分數" readonly>
+							<label for="cumulativeScore">當前平均評分數</label>
 						</div>
 						<div class="form-floating mb-3 mt-3">
-							<input type="text" class="form-control" id="totalSalesAmount" placeholder="當前累計消費金額" readonly> <label for="totalSalesAmount">當前累計消費金額</label>
+							<input type="text" class="form-control" id="totalSalesAmount" placeholder="當前累計消費金額" readonly>
+							<label for="totalSalesAmount">當前累計消費金額</label>
 						</div>
 						<div class="form-floating mb-3 mt-3">
-							<input type="text" class="form-control" id="third_party_provider" placeholder="登入方式" readonly> <label for="third_party_provider">登入方式</label>
+							<input type="text" class="form-control" id="third_party_provider" placeholder="登入方式" readonly>
+							<label for="third_party_provider">登入方式</label>
 						</div>
 						<div class="form-floating mb-3 mt-3">
-							<input type="text" class="form-control" id="registrationTime" placeholder="註冊時間" readonly> <label for="registrationTime">註冊時間</label>
+							<input type="text" class="form-control" id="registrationTime" placeholder="註冊時間" readonly>
+							<label for="registrationTime">註冊時間</label>
 						</div>
 					</div>
 					<!-- 修改密碼 -->
@@ -133,10 +149,12 @@
 						<h3>修改密碼</h3>
 						<form action="" method="post" onsubmit="return validateForm()">
 							<div class="form-floating mb-3 mt-5">
-								<input type="password" class="form-control" id="floatingPassword" placeholder="請輸入密碼"> <label for="floatingPassword">請輸入密碼</label>
+								<input type="password" class="form-control" id="floatingPassword" placeholder="請輸入密碼">
+								<label for="floatingPassword">請輸入密碼</label>
 							</div>
 							<div class="form-floating mb-3 mt-3">
-								<input type="password" class="form-control" id="floatingCheckPassword" placeholder="請再確認密碼"> <label for="floatingCheckPassword">請再確認密碼</label>
+								<input type="password" class="form-control" id="floatingCheckPassword" placeholder="請再確認密碼">
+								<label for="floatingCheckPassword">請再確認密碼</label>
 							</div>
 							<div id="error-message" class="error-message"></div>
 							<div class="d-flex justify-content-center">
@@ -158,14 +176,12 @@
 							</div>
 						</nav>
 						<div class="tab-content" id="nav-tabContent">
-							<div class="tab-pane fade show active" id="nav-all" role="tabpanel" aria-labelledby="nav-all-tab">
-							<div id="allOrdersContainer"></div>
-							</div>
-							<div class="tab-pane fade" id="nav-1" role="tabpanel" aria-labelledby="nav-1-tab">1</div>
-							<div class="tab-pane fade" id="nav-2" role="tabpanel" aria-labelledby="nav-2-tab">2</div>
-							<div class="tab-pane fade" id="nav-3" role="tabpanel" aria-labelledby="nav-3-tab">3</div>
-							<div class="tab-pane fade" id="nav-4" role="tabpanel" aria-labelledby="nav-4-tab">4</div>
-							<div class="tab-pane fade" id="nav-5" role="tabpanel" aria-labelledby="nav-5-tab">5</div>
+							<div class="tab-pane fade show active" id="nav-all" role="tabpanel" aria-labelledby="nav-all-tab"></div>
+							<div class="tab-pane fade" id="nav-1" role="tabpanel" aria-labelledby="nav-1-tab"></div>
+							<div class="tab-pane fade" id="nav-2" role="tabpanel" aria-labelledby="nav-2-tab"></div>
+							<div class="tab-pane fade" id="nav-3" role="tabpanel" aria-labelledby="nav-3-tab"></div>
+							<div class="tab-pane fade" id="nav-4" role="tabpanel" aria-labelledby="nav-4-tab"></div>
+							<div class="tab-pane fade" id="nav-5" role="tabpanel" aria-labelledby="nav-5-tab"></div>
 						</div>
 					</div>
 					<!-- 賣家訂單 -->
@@ -203,16 +219,134 @@
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
 	<script>
 	$(document).ready(function() {
-	    
-	    $.ajax({
-	        url: "/BuyAllOrder", 
-	        success: function(data) {
-	            
-	            $("#allOrdersContainer").html(data);
-	        }
+		$("#Buy-list-orders-list").click(function() {
+	        $.ajax({
+	            type: "GET",
+	            url: "/BuyAllOrderall", 
+	            success: function(data) {
+	                $("#nav-all").html(data);
+	            },
+	            error: function(xhr, status, error) {                
+	                console.error(6);
+	            }
+	        });
+	        $.ajax({
+	            type: "GET",
+	            url: "/BuyAllOrder1", 
+	            success: function(data) {
+	                $("#nav-1").html(data);
+	            },
+	            error: function(xhr, status, error) {                
+	                console.error(6);
+	            }
+	        });
+	        $.ajax({
+	            type: "GET",
+	            url: "/BuyAllOrder2", 
+	            success: function(data) {
+	                $("#nav-2").html(data);
+	            },
+	            error: function(xhr, status, error) {                
+	                console.error(6);
+	            }
+	        });
+	        $.ajax({
+	            type: "GET",
+	            url: "/BuyAllOrder3", 
+	            success: function(data) {
+	                $("#nav-3").html(data);
+	            },
+	            error: function(xhr, status, error) {                
+	                console.error(6);
+	            }
+	        });
+	        $.ajax({
+	            type: "GET",
+	            url: "/BuyAllOrder4", 
+	            success: function(data) {
+	                $("#nav-4").html(data);
+	            },
+	            error: function(xhr, status, error) {                
+	                console.error(6);
+	            }
+	        });
+	        $.ajax({
+	            type: "GET",
+	            url: "/BuyAllOrder5", 
+	            success: function(data) {
+	                $("#nav-5").html(data);
+	            },
+	            error: function(xhr, status, error) {                
+	                console.error(6);
+	            }
+	        });
 	    });
-                        var userData = {};
-
+		
+		$("#Sell-list-orders-list").click(function() {
+	        $.ajax({
+	            type: "GET",
+	            url: "/SellAllOrderall", 
+	            success: function(data) {
+	                $("#nav-all2").html(data);
+	            },
+	            error: function(xhr, status, error) {                
+	                console.error(6);
+	            }
+	        });
+	        $.ajax({
+	            type: "GET",
+	            url: "/SellAllOrder1", 
+	            success: function(data) {
+	                $("#nav-12").html(data);
+	            },
+	            error: function(xhr, status, error) {                
+	                console.error(6);
+	            }
+	        });
+	        $.ajax({
+	            type: "GET",
+	            url: "/SellAllOrder2", 
+	            success: function(data) {
+	                $("#nav-22").html(data);
+	            },
+	            error: function(xhr, status, error) {                
+	                console.error(6);
+	            }
+	        });
+	        $.ajax({
+	            type: "GET",
+	            url: "/SellAllOrder3", 
+	            success: function(data) {
+	                $("#nav-32").html(data);
+	            },
+	            error: function(xhr, status, error) {                
+	                console.error(6);
+	            }
+	        });
+	        $.ajax({
+	            type: "GET",
+	            url: "/SellAllOrder4", 
+	            success: function(data) {
+	                $("#nav-42").html(data);
+	            },
+	            error: function(xhr, status, error) {                
+	                console.error(6);
+	            }
+	        });
+	        $.ajax({
+	            type: "GET",
+	            url: "/SellAllOrder5", 
+	            success: function(data) {
+	                $("#nav-52").html(data);
+	            },
+	            error: function(xhr, status, error) {                
+	                console.error(6);
+	            }
+	        });
+	    });
+		
+	              var userData = {};
+				
                         $('#editButton').click(function () {
                             userData.username = $('#floatingUsername').val();
                             userData.email = $('#floatingEmail').val();
@@ -343,6 +477,7 @@
                                 }
                             });
                         });
+	});
                     </script>
 	<%@ include file="../FrontDeskFooter.jsp"%>
 </body>

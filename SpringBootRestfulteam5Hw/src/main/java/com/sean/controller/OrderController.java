@@ -286,6 +286,15 @@ public class OrderController {
 					return "redirect:/goindex.controller";
 		}
 	
+	@GetMapping("BuyAllOrder")
+	@ResponseBody
+	public String BuyAllOrder(Model m) {
+		MemberBean member =(MemberBean)session.getAttribute("member");
+		List<Orders> BuyAllorders = oService.findByBuyerId(member);
+		m.addAttribute(BuyAllorders);
+		return "fragments/allOrdersFragment";
+	}
+	
 	@GetMapping("queryOrder.controller")
 	public String QueryOrder(Model m ) {
 

@@ -209,7 +209,6 @@
 					<div class="mb-3">
 						<label for="editOrderStatus" class="form-label">訂單狀態:</label>
 						<select id="editOrderStatus" name="orderstatus" class="form-select">
-							<option value="0">已成立</option>
 							<option value="1">待出貨</option>
 							<option value="2">待收貨</option>
 							<option value="3">待評論</option>

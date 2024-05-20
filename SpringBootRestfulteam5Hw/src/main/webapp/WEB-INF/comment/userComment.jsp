@@ -15,6 +15,10 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/css/lightbox.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/js/lightbox.min.js"></script>
+
+
+
+
 <style>
 body {
 	font-family: Arial, sans-serif;
@@ -24,9 +28,8 @@ body {
 }
 
 .container {
-    position: relative; /* 让容器相对定位 */
 
-	max-width: 800px;
+	max-width: 500px;
 	margin: 0 auto;
 	padding: 20px;
 }
@@ -170,73 +173,41 @@ body {
     margin: 0 5px; /* 調整分頁連結之間的間距 */
 }
 
-.pagination-container {
+.custom-pagination-container {
+    margin-top: 20px; /* 调整分页组件与数据之间的间距 */
     display: flex;
-        justify-content: center;
-    
     justify-content: center;
-    width: 100%;
 }
 
-/* Ensure pagination list is centered */
-.tab .pagination {
-    margin-top: 20px;
-    padding-left: 0;
+.custom-pagination {
     list-style: none;
-    text-align: center;
-    display: inline-block; /* Change display to inline-block to center it */
+    padding: 0;
+    display: flex;
 }
 
-/* Style the pagination links */
-.tab .pagination .page-link {
-    border: 1px solid rgba(0, 0, 0, 0.2);
-    border-radius: 5px;
-    background-color: transparent;
-    outline: none;
-    cursor: pointer;
-    padding: 10px 15px;
-    transition: background-color 0.3s;
-    margin: 0 5px;
-    position: relative;
-    text-align: center;
-    color: #007bff;
+.custom-page-item {
+    margin-right: 10px; /* 调整分页链接之间的间距 */
+}
+
+.custom-page-link {
+    padding: 5px 10px;
+    background-color: #eee;
+    border: 1px solid #ccc;
     text-decoration: none;
+    color: #333;
 }
 
-.tab .pagination .page-link .badge {
-    position: absolute;
-    top: -10px;
-    right: -10px;
-    background-color: #ff0000;
-    color: #ffffff;
-    border-radius: 50%;
-    padding: 5px;
-    font-size: 12px;
-    display: inline-block;
-    opacity: 1;
-    transition: opacity 0.3s;
+.custom-page-link:hover {
+    background-color: #ddd;
 }
 
-/* Hover effect for pagination links */
-.tab .pagination .page-link:hover {
-    background-color: rgba(0, 0, 0, 0.1);
-}
-
-/* Active page item styling */
-.tab .pagination .page-item.active .page-link {
-    background-color: rgba(0, 0, 0, 0.2);
+.custom-page-link.active {
+    background-color: #007bff;
     color: #fff;
 }
-
-/* Disabled page item styling */
-.tab .pagination .page-item.disabled .page-link {
-    color: #6c757d;
-    background-color: #fff;
-    border-color: #6c757d;
-    pointer-events: none;
-    cursor: default;
+.page-separator {
+    margin: 0 5px;
 }
-
 .time-and-details {
         flex-grow: 1; /* 彈性增長，以填滿可用空間 */
         display: flex;
@@ -265,9 +236,11 @@ body {
 </style>
 </head>
 <body>
-	<%@ include file="indexcomment.jsp" %>
-
-	<div class="container">
+		<%@ include file="../FrontDeskNav.jsp"%>
+	
+	<div class="container">	
+	    <c:if test="${not empty comments}">
+	
     <c:forEach items="${comments}" var="comment">
         <div class="item" data-comment-id="${comment.commentid}">
             <i class="avatar"></i>
@@ -328,32 +301,30 @@ body {
             </div>
         </div>
     </c:forEach>
+    </c:if>
 </div>
 
 <c:if test="${totalPages > 1}">
-    <div class="pagination-container">
-        <ul class="pagination">
+    <div class="custom-pagination-container">
+        <ul class="custom-pagination">
             <c:forEach begin="0" end="${totalPages - 1}" var="pageNumber">
                 <c:url value="?page=${pageNumber}" var="pageUrl"/>
-                <li class="page-item">
+                <li class="custom-page-item">
                     <c:if test="${pageNumber == currentPage}">
-                     <li class="page-item active">
-                        <strong class="page-link">${pageNumber + 1}</strong>
-                        </li>
+                        <strong class="custom-page-link">${pageNumber + 1}</strong>
                     </c:if>
                     <c:if test="${pageNumber != currentPage}">
-                     <li class="page-item">
-                        <a class="page-link" href="${pageUrl}">${pageNumber + 1}</a>
-                      </li>   
+                        <a class="custom-page-link" href="${pageUrl}">${pageNumber + 1}</a>
                     </c:if>
                 </li>
                 <!-- 添加分页链接之间的间隔 -->
-                <li class="page-separator">&nbsp;</li>
+                <li class="custom-page-separator">&nbsp;</li>
             </c:forEach>
         </ul>
     </div>
 </c:if>
-		
+				
+		<%@ include file="../FrontDeskFooter.jsp"%>
 	
 	<script>
 	function deleteComment(commentId) {

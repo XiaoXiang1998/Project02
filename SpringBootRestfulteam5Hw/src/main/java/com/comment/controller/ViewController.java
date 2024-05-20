@@ -33,5 +33,8 @@ public class ViewController {
 	}
 	
 	
-	
+	@GetMapping("/inserttest")
+	public String insertTest() {
+		return "comment/insert";
+	}
 }

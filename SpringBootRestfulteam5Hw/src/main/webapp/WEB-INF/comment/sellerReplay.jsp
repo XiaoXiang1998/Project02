@@ -16,6 +16,7 @@
 	href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/css/lightbox.min.css">
 <script
 	src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/js/lightbox.min.js"></script>
+
 <style>
 body {
 	font-family: Arial, sans-serif;
@@ -27,7 +28,7 @@ body {
 .container {
     position: relative; /* 让容器相对定位 */
 
-	max-width: 600px;
+	max-width: 800px;
 	margin: 0 auto;
 	padding: 20px;
 }
@@ -125,47 +126,44 @@ body {
     background-color: rgba(0, 0, 0, 0.1); /* 鼠标悬停时的背景色 */
 }
 
-/* 分页链接 */
-.pagination-container .page-link {
-    border: 1px solid rgba(0, 0, 0, 0.2);
-    border-radius: 5px;
-    background-color: transparent;
-    outline: none;
+/.custom-pagination-container {
+    text-align: center; /* 将分页组件置中 */
+    margin-top: 20px;
+}
+
+.custom-pagination {
+    list-style: none;
+    padding: 0;
+    display: inline-block; /* 让分页链接水平排列 */
+}
+
+.custom-page-item {
+    display: inline-block;
+    margin-right: 5px; /* 调整分页链接之间的间距 */
+}
+
+.custom-page-link {
+    padding: 5px 10px;
+    background-color: #eee;
+    border: 1px solid #ccc;
+    text-decoration: none;
+    color: #333;
     cursor: pointer;
-    padding: 10px 15px;
-    transition: background-color 0.3s;
-    margin: 0 5px; /* 调整按钮之间的间距 */
-    position: relative; /* 将 span 元素定位相对于按钮 */
-    text-align: center;
 }
 
-.pagination-container .page-link.active {
-    background-color: #007bff; /* 选中状态的背景色 */
-    color: #fff; /* 选中状态的文本颜色 */
+.custom-page-link:hover {
+    background-color: #ddd;
 }
 
-.pagination-container .page-link:hover {
-    background-color: rgba(0, 0, 0, 0.1); /* 鼠标悬停时的	背景色 */
-}
-
-.pagination-container .badge {
-    position: absolute; /* 使用绝对定位 */
-    top: -10px; /* 调整数字在按钮上的位置 */
-    right: -10px; /* 调整数字在按钮上的位置 */
-    background-color: #ff0000; /* 设置背景颜色 */
-    color: #ffffff; /* 设置文字颜色 */
-    border-radius: 50%; /* 圆形边框 */
-    padding: 5px; /* 调整内边距 */
-    font-size: 12px; /* 调整字体大小 */
-    display: inline-block; /* 使 span 元素显示为行内块 */
-    opacity: 1; /* 初始时显示 */
-    transition: opacity 0.3s; /* 添加过渡效果 */
+.custom-page-link.active {
+    background-color: #007bff;
+    color: #fff;
 }
 </style>
 </head>
 <body>
-
-	<%@ include file="sellercomment.jsp"%>
+			<%@ include file="../FrontDeskNav.jsp"%>
+	
 	
 	<div class="container">
     <div class="row justify-content-center">
@@ -262,7 +260,7 @@ body {
                         <label><span>回覆內容:</span>
                             <textarea id="replyContent${comment.commentid}" name="replyContent" rows="10" cols="30" maxlength="100" placeholder="Your Reply"  required></textarea>
                         </label>
-                        <span class="replyContent${comment.commentid}" id="replyContent" data->輸入的字數:0/100</span><br />
+                        <span class="replyContent${comment.commentid}" id="replyContent" >輸入的字數:0/100</span><br />
                         <div class="bit-com">
                             評分:<span class="bit" id="bit1"></span> <span class="bit" id="bit2"></span> <span class="bit" id="bit3"></span> <span class="bit" id="bit4"></span> <span class="bit" id="bit5"></span>
                         </div>
@@ -273,11 +271,11 @@ body {
         </div>
     </c:forEach>
     <!-- 分页链接 -->
-<div class="pagination-container" style="text-align: center; margin-top: 20px;" id="pagination">
-    <ul class="pagination justify-content-center" style="margin-left: -20px;">
+<div class="custom-pagination-container" style="text-align: center; margin-top: 20px;" id="pagination">
+    <ul class="custom-pagination" style="list-style: none; padding: 0; display: inline-block;">
         <c:forEach begin="1" end="${totalPages}" var="pageNumber">
-            <li class="page-item" style="margin-right: 5px;">
-                <button class="page-link page-btn" data-page="${pageNumber}"  onclick="filterByPage(${pageNumber})">${pageNumber}</button>
+            <li class="custom-page-item" style="display: inline-block; margin-right: 5px;">
+                <button class="custom-page-link" data-page="${pageNumber}" onclick="filterByPage(${pageNumber})">${pageNumber}</button>
             </li>
         </c:forEach>
     </ul>
@@ -286,6 +284,7 @@ body {
 </div>
 
 
+			<%@ include file="../FrontDeskFooter.jsp"%>
 
 
 <script>
@@ -497,6 +496,22 @@ function filterComments() {
 // 初始化时调用 maskNameFunction
 document.addEventListener("DOMContentLoaded", function() {
     maskNameFunction();
+    
+    
+    var defaultReply = "感謝您的支持喔!";
+
+    // 遍历所有的评论，并设置默认回复内容
+    document.querySelectorAll('.bootstrap-frm').forEach(function(form) {
+        // 获取评论的 commentid
+        var commentId = form.id.replace('replyForm', '');
+        console.log(commentId);
+
+        // 获取 textarea 元素的 id
+        var textareaId = "replyContent" + commentId;
+
+        // 将默认回复内容设置到文本框中
+        document.getElementById(textareaId).innerText = defaultReply;
+    });
 });
 
 function resetForm() {

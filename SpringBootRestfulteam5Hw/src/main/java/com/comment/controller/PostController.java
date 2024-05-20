@@ -132,7 +132,6 @@ public class PostController {
 
 		return "redirect:indexcomment";
 	}
-
 	@GetMapping("/userComments")
 	public String getUserComments(Model model, HttpSession session, @RequestParam(defaultValue = "0") int page) {
 		MemberBean member = (MemberBean) session.getAttribute("member");

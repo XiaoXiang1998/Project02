@@ -534,8 +534,8 @@
 														</div>
 													</div>
 
-													<div class="tab-pane" id="nav-mission" role="tabpanel"
-														aria-labelledby="nav-mission-tab">
+														<div class="tab-pane" id="nav-mission" role="tabpanel"
+															aria-labelledby="nav-mission-tab">
 														
 
 														<c:if test="${not empty posts}">
@@ -1050,6 +1050,31 @@
         var currentRate = null; // 当前选定的星级
         var currentTabId = 'all-tab'; // 当前选定的标签页ID
 
+        
+     // 添加一个函数，用于遮蔽name字段的内容
+        function maskNameFunction() {
+            document.querySelectorAll('.tab-pane#nav-mission .mb-1').forEach(function(nameElement) {
+                let name = nameElement.innerText;
+                if (name.length === 3) {
+                    let maskedName = maskName(name);
+                    nameElement.innerText = maskedName;
+                }
+            });
+        }
+
+     // 調用名字替換函數，使其在頁面加載時立即執行
+        
+        function maskName(name) {
+            if (name.length !== 3) {
+                return name; // 如果名字不是三個字，直接返回名字
+            }
+            let firstChar = name.charAt(0);
+            let lastChar = name.charAt(2);
+            return firstChar + '***' + lastChar; // 將中間字符替換為星號
+        }
+        
+        
+        
         // 定义一个函数用于加载评论
         function loadComments(goodId, rate, content, photos, page) {
             $.ajax({
@@ -1065,7 +1090,11 @@
                 success: function(data) {
                     // 请求成功时，将返回的评论数据加载到页面中
                     $('#nav-mission').html($(data).find('#nav-mission').html());
+					
+                    
+                    maskNameFunction();
 
+                    
                     // 在每次成功载入后重新绑定事件处理程序
                     bindClickHandlers();
                     bindPaginationClickHandlers(); // 绑定分页链接点击事件处理程序
@@ -1078,6 +1107,8 @@
                 }
             });
         }
+        
+       
         
         // 更新星级评估数量
         function updateTabCounts(data) {
@@ -1123,6 +1154,8 @@
             currentRate = rate;
 
             loadComments(goodId, rate, content, photos, page);
+            
+           
         }
 
         // 解绑已有的点击事件处理程序，然后重新绑定到父元素

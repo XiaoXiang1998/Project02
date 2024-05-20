@@ -485,11 +485,19 @@ function filterComments() {
         success: function (data) {
             $('#commentContainer').html($(data).find('#commentContainer').html());
             $('#pagination').html($(data).find('#pagination').html());
+            
+            // 在成功回调中调用 maskNameFunction
+            maskNameFunction();
         },
         error: function() {
         }
     });
 }
+
+// 初始化时调用 maskNameFunction
+document.addEventListener("DOMContentLoaded", function() {
+    maskNameFunction();
+});
 
 function resetForm() {
     $('#productName').val('');
@@ -498,7 +506,28 @@ function resetForm() {
     $('#commentTime').val('');
 }
 
+//定义函数 maskNameFunction
+function maskNameFunction() {
+    document.querySelectorAll('.name').forEach(function(nameElement) {
+        let name = nameElement.innerText;
+        if (name.length === 3) {
+            let maskedName = maskName(name);
+            nameElement.innerText = maskedName;
+        }
+    });
+}
+
+function maskName(name) {
+    if (name.length !== 3) {
+        return name; // 如果名字不是三個字，直接返回名字
+    }
+    let firstChar = name.charAt(0);
+    let lastChar = name.charAt(2);
+    return firstChar + '***' + lastChar; // 將中間字符替換為星號
+}
+
 </script>
+
 
 </body>
 </html>

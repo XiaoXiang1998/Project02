@@ -14,20 +14,17 @@
 }
 
 .comment {
-	
 	padding: 15px;
 	margin-bottom: 15px;
-	
 }
-  /* 添加评论框之间的分隔线 */
-    .comment:not(:last-child) {
-        border-bottom: 1px solid #ccc; /* 添加分隔线 */
-        margin-bottom: 15px; /* 调整间距 */
-    }
+/* 添加评论框之间的分隔线 */
+.comment:not(:last-child) {
+	border-bottom: 1px solid #ccc; /* 添加分隔线 */
+	margin-bottom: 15px; /* 调整间距 */
+}
 
 .comment p {
 	margin: 5px 0;
-      
 }
 
 .comment .time-and-details {
@@ -95,10 +92,18 @@
 	margin: auto; /* 使圖片水平置中 */
 }
 
-#replayconetnt{
-  font-weight: bold; /* 使用粗体 */
-  font-size: 16px; /* 放大字体 */
+#replayconetnt {
+	font-size: 16px; /* 放大字体 */
+}
 
+.name {
+	color: #FB7299;
+	font-size: 16px;
+	font-weight: bold;
+	margin: 0 0 10px 0;
+}
+.nav-link.active {
+    background-color: #007bff; /* 高亮時背景顏色 */
 }
 </style>
 </head>
@@ -110,31 +115,34 @@
 	<div class="row">
 		<div class="col">
 			<ul class="nav nav-tabs">
-			<!-- 平均分數和星星圖示 -->
-<li class="nav-item">
-    <span class="nav-link" style="font-weight: bold; color: black; font-size: 22px;">
-        ${averageScore}
-    </span>
-    <!-- 顯示星星圖示 -->
-    <span class="nav-link">
-        <c:forEach begin="1" end="${averageScore}">
-            <img src="commentPicture/output.png" alt="star" class="star-img" width="20" height="20">
-        </c:forEach>
-    </span>
-</li>
+				<!-- 平均分數和星星圖示 -->
+				<li class="nav-item"><span class="nav-link"
+					style="font-weight: bold; color: black; font-size: 22px;">
+						${averageScore} </span> <!-- 顯示星星圖示 --> <span class="nav-link"> <c:forEach
+							begin="1" end="${averageScore}">
+							<img src="commentPicture/output.png" alt="star" class="star-img"
+								width="20" height="20">
+						</c:forEach>
+				</span></li>
 
-				<li class="nav-item"><a class="nav-link" href="?rating=0">全部
-						(${totalCommentsCount})</a></li>
-				<li class="nav-item"><a class="nav-link" href="?rating=5">5顆星
-						(${ratingCounts[4]})</a></li>
-				<li class="nav-item"><a class="nav-link" href="?rating=4">4顆星
-						(${ratingCounts[3]})</a></li>
-				<li class="nav-item"><a class="nav-link" href="?rating=3">3顆星
-						(${ratingCounts[2]})</a></li>
-				<li class="nav-item"><a class="nav-link" href="?rating=2">2顆星
-						(${ratingCounts[1]})</a></li>
-				<li class="nav-item"><a class="nav-link" href="?rating=1">1顆星
-						(${ratingCounts[0]})</a></li>
+				<li class="nav-item"><a
+					class="nav-link ${selectedRating == 0 ? 'active' : ''}"
+					href="?rating=0">全部</a></li>
+				<li class="nav-item"><a
+					class="nav-link ${selectedRating == 5 ? 'active' : ''}"
+					href="?rating=5">5顆星 (${ratingCounts[4]})</a></li>
+				<li class="nav-item"><a
+					class="nav-link ${selectedRating == 4 ? 'active' : ''}"
+					href="?rating=4">4顆星 (${ratingCounts[3]})</a></li>
+				<li class="nav-item"><a
+					class="nav-link ${selectedRating == 3 ? 'active' : ''}"
+					href="?rating=3">3顆星 (${ratingCounts[2]})</a></li>
+				<li class="nav-item"><a
+					class="nav-link ${selectedRating == 2 ? 'active' : ''}"
+					href="?rating=2">2顆星 (${ratingCounts[1]})</a></li>
+				<li class="nav-item"><a
+					class="nav-link ${selectedRating == 1 ? 'active' : ''}"
+					href="?rating=1">1顆星 (${ratingCounts[0]})</a></li>
 			</ul>
 		</div>
 	</div>
@@ -144,7 +152,7 @@
 		<c:forEach var="comment" items="${comments}">
 			<div class="comment">
 				<!-- 显示评论内容 -->
-				<p>${comment.member.name}</p>
+				<p class="name">${comment.member.name}</p>
 				<p>
 					<c:forEach begin="1" end="${comment.sellerrate}">
 						<img src="commentPicture/output.png" alt="star" width="20"
@@ -181,7 +189,26 @@
 			</c:forEach>
 		</ul>
 	</div>
+	<script>
+		document.addEventListener("DOMContentLoaded", function() {
+			document.querySelectorAll('.name').forEach(function(nameElement) {
+				let name = nameElement.innerText;
+				if (name.length === 3) {
+					let maskedName = maskName(name);
+					nameElement.innerText = maskedName;
+				}
+			});
+		});
 
+		function maskName(name) {
+			if (name.length !== 3) {
+				return name; // 如果名字不是三個字，直接返回名字
+			}
+			let firstChar = name.charAt(0);
+			let lastChar = name.charAt(2);
+			return firstChar + '***' + lastChar; // 將中間字符替換為星號
+		}
+	</script>
 
 </body>
 </html>

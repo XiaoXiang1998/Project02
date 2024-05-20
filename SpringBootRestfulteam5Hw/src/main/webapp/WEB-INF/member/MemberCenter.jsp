@@ -1,5 +1,8 @@
 <%@page import="com.member.model.MemberBean" %>
     <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+    <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+    <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+    
         <!DOCTYPE html>
         <html>
 
@@ -74,6 +77,18 @@
                                     <a class="list-group-item list-group-item-action" id="list-coupons-list"
                                         data-bs-toggle="list" href="#list-coupons" role="tab"
                                         aria-controls="coupons">我的優惠券</a>
+                                    <a class="list-group-item list-group-item-action" id="list-comments-list"
+                                        data-bs-toggle="list" href="userComments" role="tab"
+                                        aria-controls="comments">查看評論</a>
+                                    <a class="list-group-item list-group-item-action" id="list-myevaluate-list"
+                                        data-bs-toggle="list" href="#list-myevaluate" role="tab"
+                                        aria-controls="myevaluate">買家評價</a>
+                                    <a class="list-group-item list-group-item-action" id="list-commentsmanage-list"
+                                        data-bs-toggle="list" href="#list-commentsmanage" role="tab"
+                                        aria-controls="commentsmanage">評論管理</a>
+                                    <a class="list-group-item list-group-item-action" id="list-myreply-list"
+                                        data-bs-toggle="list" href="#List-myreply" role="tab"
+                                        aria-controls="myreply">我的回覆</a>
                                 </div>
                             </div>
                             <div class="col-md-9">
@@ -178,7 +193,7 @@
                                         aria-labelledby="list-password-list">
                                         <h3>修改密碼</h3>
                                         <form action="" method="post" onsubmit="return validateForm()">
-                                            <div class="form-floating mb-3 mt-5">
+                                            <div class="form-floating mb-3 m‵t-5">
                                                 <input type="password" class="form-control" id="floatingPassword"
                                                     placeholder="請輸入密碼">
                                                 <label for="floatingPassword">請輸入密碼</label>

@@ -72,7 +72,7 @@ body {
 
 .time {
 	color: #999;
-	font-size: 14px;
+	font-size: 16px;
 	margin-bottom: 10px;
 }
 
@@ -88,7 +88,7 @@ body {
 
 .text {
 	color: #333;
-	font-size: 14px;
+	font-size: 18px;
 	line-height: 1.5;
 }
 .dropdown {
@@ -170,13 +170,24 @@ body {
     margin: 0 5px; /* 調整分頁連結之間的間距 */
 }
 
+.pagination-container {
+    display: flex;
+        justify-content: center;
+    
+    justify-content: center;
+    width: 100%;
+}
+
+/* Ensure pagination list is centered */
 .tab .pagination {
     margin-top: 20px;
     padding-left: 0;
     list-style: none;
     text-align: center;
+    display: inline-block; /* Change display to inline-block to center it */
 }
 
+/* Style the pagination links */
 .tab .pagination .page-link {
     border: 1px solid rgba(0, 0, 0, 0.2);
     border-radius: 5px;
@@ -185,38 +196,39 @@ body {
     cursor: pointer;
     padding: 10px 15px;
     transition: background-color 0.3s;
-    margin: 0 5px; /* 调整按钮之间的间距 */
-    position: relative; /* 将span元素定位相对于按钮 */
+    margin: 0 5px;
+    position: relative;
     text-align: center;
     color: #007bff;
     text-decoration: none;
 }
 
 .tab .pagination .page-link .badge {
-    position: absolute; /* 使用绝对位置 */
-    top: -10px; /* 调整数字在按钮上的位置 */
-    right: -10px; /* 调整数字在按钮上的位置 */
-    background-color: #ff0000; /* 设置背景颜色 */
-    color: #ffffff; /* 设置文字颜色 */
-    border-radius: 50%; /* 圆形边框 */
-    padding: 5px; /* 调整内边距 */
-    font-size: 12px; /* 调整字体大小 */
-    display: inline-block; /* 使span元素显示为行内块 */
-    opacity: 1; /* 初始时显示 */
-    transition: opacity 0.3s; /* 添加过渡效果 */
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    background-color: #ff0000;
+    color: #ffffff;
+    border-radius: 50%;
+    padding: 5px;
+    font-size: 12px;
+    display: inline-block;
+    opacity: 1;
+    transition: opacity 0.3s;
 }
 
-/* 鼠标悬停时的效果 */
+/* Hover effect for pagination links */
 .tab .pagination .page-link:hover {
     background-color: rgba(0, 0, 0, 0.1);
 }
 
-/* 激活/选中按钮的样式 */
+/* Active page item styling */
 .tab .pagination .page-item.active .page-link {
     background-color: rgba(0, 0, 0, 0.2);
-    color: #fff; /* 设置文字颜色 */
+    color: #fff;
 }
 
+/* Disabled page item styling */
 .tab .pagination .page-item.disabled .page-link {
     color: #6c757d;
     background-color: #fff;
@@ -319,16 +331,20 @@ body {
 </div>
 
 <c:if test="${totalPages > 1}">
-    <div class="tab">
+    <div class="pagination-container">
         <ul class="pagination">
             <c:forEach begin="0" end="${totalPages - 1}" var="pageNumber">
                 <c:url value="?page=${pageNumber}" var="pageUrl"/>
                 <li class="page-item">
                     <c:if test="${pageNumber == currentPage}">
+                     <li class="page-item active">
                         <strong class="page-link">${pageNumber + 1}</strong>
+                        </li>
                     </c:if>
                     <c:if test="${pageNumber != currentPage}">
+                     <li class="page-item">
                         <a class="page-link" href="${pageUrl}">${pageNumber + 1}</a>
+                      </li>   
                     </c:if>
                 </li>
                 <!-- 添加分页链接之间的间隔 -->
@@ -450,6 +466,27 @@ document.querySelectorAll('.item').forEach(item => {
         editForm.style.left = `${left}px`;
     });
 });
+</script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    document.querySelectorAll('.name').forEach(function(nameElement) {
+        let name = nameElement.innerText;
+        if (name.length === 3) {
+            let maskedName = maskName(name);
+            nameElement.innerText = maskedName;
+        }
+    });
+});
+
+function maskName(name) {
+    if (name.length !== 3) {
+        return name; // 如果名字不是三個字，直接返回名字
+    }
+    let firstChar = name.charAt(0);
+    let lastChar = name.charAt(2);
+    return firstChar + '***' + lastChar; // 將中間字符替換為星號
+}
+
 </script>
 </body>
 </html>

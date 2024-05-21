@@ -63,7 +63,9 @@ public class Post {
 		this.commentcontent = commentcontent;
 		this.commenttime = commenttime;
 	}
-
+	
+	
+	
 
 
 	public Integer getCommentid() {

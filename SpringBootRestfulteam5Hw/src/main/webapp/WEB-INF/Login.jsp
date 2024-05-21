@@ -154,7 +154,7 @@
 
 					</form>
 				</div>
-				<h5><a href="#">註冊帳號</a></h5>
+				<h5><a href="Register">註冊帳號</a></h5>
 				<h5><a href="forgotPassword">忘記密碼</a></h5>
 			</div>
 		</div>

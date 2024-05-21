@@ -28,10 +28,8 @@ body {
 }
 
 .container {
-
-	max-width: 500px;
-	margin: 0 auto;
-	padding: 20px;
+    margin: 10 auto;
+    padding: 20px; /* 增加内边距 */
 }
 
 .item {
@@ -52,13 +50,7 @@ body {
 	margin-right: 20px;
 }
 
-.info {
 
-    display: inline-block;
-    vertical-align: top;
-    width: calc(100% - 70px);
-    position: relative;
-}
 
 .name {
 	color: #FB7299;
@@ -94,12 +86,7 @@ body {
 	font-size: 18px;
 	line-height: 1.5;
 }
-.dropdown {
-    position: absolute;
-    top: 10px; /* 调整按钮与评论条目顶部的距离 */
-    right: 10px; /* 调整按钮与评论条目右侧的距离 */
-    z-index: 1; /* 确保按钮位于其他内容之上 */
-}
+
 
 .dropdown-content {
     display: none;
@@ -242,7 +229,7 @@ body {
 	    <c:if test="${not empty comments}">
 	
     <c:forEach items="${comments}" var="comment">
-        <div class="item" data-comment-id="${comment.commentid}">
+        <div class="item" data-comment-id="${comment.commentid}" id="container-page">
             <i class="avatar"></i>
             <div class="info">
                 <p class="name">${comment.member.name}</p>
@@ -459,5 +446,7 @@ function maskName(name) {
 }
 
 </script>
+
+
 </body>
 </html>

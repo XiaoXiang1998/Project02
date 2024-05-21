@@ -74,11 +74,11 @@
 									<c:if test="${loop.index != 0}">
 										<li class="dropdown-divider"></li>
 									</c:if>
-									<li><a class="nav-link dropdown-item fs-md ${notification.reads == 1 ? 'text-muted' : 'fw-bold'}" href="#" <c:if test="${notification.reads == 0}">
-                                                        onclick="readNotification(${notification.id})"
-                                                        </c:if>> 
-                                                        <input type="hidden" name="orderId" value="${notification.orderId}">
-                                                        <img src="${notification.orderId.formatgoodId.goodImagePath}" alt="商品图片" style="max-width: 60px; max-height: 60px; margin-right: 10px"> ${notification.content} <input type="hidden" name="reads" value="${notification.reads}">
+									<li>
+									<input type="hidden" name="orderId" value="${notification.orderId }">
+									<a class="nav-link dropdown-item fs-md ${notification.reads == 1 ? 'text-muted' : 'fw-bold'}" href="#" onclick="Query('${notification.orderId.orderId}', '${notification.id}',${notification.reads})"> 
+                                                        <img src="${notification.orderId.formatgoodId.goodImagePath}" alt="商品图片" style="max-width: 60px; max-height: 60px; margin-right: 10px"> ${notification.content} 
+                                                        <input type="hidden" name="reads" value="${notification.reads}">
 											<div class="text-end">
 												<fmt:formatDate value="${notification.sendTime}" pattern="MM月dd日 HH時mm分" />
 											</div>
@@ -93,12 +93,18 @@
 	</div>
 </div>
 <script>
-function readNotification(notificationId) {
-    fetch("readMessage?notificationId=" + notificationId, {
+function Query(orderId, notificationId,read) {
+	if(read == 0){
+		 fetch("readMessage?notificationId=" + notificationId, {
         method: 'PUT'
-    })
-        .then(response => {
-        	location.reload();
-        })
+    }).then(response => {
+        window.location.href = "OrderById?orderId=" + orderId;
+    });
+	}else if(read == 1){
+        window.location.href = "OrderById?orderId=" + orderId;
+
+	}
+   
+	
 }
 </script>

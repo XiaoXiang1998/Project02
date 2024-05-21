@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isErrorPage="true"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="b" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <!DOCTYPE html>
 <html>
@@ -10,7 +10,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10/dist/sweetalert2.min.css">
 </head>
 <body>
-	<%@ include file="Index.jsp"%>
+	<%@ include file="../../FrontDeskNav.jsp"%>
 	<div class="container" style="white-space: nowrap">
 		<h3 class="text-center mt-3">訂單詳情</h3>
 		<div class="table-responsive mt-3">
@@ -64,13 +64,13 @@
 	</div>
 	</div>
 	<div class="footer mt-3 text-center">
-		<c:choose>
-			<c:when test="${empty order.orderId}">
+		<b:choose>
+			<b:when test="${empty order.orderId}">
 				<p class="fs-5 fw-bold">沒有訂單</p>
-			</c:when>
-			<c:otherwise>
-			</c:otherwise>
-		</c:choose>
+			</b:when>
+			<b:otherwise>
+			</b:otherwise>
+		</b:choose>
 	</div>
 
 	<div id="editForm" class="d-none" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(255, 255, 255, 0.9); z-index: 1000;">
@@ -194,5 +194,6 @@
            });
        }
     </script>
+    <%@ include file="../../FrontDeskFooter.jsp" %>
 </body>
 </html>

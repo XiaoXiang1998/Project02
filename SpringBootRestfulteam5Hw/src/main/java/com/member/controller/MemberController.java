@@ -85,6 +85,7 @@ public class MemberController {
 
 	@GetMapping("/membercenter")
 	public String MemberCenter() {
+		
 		return "/member/MemberCenter";
 	}
 

@@ -280,6 +280,20 @@ public class OrderController {
 					return "redirect:/goindex.controller";
 		}
 	
+	@GetMapping("OrderById")
+	public String OrderById(@RequestParam("orderId") Integer orderId,Model m) {
+		Orders order = oService.getById(orderId);
+		m.addAttribute("order",order);
+		MemberBean member =(MemberBean)session.getAttribute("member");
+		List<Notifications> notifications = nService.findByRecipientIdOrderBySendTimeDesc(member);
+	    Integer count = nService.noReadCounts(member);
+	    session.setAttribute("count", count);
+	    session.setAttribute("notifications", notifications);
+	    Integer carItemCount = cService.carItemCount(member);
+		session.setAttribute("carItemCount", carItemCount);
+		return "Order/jsp/QueryById";
+	}
+	
 	@GetMapping("BuyAllOrderall")
 	public String BuyAllOrder(@RequestParam(defaultValue = "0") int page,Model m) {
 		MemberBean member =(MemberBean)session.getAttribute("member");

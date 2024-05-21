@@ -140,7 +140,7 @@
 										contentType: 'application/json',
 										success: function (data) {
 											// console.log(data);
-											let content = [...data][0][0] + "-" + [...data][0][1] + "$";
+											let content = [...data][0][1] + "-" + [...data][0][1] + "$";
 											let p = document.createElement('p'); p.classList.add("text-dark"); p.classList.add("fs-5"); p.classList.add("fw-bold");
 											p.classList.add("mb-0"); p.innerHTML = content;
 											div5.append(p);

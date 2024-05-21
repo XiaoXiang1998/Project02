@@ -17,10 +17,10 @@
 <body>
 	<div class="card-deck mt-3">
 		<c:forEach items="${SellAllorders.content}" var="Sellorder">
-			<div class="card mt-3">
+			<div class="card mt-3" >
 				<div class="card-body border-bottom">
 					<div class="row">
-						<div class="col-2">
+						<div class="col-2" >
 							<h5 class="card-title">訂單編號: ${Sellorder.orderId}</h5>
 							<input type="hidden" name="orderId" value="${Sellorder.orderId}">
 						</div>
@@ -45,7 +45,7 @@
 				<div>
 					<div class="row p-3">
 						<div class="col-auto ">
-							<img src="${Sellorder.formatgoodId.goodImagePath}" class="card-img border" alt="Good Image" style="height: 150px; object-fit: cover;">
+							<img src="${Sellorder.formatgoodId.goodImagePath}" class="card-img border" alt="Good Image" style="height: 150px; object-fit: cover;" onclick="Query(${Sellorder.orderId})">
 						</div>
 						<div class="col p-3">
 							<div>商品名稱: ${Sellorder.formatgoodId.good.goodsName}</div>
@@ -93,6 +93,14 @@
 					}
 				});
 			});
+			$(".card-img").click(function() {
+		        var orderId = $(this).closest('.card').find('input[name="orderId"]').val();
+		        Query(orderId);
+		    });
+			function Query(orderId){
+				window.location.href="OrderById?orderId=" + orderId
+						console.log(orderId)
+			}
 		});
 	</script>
 </body>

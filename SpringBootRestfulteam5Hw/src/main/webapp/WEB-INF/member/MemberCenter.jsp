@@ -272,17 +272,17 @@
 										</nav>
 										<div class="tab-content" id="nav-tabContent">
 											<div class="tab-pane fade show active" id="nav-all2" role="tabpanel"
-												aria-labelledby="nav-all-tab2">.all.</div>
+												aria-labelledby="nav-all-tab2"></div>
 											<div class="tab-pane fade" id="nav-12" role="tabpanel"
-												aria-labelledby="nav-12-tab">.1.</div>
+												aria-labelledby="nav-12-tab"></div>
 											<div class="tab-pane fade" id="nav-22" role="tabpanel"
-												aria-labelledby="nav-22-tab">.2.</div>
+												aria-labelledby="nav-22-tab"></div>
 											<div class="tab-pane fade" id="nav-32" role="tabpanel"
-												aria-labelledby="nav-32-tab">.3.</div>
+												aria-labelledby="nav-32-tab"></div>
 											<div class="tab-pane fade" id="nav-42" role="tabpanel"
-												aria-labelledby="nav-42-tab">.4.</div>
+												aria-labelledby="nav-42-tab"></div>
 											<div class="tab-pane fade" id="nav-52" role="tabpanel"
-												aria-labelledby="nav-52-tab">.5.</div>
+												aria-labelledby="nav-52-tab"></div>
 										</div>
 									</div>
 									<!-- 優惠卷 -->
@@ -363,6 +363,7 @@
 									}
 								});
 							});
+							
 
 							$("#Sell-list-orders-list").click(function () {
 								$.ajax({
@@ -427,6 +428,7 @@
 								});
 							});
 
+							
 							var userData = {};
 
 							$('#editButton').click(function () {

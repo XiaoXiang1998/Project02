@@ -130,7 +130,7 @@ public class PostController {
 			}
 		}
 
-		return "redirect:indexcomment";
+		return "redirect:membercenter";
 	}
 	@GetMapping("/userComments")
 	public String getUserComments(Model model, HttpSession session, @RequestParam(defaultValue = "0") int page) {
@@ -283,48 +283,7 @@ public class PostController {
 
 		return "comment/commentadmin";
 	}
-	/*
-	 * @GetMapping("/sellerComments") public String getsellerComments(Model model,
-	 * HttpSession session, @RequestParam(defaultValue = "0") int page,
-	 * 
-	 * @RequestParam(defaultValue = "0") int rating) { MemberBean seller =
-	 * (MemberBean) session.getAttribute("member"); System.out.println("ID" +
-	 * seller.getSid());
-	 * 
-	 * Long totalComments = pService.countCommentsBySellerId(seller.getSid());
-	 * 
-	 * long[] starCounts = new long[5]; for (int i = 1; i <= 5; i++) {
-	 * starCounts[i-1] =
-	 * pService.countCommentsBySellerIdAndBuyerrate(seller.getSid(), i); }
-	 * 
-	 * int pageSize = 2;
-	 * 
-	 * Pageable pageable = PageRequest.of(page, pageSize);
-	 * 
-	 * Page<Post> sellerComments;
-	 * 
-	 * if (rating > 0) {
-	 * 
-	 * sellerComments = pService.findPostsBySellerIdAndRating(seller.getSid(),
-	 * rating, pageable); } else {
-	 * 
-	 * sellerComments = pService.findPostsBySellerId(seller.getSid(), pageable); }
-	 * 
-	 * model.addAttribute("comments", sellerComments.getContent());
-	 * model.addAttribute("currentPage", sellerComments.getNumber()); // 注意: Spring
-	 * Data JPA的頁碼從0開始 model.addAttribute("totalPages",
-	 * sellerComments.getTotalPages()); model.addAttribute("rating", rating);
-	 * model.addAttribute("totalComments", totalComments);
-	 * model.addAttribute("starCounts", starCounts);
-	 * 
-	 * List<Integer> repliedCommentIds =
-	 * pService.findRepliedCommentIdsBySellerId(seller.getSid());
-	 * model.addAttribute("repliedCommentIds", repliedCommentIds);
-	 * 
-	 * 
-	 * 
-	 * return "comment/sellerReplay"; }
-	 */
+	
 
 	@GetMapping("/sellerComments")
 	public String getSellerComments(Model model, HttpSession session, @RequestParam(defaultValue = "0") int page,
@@ -389,36 +348,7 @@ public class PostController {
 		return "comment/sellerReplay";
 	}
 
-	/*
-	 * @GetMapping("/sellerCommentsForUser") public String
-	 * getSellerCommentsForUser(Model model, HttpSession session) { MemberBean user
-	 * = (MemberBean) session.getAttribute("member"); int reviewCount =
-	 * user.getReviewCount(); int cumulativeScore = user.getCumulativeScore();
-	 * 
-	 * int avergeScore = cumulativeScore / reviewCount;
-	 * 
-	 * List<Post> userComments = user.getPosts();
-	 * 
-	 * List<Post> sellerComments = new ArrayList<>();
-	 * 
-	 * for (Post comment : userComments) { Integer userCommentId =
-	 * comment.getCommentid(); List<Post> sellerReplies =
-	 * pService.getSellerCommentsForUser(userCommentId);
-	 * sellerComments.addAll(sellerReplies); }
-	 * 
-	 * List<Integer> ratingCounts = new ArrayList<>(Collections.nCopies(6, 0)); for
-	 * (Post comment : sellerComments) { int rating = comment.getSellerrate();
-	 * ratingCounts.set(rating, ratingCounts.get(rating) + 1); }
-	 * 
-	 * int totalCommentsCount = sellerComments.size();
-	 * 
-	 * model.addAttribute("avergeScore", avergeScore);
-	 * model.addAttribute("sellerComments", sellerComments);
-	 * model.addAttribute("ratingCounts", ratingCounts);
-	 * model.addAttribute("totalCommentsCount", totalCommentsCount);
-	 * 
-	 * return "comment/sellercommentforuser"; }
-	 */
+	
 	@GetMapping("/sellerCommentsForUser")
 	public String getSellerCommentsForUser(Model model, HttpSession session, @RequestParam(defaultValue = "0") int page,
 			@RequestParam(defaultValue = "0") int rating) {
@@ -464,8 +394,22 @@ public class PostController {
 	@GetMapping("/repliedComments")
 	public String getRepliedComments(Model model, HttpSession session, @RequestParam(defaultValue = "0") int page) {
 		MemberBean seller = (MemberBean) session.getAttribute("member");
+		
+		
+		 // 計算平均分數
+	    double averageScore = 0.0;
+	    if (seller.getReviewCount() != null && seller.getReviewCount() != 0) {
+	        averageScore = (double) seller.getCumulativeScore() / seller.getReviewCount();
+	    }
+	    
+	 // 四捨五入到小數點第一位
+	    averageScore = Math.round(averageScore * 10.0) / 10.0;
+		
 		int sellerId = seller.getSid();
-
+		
+		
+		
+		
 		int pageSize = 3;
 
 		Pageable pageable = PageRequest.of(page, pageSize);
@@ -477,6 +421,7 @@ public class PostController {
 		model.addAttribute("currentPage", repliedComments.getNumber()); // 注意：Spring Data JPA的页码从0开始
 		model.addAttribute("totalPages", repliedComments.getTotalPages());
 		model.addAttribute("sellerCommentsForUser", sellerCommentsForUser);
+	    model.addAttribute("averageScore", averageScore);
 
 		return "comment/repliedComments";
 	}

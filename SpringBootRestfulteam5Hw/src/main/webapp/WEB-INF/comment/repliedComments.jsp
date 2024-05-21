@@ -76,11 +76,34 @@
 	margin: 0 0 10px 0;
 }
 
+
+
+
 </style>
 </head>
 <body>
 
 				<%@ include file="../FrontDeskNav.jsp"%>
+	
+<div class="row">
+	<div class="col">
+		<ul class="nav nav-tabs">
+			<!-- 平均分數和星星圖示 -->
+			<li class="nav-item">
+				<span class="nav-link" style="font-weight: bold; color: black; font-size: 22px; position: relative; top: 10px;">
+					${averageScore}
+				</span>
+				<!-- 顯示星星圖示 -->
+				<span class="nav-link" style="position: relative; top: -5px;">
+					<c:forEach begin="1" end="${averageScore}">
+						<img src="commentPicture/output.png" alt="star" class="star-img" width="20" height="20">
+					</c:forEach>
+				</span>
+			</li>
+		</ul>
+	</div>
+</div>
+	
 	
 <!-- 遍历卖家回复的评论 -->
 <c:forEach items="${repliedComments}" var="seller">

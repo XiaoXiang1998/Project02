@@ -76,7 +76,9 @@
 									</c:if>
 									<li><a class="nav-link dropdown-item fs-md ${notification.reads == 1 ? 'text-muted' : 'fw-bold'}" href="#" <c:if test="${notification.reads == 0}">
                                                         onclick="readNotification(${notification.id})"
-                                                        </c:if>> <img src="${notification.orderId.formatgoodId.goodImagePath}" alt="商品图片" style="max-width: 60px; max-height: 60px; margin-right: 10px"> ${notification.content} <input type="hidden" name="reads" value="${notification.reads}">
+                                                        </c:if>> 
+                                                        <input type="hidden" name="orderId" value="${notification.orderId}">
+                                                        <img src="${notification.orderId.formatgoodId.goodImagePath}" alt="商品图片" style="max-width: 60px; max-height: 60px; margin-right: 10px"> ${notification.content} <input type="hidden" name="reads" value="${notification.reads}">
 											<div class="text-end">
 												<fmt:formatDate value="${notification.sendTime}" pattern="MM月dd日 HH時mm分" />
 											</div>

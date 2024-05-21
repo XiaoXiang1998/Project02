@@ -22,6 +22,7 @@
 					<div class="row">
 						<div class="col-2">
 							<h5 class="card-title">訂單編號: ${Buyorder.orderId}</h5>
+							<input type="hidden" name="orderId" value="${Buyorder.orderId}">
 						</div>
 						<div class="col">
 							<div>賣家: ${Buyorder.sellerId.name}</div>

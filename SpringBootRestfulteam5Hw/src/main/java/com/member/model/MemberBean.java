@@ -123,7 +123,8 @@ public class MemberBean {
 
 	/* 新增用不需要id */
 	public MemberBean(String account, String password, String email, String phone, String name, String gender,
-			String address, String photoSticker, boolean seller) {
+			String address, String photoSticker, boolean seller, LocalDate registrationTime) {
+		super();
 		this.account = account;
 		this.password = password;
 		this.email = email;
@@ -133,11 +134,13 @@ public class MemberBean {
 		this.address = address;
 		this.photoSticker = photoSticker;
 		this.seller = seller;
+		this.registrationTime = registrationTime;
 	}
 	
 	/*新增時無照片*/
 	public MemberBean(String account, String password, String email, String phone, String name, String gender,
-			String address, boolean seller) {
+			String address, boolean seller, LocalDate registrationTime) {
+		super();
 		this.account = account;
 		this.password = password;
 		this.email = email;
@@ -146,8 +149,10 @@ public class MemberBean {
 		this.gender = gender;
 		this.address = address;
 		this.seller = seller;
+		this.registrationTime = registrationTime;
 	}
 	
+
 	/* 修改時用 */
 	public MemberBean(Integer sid, String account, String password, String email, String phone, String name,
 			String gender, String address, String photoSticker, boolean seller, Integer reviewCount,

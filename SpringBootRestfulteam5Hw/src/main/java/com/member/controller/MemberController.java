@@ -94,17 +94,25 @@ public class MemberController {
 		return "/good/jsp/EZBuyindex";
 	}
 
+	@GetMapping("/Register")
+	public String insertMember() { 
+		return "/member/InsertMember";
+	}
 	/*------------------------------------------------基本資料操作-----------------------------------------------------*/
 
 	/* 新增會員資料 */
 	@PostMapping("/InsertMember")
-	public ResponseEntity<String> insertAction(@RequestParam("Account") String account,
+	public ResponseEntity<Map<String, Object>> insertAction(@RequestParam("Account") String account,
 			@RequestParam("Password") String password, @RequestParam("Name") String name,
 			@RequestParam("Email") String email, @RequestParam("Phone") String phone,
 			@RequestParam("Gender") String gender, @RequestParam("Address") String address,
 			@RequestParam("Seller") boolean seller, @RequestParam("Photo_Sticker") MultipartFile mf)
 			throws IllegalStateException, IOException {
 
+		Map<String, Object> response = new HashMap<>();
+		/* 紀錄當前時間 */
+		LocalDate now = LocalDate.now();
+		
 		/* 抓取檔案名稱 */
 		String fileName = mf.getOriginalFilename();
 		System.out.println("filename: " + fileName);
@@ -112,28 +120,39 @@ public class MemberController {
 		/* 設定檔案路徑 */
 		String fileDir = "C:/team5project/SpringBootRestfulteam5Hw/src/main/resources/static/UsersPic";
 
-		/* 移動檔案 */
-		if (fileName != null && fileName.length() > 0) {
+		/* 創建一個Optional物件 */
+		Optional<MemberBean> member = mService.findByAccount(account);
 
-			String[] names = fileName.split("\\.");
-			String newFileName = account + "." + names[1];
-			/* 設定完整路徑 */
-			File fileDirPath = new File(fileDir, newFileName);
+		/* 驗證此token是否存在並回傳布林值 */
+		boolean MemberExist = member.isPresent();
+		
+		if(MemberExist) {
+			response.put("success", false);
+			return ResponseEntity.badRequest().body(response);
+		}else {
+			/* 移動檔案 */
+			if (fileName != null && fileName.length() > 0) {
 
-			String photo_sticker = "UsersPic/" + newFileName;
+				String[] names = fileName.split("\\.");
+				String newFileName = account + "." + names[1];
+				/* 設定完整路徑 */
+				File fileDirPath = new File(fileDir, newFileName);
 
-			MemberBean memBean = new MemberBean(account, password, email, phone, name, gender, address, photo_sticker,
-					seller);
+				String photo_sticker = "UsersPic/" + newFileName;
 
-			System.out.println("photo_sticker: " + photo_sticker);
-			mf.transferTo(fileDirPath);
-			mService.insert(memBean);
-		} else {
-			MemberBean memBean = new MemberBean(account, password, email, phone, name, gender, address, seller);
-			mService.insert(memBean);
+				MemberBean memBean = new MemberBean(account, password, email, phone, name, gender, address, photo_sticker,
+						seller,now);
+
+				System.out.println("photo_sticker: " + photo_sticker);
+				mf.transferTo(fileDirPath);
+				mService.insert(memBean);
+			} else {
+				MemberBean memBean = new MemberBean(account, password, email, phone, name, gender, address, seller,now);
+				mService.insert(memBean);
+			}
 		}
-		System.out.println("新增成功");
-		return ResponseEntity.ok("新增成功");
+		response.put("success", true);
+		return ResponseEntity.ok(response);
 	}
 
 	/* 刪除會員資料 */
@@ -203,7 +222,7 @@ public class MemberController {
 			if(mService.update(member)) {
 				updateSession(account, session);
 				System.out.println("無圖片版更新成功");
-				 response.put("success", true);
+				response.put("success", true);
 				return ResponseEntity.ok(response);
 			} else {
 				System.out.println("無圖片版更新失敗");

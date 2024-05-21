@@ -33,22 +33,27 @@ public class PostService {
 	}
 
 	public Post Update(Post post) {
-		Optional<Post> existingComment = pRepository.findById(post.getCommentid());
-		if (existingComment.isPresent()) {
-			Post oldComment = existingComment.get();
-			if (post.getCommentcontent() != null) {
-				oldComment.setCommentcontent(post.getCommentcontent());
-			}
-			if (post.getLastmodifiedtime() != null) {
-				oldComment.setLastmodifiedtime(post.getLastmodifiedtime());
-			}
+	    Optional<Post> existingComment = pRepository.findById(post.getCommentid());
+	    if (existingComment.isPresent()) {
+	        Post oldComment = existingComment.get();
+	        if (post.getCommentcontent() != null) {
+	            oldComment.setCommentcontent(post.getCommentcontent());
+	        }
+	        if (post.getLastmodifiedtime() != null) {
+	            oldComment.setLastmodifiedtime(post.getLastmodifiedtime());
+	        } else {
+	            // 如果传入的 post 对象中的 lastmodifiedtime 为 null，则使用当前时间戳
+	            long currentTimeMillis = System.currentTimeMillis();
+	            java.sql.Timestamp currTimestamp = new java.sql.Timestamp(currentTimeMillis);
+	            oldComment.setLastmodifiedtime(currTimestamp);
+	        }
 
-			return pRepository.save(oldComment);
-		} else {
-			// 如果找不到該評論，則可能需要處理此情況
-			// 例如拋出異常或返回null
-			return null;
-		}
+	        return pRepository.save(oldComment);
+	    } else {
+	        // 如果找不到該評論，則可能需要處理此情況
+	        // 例如拋出異常或返回null
+	        return null;
+	    }
 	}
 
 

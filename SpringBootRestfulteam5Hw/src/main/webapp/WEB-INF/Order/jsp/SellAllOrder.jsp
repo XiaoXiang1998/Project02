@@ -45,7 +45,7 @@
 				<div>
 					<div class="row p-3">
 						<div class="col-auto ">
-							<img src="${Sellorder.formatgoodId.goodImagePath}" class="card-img border" alt="Good Image" style="height: 150px; object-fit: cover;" onclick="Query(${Sellorder.orderId})">
+							<img src="${Sellorder.formatgoodId.goodImagePath}" class="card-img${button} border" alt="Good Image" style="height: 150px; object-fit: cover;" onclick="Query(${Sellorder.orderId})">
 						</div>
 						<div class="col p-3">
 							<div>商品名稱: ${Sellorder.formatgoodId.good.goodsName}</div>
@@ -93,13 +93,13 @@
 					}
 				});
 			});
-			$(".card-img").click(function() {
+			$(".card-img${button}").click(function() {
 		        var orderId = $(this).closest('.card').find('input[name="orderId"]').val();
 		        Query(orderId);
 		    });
 			function Query(orderId){
-				window.location.href="OrderById?orderId=" + orderId
 						console.log(orderId)
+				window.location.href="OrderById?orderId=" + orderId
 			}
 		});
 	</script>

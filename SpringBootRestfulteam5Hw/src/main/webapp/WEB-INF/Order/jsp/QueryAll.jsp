@@ -61,7 +61,7 @@
 							<td><c:choose>
 									<c:when test="${order.orderStatus == 0}">已成立</c:when>
 									<c:when test="${order.orderStatus == 1}">待出貨</c:when>
-									<c:when test="${order.orderStatus == 2}">待收穫</c:when>
+									<c:when test="${order.orderStatus == 2}">待收貨</c:when>
 									<c:when test="${order.orderStatus == 3}">待評論</c:when>
 									<c:when test="${order.orderStatus == 4}">已完成</c:when>
 									<c:when test="${order.orderStatus == 5}">已取消</c:when>

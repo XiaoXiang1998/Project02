@@ -45,7 +45,7 @@
 				<div>
 					<div class="row p-3">
 						<div class="col-auto ">
-							<img src="${Buyorder.formatgoodId.goodImagePath}" class="card-img border" alt="Good Image" style="height: 150px; object-fit: cover;">
+							<img src="${Buyorder.formatgoodId.goodImagePath}" class="card-img${button}2 border" alt="Good Image" style="height: 150px; object-fit: cover;">
 						</div>
 						<div class="col p-3">
 							<div>商品名稱: ${Buyorder.formatgoodId.good.goodsName}</div>
@@ -93,6 +93,14 @@
 					}
 				});
 			});
+			$(".card-img${button}2").click(function() {
+		        var orderId = $(this).closest('.card').find('input[name="orderId"]').val();
+		        Query(orderId);
+		    });
+			function Query(orderId){
+						console.log(orderId)
+				window.location.href="OrderById?orderId=" + orderId
+			}
 		});
 	</script>
 </body>

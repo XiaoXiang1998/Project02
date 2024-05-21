@@ -294,6 +294,14 @@ body {
         var formContainer = document.getElementById('replyFormContainer' + commentId);
         if (formContainer.style.display === 'none') {
             formContainer.style.display = 'block';
+            
+            // Set default reply value when showing the form
+            var textarea = document.getElementById('replyContent' + commentId);
+            if (textarea.value.trim() === '') {
+                textarea.value = "感謝您的支持喔!";
+            }
+            
+            
         } else {
             formContainer.style.display = 'none';
         }
@@ -496,23 +504,22 @@ function filterComments() {
 // 初始化时调用 maskNameFunction
 document.addEventListener("DOMContentLoaded", function() {
     maskNameFunction();
-    
-    
+    setDefaultReplyValues();
+   
+});
+
+function setDefaultReplyValues() {
     var defaultReply = "感謝您的支持喔!";
 
-    // 遍历所有的评论，并设置默认回复内容
-    document.querySelectorAll('.bootstrap-frm').forEach(function(form) {
-        // 获取评论的 commentid
+    document.querySelectorAll('.bootstrap-frm').forEach(function (form) {
         var commentId = form.id.replace('replyForm', '');
         console.log(commentId);
 
-        // 获取 textarea 元素的 id
         var textareaId = "replyContent" + commentId;
 
-        // 将默认回复内容设置到文本框中
         document.getElementById(textareaId).innerText = defaultReply;
     });
-});
+}
 
 function resetForm() {
     $('#productName').val('');

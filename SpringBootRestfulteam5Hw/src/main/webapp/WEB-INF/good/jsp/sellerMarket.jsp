@@ -13,21 +13,14 @@
                 <link
                     href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Raleway:wght@600;800&display=swap"
                     rel="stylesheet">
-
                 <!-- Icon Font Stylesheet -->
                 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" />
                 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css"
                     rel="stylesheet">
 
-                <!-- Libraries Stylesheet -->
                 <link href="../../frontlib/lightbox/css/lightbox.min.css" rel="stylesheet">
-
                 <link href="../../frontlib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
-
-                <!-- Customized Bootstrap Stylesheet -->
                 <link href="../../frontcss/bootstrap.min.css" rel="stylesheet">
-
-                <!-- Template Stylesheet -->
                 <link href="../../frontcss/style.css" rel="stylesheet">
                 <style>
                     .CategotyClick {
@@ -37,7 +30,7 @@
                 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
                 <script>
                     var indexPage = 1;
-                    $(function () {
+                    $(function () { //賣家底下的商品分頁查詢
                         let target = $('#CategoriesList').find('input[type="checkbox"][name="Category"]:checked');
                         let Category;
                         if (target.length == 0) {
@@ -60,11 +53,12 @@
                         else {
                             orderItem = $('#fruits').val();
                         }
-                        let goodNameLength = $('#GoodNameResult').prop("innerHTML").length;
 
-                        let goodName = $('#GoodNameResult').prop("innerHTML").substring(3, goodNameLength - 4);
 
-                        let hiddenContent = goodName + "_" + Category + "_" + price + "_" + orderItem;
+                        let sellerID = $('#sellerID').prop("innerHTML");
+                        let goodName = "XXX";
+                        //額外加入 搜尋名稱
+                        let hiddenContent = sellerID + "_" + Category + "_" + price + "_" + orderItem + "_" + goodName;
                         //
                         loadPage(indexPage, hiddenContent);//還需檢查額外條件
                     })
@@ -91,77 +85,87 @@
                         else {
                             orderItem = $('#fruits').val();
                         }
-                        let goodNameLength = $('#GoodNameResult').prop("innerHTML").length;
-
-                        let goodName = $('#GoodNameResult').prop("innerHTML").substring(3, goodNameLength - 4);
-
-                        let hiddenContent = goodName + "_" + Category + "_" + price + "_" + orderItem;
+                        // 尋找查詢商品名稱(改變分頁、輸入商品名稱)
+                        let goodName;
+                        if ($('#GoodResultName').prop("innerHTML") == "") {
+                            goodName = "XXX";
+                        } else {
+                            let goodNameResult = $('#GoodResultName').prop("innerHTML");
+                            goodName = goodNameResult.substring(3, goodNameResult.length - 4);
+                        }
+                        //
+                        console.log($('#GoodResultName').prop("innerHTML"));
+                        let sellerID = $('#sellerID').prop("innerHTML");
+                        let hiddenContent = sellerID + "_" + Category + "_" + price + "_" + orderItem + "_" + goodName;
                         //
                         indexPage = page;
                         loadPage(indexPage, hiddenContent);
                     }
                     function loadPage(indexPage, hiddenContent) {
+                        // let hiddenContent = sellerID + "_" + Category + "_" + price + "_" + orderItem + "_" + goodName;
                         $.ajax({
                             type: 'get',
-                            url: '/searchGoodResult/' + indexPage + "/" + hiddenContent,
+                            url: '/searchSellerGoodResult/' + indexPage + "/" + hiddenContent,
                             contentType: 'application/json',
                             success: function (data) {
                                 //	private Integer page;
                                 //	private List<GoodPriceDTO> goodPriceDtoList;
-                                let data1 = data.goodPriceDtoList;
-                                $('#returnGoodResult').prop("innerHTML", "");
-                                $.each(data1, function (i, n) {
-                                    //form標籤包在div[class="col-md-6 col-lg-6 col-xl-4"]裡面
-                                    //div[class="col-md-6 col-lg-6 col-xl-4"]
-                                    let form = document.createElement('form');
-                                    let inputID = document.createElement('input'); inputID.setAttribute("type", "text"); inputID.setAttribute("name", "GoodID"); inputID.classList.add('form-control'); inputID.setAttribute("value", n.goodsID); inputID.setAttribute("hidden", true);
-                                    //
-                                    let div0 = document.createElement("div"); div0.classList.add("col-md-6"); div0.classList.add("col-lg-6"); div0.classList.add("col-xl-4");
-                                    let div1 = document.createElement("div"); div1.classList.add("rounded"); div1.classList.add("position-relative"); div1.classList.add("fruite-item");
-                                    let div2 = document.createElement("div"); div2.classList.add("fruite-img");
-                                    let img0 = document.createElement("img"); img0.classList.add("img-fluid"); img0.classList.add("w-100"); img0.classList.add("rounded-top"); img0.setAttribute("src", n.titleImage); img0.setAttribute("alt", n.titleImage); div2.append(img0); img0.setAttribute("style", "width: 150px;height: 250px;");
-                                    let div3 = document.createElement("div"); div3.classList.add("text-white"); div3.classList.add("bg-secondary"); div3.classList.add("px-3"); div3.classList.add("py-1"); div3.classList.add("rounded"); div3.classList.add("position-absolute");
-                                    div3.setAttribute("style", "top: 10px; left: 10px;"); div3.innerHTML = n.goodType;
-                                    let div4 = document.createElement("div"); div4.classList.add("p-4"); div4.classList.add("border"); div4.classList.add("border-secondary"); div4.classList.add("border-top-0"); div4.classList.add("rounded-bottom");
-                                    let contenth4 = document.createElement("h4"); contenth4.innerHTML = n.goodName;
-                                    // <div class="d-flex my-3">
-                                    //      <i class="fas fa-star text-primary"></i>
-                                    //      <i class="fas fa-star text-primary"></i>
-                                    //      <i class="fas fa-star text-primary"></i>
-                                    //      <i class="fas fa-star text-primary"></i>
-                                    //      <i class="fas fa-star"></i>
-                                    // </div>
-                                    let div5 = document.createElement("div"); div5.classList.add("d-flex"); div5.classList.add("my-3");
-                                    let score = n.goodAVG;
-                                    for (let i = 1; i <= 5; i++) {
-                                        if (score >= i) {
-                                            let fontawesomei = document.createElement("i"); fontawesomei.classList.add("fas"); fontawesomei.classList.add("fa-star"); fontawesomei.classList.add("text-primary");
-                                            div5.append(fontawesomei);
+                                console.log(data);
+                                console.log(data.goodPriceDtoList == "");
+                                if (data.goodPriceDtoList == "") {
+                                    let content = `<h1>找無資料</h1>`;
+                                    $('#returnGoodResult').prop("innerHTML", content);
+                                    changePaheNumber(data.page);
+                                }
+                                else {
+                                    let data1 = data.goodPriceDtoList;
+                                    $('#returnGoodResult').prop("innerHTML", "");
+                                    $.each(data1, function (i, n) {
+                                        //form標籤包在div[class="col-md-6 col-lg-6 col-xl-4"]裡面
+                                        //div[class="col-md-6 col-lg-6 col-xl-4"]
+                                        let form = document.createElement('form');
+                                        let inputID = document.createElement('input'); inputID.setAttribute("type", "text"); inputID.setAttribute("name", "GoodID"); inputID.classList.add('form-control'); inputID.setAttribute("value", n.goodsID); inputID.setAttribute("hidden", true);
+                                        //
+                                        let div0 = document.createElement("div"); div0.classList.add("col-md-6"); div0.classList.add("col-lg-6"); div0.classList.add("col-xl-4");
+                                        let div1 = document.createElement("div"); div1.classList.add("rounded"); div1.classList.add("position-relative"); div1.classList.add("fruite-item");
+                                        let div2 = document.createElement("div"); div2.classList.add("fruite-img");
+                                        let img0 = document.createElement("img"); img0.classList.add("img-fluid"); img0.classList.add("w-100"); img0.classList.add("rounded-top"); img0.setAttribute("src", n.titleImage); img0.setAttribute("alt", n.titleImage); div2.append(img0); img0.setAttribute("style", "width: 150px;height: 250px;");
+                                        let div3 = document.createElement("div"); div3.classList.add("text-white"); div3.classList.add("bg-secondary"); div3.classList.add("px-3"); div3.classList.add("py-1"); div3.classList.add("rounded"); div3.classList.add("position-absolute");
+                                        div3.setAttribute("style", "top: 10px; left: 10px;"); div3.innerHTML = n.goodType;
+                                        let div4 = document.createElement("div"); div4.classList.add("p-4"); div4.classList.add("border"); div4.classList.add("border-secondary"); div4.classList.add("border-top-0"); div4.classList.add("rounded-bottom");
+                                        let contenth4 = document.createElement("h4"); contenth4.innerHTML = n.goodName;
+
+                                        let div5 = document.createElement("div"); div5.classList.add("d-flex"); div5.classList.add("my-3");
+                                        let score = n.goodAVG;
+                                        for (let i = 1; i <= 5; i++) {
+                                            if (score >= i) {
+                                                let fontawesomei = document.createElement("i"); fontawesomei.classList.add("fas"); fontawesomei.classList.add("fa-star"); fontawesomei.classList.add("text-primary");
+                                                div5.append(fontawesomei);
+                                            }
+                                            else {
+                                                let fontawesomei = document.createElement("i"); fontawesomei.classList.add("fas"); fontawesomei.classList.add("fa-star");
+                                                div5.append(fontawesomei);
+                                            }
                                         }
-                                        else {
-                                            let fontawesomei = document.createElement("i"); fontawesomei.classList.add("fas"); fontawesomei.classList.add("fa-star");
-                                            div5.append(fontawesomei);
-                                        }
-                                    }
-                                    let div6 = document.createElement("div"); div6.classList.add("d-flex"); div6.classList.add("justify-content-between");
-                                    div6.classList.add("flex-lg-wrap");
-                                    //                 <p class="text-dark fs-5 fw-bold mb-0">$4.99 / kg</p>
-                                    let p1 = document.createElement("p"); p1.classList.add("text-dark"); p1.classList.add("fs-5"); p1.classList.add("fw-bold");
-                                    p1.classList.add("mb-0");
-                                    let content = n.minprice + "-" + n.maxprice + "$";
-                                    p1.innerHTML = content;
-                                    div6.append(p1);
-                                    div4.append(contenth4); div4.append(div5); div4.append(div6);
-                                    div1.append(div2); div1.append(div3); div1.append(div4);
-                                    form.append(div1);
+                                        let div6 = document.createElement("div"); div6.classList.add("d-flex"); div6.classList.add("justify-content-between");
+                                        div6.classList.add("flex-lg-wrap");
+                                        //                 <p class="text-dark fs-5 fw-bold mb-0">$4.99 / kg</p>
+                                        let p1 = document.createElement("p"); p1.classList.add("text-dark"); p1.classList.add("fs-5"); p1.classList.add("fw-bold");
+                                        p1.classList.add("mb-0");
+                                        let content = n.minprice + "-" + n.maxprice + "$";
+                                        p1.innerHTML = content;
+                                        div6.append(p1);
+                                        div4.append(contenth4); div4.append(div5); div4.append(div6);
+                                        div1.append(div2); div1.append(div3); div1.append(div4);
+                                        form.append(div1);
 
-                                    div0.append(form); form.append(inputID)
-                                    $('#returnGoodResult').append(div0);
-                                })
+                                        div0.append(form); form.append(inputID)
+                                        $('#returnGoodResult').append(div0);
+                                    })
 
-                                changePaheNumber(data.page);
+                                    changePaheNumber(data.page);
 
-
+                                }
                             }
                         })
                     }
@@ -173,13 +177,13 @@
                     <% HttpSession MemberSession=request.getSession(); MemberBean member=(MemberBean)
                         MemberSession.getAttribute("member"); %>
                         <!-- Fruits Shop Start-->
-                        <div class="container-fluid fruite py-5">
+                        <div class="container-fluid fruite">
                             <div class="container py-5">
-                                <div class="row mt-5">
-                                    <div class="col mt-5">
-                                        <h1 class="mb-4 mt-2" id="GoodNameResult">搜尋"${goodsName}"的結果</h1>
+                                <div class="row">
+                                    <div class="col">
+                                        <h1 class="mb-4 mt-2" id="sellerName">歡迎來到"${sellerName}"的賣場</h1>
                                     </div>
-                                    <div class="col-xl-3 mt-5">
+                                    <div class="col-xl-3">
                                         <div class="bg-light ps-3 py-3 rounded d-flex justify-content-between mb-4">
                                             <form action="" id="GoodOrderByItem">
                                                 <label for="fruits">Default Sorting:</label>
@@ -194,9 +198,12 @@
                                         </div>
                                     </div>
                                 </div>
-                                <h1 class="mb-4 mt-5" id="test">${totalPages}</h1>
-                                <h1 class="mb-4 mt-5" id="test1">
-                                </h1>
+                                <span class="mb-4 mt-5" id="sellerID" style="font-size: 25px;" hidden>${sellerID}</span>
+                                <!-- 賣家編號 -->
+                                <input type="text" name="GoodName" placeholder="搜尋賣家底下的商品" class="mb-3"
+                                    id="SearchGoodName">
+                                <button type="button" id="SearchGoodNameBtn"><i class="fas fa-search"></i></button>
+                                <span id="GoodResultName" class="ms-5" style="font-size: 25px;font-family: 標楷體;"></span>
                                 <div class="row g-4">
                                     <div class="col-lg-12">
                                         <div class="row g-4">
@@ -209,7 +216,7 @@
                                                 <div class="row g-4">
                                                     <div class="col-lg-12">
                                                         <div class="mb-3">
-                                                            <h4>種類</h4>
+                                                            <h4 class="mt-5">種類</h4>
                                                             <ul class="list-unstyled fruite-categorie"
                                                                 id="CategoriesList">
                                                                 <c:forEach var="j" begin="0" end="${CategoryNumber}"
@@ -218,7 +225,7 @@
                                                                         <div
                                                                             class="form-check d-flex justify-content-between fruite-name CategotyClick">
                                                                             <form action="">
-                                                                                <input class="form-check-input"
+                                                                                <input class="form-check-input mt-2"
                                                                                     type="checkbox"
                                                                                     value="${j.goodsType}"
                                                                                     name="Category">
@@ -239,7 +246,7 @@
                                                     </div>
                                                     <div class="col-lg-12">
                                                         <div class="mb-3">
-                                                            <h4 class="mb-2">Price</h4>
+                                                            <h4 class="mb-2">價格</h4>
                                                             <input type="range" class="form-range w-100" id="rangeInput"
                                                                 name="rangeInput" min="0" max="50000" value="0"
                                                                 oninput="amount.value=rangeInput.value">
@@ -247,84 +254,60 @@
                                                                 max-value="50000" for="rangeInput">0</output>
                                                         </div>
                                                     </div>
-                                                    <div class="col-lg-12" id="popularGoodList">
-                                                        <h4 class="mb-3">暢銷商品</h4>
-                                                        <!-- PopularGoodBasicInfo -->
-                                                        <div id="popularGoodList1">
-                                                            <c:forEach var="j" begin="0" step="1"
-                                                                items="${PopularGoodBasicInfo}">
-                                                                <form action="" class="popularGoodListForm">
-                                                                    <div
-                                                                        class="d-flex align-items-center justify-content-start mb-3">
-                                                                        <div class="rounded me-4"
-                                                                            style="width: 100px; height: 100px;">
-                                                                            <img src="${j.titleImage}"
-                                                                                class="img-fluid rounded w-100 h-100"
-                                                                                alt=""
-                                                                                style="width: 50px;height: 50px;">
-                                                                        </div>
-                                                                        <input type="text" name="GoodID"
-                                                                            value="${j.goodsID}" hidden>
-                                                                        <div>
-                                                                            <h6 class="mb-2">${j.goodName}</h6>
-                                                                            <div class="d-flex mb-2">
-                                                                                <c:forEach var="i" begin="1" end="5"
-                                                                                    step="1" varStatus="loop">
-                                                                                    <c:if
-                                                                                        test="${j.goodAVG>=loop.index}">
-                                                                                        <i
-                                                                                            class="fa fa-star text-secondary"></i>
-                                                                                    </c:if>
-                                                                                    <c:if
-                                                                                        test="${loop.index>j.goodAVG}">
-                                                                                        <i class="fa fa-star"></i>
-                                                                                    </c:if>
-                                                                                </c:forEach>
-                                                                            </div>
-                                                                            <div class="d-flex mb-2">
-                                                                                <h5 class="fw-bold me-2">
-                                                                                    ${j.minprice}-${j.maxprice}
-                                                                                    $
-                                                                                </h5>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </form>
-                                                            </c:forEach>
-                                                        </div>
 
-                                                        <div class="d-flex justify-content-center my-4" id="borderLine">
-                                                            <!-- 點擊View More -->
-                                                            <button class="btn btn-primary" type="button"
-                                                                id="ViewMore">View
-                                                                More</button>
-                                                        </div>
-                                                    </div>
                                                 </div>
                                             </div>
                                             <div class="col-lg-9">
-                                                <div class="row g-4 " id="returnGoodResult">
+                                                <div class="row g-4 justify-content-center" id="returnGoodResult">
                                                     <!-- justify-content-center -->
 
                                                 </div>
                                                 <div class="col-12">
                                                     <div class="pagination d-flex justify-content-center mt-5">
-                                                        <!-- <a href="#" class="rounded">&laquo;</a> -->
-                                                        <!-- Previous -->
-                                                        <!-- <c:forEach var="i" begin="0" end="${totalPages+1}" step="1">
-                                                <button id="myPage" type="button"
-                                                    onclick="change(${i}+1)">${i+1}</button>
-                                            </c:forEach> -->
                                                         <div class="row" id="PageList">
 
                                                         </div>
-                                                        <!-- Next -->
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <h4 class="mb-3">暢銷商品</h4>
+                            <!-- PopularGoodBasicInfo -->
+                            <div class="owl-carousel justify-content-center">
+
+                                <!--  -->
+                                <c:forEach var="j" begin="0" step="1" items="${PopularGoodBasicInfo}">
+                                    <form action="" class="popularGood">
+                                        <div class="align-items-center justify-content-start mb-3">
+                                            <div class="rounded me-4">
+                                                <img src="${j.titleImage}" class="img-fluid rounded w-100 h-100" alt="">
+                                            </div>
+                                            <div>
+                                                <h6 class="mb-2">${j.goodName}</h6>
+                                                <div class="d-flex mb-2">
+                                                    <c:forEach var="i" begin="1" end="5" step="1" varStatus="loop">
+                                                        <c:if test="${j.goodAVG>=loop.index}">
+                                                            <i class="fa fa-star text-secondary"></i>
+                                                        </c:if>
+                                                        <c:if test="${loop.index>j.goodAVG}">
+                                                            <i class="fa fa-star"></i>
+                                                        </c:if>
+                                                    </c:forEach>
+                                                </div>
+                                                <input type="text" name="GoodID" value="${j.goodsID}" hidden>
+                                                <div class="d-flex mb-2">
+                                                    <h5 class="fw-bold me-2">${j.minprice}-${j.maxprice} $</h5>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </c:forEach>
+
                             </div>
                         </div>
                         <!-- Fruits Shop End-->
@@ -458,14 +441,10 @@
                         <!-- Template Javascript -->
                         <script src="../../frontjs/main.js"></script>
                         <script>
-                            //點擊種類checkbox 觸發ajax並保有分頁查詢
-                            $('input[type="checkbox"][name="Category"]').click(function () {//仍須滿足分頁查詢的功能
-                                let goodNameLength = $('#GoodNameResult').prop("innerHTML").length;
-                                let goodName = $('#GoodNameResult').prop("innerHTML").substring(3, goodNameLength - 4);
-                                // console.log("123123123123123");
-                                // console.log($(this).closest('form').find("span").prop("innerHTML")); //種類
-                                // console.log($('#rangeInput').val()); //價格
-                                // console.log($('#fruits').val()); //用甚麼方式排序
+                            $('input[type="checkbox"][name="Category"]').click(function () {//仍須滿足分頁查詢的功能(種類)
+                                // 抓賣家編號
+                                let sellerID = $('#sellerID').prop("innerHTML");
+                                // 
                                 let Category;
                                 if ($(this).prop("checked") == true) {
                                     Category = $(this).closest('form').find("span").prop("innerHTML");
@@ -487,17 +466,22 @@
                                 else {
                                     orderItem = $('#fruits').val();
                                 }
-                                let hiddenContent = goodName + "_" + Category + "_" + price + "_" + orderItem;
+                                $('#SearchGoodName').prop("value", "");//將input標籤內的值清空
+                                $('#GoodResultName').prop("innerHTML", "");
+                                let goodName = "XXX";
+                                let hiddenContent = sellerID + "_" + Category + "_" + price + "_" + orderItem + "_" + goodName;
                                 console.log("hiddenContent = " + hiddenContent);
                                 loadPage(1, hiddenContent);
                             })
-                            //調整價格大小 觸發ajax並保有分頁查詢
-                            $('#rangeInput').change(function () {
-                                let goodNameLength = $('#GoodNameResult').prop("innerHTML").length;
 
+                            $('#rangeInput').change(function () {//價格
+                                // 抓賣家編號
+                                let sellerID = $('#sellerID').prop("innerHTML");
+                                //
+                                // let goodNameLength = $('#GoodNameResult').prop("innerHTML").length;
                                 let target = $('#CategoriesList').find('input[type="checkbox"][name="Category"]:checked');
-                                let goodName = $('#GoodNameResult').prop("innerHTML").substring(3, goodNameLength - 4);
-
+                                // let goodName = $('#GoodNameResult').prop("innerHTML").substring(3, goodNameLength - 4);
+                                //
                                 let Category;
                                 if (target.length == 0) {
                                     Category = "XXX";
@@ -520,16 +504,19 @@
                                 else {
                                     orderItem = $('#fruits').val();
                                 }
-                                let hiddenContent = goodName + "_" + Category + "_" + price + "_" + orderItem;
+                                $('#SearchGoodName').prop("value", "");//將input標籤內的值清空
+                                $('#GoodResultName').prop("innerHTML", "");
+                                let goodName = "XXX";
+                                let hiddenContent = sellerID + "_" + Category + "_" + price + "_" + orderItem + "_" + goodName;
                                 console.log("hiddenContent = " + hiddenContent);
                                 loadPage(1, hiddenContent);
                             })
-                            //指定排序方式 觸發ajax並保有分頁查詢
-                            $('#fruits').change(function () {
-                                let goodNameLength = $('#GoodNameResult').prop("innerHTML").length;
-
-                                let goodName = $('#GoodNameResult').prop("innerHTML").substring(3, goodNameLength - 4);
-
+                            $('#fruits').change(function () { //排序
+                                // 抓賣家編號
+                                let sellerID = $('#sellerID').prop("innerHTML");
+                                // let goodNameLength = $('#GoodNameResult').prop("innerHTML").length;
+                                // let goodName = $('#GoodNameResult').prop("innerHTML").substring(3, goodNameLength - 4);
+                                //
                                 let orderItem;
                                 if ($(this).val() == "NO") {
                                     orderItem = "XXX";
@@ -553,12 +540,14 @@
                                 else {
                                     price = $('#rangeInput').val();
                                 }
-                                let hiddenContent = goodName + "_" + Category + "_" + price + "_" + orderItem;
+                                $('#SearchGoodName').prop("value", "");//將input標籤內的值清空
+                                $('#GoodResultName').prop("innerHTML", "");
+                                let goodName = "XXX";
+                                let hiddenContent = sellerID + "_" + Category + "_" + price + "_" + orderItem + "_" + goodName;
                                 console.log("hiddenContent = " + hiddenContent);
                                 loadPage(1, hiddenContent);
                             })
-                            //查詢新的商品名稱 頁面跳轉
-                            $('#GoToSearchGood').click(function () {
+                            $('#GoToSearchGood').click(function () { //從最上面的瀏覽頁搜尋商品(對象是整個商品資料庫)
                                 let searchGoodInput = $(this).closest('form').find('input');
                                 if (searchGoodInput.prop('value') == null) {
                                     console.log(searchGoodInput);
@@ -571,7 +560,7 @@
                                     form.submit();
                                 }
                             })
-                            // 當觸發ajax後，根據得到的結果數量改變點擊按鈕的數量 $('#PageList')放入頁面的地方
+                            // $('#PageList')放入頁面的地方
                             function changePaheNumber(pageNumber) {//pageNumber = ${ totalPages+ 1}
                                 console.log("pageNumber = " + pageNumber);
 
@@ -583,6 +572,7 @@
                                     btn1.setAttribute("type", "button");
                                     btn1.innerHTML = i;
                                     btn1.setAttribute("onclick", "change(" + (i) + ")");
+                                    btn1.classList.add("btn"); btn1.classList.add("btn-outline-primary"); btn1.classList.add("me-1");
                                     btn1.classList.add("col");
                                     console.log("i = " + i);
                                     $('#PageList').append(btn1);
@@ -590,7 +580,7 @@
                                 $('#PageList').prop("innerHTML")
                                 // $('#test').prop("innerHTML", pageNumber + 1);
                             }
-                            //檢閱詳細商品資訊
+
                             $(document).on('click', 'div[class="col-md-6 col-lg-6 col-xl-4"]', function () {//前往詳細商品頁面
                                 console.log("你點到我了");
                                 let form = $(this).find('form');
@@ -599,78 +589,48 @@
                                 form.prop("action", "goodDetail.controller");
                                 form.submit();
                             })
-                            //想看更多熱銷商品 觸發ajax
-                            $('#ViewMore').click(function () {
-                                // let showstatus = ;
-                                let showstatusString = $(this).prop("innerHTML").replace(/\s*/g, "");
-                                console.log("你點到" + showstatusString);
 
-                                let target = $('#popularGoodList').find(`div[class="d-flex align-items-center justify-content-start mb-3"]`);
-                                console.log(target);
-                                let arrtarget = [...target];
-                                for (let i = 0; i < arrtarget.length; i++) {
-                                    arrtarget[i].outerHTML = "";
-                                }
-                                let targetpopular = $('#GoodNameResult').prop("innerHTML");
-                                let targetString = targetpopular.substring(3, targetpopular.length - 4);
-                                let form = document.createElement("form");
-                                let formdata = new FormData(form);
-                                formdata.append("GoodName", targetString);
-                                let params = { GoodName: targetString, showstatus: showstatusString };
-                                console.log(params);
-                                $.ajax({
-                                    type: "get",
-                                    url: "/viewMoreGood",
-                                    dataType: "json",
-                                    contentType: "application/json",
-                                    data: params,
-                                    success: function (data) {
-                                        $.each(data, function (i, n) {
-                                            // let div0 = document.createElement("div");
-                                            // div0.classList.add("d-flex"); div0.classList.add("align-items-center");
-                                            // div0.classList.add("justify-content-start"); div0.classList.add("mb-3");
-                                            let content = `<div class="d-flex align-items-center justify-content-start mb-3">
-                                 <div class="rounded me-4" style="width: 100px; height: 100px;">
-                                                        <img src=`+ n.titleImage + ` class="img-fluid rounded w-100 h-100"
-                                                            alt="" style="width: 50px;height: 50px;">
-                                                    </div>
-                                                    <div>
-                                                        <h6 class="mb-2">`+ n.goodName + `</h6>
-                                                        <div class="d-flex mb-2">`;
-                                            for (let j = 1; j <= 5; j++) {
-                                                if (n.goodAVG >= j) {
-                                                    content = content + `<i class="fa fa-star text-secondary"></i>`;
-                                                }
-                                                else {
-                                                    content = content + `<i class="fa fa-star"></i>`;
-                                                }
-                                            }
-                                            content = content + `</div>
-                                                        <div class="d-flex mb-2">
-                                                            <h5 class="fw-bold me-2">`+ n.minprice + `-` + n.maxprice + `$</h5>
-                                                        </div>
-                                                    </div>
-                                                </div>`;
-                                            // div0.append(content);
-                                            $('#popularGoodList1').append(content);
-                                        })
-                                    }
-                                })
-                                console.log($(this).prop("innerHTML").replace(/\s*/g, "") == "ViewMore");
-                                if ($(this).prop("innerHTML").replace(/\s*/g, "") == "ViewMore") {
-                                    $(this).prop("innerHTML", "View Less");
+                            $('#SearchGoodNameBtn').click(function () {//在賣家底下搜尋商品
+                                let sellerID = $('#sellerID').prop("innerHTML");
+
+                                let target = $('#CategoriesList').find('input[type="checkbox"][name="Category"]:checked');
+                                let Category;
+                                if (target.length == 0) {
+                                    Category = "XXX";
                                 }
                                 else {
-                                    if ($(this).prop("innerHTML").replace(/\s*/g, "") == "ViewLess") {
-                                        $(this).prop("innerHTML", "View More");
-                                    }
+                                    Category = target.val();
                                 }
+                                let price;
+                                if ($('#rangeInput').val() == 0) {
+                                    price = "XXX";
+                                }
+                                else {
+                                    price = $('#rangeInput').val();
+                                }
+                                let orderItem;
+                                if ($('#fruits').val() == "NO") {
+                                    orderItem = "XXX";
+                                }
+                                else {
+                                    orderItem = $('#fruits').val();
+                                }
+                                let goodName = $('#SearchGoodName').val();
+                                $('#GoodResultName').prop("innerHTML", `搜尋"` + goodName + "`的結果");
+                                let hiddenContent = sellerID + "_" + Category + "_" + price + "_" + orderItem + "_" + goodName;
+                                loadPage(1, hiddenContent);
                             })
-                            //檢閱熱銷商品的詳細資訊
-                            $('.popularGoodListForm').click(function () {
+
+                            $('.owl-carousel').owlCarousel({
+                                loop: true,
+                                margin: 10,
+                                nav: true,
+                                items: 4,
+                            })
+
+                            $('.popularGood').click(function () {
                                 let form = $(this).closest("form");
-                                form.prop("action", "goodDetail.controller");
-                                form.prop("method", "get");
+                                form.prop("method", "get"); form.prop("action", "goodDetail.controller");
                                 form.submit();
                             })
                         </script>

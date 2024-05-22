@@ -140,9 +140,32 @@ public class OrderController {
 		cService.deleteCarItemById(cartItemId);
 		List<CarItem> carItems = cService.findByMemberId(memberId);
 		m.addAttribute("carItems", carItems);
-		return "Order/jsp/ShopCar";
+		return "Order/jsformatIDp/ShopCar";
 	}
+	
+	@GetMapping("DirectlyBuy")
+	public String DirectlyBuy(@RequestParam("ordersellerID") Integer sellerId,@RequestParam("orderformatID") Integer formatID,
+			@RequestParam("orderformatprice") Integer price,@RequestParam("orderNumber") Integer quantity,
+			@RequestParam("orderGoodName") String goodsName,@RequestParam("orderGoodSize") String goodSize,
+			@RequestParam("orderformatimagepath") String imagePath,Model m) {
+		MemberBean memberb = (MemberBean) session.getAttribute("member");
 
+		Integer memberId = memberb.getSid();
+		List<Notifications> notifications = nService.findByRecipientIdOrderBySendTimeDesc(memberb);
+		Integer count = nService.noReadCounts(memberb);
+		session.setAttribute("count", count);
+		session.setAttribute("notifications", notifications);
+		m.addAttribute("memberId", memberId);
+		m.addAttribute("sellerId",sellerId);
+		m.addAttribute("formatID",formatID);
+		m.addAttribute("price",price);
+		m.addAttribute("goodSize", goodSize);
+		m.addAttribute("goodsName",goodsName);
+		m.addAttribute("quantity",quantity);
+		m.addAttribute("imagePath",imagePath);
+		return "Order/jsp/DirectlyBuy";
+	}
+	
 	@GetMapping("/payment.controller")
 	public String Payment(@RequestParam("checkedItemIds") Integer[] checkedItemIds, Model m) {
 		MemberBean memberb = (MemberBean) session.getAttribute("member");
@@ -152,6 +175,8 @@ public class OrderController {
 			List<CarItem> items = cService.findByIdList(itemId);
 			if (items != null) {
 				cartItems.addAll(items);
+			}if(items == null) {
+				
 			}
 			System.out.println(cartItems);
 		}

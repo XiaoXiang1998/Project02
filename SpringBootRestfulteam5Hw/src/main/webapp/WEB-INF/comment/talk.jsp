@@ -41,7 +41,6 @@
 	margin-bottom: 10px;
 	border-radius: 10px;
 	word-wrap: break-word;
-	
 }
 
 .selected-user {
@@ -61,28 +60,26 @@
 }
 
 #chat-content {
-    overflow-y: auto;
-    max-height: 400px; 
+	overflow-y: auto;
+	max-height: 400px;
 }
 
 .message-time {
-    display: inline; 
+	display: inline;
 }
 
 .avatar-icon {
-    width: 30px;
-    height: 30px; 
-    border-radius: 50%; 
-    margin-right: 10px; 
+	width: 30px;
+	height: 30px;
+	border-radius: 50%;
+	margin-right: 10px;
 }
-
-
 </style>
 </head>
 <body class="gradient-custom">
 	<div class="container py-5">
 		<div class="row">
-		<input type="hidden" id="username" value="${username}">
+			<input type="hidden" id="username" value="${username}">
 			<div class="col-md-6 col-lg-5 col-xl-5 mb-4 mb-md-0">
 				<h5 class="font-weight-bold mb-3 text-center text-white">Member</h5>
 				<div class="card mask-custom">
@@ -103,6 +100,8 @@
 						<div data-mdb-input-init class="form-outline form-white">
 							<textarea class="form-control" id="message" rows="3"></textarea>
 							<label class="form-label" for="message">Message</label>
+							<button type="button" id="emojiButton">😀</button>
+							<div id="emojiContainer" style="display: none;"></div>
 						</div>
 					</li>
 					<li>
@@ -115,241 +114,292 @@
 	</div>
 
 	<script>
-	$(function() {
+		$(function() {
 
-		var ws;
-		if ("WebSocket" in window) {
-			var baseUrl = 'ws://localhost:8081/websocket/';
-			var username = $('#username').val();
-			ws = new WebSocket(baseUrl + username);
-
-			ws.onopen = function() {
-				  console.log("建立 websocket 连接......");
-
-	              loadChatHistory();
-	              handleOnlineUsersUpdate([]);
-			};
-
-			ws.onmessage = function(event) {
-			    var data = JSON.parse(event.data);
-			    console.log("Received message:", data);
-
-			    if (data.onlineUsers !== undefined) {
-			        handleOnlineUsersUpdate(data.onlineUsers);
-			    } else if (data.offlineUser !== undefined) { 
-			        var offlineUser = data.offlineUser;
-			        $('#content').append('[' + offlineUser + ']已離線');
-
-			    } else if (data.onlineUser !== undefined ) { 
-			        var onlineUser = data.onlineUser;
-			        $('#content').append('[' + onlineUser + ']已進入聊天室');
-	
-			    } else {
-			        var $content = $('#content');
-			        var messageClass = data.sender === $('#username').val() ? 'right-float'
-			                : 'left-float';
-			        var currentTime = getCurrentTime(); 
-			        var messageDiv = '<div class="message ' + messageClass + '">' +
-                    '<img class="avatar" src="commentPicture/deafult-avatar.png" alt="Avatar">' +
-                    data.sender + ': ' + data.content + 
-                    '<span class="message-time">' + data.time + '</span>' +
-                 '</div>';
-			        $content.append(messageDiv);
-			        
-			        var scrollHeight = $('#chat-content')[0].scrollHeight;
-			        $('#chat-content').scrollTop(scrollHeight);
-			        
-			        storeMessage(data);
-			        
-			        updateLastMessageForUser(data.sender, data.content, data.time);
-
-			    }
-			};
-
-			ws.onclose = function() {
-				console.log("關閉 websocket 連接......");
-			};
-
-			ws.onerror = function(event) {
-				console.log("websocket 發生錯誤......" + event + '\n');
-			};
-
-			$('#toSend').click(function() {
-				sendMsg();
-			});
-
-			$(document).keyup(function(event) {
-				if (event.keyCode == 13) {
-					sendMsg();
-				}
-			});
-
-			function handleOnlineUsersUpdate(onlineUsers) {
-			    var onlineUsersList = document.getElementById("onlineUsersList");
-			    onlineUsersList.innerHTML = ""; 
-
-			    onlineUsers.forEach(function(user) {
-			        if (user !== $('#username').val()) { 
-			            var listItem = document.createElement("li");
-			            listItem.textContent = user;
-			            listItem.classList.add("user"); 
-			            
-			            listItem.setAttribute("data-username", user); 
-
-			            
-			            // 添加一个容器来显示最后一条消息的内容
-			            var lastMessageContainer = document.createElement("div");
-			            lastMessageContainer.classList.add("last-message");
-			            listItem.appendChild(lastMessageContainer);
-			            
-			            // 获取用户的最后一条消息
-			            var lastMessage = getLastMessageForUser(user);
-
-			            if (lastMessage !== null) { // 检查是否存在最后一条消息
-			                // 更新容器中的内容为最后一条消息的内容
-			                lastMessageContainer.textContent = lastMessage ? lastMessage.content : "";
-			            }
-
-			            // 添加用户头像
-			            var img = document.createElement("img");
-			            img.src = "commentPicture/deafult-avatar.png"; 
-			            img.alt = "Avatar";
-			            img.classList.add("avatar");
-			            listItem.prepend(img); 
-			            
-			            // 将用户列表项添加到用户列表中
-			            onlineUsersList.appendChild(listItem);
-
-			            // 添加点击事件监听器
-			            listItem.addEventListener("click", function() {
-			                var receiver = user;
-			                onlineUsersList.querySelectorAll(".user").forEach(function(element) {
-			                    element.classList.remove("selected-user");
-			                });
-			                listItem.classList.add("selected-user");
-			                window.selectedReceiver = receiver;
-			            });
-			        }
-			    });
-			}
-			
-			
-
-			
-			
-			function getLastMessageForUser(username) {
-	            var chatHistory = localStorage.getItem('chatHistory');
-	            if (chatHistory) {
-	                var messages = JSON.parse(chatHistory);
-	                var userMessages = messages.filter(function(message) {
-	                    return message.sender === username;
-	                });
-	                if (userMessages.length > 0) {
-	                    return userMessages[userMessages.length - 1];
-	                }
-	            }
-	            return null;
-	        }
-			
-			function updateLastMessageForUser(username, content, time) {
-			    console.log("进步来是沙小");
-
-			    var onlineUsersList = document.getElementById("onlineUsersList");
-			    var userItems = onlineUsersList.querySelectorAll(".user");
-
-			    userItems.forEach(function(userItem) {
-			        var userItemUsername = userItem.getAttribute("data-username");
-			        if (userItemUsername === username) { 
-			            var lastMessageContainer = userItem.querySelector(".last-message");
-			            console.log(userItemUsername);
-			            lastMessageContainer.textContent = content;
-			            console.log(content);
-			        }
-			    });
-			}
-
-			
-			function sendMsg(receiver) {
-				var message = $('#message').val();
+			var ws;
+			if ("WebSocket" in window) {
+				var baseUrl = 'ws://localhost:8081/websocket/';
 				var username = $('#username').val();
-				var receiver = window.selectedReceiver;
-				var sender=$('#message').val();
-			    var currentTime = getCurrentTime(); 
-	
-				
-				
-				var msgObj = {
-					"sender" : username,
-					"receiver" : receiver,
-					"content" : message,
-			        "time": currentTime 
+				ws = new WebSocket(baseUrl + username);
+
+				ws.onopen = function() {
+					console.log("建立 websocket 连接......");
+
+					loadChatHistory();
+					handleOnlineUsersUpdate([]);
 				};
-				var jsonString = JSON.stringify(msgObj);
-				var $content = $('#content');
-				$content.append('<div class="message right-float">' +
-		                '<img class="avatar" src="commentPicture/deafult-avatar.png" alt="Avatar">' +
-		                "我" + ': ' + message + 
-		                '<span class="message-time">' + currentTime + '</span>' +
-		                '</div>');				
-				
-			    storeMessage(msgObj);
 
-				$('#message').val("");
+				ws.onmessage = function(event) {
+					var data = JSON.parse(event.data);
+					console.log("Received message:", data);
 
-				ws.send(jsonString);
-				
-			    var scrollHeight = $('#chat-content')[0].scrollHeight;
-			    $('#chat-content').scrollTop(scrollHeight);
-			    
+					if (data.onlineUsers !== undefined) {
+						handleOnlineUsersUpdate(data.onlineUsers);
+					} else if (data.offlineUser !== undefined) {
+						var offlineUser = data.offlineUser;
+						$('#content').append('[' + offlineUser + ']已離線');
 
+					} else if (data.onlineUser !== undefined) {
+						var onlineUser = data.onlineUser;
+						$('#content').append('[' + onlineUser + ']已進入聊天室');
+
+					} else {
+						var $content = $('#content');
+						var messageClass = data.sender === $('#username').val() ? 'right-float'
+								: 'left-float';
+						var currentTime = getCurrentTime();
+						var messageDiv = '<div class="message ' + messageClass + '">'
+								+ '<img class="avatar" src="commentPicture/deafult-avatar.png" alt="Avatar">'
+								+ data.sender
+								+ ': '
+								+ data.content
+								+ '<span class="message-time">'
+								+ data.time
+								+ '</span>' + '</div>';
+						$content.append(messageDiv);
+
+						var scrollHeight = $('#chat-content')[0].scrollHeight;
+						$('#chat-content').scrollTop(scrollHeight);
+
+						storeMessage(data);
+
+						updateLastMessageForUser(data.sender, data.content,
+								data.time);
+
+					}
+				};
+
+				ws.onclose = function() {
+					console.log("關閉 websocket 連接......");
+				};
+
+				ws.onerror = function(event) {
+					console.log("websocket 發生錯誤......" + event + '\n');
+				};
+
+				$('#toSend').click(function() {
+					sendMsg();
+				});
+
+				$(document).keyup(function(event) {
+					if (event.keyCode == 13) {
+						sendMsg();
+					}
+				});
+
+				function handleOnlineUsersUpdate(onlineUsers) {
+					var onlineUsersList = document
+							.getElementById("onlineUsersList");
+					onlineUsersList.innerHTML = "";
+
+					onlineUsers
+							.forEach(function(user) {
+								if (user !== $('#username').val()) {
+									var listItem = document.createElement("li");
+									listItem.textContent = user;
+									listItem.classList.add("user");
+
+									listItem
+											.setAttribute("data-username", user);
+
+									// 添加一个容器来显示最后一条消息的内容
+									var lastMessageContainer = document
+											.createElement("div");
+									lastMessageContainer.classList
+											.add("last-message");
+									listItem.appendChild(lastMessageContainer);
+
+									// 获取用户的最后一条消息
+									var lastMessage = getLastMessageForUser(user);
+
+									if (lastMessage !== null) { // 检查是否存在最后一条消息
+										// 更新容器中的内容为最后一条消息的内容
+										lastMessageContainer.textContent = lastMessage ? lastMessage.content
+												: "";
+									}
+
+									// 添加用户头像
+									var img = document.createElement("img");
+									img.src = "commentPicture/deafult-avatar.png";
+									img.alt = "Avatar";
+									img.classList.add("avatar");
+									listItem.prepend(img);
+
+									// 将用户列表项添加到用户列表中
+									onlineUsersList.appendChild(listItem);
+
+									// 添加点击事件监听器
+									listItem
+											.addEventListener(
+													"click",
+													function() {
+														var receiver = user;
+														onlineUsersList
+																.querySelectorAll(
+																		".user")
+																.forEach(
+																		function(
+																				element) {
+																			element.classList
+																					.remove("selected-user");
+																		});
+														listItem.classList
+																.add("selected-user");
+														window.selectedReceiver = receiver;
+													});
+								}
+							});
+				}
+
+				function getLastMessageForUser(username) {
+					var chatHistory = localStorage.getItem('chatHistory');
+					if (chatHistory) {
+						var messages = JSON.parse(chatHistory);
+						var userMessages = messages.filter(function(message) {
+							return message.sender === username;
+						});
+						if (userMessages.length > 0) {
+							return userMessages[userMessages.length - 1];
+						}
+					}
+					return null;
+				}
+
+				function updateLastMessageForUser(username, content, time) {
+					console.log("进步来是沙小");
+
+					var onlineUsersList = document
+							.getElementById("onlineUsersList");
+					var userItems = onlineUsersList.querySelectorAll(".user");
+
+					userItems.forEach(function(userItem) {
+						var userItemUsername = userItem
+								.getAttribute("data-username");
+						if (userItemUsername === username) {
+							var lastMessageContainer = userItem
+									.querySelector(".last-message");
+							console.log(userItemUsername);
+							lastMessageContainer.textContent = content;
+							console.log(content);
+						}
+					});
+				}
+
+				function sendMsg(receiver) {
+					var message = $('#message').val();
+					var username = $('#username').val();
+					var receiver = window.selectedReceiver;
+					var sender = $('#message').val();
+					var currentTime = getCurrentTime();
+
+					var msgObj = {
+						"sender" : username,
+						"receiver" : receiver,
+						"content" : message,
+						"time" : currentTime
+					};
+					var jsonString = JSON.stringify(msgObj);
+					var $content = $('#content');
+					$content
+							.append('<div class="message right-float">'
+									+ '<img class="avatar" src="commentPicture/deafult-avatar.png" alt="Avatar">'
+									+ "我" + ': ' + message
+									+ '<span class="message-time">'
+									+ currentTime + '</span>' + '</div>');
+
+					storeMessage(msgObj);
+
+					$('#message').val("");
+
+					ws.send(jsonString);
+
+					var scrollHeight = $('#chat-content')[0].scrollHeight;
+					$('#chat-content').scrollTop(scrollHeight);
+
+				}
+
+				function getCurrentTime() {
+					var now = new Date();
+					var hours = now.getHours();
+					var minutes = now.getMinutes();
+
+					hours = hours < 10 ? '0' + hours : hours;
+					minutes = minutes < 10 ? '0' + minutes : minutes;
+
+					var period = hours >= 12 ? '下午' : '上午';
+					hours = hours > 12 ? hours - 12 : hours;
+					return period + ' ' + hours + '點' + ' ' + minutes + '分';
+				}
+
+				function storeMessage(message) {
+					var chatHistory = localStorage.getItem('chatHistory');
+					var messages = chatHistory ? JSON.parse(chatHistory) : [];
+					messages.push(message);
+					localStorage.setItem('chatHistory', JSON
+							.stringify(messages));
+				}
+
+				function loadChatHistory() {
+					var chatHistory = localStorage.getItem('chatHistory');
+					if (chatHistory) {
+						var messages = JSON.parse(chatHistory);
+						messages
+								.forEach(function(message) {
+									var messageClass = message.sender === $(
+											'#username').val() ? 'right-float'
+											: 'left-float';
+									var senderName = message.sender === $(
+											'#username').val() ? '我'
+											: message.sender;
+									var messageDiv = '<div class="message ' + messageClass + '">'
+											+ '<img class="avatar" src="commentPicture/deafult-avatar.png" alt="Avatar">'
+											+ senderName
+											+ ': '
+											+ message.content
+											+ '<span class="message-time">'
+											+ message.time
+											+ '</span>'
+											+ '</div>';
+									$('#content').append(messageDiv);
+								});
+
+						var scrollHeight = $('#chat-content')[0].scrollHeight;
+						$('#chat-content').scrollTop(scrollHeight);
+					}
+				}
+
+			} else {
+				alert("很抱歉，您的瀏覽器不支持 WebSocket！！！");
 			}
-			
-			function getCurrentTime() {
-			    var now = new Date();
-			    var hours = now.getHours();
-			    var minutes = now.getMinutes();
+			 // 表情符号功能
+        	var emojis = ["😀", "😃", "😄", "😁", "😆", "😅", "🤣", "😂", "🙂", "🙃","😎","👍","(●'◡'●)"];
+	        var $emojiContainer = $('#emojiContainer');
 
-			    hours = hours < 10 ? '0' + hours : hours;
-			    minutes = minutes < 10 ? '0' + minutes : minutes;
+	        // Populate the emoji container with emojis
+	        emojis.forEach(function(emoji) {
+	            var $emoji = $('<span>').addClass('emoji').text(emoji);
+	            $emojiContainer.append($emoji);
+	        });
 
-			    var period = hours >= 12 ? '下午' : '上午'; 
-			    hours = hours > 12 ? hours - 12 : hours; 
-			    return period + ' ' + hours + '點' + ' ' + minutes + '分';
-			}
+	        // Show/hide the emoji container when the button is clicked
+	        $('#emojiButton').click(function() {
+	            $emojiContainer.toggle();
+	        });
 
-	        function storeMessage(message) {
-	            var chatHistory = localStorage.getItem('chatHistory');
-	            var messages = chatHistory ? JSON.parse(chatHistory) : [];
-	            messages.push(message);
-	            localStorage.setItem('chatHistory', JSON.stringify(messages));
-	        }
-	        
-	        function loadChatHistory() {
-	            var chatHistory = localStorage.getItem('chatHistory');
-	            if (chatHistory) {
-	                var messages = JSON.parse(chatHistory);
-	                messages.forEach(function(message) {
-	                    var messageClass = message.sender === $('#username').val() ? 'right-float' : 'left-float';
-	                    var senderName = message.sender === $('#username').val() ? '我' : message.sender;
-	                    var messageDiv = '<div class="message ' + messageClass + '">' +
-                        '<img class="avatar" src="commentPicture/deafult-avatar.png" alt="Avatar">' +
-                        senderName + ': ' + message.content +
-                        '<span class="message-time">' + message.time + '</span>' +
-                     '</div>';
-	                    $('#content').append(messageDiv);
-	                });
+	        // Insert emoji into textarea
+	        $emojiContainer.on('click', '.emoji', function() {
+	            var emoji = $(this).text();
+	            var $message = $('#message');
+	            $message.val($message.val() + emoji);
+	        });
 
-	                var scrollHeight = $('#chat-content')[0].scrollHeight;
-	                $('#chat-content').scrollTop(scrollHeight);
+	        // Hide emoji container when clicking outside
+	        $(document).click(function(event) {
+	            if (!$(event.target).closest('#emojiButton, #emojiContainer').length) {
+	                $emojiContainer.hide();
 	            }
-	        }
-	        
-	        
-	        
-		} else {
-			alert("很抱歉，您的瀏覽器不支持 WebSocket！！！");
-		}
-	});
+	        });
+		});
 	</script>
 </body>
 </html>

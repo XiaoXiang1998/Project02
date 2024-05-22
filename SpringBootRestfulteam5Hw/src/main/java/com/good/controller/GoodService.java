@@ -46,10 +46,49 @@ public class GoodService{
 	public Page<GoodsBean2> findAllByPage(Pageable pageable){
 		return goodRepos.findAll(pageable);
 	}
+	public List<GoodsBean2> findSellerGoodItem(Integer sellerID){
+		return goodRepos.findSellerGoodItem(sellerID);
+	}
+
 	public List<GoodsBean2> findSellerGood(String goodsName,Integer sellerID){
 		return goodRepos.findSellerGood(goodsName, sellerID);
 	}
 	public List<GoodsBean2> findGoodByLaunchDate(){
 		return goodRepos.findGoodByLaunchDate();
+	}
+	public Page<GoodsBean2> findGoodByPageOnMarket(Pageable pageable){
+		return goodRepos.findGoodByPageOnMarket( pageable);
+	}
+	public Page<GoodsBean2> findGoodByPageDiscontinue(Pageable pageable){
+		return goodRepos.findGoodByPageDiscontinue( pageable);
+	}
+	//
+	public Page<GoodsBean2> findGoodByPageAndNameOnMarket(Pageable pageable,String goodName){
+		return goodRepos.findGoodByPageAndNameOnMarket(pageable, goodName);
+	}
+	public Page<GoodsBean2> findGoodByPageAndNameDiscontinue(Pageable pageable,String goodName){
+		return goodRepos.findGoodByPageAndNameDiscontinue(pageable, goodName);
+	}
+	public Page<GoodsBean2> findGoodByPageAndNameAll(Pageable pageable,String goodName){
+		return goodRepos.findGoodByPageAndNameAll(goodName,pageable);
+	}
+	//從賣家中，從上架、下架、全部商品中查詢商品名稱
+	public Page<GoodsBean2> findSellerGoodByPageOnMarket(Pageable pageable,Integer sellerID){
+		return goodRepos.findSellerGoodByPageOnMarket(pageable, sellerID);
+	}
+	public Page<GoodsBean2> findSellerGoodByPageAndNameOnMarket(Pageable pageable,Integer sellerID,String goodNameString){
+		return goodRepos.findSellerGoodByPageAndNameOnMarket(pageable, sellerID, goodNameString);
+	}
+	public Page<GoodsBean2> findSellerGoodByPageDiscontinue(Pageable pageable,Integer sellerID){
+		return goodRepos.findSellerGoodByPageDiscontinue(pageable, sellerID);
+	}
+	public Page<GoodsBean2> findSellerGoodByPageAndNameDiscontinue(Pageable pageable,Integer sellerID,String goodNameString){
+		return goodRepos.findSellerGoodByPageAndNameDiscontinue(pageable, sellerID, goodNameString);
+	}
+	public Page<GoodsBean2> findSellerAllByPage(Pageable pageable,Integer sellerID){
+		return goodRepos.findSellerAllByPage(pageable, sellerID);
+	}
+	public Page<GoodsBean2> findSellerGoodByPageAndNameAll(Pageable pageable,Integer sellerID,String goodNameString){
+		return goodRepos.findSellerGoodByPageAndNameAll(pageable, sellerID, goodNameString);
 	}
 }

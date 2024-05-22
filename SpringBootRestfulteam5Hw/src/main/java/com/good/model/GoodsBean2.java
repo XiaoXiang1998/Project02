@@ -60,7 +60,8 @@ public class GoodsBean2 implements java.io.Serializable {
 	private String titleImage;
 	@Column(name="GOODSSOLD")
 	private Integer goodsold;
-	
+	@Column(name="STATUS")
+	private Integer status;
 	//
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "good", cascade = CascadeType.ALL)
 	@JsonManagedReference
@@ -76,7 +77,7 @@ public class GoodsBean2 implements java.io.Serializable {
 	}
 
 	public GoodsBean2(Integer goodsID, String goodsName, String goodsDirection, String goodsType,
-			 String brand, String shipmentPlace, MemberBean goodsSellerID,String titleImage) {
+			 String brand, String shipmentPlace, MemberBean goodsSellerID,String titleImage,Integer status) {
 		this.goodsID = goodsID;
 		this.goodsName = goodsName;
 		this.goodsDirection = goodsDirection;
@@ -85,10 +86,11 @@ public class GoodsBean2 implements java.io.Serializable {
 		this.shipmentPlace = shipmentPlace;
 		this.goodsSellerID = goodsSellerID;
 		this.titleImage = titleImage;
+		this.status = status;
 	}
 
 	public GoodsBean2(String goodsName, String goodsDirection, String goodsType,
-			String brand, String shipmentPlace, MemberBean goodsSellerID,String titleImage) {
+			String brand, String shipmentPlace, MemberBean goodsSellerID,String titleImage,Integer status) {
 		this.goodsName = goodsName;
 		this.goodsDirection = goodsDirection;
 		this.goodsType = goodsType;
@@ -96,6 +98,7 @@ public class GoodsBean2 implements java.io.Serializable {
 		this.shipmentPlace = shipmentPlace;
 		this.goodsSellerID = goodsSellerID;
 		this.titleImage = titleImage;
+		this.status = status;
 	}
 
 //
@@ -209,6 +212,23 @@ public class GoodsBean2 implements java.io.Serializable {
 	public void setGoodsold(Integer goodsold) {
 		this.goodsold = goodsold;
 	}
+
+	public Integer getStatus() {
+		return status;
+	}
+
+	public void setStatus(Integer status) {
+		this.status = status;
+	}
+
+	@Override
+	public String toString() {
+		return "GoodsBean2 [goodsID=" + goodsID + ", goodsName=" + goodsName + ", goodsDirection=" + goodsDirection
+				+ ", goodsType=" + goodsType + ", launchDate=" + launchDate + ", brand=" + brand + ", shipmentPlace="
+				+ shipmentPlace + ", numberRatings=" + numberRatings + ", rating=" + rating + ", goodsSellerID="
+				+ goodsSellerID.getSid() + ", titleImage=" + titleImage + ", goodsold=" + goodsold +", status=" + status+ "]";
+	}
+
 	
 
 }

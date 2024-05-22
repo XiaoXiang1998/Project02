@@ -49,5 +49,11 @@ public class GoodBasicDto {
 	public void setTitleImage(String titleImage) {
 		this.titleImage = titleImage;
 	}
+
+	@Override
+	public String toString() {
+		return "GoodBasicDto [goodsID=" + goodsID + ", goodsType=" + goodsType + ", goodsName=" + goodsName
+				+ ", titleImage=" + titleImage + "]";
+	}
 	
 }

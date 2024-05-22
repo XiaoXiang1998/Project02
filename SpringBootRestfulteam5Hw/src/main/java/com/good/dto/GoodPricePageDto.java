@@ -2,6 +2,8 @@ package com.good.dto;
 
 import java.util.List;
 
+import com.good.model.GoodsBean2;
+
 public class GoodPricePageDto {
 	
 	private Integer page;
@@ -23,6 +25,10 @@ public class GoodPricePageDto {
 	public void setGoodPriceDtoList(List<GoodPriceDTO> goodPriceDtoList) {
 		this.goodPriceDtoList = goodPriceDtoList;
 	}
+
+	
+
+	
 
 	
 }

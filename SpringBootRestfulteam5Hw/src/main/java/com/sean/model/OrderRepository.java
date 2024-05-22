@@ -39,4 +39,12 @@ public interface OrderRepository extends JpaRepository<Orders, Integer> {
 	@Modifying
 	@Query(value = "update Orders set name = ?1 , address = ?2 , tel = ?3 , orderStatus = ?4 where orderId = ?5")
 	public void updateOrderById(String name , String address , String tel , Integer orderStatus , Integer orderId);
+
+	@Modifying
+	@Query(value = "update Orders set name = ?1 , address = ?2 , tel = ?3 where orderId = ?4")
+	public void BuyerUpdate(String name , String address , String tel , Integer orderId);
+
+	@Modifying
+	@Query(value = "update Orders set orderStatus = ?1 where orderId = ?2")
+	public void UpdateStatus(Integer orderStatus, Integer orderId);
 }

@@ -124,7 +124,7 @@
 															<button
 																class="btn btn-outline-primary round-pill CategoryItem w-100 mb-1">
 																<img src="${j.goodImagePath}" alt="${j.goodImagePath}"
-																	style="width: 20px;height: 20px;">
+																	style="width: 20px;height: 20px;" class="CategoryImage">
 																<span class="CategorySize">${j.goodSize}</span>
 																<span hidden class="CategoryPrice">${j.goodPrice}</span>
 																<span hidden
@@ -172,6 +172,9 @@
 														<form action="" id="orderDetail">
 															<!-- 進入訂單環節(跳轉頁面) -->
 															<!-- 下單後對應規格的庫存量會下降 -->
+															<input type="text" class="form-control" id="orderformatimagepath"
+																name="orderformatimagepath" >
+															<!-- 規格圖片 -->
 															<input type="text" class="form-control" id="orderformatID"
 																name="orderformatID" >
 															<!-- 規格表編號(OK) -->
@@ -185,7 +188,7 @@
 																name="orderNumber" >
 															<!-- 購買數量 -->
 															<input type="text" class="form-control" id="orderGoodName"
-																name="orderGoodName" value="${Good.goodsID}">
+																name="orderGoodName" value="${Good.goodsName}">
 															<!-- 商品名稱 -->
 															<input type="text" class="form-control" id="orderGoodSize"
 																name="orderGoodSize" >
@@ -552,13 +555,18 @@
 								// 還需要取得大小
 								let goodstock = $(this).find('span[class="CategoryNumber"]').prop("innerHTML");
 								let formatprice = $(this).find('span[class="CategoryPrice"]').prop("innerHTML");
-								let formatSize = $(this).find('span[class="CategorySize"]').prop("innerHTML");
+								let formatSize = $(this).find('span[class="CategorySize"]').prop("innerHTML");//大小
+								let formatimagepathtarget = $(this).find('img').prop("src");//圖片
+								let ps = formatimagepathtarget.lastIndexOf("/");
+								let formatimagepath = "../../"+formatimagepathtarget.substring(ps+1);
+								console.log(formatimagepath);
 								//
 								$('#cartPrice').prop("value", formatprice);
 								$('#orderformatprice').prop("value", formatprice);
 								$('#remainingNumber').prop("innerHTML", goodstock);
 								$('#CategoryPrice').prop("innerHTML", formatprice);
 								$('#orderGoodSize').prop("value",formatSize);
+								$('#orderformatimagepath').prop("value",formatimagepath);
 							})
 
 							//改變買入數量[有防呆機制]

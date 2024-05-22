@@ -285,7 +285,9 @@ public class OrderController {
 			n2.setSendTime(currentDate);
 			n2.setReads(0);
 			nService.sendMessage(n2);
-			cService.clearShopCarByMemberId(itemIds[i]);
+			if(itemIds.length > 0) {
+				cService.clearShopCarByMemberId(itemIds[i]);				
+			}
 		}
 		if (paymentMethod == 1) {
 			StringBuilder concatenatedGoodsNames = new StringBuilder();

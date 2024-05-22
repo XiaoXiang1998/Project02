@@ -15,6 +15,7 @@
 <body>
 	<%@ include file="../../FrontDeskNav.jsp"%>
 	<form id="orderForm" method="post" action="order.controller">
+		<input type="hidden" name="itemId" value=-1>
 		<div class="container ">
 			<div class="row justify-content-center mt-5">
 				<div class="col-md-10">

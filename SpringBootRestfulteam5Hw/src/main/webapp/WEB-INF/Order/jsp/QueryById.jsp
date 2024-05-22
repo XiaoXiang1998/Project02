@@ -59,8 +59,9 @@
 		<div class="row mt-3 align-item-center">
 			<div class="col-md-12">
 				<div class="card fs-5">
+				<input type="hidden" name="status" id="status" value="${order.orderStatus }">
 					<div class="card-header">訂單編號: ${order.orderId}</div>
-					<div class="card-body">
+					<div class="card-body border-bottom">
 						<div class="row">
 							<p>
 								<strong style="padding-left: 10px">賣家:</strong>
@@ -132,7 +133,7 @@
 							</div>
 						</div>
 					</div>
-					<div class="progress-container m-3">
+					<div class="progress-container m-3" id="progress-container">
 						<div class="step">
 							<div class="circle">
 								<i class="fa-solid fa-file-lines"></i>
@@ -182,7 +183,7 @@
 						</c:choose>
 					</div>
 					<div class="row">
-						<div class="col-md-12  text-end align-items-center mt-3">
+						<div class="col-md-12  text-end align-items-center ">
 							<p class="me-3">
 								<strong>支付金額:</strong>
 								$${order.totalPrice}
@@ -229,6 +230,9 @@
 								<c:when test="${order.orderStatus == 4 && member.sid == order.sellerId.sid}">
 									<a href="#" class="btn btn-outline-secondary fs-4 me-3 mb-3" style="width: 200px; height: 50px; pointer-events: none; opacity: 0.5;">訂單已完成</a>
 								</c:when>
+								<c:when test="${order.orderStatus == 5 }">
+									<a href="#" class="btn btn-outline-secondary fs-4 me-3 mb-3" style="width: 200px; height: 50px; pointer-events: none; opacity: 0.5;">訂單已取消</a>
+								</c:when>
 							</c:choose>
 						</div>
 					</div>
@@ -273,6 +277,12 @@
 	</div>
 
 	<script>
+	$(document).ready(function(){
+		const orderStatus = document.getElementById("status").value;
+        if (orderStatus == 5) {
+        	$("#progress-container").addClass("d-none");
+        }
+	})
 	function Shipment(orderId, orderStatus) {
 	    console.log(orderId, orderStatus);
 	    Swal.fire({

@@ -66,6 +66,13 @@ public class OrdersService {
 	public void updateOrderById(String name , String address , String tel , Integer orderStatus , Integer orderId) {
 		oRops.updateOrderById(name, address, tel, orderStatus, orderId);
 	}
+	public void UpdateStatus(Integer orderStatus, Integer orderId) {
+		oRops.UpdateStatus(orderStatus, orderId);
+	}
+	
+	public void BuyerUpdate(String name , String address , String tel , Integer orderId) {
+		oRops.BuyerUpdate(name, address, tel, orderId);
+	}
 	public String ecpayCheckout(String totalAmount,String merchantTradeDate, String itemName) {
 
 		String uuId = UUID.randomUUID().toString().replaceAll("-", "").substring(0, 20);

@@ -61,7 +61,7 @@
 						</div>
 					</div>
 					<div class="border-top">
-						<div class="text-end me-3 fs-4 p-3">訂單金額: $${Buyorder.totalPrice}</div>
+						<div class="text-end me-3 fs-4 p-3">訂單金額: $${Sellorder.totalPrice}</div>
 					</div>
 				</div>
 			</div>

@@ -21,6 +21,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -47,10 +48,10 @@ public class OrderController {
 
 	@Autowired
 	private GoodFormatService gService;
-	
+
 	@Autowired
 	private NotificationsService nService;
-	
+
 	@Autowired
 	private MemberService mService;
 
@@ -59,31 +60,32 @@ public class OrderController {
 
 	@Autowired
 	private OrdersService oService;
-	
+
 	@Autowired
 	private HttpSession session;
-	
+
 	@GetMapping("goindex.controller")
 	public String GoIndex(Model m) {
-		m.addAttribute("page","index");
-		MemberBean member =(MemberBean)session.getAttribute("member");
+		m.addAttribute("page", "index");
+		MemberBean member = (MemberBean) session.getAttribute("member");
 		List<Notifications> notifications = nService.findByRecipientIdOrderBySendTimeDesc(member);
 		Integer count = nService.noReadCounts(member);
 		session.setAttribute("count", count);
 		session.setAttribute("notifications", notifications);
 		return "Order/jsp/Index";
 	}
+
 	@PutMapping("readMessage")
 	public void readMessage(@RequestParam("notificationId") Integer notificationId) {
-	    nService.readMessage(notificationId); 
+		nService.readMessage(notificationId);
 	}
-	
-	
+
 	@GetMapping("goquery.controller")
 	public String GoQuery(Model m) {
-		m.addAttribute("page","query");
+		m.addAttribute("page", "query");
 		return "/Order/jsp/Query";
 	}
+
 	@GetMapping("goui.controller")
 	public String GoUI() {
 		return "ControlUI";
@@ -98,14 +100,14 @@ public class OrderController {
 	public String Product(Model m) {
 		List<GoodFormat> products = gService.getAll();
 		m.addAttribute("products", products);
-		m.addAttribute("page","product");
+		m.addAttribute("page", "product");
 		return "Order/jsp/Product";
 	}
-	
+
 	@PostMapping("inserttoshopcar.controller")
 	public String insertToShopCar(@RequestParam("productId") Integer productId,
 			@RequestParam("quantity") Integer quantity, @RequestParam("productPrice") Integer productPrice) {
-		MemberBean memberb =(MemberBean)session.getAttribute("member");
+		MemberBean memberb = (MemberBean) session.getAttribute("member");
 		Integer memberId = memberb.getSid();
 		Optional<MemberBean> members = mService.findById(memberId);
 		MemberBean member = members.get();
@@ -123,7 +125,7 @@ public class OrderController {
 	@PutMapping("updateQuantity.controller")
 	public String UpdateQuantityById(@RequestParam("itemId") Integer cartItemId,
 			@RequestParam("quantity") Integer quantity, Model m) {
-		MemberBean memberb =(MemberBean)session.getAttribute("member");
+		MemberBean memberb = (MemberBean) session.getAttribute("member");
 		Integer memberId = memberb.getSid();
 		cService.updateQuantityById(quantity, cartItemId);
 		List<CarItem> carItems = cService.findByMemberId(memberId);
@@ -133,7 +135,7 @@ public class OrderController {
 
 	@DeleteMapping("/deleteCartItem.controller")
 	public String DeleteCartItem(@RequestParam("itemId") Integer cartItemId, Model m) {
-		MemberBean memberb =(MemberBean)session.getAttribute("member");
+		MemberBean memberb = (MemberBean) session.getAttribute("member");
 		Integer memberId = memberb.getSid();
 		cService.deleteCarItemById(cartItemId);
 		List<CarItem> carItems = cService.findByMemberId(memberId);
@@ -142,351 +144,364 @@ public class OrderController {
 	}
 
 	@GetMapping("/payment.controller")
-	public String Payment(@RequestParam("checkedItemIds") Integer[] checkedItemIds,Model m) {
-		MemberBean memberb =(MemberBean)session.getAttribute("member");
+	public String Payment(@RequestParam("checkedItemIds") Integer[] checkedItemIds, Model m) {
+		MemberBean memberb = (MemberBean) session.getAttribute("member");
 		Integer memberId = memberb.getSid();
 		List<CarItem> cartItems = new ArrayList<>();
-	    for (Integer itemId : checkedItemIds) {
-	    	 List<CarItem> items = cService.findByIdList(itemId);
-	        if (items != null) {
-	        	cartItems.addAll(items);
-	        }
-	        System.out.println(cartItems);
-	    }
-	    List<Notifications> notifications = nService.findByRecipientIdOrderBySendTimeDesc(memberb);
-	    Integer count = nService.noReadCounts(memberb);
-	    session.setAttribute("count", count);
-	    session.setAttribute("notifications", notifications);
+		for (Integer itemId : checkedItemIds) {
+			List<CarItem> items = cService.findByIdList(itemId);
+			if (items != null) {
+				cartItems.addAll(items);
+			}
+			System.out.println(cartItems);
+		}
+		List<Notifications> notifications = nService.findByRecipientIdOrderBySendTimeDesc(memberb);
+		Integer count = nService.noReadCounts(memberb);
+		session.setAttribute("count", count);
+		session.setAttribute("notifications", notifications);
 		m.addAttribute("cartItems", cartItems);
 		m.addAttribute("memberId", memberId);
-		m.addAttribute("page","shopcar");
+		m.addAttribute("page", "shopcar");
 		return "Order/jsp/Payment";
 	}
-    @GetMapping("shopcar.controller")
-    public String ShopCar(Integer MemberId, Model m) {
-        MemberBean member =(MemberBean)session.getAttribute("member");
-        Integer memberId = member.getSid();
-        List<CarItem> carItems = cService.findByMemberId(memberId);
-        m.addAttribute("page","shopcar");
-        m.addAttribute("carItems", carItems);
-	    List<Notifications> notifications = nService.findByRecipientIdOrderBySendTimeDesc(member);
-	    Integer count = nService.noReadCounts(member);
-	    session.setAttribute("count", count);
-	    session.setAttribute("notifications", notifications);
-	    Integer carItemCount = cService.carItemCount(member);
+
+	@GetMapping("shopcar.controller")
+	public String ShopCar(Integer MemberId, Model m) {
+		MemberBean member = (MemberBean) session.getAttribute("member");
+		Integer memberId = member.getSid();
+		List<CarItem> carItems = cService.findByMemberId(memberId);
+		m.addAttribute("page", "shopcar");
+		m.addAttribute("carItems", carItems);
+		List<Notifications> notifications = nService.findByRecipientIdOrderBySendTimeDesc(member);
+		Integer count = nService.noReadCounts(member);
+		session.setAttribute("count", count);
+		session.setAttribute("notifications", notifications);
+		Integer carItemCount = cService.carItemCount(member);
 		session.setAttribute("carItemCount", carItemCount);
-        return "Order/jsp/ShopCar";
-    }
+		return "Order/jsp/ShopCar";
+	}
+
 	@GetMapping("/ecpayCheckout")
 	@ResponseBody
 	public String ecpayCheckout(@RequestParam("aioCheckOutALLForm") String aioCheckOutALLForm) {
 
 		return aioCheckOutALLForm;
 	}
-	
-	@PostMapping("order.controller")
-		public String Order(@RequestParam("memberId") Integer memberId, @RequestParam("sellerId") Integer[] sellerIds,
-				@RequestParam("productId") Integer[] productIds, @RequestParam("quantity") Integer[] quantities,
-				@RequestParam("name") String[] names, @RequestParam("address") String[] addresses,
-				@RequestParam("tel") String[] tels, @RequestParam("shippingMethod") short[] shippingMethods,
-				@RequestParam("shippingFee") Integer[] shippingFees, @RequestParam("totalPrices") Integer[] totalPrices,
-				@RequestParam("originalPrices") Integer[] oringinalPrices, @RequestParam("totalPrice") Integer AlltotalPrice,
-				@RequestParam("paymentMethod") short paymentMethod, @RequestParam("statusValue") short statusValue,
-				@RequestParam("itemId") Integer[] itemIds,Model m) {
-			
-			
-			System.out.println(memberId.getClass());
-			Date currentDate = new Date();
-			Optional<MemberBean> members = mService.findById(memberId);
-			MemberBean member = members.get();
-			PaymentDetails p = new PaymentDetails();
-			p.setPayUserId(member);
-			p.setPaymentMethod(paymentMethod);
-			p.setCreatedAt(currentDate);
-			p.setModifiedAt(currentDate);
-			p.setTotalPrice(AlltotalPrice);
-			PaymentDetails pBean = pService.paymentDetails(p);
-	
-			for (int i = 0; i < itemIds.length; i++) {
-	
-				
-				Optional<MemberBean> sellerId = mService.findById(sellerIds[i]);
-				MemberBean seller = sellerId.get();
-				Optional<GoodFormat> products = gService.findById(productIds[i]);
-				GoodFormat product = products.get();
-				Orders order = new Orders();
-				order.setBuyerId(member);
-				order.setSellerId(seller);
-				order.setFormatgoodId(product);
-				order.setQuantity(quantities[i]);
-				order.setName(names[i]);
-				order.setAddress(addresses[i]);
-				order.setTel(tels[i]);
-				order.setShippingMethod(shippingMethods[i]);
-				order.setShippingFee(shippingFees[i]);
-				order.setOriginalPrice(oringinalPrices[i]);
-				order.setTotalPrice(totalPrices[i]);
-				order.setPaymentId(pBean);
-				if(paymentMethod == 1) {
-					order.setPayStatus((short)1);				
-				}else {
-					order.setPayStatus(statusValue);
-				}
-				order.setOrderStatus((short) 0);
-				order.setCreatedAt(currentDate);
-				order.setModifiedAt(currentDate);
-				Orders o = oService.insertToOrder(order);
-				String goodsName = product.getGood().getGoodsName();
-				int orderId = o.getOrderId();			
-				String buyerName = member.getName();
-				Notifications n = new Notifications();
-				String buyerMessage = "親愛的 <span style='color: blue;'>" + buyerName + "</span> 您好，您的訂單 <span style='color: red;'>" + orderId + "</span> 已成立";
-				n.setOrderId(o);
-				n.setRecipientId(member);
-				n.setContent(buyerMessage);
-				n.setSendTime(currentDate);
-				n.setReads(0);
-				nService.sendMessage(n);
-				Notifications n2 = new Notifications();
-				String sellerMessgae = "用戶 <span style='color: blue;'>" + buyerName + "</span> 已向你的商品 <span style='color: green;'>" + goodsName + "</span> 下訂單，訂單編號為: <span style='color: red;'>" + orderId + "</span>";
-				n2.setOrderId(o);
-				n2.setRecipientId(seller);
-				n2.setContent(sellerMessgae);
-				n2.setSendTime(currentDate);
-				n2.setReads(0);
-				nService.sendMessage(n2);
-				cService.clearShopCarByMemberId(itemIds[i]);
-			}
-				if(paymentMethod == 1) {
-					StringBuilder concatenatedGoodsNames = new StringBuilder();
-					for (Integer productId : productIds) {
-					    Optional<GoodFormat> products = gService.findById(productId);
-					    if (products.isPresent()) {
-					        GoodFormat product = products.get();
-					        String goodsName = product.getGood().getGoodsName();
-					        concatenatedGoodsNames.append(goodsName).append("#");
-					    }
-					}
-					String goodsNamesString = concatenatedGoodsNames.toString();
-					SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-					String StringDate = sdf.format(currentDate);
-					String StringTotalAmount = String.valueOf(AlltotalPrice);
-					String aioCheckOutALLForm = oService.ecpayCheckout(StringTotalAmount,StringDate,goodsNamesString);
 
-					m.addAttribute("aioCheckOutALLForm",aioCheckOutALLForm);
-				
-					return "redirect:/ecpayCheckout?aioCheckOutALLForm=" + URLEncoder.encode(aioCheckOutALLForm, StandardCharsets.UTF_8);
-				}
-					return "redirect:/goindex.controller";
+	@PostMapping("order.controller")
+	public String Order(@RequestParam("memberId") Integer memberId, @RequestParam("sellerId") Integer[] sellerIds,
+			@RequestParam("productId") Integer[] productIds, @RequestParam("quantity") Integer[] quantities,
+			@RequestParam("name") String[] names, @RequestParam("address") String[] addresses,
+			@RequestParam("tel") String[] tels, @RequestParam("shippingMethod") short[] shippingMethods,
+			@RequestParam("shippingFee") Integer[] shippingFees, @RequestParam("totalPrices") Integer[] totalPrices,
+			@RequestParam("originalPrices") Integer[] oringinalPrices,
+			@RequestParam("totalPrice") Integer AlltotalPrice, @RequestParam("paymentMethod") short paymentMethod,
+			@RequestParam("statusValue") short statusValue, @RequestParam("itemId") Integer[] itemIds, Model m) {
+
+		System.out.println(memberId.getClass());
+		Date currentDate = new Date();
+		Optional<MemberBean> members = mService.findById(memberId);
+		MemberBean member = members.get();
+		PaymentDetails p = new PaymentDetails();
+		p.setPayUserId(member);
+		p.setPaymentMethod(paymentMethod);
+		p.setCreatedAt(currentDate);
+		p.setModifiedAt(currentDate);
+		p.setTotalPrice(AlltotalPrice);
+		PaymentDetails pBean = pService.paymentDetails(p);
+
+		for (int i = 0; i < itemIds.length; i++) {
+
+			Optional<MemberBean> sellerId = mService.findById(sellerIds[i]);
+			MemberBean seller = sellerId.get();
+			Optional<GoodFormat> products = gService.findById(productIds[i]);
+			GoodFormat product = products.get();
+			Orders order = new Orders();
+			order.setBuyerId(member);
+			order.setSellerId(seller);
+			order.setFormatgoodId(product);
+			order.setQuantity(quantities[i]);
+			order.setName(names[i]);
+			order.setAddress(addresses[i]);
+			order.setTel(tels[i]);
+			order.setShippingMethod(shippingMethods[i]);
+			order.setShippingFee(shippingFees[i]);
+			order.setOriginalPrice(oringinalPrices[i]);
+			order.setTotalPrice(totalPrices[i]);
+			order.setPaymentId(pBean);
+			if (paymentMethod == 1) {
+				order.setPayStatus((short) 1);
+			} else {
+				order.setPayStatus(statusValue);
+			}
+			order.setOrderStatus((short) 1);
+			order.setCreatedAt(currentDate);
+			order.setModifiedAt(currentDate);
+			Orders o = oService.insertToOrder(order);
+			String goodsName = product.getGood().getGoodsName();
+			int orderId = o.getOrderId();
+			String buyerName = member.getName();
+			Notifications n = new Notifications();
+			String buyerMessage = "親愛的 <span style='color: blue;'>" + buyerName
+					+ "</span> 您好，您的訂單 <span style='color: red;'>" + orderId + "</span> 已成立";
+			n.setOrderId(o);
+			n.setRecipientId(member);
+			n.setContent(buyerMessage);
+			n.setSendTime(currentDate);
+			n.setReads(0);
+			nService.sendMessage(n);
+			Notifications n2 = new Notifications();
+			String sellerMessgae = "用戶 <span style='color: blue;'>" + buyerName
+					+ "</span> 已向你的商品 <span style='color: green;'>" + goodsName
+					+ "</span> 下訂單，訂單編號為: <span style='color: red;'>" + orderId + "</span>";
+			n2.setOrderId(o);
+			n2.setRecipientId(seller);
+			n2.setContent(sellerMessgae);
+			n2.setSendTime(currentDate);
+			n2.setReads(0);
+			nService.sendMessage(n2);
+			cService.clearShopCarByMemberId(itemIds[i]);
 		}
-	
+		if (paymentMethod == 1) {
+			StringBuilder concatenatedGoodsNames = new StringBuilder();
+			for (Integer productId : productIds) {
+				Optional<GoodFormat> products = gService.findById(productId);
+				if (products.isPresent()) {
+					GoodFormat product = products.get();
+					String goodsName = product.getGood().getGoodsName();
+					concatenatedGoodsNames.append(goodsName).append("#");
+				}
+			}
+			String goodsNamesString = concatenatedGoodsNames.toString();
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+			String StringDate = sdf.format(currentDate);
+			String StringTotalAmount = String.valueOf(AlltotalPrice);
+			String aioCheckOutALLForm = oService.ecpayCheckout(StringTotalAmount, StringDate, goodsNamesString);
+
+			m.addAttribute("aioCheckOutALLForm", aioCheckOutALLForm);
+
+			return "redirect:/ecpayCheckout?aioCheckOutALLForm="
+					+ URLEncoder.encode(aioCheckOutALLForm, StandardCharsets.UTF_8);
+		}
+		return "redirect:/goindex.controller";
+	}
+
 	@GetMapping("OrderById")
-	public String OrderById(@RequestParam("orderId") Integer orderId,Model m) {
+	public String OrderById(@RequestParam("orderId") Integer orderId, Model m) {
 		Orders order = oService.getById(orderId);
-		m.addAttribute("order",order);
-		MemberBean member =(MemberBean)session.getAttribute("member");
+		m.addAttribute("order", order);
+		MemberBean member = (MemberBean) session.getAttribute("member");
 		List<Notifications> notifications = nService.findByRecipientIdOrderBySendTimeDesc(member);
-	    Integer count = nService.noReadCounts(member);
-	    session.setAttribute("count", count);
-	    session.setAttribute("notifications", notifications);
-	    Integer carItemCount = cService.carItemCount(member);
+		Integer count = nService.noReadCounts(member);
+		session.setAttribute("count", count);
+		session.setAttribute("notifications", notifications);
+		Integer carItemCount = cService.carItemCount(member);
 		session.setAttribute("carItemCount", carItemCount);
 		return "Order/jsp/QueryById";
 	}
-	
+
 	@GetMapping("BuyAllOrderall")
-	public String BuyAllOrder(@RequestParam(defaultValue = "0") int page,Model m) {
-		MemberBean member =(MemberBean)session.getAttribute("member");
+	public String BuyAllOrder(@RequestParam(defaultValue = "0") int page, Model m) {
+		MemberBean member = (MemberBean) session.getAttribute("member");
 		Pageable pageable = PageRequest.of(page, 5);
-		Page<Orders> BuyAllorders = oService.findByBuyerId(member,pageable);
-		m.addAttribute("BuyAllorders",BuyAllorders);
-		m.addAttribute("currentPage",page);
-		m.addAttribute("totalPages",BuyAllorders.getTotalPages());
-		m.addAttribute("button","all");
+		Page<Orders> BuyAllorders = oService.findByBuyerId(member, pageable);
+		m.addAttribute("BuyAllorders", BuyAllorders);
+		m.addAttribute("currentPage", page);
+		m.addAttribute("totalPages", BuyAllorders.getTotalPages());
+		m.addAttribute("button", "all");
 		return "Order/jsp/BuyAllOrder";
-		
+
 	}
+
 	@GetMapping("BuyAllOrder1")
-	public String BuyAllOrder1(@RequestParam(defaultValue = "0") int page,Model m) {
-		MemberBean member =(MemberBean)session.getAttribute("member");
+	public String BuyAllOrder1(@RequestParam(defaultValue = "0") int page, Model m) {
+		MemberBean member = (MemberBean) session.getAttribute("member");
 		Pageable pageable = PageRequest.of(page, 5);
-		Page<Orders> BuyAllorders = oService.findByBuyerIdAndOrderStatus(member,1,pageable);
-		m.addAttribute("BuyAllorders",BuyAllorders);
-		m.addAttribute("currentPage",page);
-		m.addAttribute("totalPages",BuyAllorders.getTotalPages());
-		m.addAttribute("button",1);
+		Page<Orders> BuyAllorders = oService.findByBuyerIdAndOrderStatus(member, 1, pageable);
+		m.addAttribute("BuyAllorders", BuyAllorders);
+		m.addAttribute("currentPage", page);
+		m.addAttribute("totalPages", BuyAllorders.getTotalPages());
+		m.addAttribute("button", 1);
 		return "Order/jsp/BuyAllOrder";
-		
+
 	}
+
 	@GetMapping("BuyAllOrder2")
-	public String BuyAllOrder2(@RequestParam(defaultValue = "0") int page,Model m) {
-		MemberBean member =(MemberBean)session.getAttribute("member");
+	public String BuyAllOrder2(@RequestParam(defaultValue = "0") int page, Model m) {
+		MemberBean member = (MemberBean) session.getAttribute("member");
 		Pageable pageable = PageRequest.of(page, 5);
-		Page<Orders> BuyAllorders = oService.findByBuyerIdAndOrderStatus(member,2,pageable);
-		m.addAttribute("BuyAllorders",BuyAllorders);
-		m.addAttribute("currentPage",page);
-		m.addAttribute("totalPages",BuyAllorders.getTotalPages());
-		m.addAttribute("button",2);
+		Page<Orders> BuyAllorders = oService.findByBuyerIdAndOrderStatus(member, 2, pageable);
+		m.addAttribute("BuyAllorders", BuyAllorders);
+		m.addAttribute("currentPage", page);
+		m.addAttribute("totalPages", BuyAllorders.getTotalPages());
+		m.addAttribute("button", 2);
 		return "Order/jsp/BuyAllOrder";
-		
+
 	}
+
 	@GetMapping("BuyAllOrder3")
-	public String BuyAllOrder3(@RequestParam(defaultValue = "0") int page,Model m) {
-		MemberBean member =(MemberBean)session.getAttribute("member");
+	public String BuyAllOrder3(@RequestParam(defaultValue = "0") int page, Model m) {
+		MemberBean member = (MemberBean) session.getAttribute("member");
 		Pageable pageable = PageRequest.of(page, 5);
 		System.out.println(page);
 		System.out.println(pageable);
-		Page<Orders> BuyAllorders = oService.findByBuyerIdAndOrderStatus(member,3,pageable);
-		m.addAttribute("BuyAllorders",BuyAllorders);
-		m.addAttribute("currentPage",page);
-		m.addAttribute("totalPages",BuyAllorders.getTotalPages());
-		m.addAttribute("button",3);
+		Page<Orders> BuyAllorders = oService.findByBuyerIdAndOrderStatus(member, 3, pageable);
+		m.addAttribute("BuyAllorders", BuyAllorders);
+		m.addAttribute("currentPage", page);
+		m.addAttribute("totalPages", BuyAllorders.getTotalPages());
+		m.addAttribute("button", 3);
 		return "Order/jsp/BuyAllOrder";
-		
+
 	}
+
 	@GetMapping("BuyAllOrder4")
-	public String BuyAllOrder4(@RequestParam(defaultValue = "0") int page,Model m) {
-		MemberBean member =(MemberBean)session.getAttribute("member");
+	public String BuyAllOrder4(@RequestParam(defaultValue = "0") int page, Model m) {
+		MemberBean member = (MemberBean) session.getAttribute("member");
 		Pageable pageable = PageRequest.of(page, 5);
-		Page<Orders> BuyAllorders = oService.findByBuyerIdAndOrderStatus(member,4,pageable);
-		m.addAttribute("BuyAllorders",BuyAllorders);
-		m.addAttribute("currentPage",page);
-		m.addAttribute("totalPages",BuyAllorders.getTotalPages());
-		m.addAttribute("button",4);
+		Page<Orders> BuyAllorders = oService.findByBuyerIdAndOrderStatus(member, 4, pageable);
+		m.addAttribute("BuyAllorders", BuyAllorders);
+		m.addAttribute("currentPage", page);
+		m.addAttribute("totalPages", BuyAllorders.getTotalPages());
+		m.addAttribute("button", 4);
 		return "Order/jsp/BuyAllOrder";
-		
+
 	}
+
 	@GetMapping("BuyAllOrder5")
-	public String BuyAllOrder5(@RequestParam(defaultValue = "0") int page,Model m) {
-		MemberBean member =(MemberBean)session.getAttribute("member");
+	public String BuyAllOrder5(@RequestParam(defaultValue = "0") int page, Model m) {
+		MemberBean member = (MemberBean) session.getAttribute("member");
 		Pageable pageable = PageRequest.of(page, 5);
-		Page<Orders> BuyAllorders = oService.findByBuyerIdAndOrderStatus(member,5,pageable);
-		m.addAttribute("BuyAllorders",BuyAllorders);
-		m.addAttribute("currentPage",page);
-		m.addAttribute("totalPages",BuyAllorders.getTotalPages());
-		m.addAttribute("button",5);
-		
+		Page<Orders> BuyAllorders = oService.findByBuyerIdAndOrderStatus(member, 5, pageable);
+		m.addAttribute("BuyAllorders", BuyAllorders);
+		m.addAttribute("currentPage", page);
+		m.addAttribute("totalPages", BuyAllorders.getTotalPages());
+		m.addAttribute("button", 5);
+
 		return "Order/jsp/BuyAllOrder";
-		
+
 	}
-	
+
 	@GetMapping("SellAllOrderall")
-	public String SellAllOrderall(@RequestParam(defaultValue = "0") int page,Model m) {
-		MemberBean member =(MemberBean)session.getAttribute("member");
+	public String SellAllOrderall(@RequestParam(defaultValue = "0") int page, Model m) {
+		MemberBean member = (MemberBean) session.getAttribute("member");
 		Pageable pageable = PageRequest.of(page, 5);
-		Page<Orders> SellAllorders = oService.findBySellerId(member,pageable);
-		m.addAttribute("SellAllorders",SellAllorders);
-		m.addAttribute("currentPage",page);
-		m.addAttribute("totalPages",SellAllorders.getTotalPages());
-		m.addAttribute("button","all");
-		
+		Page<Orders> SellAllorders = oService.findBySellerId(member, pageable);
+		m.addAttribute("SellAllorders", SellAllorders);
+		m.addAttribute("currentPage", page);
+		m.addAttribute("totalPages", SellAllorders.getTotalPages());
+		m.addAttribute("button", "all");
+
 		return "Order/jsp/SellAllOrder";
-		
+
 	}
+
 	@GetMapping("SellAllOrder1")
-	public String SellAllOrder1(@RequestParam(defaultValue = "0") int page,Model m) {
-		MemberBean member =(MemberBean)session.getAttribute("member");
+	public String SellAllOrder1(@RequestParam(defaultValue = "0") int page, Model m) {
+		MemberBean member = (MemberBean) session.getAttribute("member");
 		Pageable pageable = PageRequest.of(page, 5);
-		Page<Orders> SellAllorders = oService.findBySellerIdAndOrderStatus(member,1,pageable);
-		m.addAttribute("SellAllorders",SellAllorders);
-		m.addAttribute("currentPage",page);
-		m.addAttribute("totalPages",SellAllorders.getTotalPages());
-		m.addAttribute("button",1);
-		
+		Page<Orders> SellAllorders = oService.findBySellerIdAndOrderStatus(member, 1, pageable);
+		m.addAttribute("SellAllorders", SellAllorders);
+		m.addAttribute("currentPage", page);
+		m.addAttribute("totalPages", SellAllorders.getTotalPages());
+		m.addAttribute("button", 1);
+
 		return "Order/jsp/SellAllOrder";
 	}
+
 	@GetMapping("SellAllOrder2")
-	public String SellAllOrder2(@RequestParam(defaultValue = "0") int page,Model m) {
-		MemberBean member =(MemberBean)session.getAttribute("member");
+	public String SellAllOrder2(@RequestParam(defaultValue = "0") int page, Model m) {
+		MemberBean member = (MemberBean) session.getAttribute("member");
 		Pageable pageable = PageRequest.of(page, 5);
-		Page<Orders> SellAllorders = oService.findBySellerIdAndOrderStatus(member,2,pageable);
-		m.addAttribute("SellAllorders",SellAllorders);
-		m.addAttribute("currentPage",page);
-		m.addAttribute("totalPages",SellAllorders.getTotalPages());
-		m.addAttribute("button",2);
-		
+		Page<Orders> SellAllorders = oService.findBySellerIdAndOrderStatus(member, 2, pageable);
+		m.addAttribute("SellAllorders", SellAllorders);
+		m.addAttribute("currentPage", page);
+		m.addAttribute("totalPages", SellAllorders.getTotalPages());
+		m.addAttribute("button", 2);
+
 		return "Order/jsp/SellAllOrder";
 	}
+
 	@GetMapping("SellAllOrder3")
-	public String SellAllOrder3(@RequestParam(defaultValue = "0") int page,Model m) {
-		MemberBean member =(MemberBean)session.getAttribute("member");
+	public String SellAllOrder3(@RequestParam(defaultValue = "0") int page, Model m) {
+		MemberBean member = (MemberBean) session.getAttribute("member");
 		Pageable pageable = PageRequest.of(page, 5);
-		Page<Orders> SellAllorders = oService.findBySellerIdAndOrderStatus(member,3,pageable);
-		m.addAttribute("SellAllorders",SellAllorders);
-		m.addAttribute("currentPage",page);
-		m.addAttribute("totalPages",SellAllorders.getTotalPages());
-		m.addAttribute("button",3);
-		
+		Page<Orders> SellAllorders = oService.findBySellerIdAndOrderStatus(member, 3, pageable);
+		m.addAttribute("SellAllorders", SellAllorders);
+		m.addAttribute("currentPage", page);
+		m.addAttribute("totalPages", SellAllorders.getTotalPages());
+		m.addAttribute("button", 3);
+
 		return "Order/jsp/SellAllOrder";
 	}
+
 	@GetMapping("SellAllOrder4")
-	public String SellAllOrder4(@RequestParam(defaultValue = "0") int page,Model m) {
-		MemberBean member =(MemberBean)session.getAttribute("member");
+	public String SellAllOrder4(@RequestParam(defaultValue = "0") int page, Model m) {
+		MemberBean member = (MemberBean) session.getAttribute("member");
 		Pageable pageable = PageRequest.of(page, 5);
-		Page<Orders> SellAllorders = oService.findBySellerIdAndOrderStatus(member,4,pageable);
-		m.addAttribute("SellAllorders",SellAllorders);
-		m.addAttribute("currentPage",page);
-		m.addAttribute("totalPages",SellAllorders.getTotalPages());
-		m.addAttribute("button",4);
-		
+		Page<Orders> SellAllorders = oService.findBySellerIdAndOrderStatus(member, 4, pageable);
+		m.addAttribute("SellAllorders", SellAllorders);
+		m.addAttribute("currentPage", page);
+		m.addAttribute("totalPages", SellAllorders.getTotalPages());
+		m.addAttribute("button", 4);
+
 		return "Order/jsp/SellAllOrder";
 	}
+
 	@GetMapping("SellAllOrder5")
-	public String SellAllOrder5(@RequestParam(defaultValue = "0") int page,Model m) {
-		MemberBean member =(MemberBean)session.getAttribute("member");
+	public String SellAllOrder5(@RequestParam(defaultValue = "0") int page, Model m) {
+		MemberBean member = (MemberBean) session.getAttribute("member");
 		Pageable pageable = PageRequest.of(page, 5);
-		Page<Orders> SellAllorders = oService.findBySellerIdAndOrderStatus(member,5,pageable);
-		m.addAttribute("SellAllorders",SellAllorders);
-		m.addAttribute("currentPage",page);
-		m.addAttribute("totalPages",SellAllorders.getTotalPages());
-		m.addAttribute("button",5);
-		
+		Page<Orders> SellAllorders = oService.findBySellerIdAndOrderStatus(member, 5, pageable);
+		m.addAttribute("SellAllorders", SellAllorders);
+		m.addAttribute("currentPage", page);
+		m.addAttribute("totalPages", SellAllorders.getTotalPages());
+		m.addAttribute("button", 5);
+
 		return "Order/jsp/SellAllOrder";
 	}
-	
-	
+
 	@GetMapping("queryOrder.controller")
-	public String QueryOrder(Model m ) {
+	public String QueryOrder(Model m) {
 
 		List<Orders> orders = oService.findByOrderStatusNot(5);
 		m.addAttribute("orders", orders);
 		Map<String, Integer> monthOrdersMap = new LinkedHashMap<>();
-	    LocalDate today = LocalDate.now();
-	    
-	    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM");
+		LocalDate today = LocalDate.now();
 
-	    for (int i = 4; i >= 0; i--) {
-	        LocalDate startOfMonth = today.minusMonths(i).withDayOfMonth(1);
-	        String monthLabel = startOfMonth.format(formatter);
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM");
 
-	        LocalDate endOfMonth = startOfMonth.withDayOfMonth(startOfMonth.lengthOfMonth());
+		for (int i = 4; i >= 0; i--) {
+			LocalDate startOfMonth = today.minusMonths(i).withDayOfMonth(1);
+			String monthLabel = startOfMonth.format(formatter);
 
-	        Integer ordersCount = oService.findOrdersCount(java.sql.Date.valueOf(startOfMonth), java.sql.Date.valueOf(endOfMonth));
-	        monthOrdersMap.put(monthLabel, ordersCount);
-	    }
-	    Map<String, Integer> monthOrdersPrice = new LinkedHashMap<>();
-	    
-	    for (int i = 4; i >= 0; i--) {
-	    	LocalDate startOfMonth = today.minusMonths(i).withDayOfMonth(1);
-	    	String monthLabel = startOfMonth.format(formatter);
-	    	
-	    	LocalDate endOfMonth = startOfMonth.withDayOfMonth(startOfMonth.lengthOfMonth());
-	    	
-	    	Integer ordersPrice = oService.findOrdersPrice(java.sql.Date.valueOf(startOfMonth), java.sql.Date.valueOf(endOfMonth));
-	    	System.out.println("6666666666"+ordersPrice);
-	    	monthOrdersPrice.put(monthLabel, ordersPrice);
-	    }
+			LocalDate endOfMonth = startOfMonth.withDayOfMonth(startOfMonth.lengthOfMonth());
 
-	    m.addAttribute("monthOrdersMap", monthOrdersMap);
-	    m.addAttribute("monthOrdersPrice",monthOrdersPrice);
-	    return "/Order/jsp/Test";
+			Integer ordersCount = oService.findOrdersCount(java.sql.Date.valueOf(startOfMonth),
+					java.sql.Date.valueOf(endOfMonth));
+			monthOrdersMap.put(monthLabel, ordersCount);
+		}
+		Map<String, Integer> monthOrdersPrice = new LinkedHashMap<>();
+
+		for (int i = 4; i >= 0; i--) {
+			LocalDate startOfMonth = today.minusMonths(i).withDayOfMonth(1);
+			String monthLabel = startOfMonth.format(formatter);
+
+			LocalDate endOfMonth = startOfMonth.withDayOfMonth(startOfMonth.lengthOfMonth());
+
+			Integer ordersPrice = oService.findOrdersPrice(java.sql.Date.valueOf(startOfMonth),
+					java.sql.Date.valueOf(endOfMonth));
+			System.out.println("6666666666" + ordersPrice);
+			monthOrdersPrice.put(monthLabel, ordersPrice);
+		}
+
+		m.addAttribute("monthOrdersMap", monthOrdersMap);
+		m.addAttribute("monthOrdersPrice", monthOrdersPrice);
+		return "/Order/jsp/Test";
 
 	}
-	
-	
+
 	@PutMapping("fakeDelete.controller")
-	public void DeleteOrder(@RequestParam("orderId") Orders order,
-			Model m) {
+	public void DeleteOrder(@RequestParam("orderId") Orders order, Model m) {
 		int orderId = order.getOrderId();
 		oService.cancelOrderById(orderId);
 		Date currentDate = new Date();
@@ -497,9 +512,9 @@ public class OrderController {
 		MemberBean member = members.get();
 		Optional<MemberBean> members2 = mService.findById(sellerId);
 		MemberBean seller = members2.get();
-		
+
 		Notifications n = new Notifications();
-		String buyerMessage = "親愛的" + buyerName +"您好，您的訂單編號為:" + orderId + "的訂單已成功取消";
+		String buyerMessage = "親愛的" + buyerName + "您好，您的訂單編號為:" + orderId + "的訂單已成功取消";
 		n.setOrderId(order);
 		n.setRecipientId(member);
 		n.setContent(buyerMessage);
@@ -515,16 +530,31 @@ public class OrderController {
 		n2.setReads(0);
 		nService.sendMessage(n2);
 	}
-	
+
 	@PutMapping("updateOrder.controller")
 	public void UpdateOrder(@RequestParam("orderId") String orderIdStr,
-			@RequestParam("orderstatus") String orderStatusStr,
-			@RequestParam("name") String name, @RequestParam("address") String address, @RequestParam("tel") String tel,
-			Model m ) {
+			@RequestParam("orderstatus") String orderStatusStr, @RequestParam("name") String name,
+			@RequestParam("address") String address, @RequestParam("tel") String tel, Model m) {
 		int orderId = Integer.parseInt(orderIdStr);
 		int orderStatus = Integer.parseInt(orderStatusStr);
-		oService.updateOrderById(name,address,tel , orderStatus,orderId);
-		
-		
+		oService.updateOrderById(name, address, tel, orderStatus, orderId);
+
 	}
+
+	@PutMapping("BuyerUpdate")
+	public void BuyerUpdate(@RequestParam("orderId") String orderIdStr, @RequestParam("name") String name,
+			@RequestParam("address") String address, @RequestParam("tel") String tel, Model m) {
+
+		int orderId = Integer.parseInt(orderIdStr);
+		oService.BuyerUpdate(name, address, tel, orderId);
+	}
+
+	@PutMapping("UpdateStatus/{orderId}/{orderStatus}")
+	public void UpdateStatus(@PathVariable("orderId") Integer orderId,
+	        @PathVariable("orderStatus") Integer orderStatus, Model m) {
+	    System.out.println(orderStatus);
+	    System.out.println(orderId);
+	    oService.UpdateStatus(orderStatus, orderId);
+	}
+
 }

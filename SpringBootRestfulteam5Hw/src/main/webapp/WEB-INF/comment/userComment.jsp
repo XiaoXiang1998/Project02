@@ -1,6 +1,6 @@
 <%@page import="java.sql.Time"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8" isErrorPage="true"   import="java.util.*"%>
+	pageEncoding="UTF-8" isErrorPage="true" import="java.util.*"%>
 
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <c:set var="basePath" value="${pageContext.request.contextPath}" />
@@ -13,8 +13,10 @@
 <title>評論資料</title>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/css/lightbox.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/js/lightbox.min.js"></script>
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/css/lightbox.min.css">
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/js/lightbox.min.js"></script>
 
 
 
@@ -28,8 +30,8 @@ body {
 }
 
 .container {
-    margin: 10 auto;
-    padding: 20px; /* 增加内边距 */
+	margin: 10 auto;
+	padding: 20px; /* 增加内边距 */
 }
 
 .item {
@@ -49,8 +51,6 @@ body {
 	display: inline-block;
 	margin-right: 20px;
 }
-
-
 
 .name {
 	color: #FB7299;
@@ -86,233 +86,299 @@ body {
 	font-size: 18px;
 	line-height: 1.5;
 }
-
+.dropdown-container {
+ position: absolute;
+    top: 0;
+    right: 0;
+    padding: 10px; /* 可以根據需要調整間距 */
+}
 
 .dropdown-content {
-    display: none;
-    position: relative; /* 将下拉菜单设置为相对定位 */
-    background-color: #fff;
-    min-width: 120px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    z-index: 1;
-    border-radius: 5px;
+	display: none;
+	position: relative; /* 将下拉菜单设置为相对定位 */
+	background-color: #fff;
+	min-width: 120px;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+	z-index: 1;
+	border-radius: 5px;
 }
 
 .dropdown-content a {
-    color: #333;
-    padding: 12px 16px;
-    text-decoration: none;
-    display: block;
+	color: #333;
+	padding: 12px 16px;
+	text-decoration: none;
+	display: block;
 }
 
 .dropdown-content a:hover {
-    background-color: #f9f9f9;
+	background-color: #f9f9f9;
 }
 
 .dropdown:hover .dropdown-content {
-    display: block;
+	display: block;
 }
 
 .edit-window {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: #fff;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    z-index: 9999;
-    display: none;
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	background-color: #fff;
+	padding: 20px;
+	border: 1px solid #ccc;
+	border-radius: 8px;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+	z-index: 9999;
+	display: none;
 }
 
 .edit-window textarea {
-      width: 100%;
-    height: 100px;
-    resize: none;
-    margin-bottom: 10px;
-    border: 1px solid #ccc; /* 添加邊框 */
-    border-radius: 5px; /* 圓角 */
-    padding: 10px; /* 內邊距 */
-    font-size: 14px; /* 字體大小 */
-    line-height: 1.5; /* 行高 */
+	width: 100%;
+	height: 100px;
+	resize: none;
+	margin-bottom: 10px;
+	border: 1px solid #ccc; /* 添加邊框 */
+	border-radius: 5px; /* 圓角 */
+	padding: 10px; /* 內邊距 */
+	font-size: 14px; /* 字體大小 */
+	line-height: 1.5; /* 行高 */
 }
 /* 擴展 textarea 在 hover 狀態下的樣式 */
 .edit-window textarea:hover {
-    border-color: #999;
+	border-color: #999;
 }
 /* 擴展 textarea 在 focus 狀態下的樣式 */
 .edit-window textarea:focus {
-    outline: none;
-    border-color: #007bff; /* 更改 focus 狀態下的邊框顏色 */
-    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* 添加 focus 狀態下的陰影效果 */
+	outline: none;
+	border-color: #007bff; /* 更改 focus 狀態下的邊框顏色 */
+	box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* 添加 focus 狀態下的陰影效果 */
 }
 
 .close-btn {
-    position: absolute;
-    top: 5px;
-    right: 5px;
-    cursor: pointer;
+	position: absolute;
+	top: 5px;
+	right: 5px;
+	cursor: pointer;
 }
 
 .page-separator {
-    margin: 0 5px; /* 調整分頁連結之間的間距 */
+	margin: 0 5px; /* 調整分頁連結之間的間距 */
 }
 
 .custom-pagination-container {
-    margin-top: 20px; /* 调整分页组件与数据之间的间距 */
-    display: flex;
-    justify-content: center;
+	margin-top: 20px; /* 调整分页组件与数据之间的间距 */
+	display: flex;
+	justify-content: center;
 }
 
 .custom-pagination {
-    list-style: none;
-    padding: 0;
-    display: flex;
+	list-style: none;
+	padding: 0;
+	display: flex;
 }
 
 .custom-page-item {
-    margin-right: 10px; /* 调整分页链接之间的间距 */
+	margin-right: 10px; /* 调整分页链接之间的间距 */
 }
 
 .custom-page-link {
-    padding: 5px 10px;
-    background-color: #eee;
-    border: 1px solid #ccc;
-    text-decoration: none;
-    color: #333;
+	padding: 5px 10px;
+	background-color: #eee;
+	border: 1px solid #ccc;
+	text-decoration: none;
+	color: #333;
 }
 
 .custom-page-link:hover {
-    background-color: #ddd;
+	background-color: #ddd;
 }
 
 .custom-page-link.active {
-    background-color: #007bff;
-    color: #fff;
+	background-color: #007bff;
+	color: #fff;
 }
+
 .page-separator {
-    margin: 0 5px;
+	margin: 0 5px;
 }
+
 .time-and-details {
-        flex-grow: 1; /* 彈性增長，以填滿可用空間 */
-        display: flex;
-        flex-direction: row;
-    }
-    .order-details {
-        margin-right: 10px; /* 增加右邊距，使得各項目之間有一定間距 */
-    }
-    
-    .time{
-	    margin-right: 5px; /* 調整時間和 | 之間的間距 */
-	
+	flex-grow: 1; /* 彈性增長，以填滿可用空間 */
+	display: flex;
+	flex-direction: row;
+}
+
+.order-details {
+	margin-right: 10px; /* 增加右邊距，使得各項目之間有一定間距 */
+}
+
+.time {
+	margin-right: 5px; /* 調整時間和 | 之間的間距 */
 }
 
 .separator {
-    margin-right: 5px; /* 調整右側間距 */
-    margin-left: 5px; /* 調整左側間距 */
+	margin-right: 5px; /* 調整右側間距 */
+	margin-left: 5px; /* 調整左側間距 */
 }
+
 .reply {
-    border: 3px solid #ddd;
-    background-color: #f7f7f7;
-    padding: 10px;
-    margin-top: 10px;
-    border-radius: 10px;
+	border: 3px solid #ddd;
+	background-color: #f7f7f7;
+	padding: 10px;
+	margin-top: 10px;
+	border-radius: 10px;
+}
+
+.goods-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px; /* 可选：为每个商品间添加一些间距 */
+}
+
+.goods-container img {
+    width: 100px; /* 调整图片宽度 */
+    height: 100px; /* 调整图片高度 */
+    margin-right: 30px; /* 图片和描述之间的间距 */
+}
+
+.goods-details {
+    flex-grow: 1; /* 让描述文本占据剩余空间 */
+    max-width: 200px; /* 设置描述文本的最大宽度，根据实际情况调整 */
+    white-space: nowrap; /* 防止文字换行 */
+    overflow: hidden; /* 超出部分隐藏 */
+    text-overflow: ellipsis; /* 超出部分以省略号显示 */
+}
+
+.goods-details span {
+    font-weight: bold; /* 设置字体加粗 */
+    font-size: 1.1em; /* 设置字体大小，根据实际情况调整 */
+    color: black; /* 设置文字颜色为黑色 */
 }
 </style>
 </head>
 <body>
-		<%@ include file="../FrontDeskNav.jsp"%>
-	
-	<div class="container">	
-	    <c:if test="${not empty comments}">
-	
-    <c:forEach items="${comments}" var="comment">
-        <div class="item" data-comment-id="${comment.commentid}" id="container-page">
-            <i class="avatar"></i>
-            <div class="info">
-                <p class="name">${comment.member.name}</p>
-                <p>
-                    <c:forEach begin="1" end="${comment.buyerrate}">
-                        <img src="commentPicture/output.png" alt="star" width="20" height="20">
-                    </c:forEach>
-                </p>
-                <div class="time-and-details">
-                <c:if test="${not empty comment.commenttime}">
-                        <fmt:formatDate value="${comment.commenttime}" pattern="yyyy-MM-dd HH:mm" var="formattedCommentTime" />
-                        <p class="time">${formattedCommentTime}</p>
-                    </c:if>
-                    <p class="order-details"><span class="separator">|</span>訂單編號: ${comment.orders.orderId}</p>
-                    <p class="order-details">規格尺寸: ${comment.orders.formatgoodId.goodSize}</p>
-                    <p class="order-details">商品名稱: ${comment.orders.formatgoodId.good.goodsName}</p>
-                </div>
-                <c:choose>
-                    <c:when test="${not empty comment.productphoto}">
-                        <a href="${pageContext.request.contextPath}/${comment.productphoto}" data-lightbox="product-images-${comment.commentid}">
-                            <img class="product-photo" src="${pageContext.request.contextPath}/${comment.productphoto}" alt="產品圖片">
-                        </a>
-                    </c:when>
-                    <c:otherwise>
-                        <div class="no-image"></div>
-                    </c:otherwise>
-                </c:choose>
-                <p class="text">${comment.commentcontent}</p>
-                 <c:forEach items="${replies}" var="reply">
-                    <c:if test="${reply.repliedcommentid eq comment.commentid}">
-                        <div class="reply">
-                        <p>賣家回應:</p>
-                            <p class="reply-content">${reply.replayconetnt}</p>
-                            <c:if test="${not empty reply.replaytime}">
-                        <fmt:formatDate value="${reply.replaytime}" pattern="yyyy-MM-dd HH:mm" var="formattedCommentTime" />
-                        <p class="time">${formattedCommentTime}</p>
-                    </c:if>
-                        </div>
-                    </c:if>
-                </c:forEach>
-                <div class="dropdown">
-                    <button class="dropbtn">&#8942;</button>
-                    <div class="dropdown-content">
-                        <a href="#" onclick="showEditForm(${comment.commentid}, '${comment.commentcontent}');" >編輯</a>
-                        <a href="#" onclick="deleteComment(${comment.commentid}); return false;">刪除</a>
-                    </div>
-                </div>
-                <div id="editForm${comment.commentid}" style="display: none;" class="edit-window">
-                    <span class="close-btn" onclick="closeEditWindow(${comment.commentid})">×</span>
-                    <form id="commentForm${comment.commentid}" action="post/${comment.commentid}" method="post">
-                        <input type="hidden" name="_method" value="PUT">
-                        <textarea name="commentContent" id="commentContent_${comment.commentid}"></textarea>
-                        <button type="button" onclick="updateComment(${comment.commentid});">提交</button>
-                    </form>
-                </div>            
-            </div>
-        </div>
-    </c:forEach>
-    </c:if>
-</div>
+	<%@ include file="../FrontDeskNav.jsp"%>
 
-<c:if test="${totalPages > 1}">
-    <div class="custom-pagination-container">
-        <ul class="custom-pagination">
-            <c:forEach begin="0" end="${totalPages - 1}" var="pageNumber">
-                <c:url value="?page=${pageNumber}" var="pageUrl"/>
-                <li class="custom-page-item">
-                    <c:if test="${pageNumber == currentPage}">
-                        <strong class="custom-page-link">${pageNumber + 1}</strong>
-                    </c:if>
-                    <c:if test="${pageNumber != currentPage}">
-                        <a class="custom-page-link" href="${pageUrl}">${pageNumber + 1}</a>
-                    </c:if>
-                </li>
-                <!-- 添加分页链接之间的间隔 -->
-                <li class="custom-page-separator">&nbsp;</li>
-            </c:forEach>
-        </ul>
-    </div>
-</c:if>
-				
-		<%@ include file="../FrontDeskFooter.jsp"%>
-	
+	<div class="container">
+		<c:if test="${not empty comments}">
+
+			<c:forEach items="${comments}" var="comment">
+				<div class="item" data-comment-id="${comment.commentid}"
+					id="container-page">
+					<i class="avatar"></i>
+					<div class="info">
+						<p class="name">${comment.member.name}</p>
+						<p>
+							<c:forEach begin="1" end="${comment.buyerrate}">
+								<img src="commentPicture/output.png" alt="star" width="20"
+									height="20">
+							</c:forEach>
+						</p>
+						<div class="time-and-details">
+							<c:if test="${not empty comment.commenttime}">
+								<fmt:formatDate value="${comment.commenttime}"
+									pattern="yyyy-MM-dd HH:mm" var="formattedCommentTime" />
+								<p class="time">${formattedCommentTime}</p>
+							</c:if>
+							<p class="order-details">
+								<span class="separator">|</span>訂單編號: ${comment.orders.orderId}
+							</p>
+							<p class="order-details">規格尺寸:
+								${comment.orders.formatgoodId.goodSize}</p>
+							<p class="order-details">商品名稱:
+								${comment.orders.formatgoodId.good.goodsName}</p>
+						</div>
+						<c:choose>
+							<c:when test="${not empty comment.productphoto}">
+								<a
+									href="${pageContext.request.contextPath}/${comment.productphoto}"
+									data-lightbox="product-images-${comment.commentid}"> <img
+									class="product-photo"
+									src="${pageContext.request.contextPath}/${comment.productphoto}"
+									alt="產品圖片">
+								</a>
+							</c:when>
+							<c:otherwise>
+								<div class="no-image"></div>
+							</c:otherwise>
+						</c:choose>
+						<p class="text">${comment.commentcontent}</p>
+						<c:forEach items="${replies}" var="reply">
+							<c:if test="${reply.repliedcommentid eq comment.commentid}">
+								<div class="reply">
+									<p>賣家回應:</p>
+									<p class="reply-content">${reply.replayconetnt}</p>
+									<c:if test="${not empty reply.replaytime}">
+										<fmt:formatDate value="${reply.replaytime}"
+											pattern="yyyy-MM-dd HH:mm" var="formattedCommentTime" />
+										<p class="time">${formattedCommentTime}</p>
+									</c:if>
+									<c:forEach var="goods" items="${reply.member.goods2}">
+										<div class="goods-container">
+											<a href="goodDetail.controller?GoodID=${goods.goodsID}">
+												<img src="${goods.titleImage}" alt="商品標題圖片" width="100px"
+												height="100px" />
+											</a>
+											<div class="goods-details">
+												<span>${goods.goodsDirection}</span>
+											</div>
+										</div>
+									</c:forEach>
+								</div>
+							</c:if>
+						</c:forEach>
+						<div class="dropdown-container">
+						
+						<div class="dropdown">
+        <i class="dropbtn fa-solid fa-pen-to-square"></i>
+							<div class="dropdown-content">
+								<a href="#"
+									onclick="showEditForm(${comment.commentid}, '${comment.commentcontent}');">編輯</a>
+								<a href="#"
+									onclick="deleteComment(${comment.commentid}); return false;">刪除</a>
+							</div>
+						</div>
+						</div>
+						
+						<div id="editForm${comment.commentid}" style="display: none;"
+							class="edit-window">
+							<span class="close-btn"
+								onclick="closeEditWindow(${comment.commentid})">×</span>
+							<form id="commentForm${comment.commentid}"
+								action="post/${comment.commentid}" method="post">
+								<input type="hidden" name="_method" value="PUT">
+								<textarea name="commentContent"
+									id="commentContent_${comment.commentid}"></textarea>
+								<button type="button"
+									onclick="updateComment(${comment.commentid});">提交</button>
+							</form>
+						</div>
+					</div>
+				</div>
+			</c:forEach>
+		</c:if>
+	</div>
+
+	<c:if test="${totalPages > 1}">
+		<div class="custom-pagination-container">
+			<ul class="custom-pagination">
+				<c:forEach begin="0" end="${totalPages - 1}" var="pageNumber">
+					<c:url value="?page=${pageNumber}" var="pageUrl" />
+					<li class="custom-page-item"><c:if
+							test="${pageNumber == currentPage}">
+							<strong class="custom-page-link">${pageNumber + 1}</strong>
+						</c:if> <c:if test="${pageNumber != currentPage}">
+							<a class="custom-page-link" href="${pageUrl}">${pageNumber + 1}</a>
+						</c:if></li>
+					<!-- 添加分页链接之间的间隔 -->
+					<li class="custom-page-separator">&nbsp;</li>
+				</c:forEach>
+			</ul>
+		</div>
+	</c:if>
+
+	<%@ include file="../FrontDeskFooter.jsp"%>
+
 	<script>
 	function deleteComment(commentId) {
 	    Swal.fire({
@@ -349,7 +415,7 @@ body {
 	    });
 	}
 </script>
-<script>
+	<script>
 function showEditForm(commentId, commentContent) {
     var editFormId = "editForm" + commentId;
     document.getElementById(editFormId).style.display = "block";
@@ -408,7 +474,7 @@ function updateComment(commentId) {
     });
 }
 </script>
-<script>
+	<script>
 
 document.querySelectorAll('.item').forEach(item => {
     item.querySelector('.dropdown-content a:nth-of-type(1)').addEventListener('click', function(event) {
@@ -425,7 +491,7 @@ document.querySelectorAll('.item').forEach(item => {
     });
 });
 </script>
-<script>
+	<script>
 document.addEventListener("DOMContentLoaded", function() {
     document.querySelectorAll('.name').forEach(function(nameElement) {
         let name = nameElement.innerText;

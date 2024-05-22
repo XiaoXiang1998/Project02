@@ -14,70 +14,74 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/css/lightbox.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/js/lightbox.min.js"></script>
 
-<style>
-/* 卖家回复内容 */
-.seller-reply {
-    background-color: #f9f9f9;
-    padding: 20px;
-    margin-bottom: 20px;
-}
-
-/* 买家评论内容 */
-.buyer-comment {
-    background-color: #e3f2fd;
-    padding: 10px;
-    margin-bottom: 20px;
-}
-
-/* 分页按钮容器 */
-.pagination-container {
-    text-align: center;
-    margin-top: 20px;
-}
-
-/* 分页按钮样式 */
-.pagination-container a {
-    display: inline-block;
-    padding: 5px 10px;
-    margin-right: 5px;
-    border: 1px solid #ccc;
-    border-radius: 3px;
-    text-decoration: none;
-    color: #333;
-    background-color: #fff;
-}
-
-.pagination-container a:hover {
-    background-color: #f0f0f0;
-}
-
-.time-and-details {
-        flex-grow: 1; /* 彈性增長，以填滿可用空間 */
-        display: flex;
-        flex-direction: row;
-    }
-    .order-details {
-        margin-right: 10px; /* 增加右邊距，使得各項目之間有一定間距 */
-    }
-    
-    .time{
-	    margin-right: 5px; /* 調整時間和 | 之間的間距 */
+	<style>
+	/* 卖家回复内容 */
+	.seller-reply {
+	    background-color: #f9f9f9;
+	    padding: 20px;
+	    margin-bottom: 20px;
+	}
 	
+	/* 买家评论内容 */
+	.buyer-comment {
+	    background-color: #e3f2fd;
+	    padding: 10px;
+	    margin-bottom: 20px;
+	}
+	
+	/* 分页按钮容器 */
+	.pagination-container {
+	    text-align: center;
+	    margin-top: 20px;
+	}
+	
+	/* 分页按钮样式 */
+	.pagination-container a {
+	    display: inline-block;
+	    padding: 5px 10px;
+	    margin-right: 5px;
+	    border: 1px solid #ccc;
+	    border-radius: 3px;
+	    text-decoration: none;
+	    color: #333;
+	    background-color: #fff;
+	}
+	
+	.pagination-container a:hover {
+	    background-color: #f0f0f0;
+	}
+	
+	.time-and-details {
+	        flex-grow: 1; /* 彈性增長，以填滿可用空間 */
+	        display: flex;
+	        flex-direction: row;
+	    }
+	    .order-details {
+	        margin-right: 10px; /* 增加右邊距，使得各項目之間有一定間距 */
+	    }
+	    
+	    .time{
+		    margin-right: 5px; /* 調整時間和 | 之間的間距 */
+		
+	}
+	
+	.separator {
+	    margin-right: 5px; /* 調整右側間距 */
+	    margin-left: 5px; /* 調整左側間距 */
+	}
+	.name {
+		color: #FB7299;
+		font-size: 16px;
+		font-weight: bold;
+		margin: 0 0 10px 0;
+	}
+
+.sellerrate {
+    margin: 10px 0; /* 设置上下间距 */
 }
-
-.separator {
-    margin-right: 5px; /* 調整右側間距 */
-    margin-left: 5px; /* 調整左側間距 */
+.reply-content {
+    margin-top: 10px; /* 设置与上方内容的间距 */
 }
-.name {
-	color: #FB7299;
-	font-size: 16px;
-	font-weight: bold;
-	margin: 0 0 10px 0;
-}
-
-
-
 
 </style>
 </head>
@@ -110,11 +114,12 @@
     <div class="seller-reply">
         <!-- 显示卖家回复内容 -->
         <p class="name">${seller.member.name}</p>
-        <p>${seller.replayconetnt}</p>
-        <p>
-            <c:forEach begin="1" end="${seller.sellerrate}">
-                <img src="commentPicture/output.png" alt="star" width="20" height="20">
+        <c:forEach begin="1" end="${seller.sellerrate}">
+                <img src="commentPicture/output.png" alt="star" width="20" height="20"  class="sellerrate">
             </c:forEach>
+        <p class="reply-content">${seller.replayconetnt}</p>
+        <p>
+            
         </p>
          <c:if test="${not empty seller.replaytime}">
                         <fmt:formatDate value="${seller.replaytime}" pattern="yyyy-MM-dd HH:mm" var="formattedCommentTime" />
@@ -127,6 +132,11 @@
             <c:if test="${buyer.commentid eq seller.repliedcommentid}">
                 <div class="buyer-comment">
                     <p class="name"> ${buyer.member.name}</p>
+                    <p>
+                        <c:forEach begin="1" end="${buyer.buyerrate}">
+                            <img src="commentPicture/output.png" alt="star" width="20" height="20">
+                        </c:forEach>
+                    </p>
                     <p> ${buyer.commentcontent}</p>
                    <div class="time-and-details">
                 <c:if test="${not empty buyer.commenttime}">
@@ -141,7 +151,7 @@
                      <c:choose>
                     <c:when test="${not empty buyer.productphoto}">
                         <a href="${pageContext.request.contextPath}/${buyer.productphoto}" data-lightbox="product-images-${buyer.commentid}">
-                            <img class="product-photo" src="${pageContext.request.contextPath}/${buyer.productphoto}" alt="產品圖片" width="50px" height="50px">
+                            <img class="product-photo" src="${pageContext.request.contextPath}/${buyer.productphoto}" alt="產品圖片" width="100px" height="100px">
                         </a>
                     </c:when>
                     <c:otherwise>
@@ -149,11 +159,7 @@
                     </c:otherwise>
                 </c:choose>
                     <!-- 显示买家评分 -->
-                    <p>
-                        <c:forEach begin="1" end="${buyer.buyerrate}">
-                            <img src="commentPicture/output.png" alt="star" width="20" height="20">
-                        </c:forEach>
-                    </p>
+                    
                 </div>
             </c:if>
         </c:forEach>

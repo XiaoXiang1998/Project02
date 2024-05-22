@@ -102,14 +102,32 @@
 	font-weight: bold;
 	margin: 0 0 10px 0;
 }
+
 .nav-link.active {
-    background-color: #007bff; /* 高亮時背景顏色 */
+	background-color: #007bff; /* 高亮時背景顏色 */
+}
+.goods-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.goods-container img {
+    margin-right: 10px;
+    border: 1px solid #ccc; /* 边框颜色 */
+}
+
+.goods-container span {
+    font-size: 1.1em; /* 设置字体大小，根据实际情况调整 */
+    color: black; /* 设置文字颜色为黑色 */
+    background-color: #e0e0e0; /* 设置背景颜色为浅灰色 */
+    padding: 5px; /* 可选：添加一些内边距 */
 }
 </style>
 </head>
 <body>
 
-		<%@ include file="../FrontDeskNav.jsp"%>
+	<%@ include file="../FrontDeskNav.jsp"%>
 
 
 	<div class="row">
@@ -175,6 +193,17 @@
 					</c:forEach>
 				</div>
 				<p id="replayconetnt">${comment.replayconetnt}</p>
+				<c:forEach var="good" items="${comment.member.goods2}">
+					<c:forEach var="format" items="${good.format}">
+						<div class="goods-container">
+							<a href="goodDetail.controller?GoodID=${good.goodsID}"> <img
+								src="${format.goodImagePath}" alt="商品標題圖片" width="100px"
+								height="100px" />
+							</a> 
+								<span>${good.goodsDirection}</span>
+						</div>
+					</c:forEach>
+				</c:forEach>
 			</div>
 		</c:forEach>
 	</div>
@@ -189,9 +218,9 @@
 			</c:forEach>
 		</ul>
 	</div>
-	
-			<%@ include file="../FrontDeskFooter.jsp"%>
-	
+
+	<%@ include file="../FrontDeskFooter.jsp"%>
+
 	<script>
 		document.addEventListener("DOMContentLoaded", function() {
 			document.querySelectorAll('.name').forEach(function(nameElement) {

@@ -54,7 +54,7 @@ import com.member.model.MemberBean;
 	            jsonObject.put("sender", sender);
 	            jsonObject.put("content", message);
 	            jsonObject.put("time", time); 
-
+	            
 	            sendMessage(receiverSession, jsonObject.toString());
 	        } else {
 	            sendMessageToSender("System", "User " + receiver + " is not online.");

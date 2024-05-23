@@ -47,9 +47,12 @@ public class MemberDetailsService implements UserDetailsService {
 		Integer count = nService.noReadCounts(member);
 		session.setAttribute("count", count);
 		session.setAttribute("notifications", notifications);
+		System.out.println(count);
+		System.out.println(notifications);
 		// 購物車數量
 		Integer carItemCount = cService.carItemCount(member);
 		session.setAttribute("carItemCount", carItemCount);
+		System.out.println(carItemCount);
 		return new MemberDetailsRule(member);// 回傳客制化建立會員
 	}
 }

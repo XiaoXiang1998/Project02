@@ -265,6 +265,7 @@ public class OrderController {
 			order.setName(names[i]);
 			order.setAddress(addresses[i]);
 			order.setTel(tels[i]);
+			System.out.println(shippingMethods[i]);
 			order.setShippingMethod(shippingMethods[i]);
 			order.setShippingFee(shippingFees[i]);
 			order.setOriginalPrice(oringinalPrices[i]);

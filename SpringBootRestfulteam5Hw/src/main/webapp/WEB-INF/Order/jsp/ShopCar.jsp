@@ -32,7 +32,7 @@ input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer
 								<img src="https://thumb.silhouette-ac.com/t/88/88011730a0e354a38deb024285583920_t.jpeg" alt="" class="object-fit-cover w-100 h-100" />
 							</div>
 							<p class="text-muted pt-2">你的購物車是空的。</p>
-							<a href="product.controller" class="btn btn-primary">前往購物</a>
+							<a href="EZBuyIndexWithoutLogin" class="btn btn-primary">前往購物</a>
 						</div>
 					</c:when>
 					<c:otherwise>

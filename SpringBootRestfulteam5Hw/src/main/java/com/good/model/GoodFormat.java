@@ -39,7 +39,7 @@ public class GoodFormat {
 	private Integer goodsStock;
 
 	@JsonBackReference
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "GOODSID")
 	private GoodsBean2 good;
 	//

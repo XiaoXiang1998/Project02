@@ -123,6 +123,33 @@
 				font-size: 16px;
 				/* 變更字體大小為16像素 */
 			}
+
+			/* 自定义按钮样式 */
+			.custom-google-button {
+				display: inline-flex;
+				align-items: center;
+				padding: 10px 20px;
+				background-color: #fff;
+				border: 1px solid #ccc;
+				border-radius: 50px;
+				/* 使按钮变成橢圓形 */
+				cursor: pointer;
+				font-size: 16px;
+				color: #333;
+				box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+				transition: background-color 0.3s, box-shadow 0.3s;
+			}
+
+			.custom-google-button:hover {
+				background-color: #f7f7f7;
+				box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+			}
+
+			.custom-google-button img {
+				width: 20px;
+				height: 20px;
+				margin-right: 10px;
+			}
 		</style>
 	</head>
 
@@ -133,7 +160,7 @@
 
 					<h3>登入 Login</h3>
 
-					<form method="post" action="MemberLogin.controller">
+					<form method="post" action="login">
 						<input type="text" id="username" name="username" placeholder="帳號" required>
 						<div class="tab"></div>
 						<input type="password" id="password" name="password" placeholder="密碼" required>
@@ -141,26 +168,22 @@
 							<input type="checkbox" id="seePassword" onclick="togglePassword()">
 							<label for="seePassword" style="font-size: 12px;">顯示密碼</label>
 						</div>
-						<div class="tab"></div>
 						<input type="submit" value="登入" class="submit">
-						<div id="g_id_onload"
-							data-client_id="892237680262-jsfn5kl8g9a7ks0nj2sh9vgeem2o4tla.apps.googleusercontent.com"
-							data-context="signin" data-ux_mode="popup"
-							data-login_uri="http://localhost:8081/google.login" data-auto_prompt="false"></div>
-
-						<div class="g_id_signin" data-type="standard" data-shape="pill" data-theme="outline"
-							data-text="signin_with" data-size="large" data-logo_alignment="left">
-						</div>
-
 					</form>
+				</div>
+				<div class="custom-google-button" id="customGoogleButton" style="margin-top: 16px;">
+					<span>Sign in with Google</span>
 				</div>
 				<h5><a href="Register">註冊帳號</a></h5>
 				<h5><a href="forgotPassword">忘記密碼</a></h5>
 			</div>
 		</div>
 
-		<script src="https://accounts.google.com/gsi/client?hl=en" async></script>
 		<script>
+			document.getElementById('customGoogleButton').addEventListener('click', function () {
+				window.location.href = 'http://localhost:8081/oauth2/authorization/google';
+			});
+
 			function togglePassword() {
 				let passwordInput = document.getElementById("password");
 				let checkbox = document.getElementById("seePassword");

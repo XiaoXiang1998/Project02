@@ -5,9 +5,7 @@ import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -16,6 +14,9 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -28,7 +29,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.good.dto.GoodPriceDTO;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken.Payload;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
@@ -86,19 +86,34 @@ public class MemberController {
 	@GetMapping("/membercenter")
 	public String MemberCenter() {
 		
-		return "/member/MemberCenter";
+		return "member/MemberCenter";
 	}
 
 	@GetMapping("/logout")
 	public String logout() {
 		httpSession.invalidate();
-		return "/good/jsp/EZBuyindex";
+		return "good/jsp/EZBuyindex";
 	}
 
 	@GetMapping("/Register")
 	public String insertMember() { 
-		return "/member/InsertMember";
+		return "member/InsertMember";
 	}
+	/*------------------------------------------------測試區-----------------------------------------------------*/
+	@GetMapping("/testsecurity")
+	public String testSecurity() { 
+		return "member/TestSecurity";
+	}
+	
+	@GetMapping("/testThirdParty")
+	@ResponseBody
+	public DefaultOAuth2User testThirdParty() {
+		System.out.println("進入測試");
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		System.out.println(authentication);
+		return (DefaultOAuth2User) authentication.getPrincipal();
+	}
+	
 	/*------------------------------------------------基本資料操作-----------------------------------------------------*/
 
 	/* 新增會員資料 */
@@ -233,43 +248,7 @@ public class MemberController {
 		}
 	}
 
-	/* 顯示所有會員資料 */
-	@GetMapping("/showAllMember")
-	public String showMembers(Model m) {
-		m.addAttribute("members", mService.getAll());
-		return "/WEB-INF/member/GetAllMembers";
-	}
-
-	/* 選定搜尋方法 */
-	@GetMapping("/SelectFunction")
-	public String selectedFunction(@RequestParam("selected") String function, @RequestParam("content") String content,
-			Model m) {
-
-		switch (function) {
-		case "SelectByName":
-			m.addAttribute("members", mService.selectByName(content));
-			break;
-		case "SelectLikeName":
-			m.addAttribute("members", mService.selectLikeName(content));
-			break;
-		case "SelectByAccount":
-			m.addAttribute("members", mService.selectByAccount(content));
-			break;
-		case "SelectByPhone":
-			m.addAttribute("members", mService.selectByPhone(content));
-			break;
-		}
-		return "/WEB-INF/member/GetAllMembers";
-
-	}
-
 	/*------------------------------------------------登入操作-----------------------------------------------------*/
-
-	/* 回到adminUI */
-	@PostMapping("/backToAdminUI")
-	public String backToAdminUI() {
-		return "/WEB-INF/member/AdminUI";
-	}
 
 	/* 登入機制 */
 	@PostMapping("/MemberLogin.controller")
@@ -300,7 +279,7 @@ public class MemberController {
 
 	@GetMapping("/forgotPassword")
 	public String turnToforgotPassword() {
-		return "/member/ForgetPassword";
+		return "member/ForgetPassword";
 	}
 
 	/*------------------------------------------------第三方登入測試-----------------------------------------------------*/
@@ -311,7 +290,7 @@ public class MemberController {
 	}
 
 	/* 第三方登入獲取參數 */
-	@PostMapping("/google.login")
+//	@PostMapping("/google.login")
 	public String googleLogin(@RequestParam("credential") String credential)
 			throws GeneralSecurityException, IOException {
 		GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(new NetHttpTransport(), new GsonFactory())
@@ -344,17 +323,6 @@ public class MemberController {
 		String[] splitAccount = email.split("@");
 		String account = splitAccount[0];
 		if (idToken != null) {
-//	            int level = 1;
-
-//			System.out.println("獨家金鑰: " + thirdPartyId);
-//			System.out.println("第三方登入方式: " + thirdPartyProvider);
-//			System.out.println("信箱: " + email);
-//			System.out.println("帳號: " + account);
-//			System.out.println("全名: " + name);
-//			System.out.println("照片: " + pictureUrl);
-//			System.out.println("姓氏: " + givenName);
-//			System.out.println("名字: " + familyName);
-
 			if (mService.findByAccount(account).isPresent()) {
 				if (mService.checkLogin(account, thirdPartyId)) {
 					System.out.println("登入成功");
@@ -365,8 +333,7 @@ public class MemberController {
 					httpSession.setAttribute("member", memberInformation);
 					System.out.println("session設定成功");
 					// 檢查會員等級
-//					return "/good/jsp/EZBuyindex"; //
-					return "forward:EZBuyIndex";//游能佑加的
+					return "good/jsp/EZBuyindex";
 				}
 			} else {
 				/* 紀錄當前時間 */
@@ -384,7 +351,7 @@ public class MemberController {
 				// 購物車數量
 				Integer carItemCount = cService.carItemCount(memBean);
 				httpSession.setAttribute("carItemCount", carItemCount);
-				return "/good/jsp/EZBuyindex";
+				return "good/jsp/EZBuyindex";
 			}
 		}
 		return "失敗";
@@ -480,17 +447,17 @@ public class MemberController {
 				/* 比較TOKEN */
 				if (token.equals(rtBean.getToken())) {
 					rtService.deleteForgetPassword(thisID);
-					return "/member/ResetPassword";
+					return "member/ResetPassword";
 				} else {
 					rtService.deleteForgetPassword(thisID);
-					return "/member/tokenErr";
+					return "member/tokenErr";
 				}
 			} else {
 				rtService.deleteForgetPassword(thisID);
-				return "/member/TimeOut";
+				return "member/TimeOut";
 			}
 		} else {
-			return "/member/NotExist";
+			return "member/NotExist";
 		}
 
 	}
@@ -510,7 +477,7 @@ public class MemberController {
 	/*------------------------------------------------測試區-----------------------------------------------------*/
 	@GetMapping("/testinclude")
 	public String test() {
-		return "/member/TEST";
+		return "member/TEST";
 	}
 	/*------------------------------------------------內斂區-----------------------------------------------------*/
 	private void updateSession(String account, HttpSession session) {

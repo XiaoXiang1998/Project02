@@ -41,6 +41,7 @@ public class MemberDetailsService implements UserDetailsService {
 		if (member == null) {
 			throw new UsernameNotFoundException("Can't find member: " + username);
 		}
+		
 		session.setAttribute("member", member);
 		List<Notifications> notifications = nService.findByRecipientIdOrderBySendTimeDesc(member);
 		Integer count = nService.noReadCounts(member);

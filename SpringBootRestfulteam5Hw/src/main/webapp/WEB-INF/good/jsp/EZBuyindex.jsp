@@ -221,7 +221,7 @@
 					</div>
 					<!-- Copyright End -->
 
-
+					<!-- <img src="" alt="" style="height: 300px;"> -->
 
 					<!-- Back to Top -->
 					<a href="#" class="btn btn-primary border-3 border-primary rounded-circle back-to-top">
@@ -271,17 +271,29 @@
 										// console.log(span1); console.log(a1); console.log(li1);
 										//
 
-
-										let content = `<li class="nav-item">
+										if (check == 0) {
+											let content = `<li class="nav-item">
 														<a class="d-flex m-2 py-2 bg-light rounded-pill active" data-bs-toggle="pill" href="#tab-` + (i + 1) + `">
 															<span class="text-dark" style="width: 130px;" data-typeName = `+ n + `>` + n + `</span>
 														</a>
 													</li>`;
-										console.log(content);
-
-										let ulcontainer = document.getElementById("CategoryList");
-										ulcontainer.innerHTML = ulcontainer.innerHTML + content;
+											let ulcontainer = document.getElementById("CategoryList");
+											ulcontainer.innerHTML = ulcontainer.innerHTML + content;
+											console.log(content);
+											check++;
+										}
+										else {
+											let content = `<li class="nav-item">
+														<a class="d-flex m-2 py-2 bg-light rounded-pill" data-bs-toggle="pill" href="#tab-` + (i + 1) + `">
+															<span class="text-dark" style="width: 130px;" data-typeName = `+ n + `>` + n + `</span>
+														</a>
+													</li>`;
+											let ulcontainer = document.getElementById("CategoryList");
+											ulcontainer.innerHTML = ulcontainer.innerHTML + content;
+											console.log(content);
+										}
 										console.log($('#CategoryList').prop("innerHTML"));
+
 									})
 								}
 							}
@@ -327,8 +339,10 @@
 										let div0 = document.createElement('div'); div0.classList.add("col-md-6"); div0.classList.add("col-lg-4"); div0.classList.add("col-xl-3");
 										let div1 = document.createElement('div'); div1.classList.add("rounded"); div1.classList.add("position-relative"); div1.classList.add("fruite-item");
 										let div2 = document.createElement('div'); div2.classList.add("fruite-img");
+										div2.setAttribute("style", "height: 300px;")
 										let img0 = document.createElement('img');//將圖片插入
-										img0.setAttribute("src", n.titleImage); img0.classList.add("img-fluid"); img0.classList.add("w-100");
+										img0.setAttribute("src", n.titleImage); img0.classList.add("img-fluid");
+										img0.classList.add("w-100"); img0.classList.add("h-100");
 										img0.classList.add("rounded-top"); img0.setAttribute("alt", n.titleImage);//封面照片
 										div2.append(img0);
 										let div3 = document.createElement('div'); div3.classList.add("text-white"); div3.classList.add("bg-secondary"); div3.classList.add("px-3");
@@ -336,8 +350,8 @@
 										div3.setAttribute("style", "top: 10px; left: 10px;"); div3.innerHTML = n.goodsType;//商品種類
 										let div4 = document.createElement('div'); div4.classList.add("p-4"); div4.classList.add("border"); div4.classList.add("border-secondary"); div4.classList.add("border-top-0"); div4.classList.add("rounded-bottom");
 										let h4 = document.createElement("h4"); h4.innerHTML = n.goodsName//商品名稱
-										let h1ID = document.createElement("h1");h1ID.innerHTML = n.goodsID;
-										h1ID.classList.add("GoodIDHI");
+										let h1ID = document.createElement("h1"); h1ID.innerHTML = n.goodsID;
+										h1ID.classList.add("GoodIDHI"); h1ID.setAttribute("hidden", true);
 										// <div class="d-flex justify-content-between flex-lg-wrap">
 										let div5 = document.createElement("div"); div5.classList.add("d-flex"); div5.classList.add("justify-content-between");
 										div5.classList.add("flex-lg-wrap");
@@ -358,7 +372,7 @@
 											}
 										})
 										//
-										div4.append(h4); div4.append(div5); div1.append(div2); div1.append(div3); div1.append(div4); div0.append(div1);div0.append(h1ID);
+										div4.append(h4); div4.append(div5); div1.append(div2); div1.append(div3); div1.append(div4); div0.append(div1); div0.append(h1ID);
 										divcontain3.append(div0);
 										// console.log($('#tabContentList'));
 										$('#tabContentList').append(divcontain0);
@@ -389,15 +403,15 @@
 								form.prop("action", "/goodDetail.controller");
 								form.prop("method", "get");
 								form.submit();
-						})
-						$(document).on('click','div[class="col-md-6 col-lg-4 col-xl-3"]',function(){
+							})
+						$(document).on('click', 'div[class="col-md-6 col-lg-4 col-xl-3"]', function () {
 							let target = $(this).find('h1[class="GoodIDHI"]');
 							let goodID = target.prop("innerHTML");
 							console.log(goodID);
 							let form = document.createElement("form");
-							form.setAttribute("method","get");form.setAttribute("action","goodDetail.controller");
+							form.setAttribute("method", "get"); form.setAttribute("action", "goodDetail.controller");
 							let input1 = document.createElement("input");
-							input1.setAttribute("type","text");input1.setAttribute("name","GoodID");input1.setAttribute("value",goodID);
+							input1.setAttribute("type", "text"); input1.setAttribute("name", "GoodID"); input1.setAttribute("value", goodID);
 							form.append(input1);
 							$(document.body).append(form);
 							form.submit();
@@ -418,7 +432,7 @@
 								}
 							})
 						})
-						
+
 						function readNotification(notificationId) {
 							fetch("readMessage?notificationId=" + notificationId, {
 								method: 'PUT'

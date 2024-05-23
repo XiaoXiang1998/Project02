@@ -365,7 +365,8 @@ public class MemberController {
 					httpSession.setAttribute("member", memberInformation);
 					System.out.println("session設定成功");
 					// 檢查會員等級
-					return "/good/jsp/EZBuyindex";
+//					return "/good/jsp/EZBuyindex"; //
+					return "forward:EZBuyIndex";//游能佑加的
 				}
 			} else {
 				/* 紀錄當前時間 */

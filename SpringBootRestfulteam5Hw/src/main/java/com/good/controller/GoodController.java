@@ -35,6 +35,7 @@ import org.springframework.data.domain.Pageable;
 import com.comment.model.Post;
 import com.comment.model.PostService;
 import com.good.dto.GoodBasicDto;
+import com.good.dto.GoodFormatICarouselDto;
 import com.good.dto.GoodFormatImageDto;
 import com.good.dto.GoodIDDto;
 import com.good.dto.GoodPageDto;
@@ -246,7 +247,8 @@ public class GoodController {
 //multipartFile.getOriginalFilename():上傳檔案的名稱
 //1.取得圖片格式
 			String Formatfilename = multipartFile.getOriginalFilename();
-			int pos = filename.lastIndexOf(".");
+			int pos = Formatfilename.lastIndexOf(".");
+			System.err.println("Formatfilename = "+Formatfilename + ",pos = "+pos);
 			String patternFormatImage = Formatfilename.substring(pos, Formatfilename.length());
 //2.給予新的名字
 			String timeStampFormat = simpleDateFormat.format(new Date());
@@ -383,12 +385,34 @@ public class GoodController {
 		//
 		List<GoodFormat> byIDOrderByFormatImage = gfService.getByIDOrderByFormatImage(goodID);
 		List<GoodImageBean> findImagesByID = giService.findImagesByID(goodID);
-		List<String> distinctFormatImage = gfService.getDistinctFormatImage(goodID);
+		List<String> distinctFormatImage = gfService.getDistinctFormatImage(goodID); //取得對應商品編號下的所有規格圖片
 		List<GoodFormatImageDto> goodformatimagelist = new ArrayList();
+		int count1 = 1;
+		List<GoodFormatICarouselDto> goodformatcarousldtolist = new ArrayList();
 		for (String item : distinctFormatImage) {
 			GoodFormatImageDto goodformatimage = new GoodFormatImageDto();
 			goodformatimage.setGoodImagePath(item);
 			goodformatimagelist.add(goodformatimage);
+			//透過圖片路徑找其他資料
+			List<GoodFormat> test= gfService.getFormatByImage(item);
+			for(GoodFormat testitem:test) {
+				String dtoformatimagepath = testitem.getGoodImagePath();
+				String dtoformatsize = testitem.getGoodSize();
+				Integer dtoformatprice = testitem.getGoodPrice();
+				Integer dtoformatstock = testitem.getGoodsStock();
+				Integer dtoformatID = testitem.getFormatID();
+				Integer index = count1;
+				//
+				GoodFormatICarouselDto goodformatcarousldto= new GoodFormatICarouselDto();
+				goodformatcarousldto.setFormatID(dtoformatID);
+				goodformatcarousldto.setFormatImagePath(dtoformatimagepath);
+				goodformatcarousldto.setFormatPrice(dtoformatprice);
+				goodformatcarousldto.setFormatSize(dtoformatsize);
+				goodformatcarousldto.setFormatStock(dtoformatstock);
+				goodformatcarousldto.setIndex(index);
+				goodformatcarousldtolist.add(goodformatcarousldto);
+			}
+			count1++;
 		}
 
 		Pageable pageable = PageRequest.of(page, size);
@@ -477,6 +501,7 @@ public class GoodController {
 			System.err.println(item.toString());
 		}
 		int sellerID = good.getGoodsSellerID().getSid();
+		m.addAttribute("GoodFormatCarouslDtoList", goodformatcarousldtolist);
 		m.addAttribute("sellerID", sellerID);
 		m.addAttribute("Good", good);
 		m.addAttribute("GoodFormat", byIDOrderByFormatImage);
@@ -565,13 +590,14 @@ public class GoodController {
 
 	/* 賣家檢視自家全部商品 */
 	@GetMapping("sellerGoodQueryAll")
-	public String sellerGoodQueryAll(HttpServletRequest request, HttpSession session) {// @RequestParam("sellerID")
+	public String sellerGoodQueryAll(HttpServletRequest request,Model m) {// @RequestParam("sellerID")
 																						// Integer sellerID,
 		MemberBean user = (MemberBean) session.getAttribute("member");
 		int sellerID = user.getSid();
 
-		HttpSession session2 = request.getSession();
-		session2.setAttribute("sellerID", sellerID);
+//		HttpSession session2 = request.getSession();
+//		session2.setAttribute("sellerID", sellerID);
+		m.addAttribute("sellerID", sellerID);
 		return "good/jsp/sellerGoodQueryAll";
 	}
 	/* 賣家檢視自家全部商品(分頁查詢功能) */
@@ -590,7 +616,7 @@ public class GoodController {
 		System.err.println("goodNameString = " + goodNameString);
 		String sellerID = split[3];
 		System.err.println("sellerID = " + sellerID);
-		int pageSize = 1;
+		int pageSize = 10;
 		Pageable p1 = PageRequest.of(pageNo - 1, pageSize);
 		Page<GoodsBean2> page = null;
 		switch (status) {
@@ -651,9 +677,9 @@ public class GoodController {
 
 	// 買家進入賣家的賣場 展示賣家所有上架的商品
 	@GetMapping("/sellerMarket")
-	public String sellerMarket(HttpServletRequest request, HttpSession session) {
-		MemberBean user = (MemberBean) session.getAttribute("member");
-		int sellerID = user.getSid();
+	public String sellerMarket(HttpServletRequest request, HttpSession session,@RequestParam("SellerID") Integer sellerID) {
+//		MemberBean user = (MemberBean) session.getAttribute("member");
+//		int sellerID = user.getSid();
 		// 取得賣家所擁有的商品編號
 		Query<Integer> popularListID = (Query<Integer>) entityManager.createQuery(
 				"select g.goodsID from GoodsBean2 g where g.status = 1 AND g.goodsSellerID.sid = ?1 ORDER BY g.rating/g.numberRatings")
@@ -758,7 +784,7 @@ public class GoodController {
 		} else {// 指定價格
 			hql2 = "AND gf.goodPrice between 0 AND " + price + " ";
 		}
-		if (goodName.equals("XXX")) {
+		if (goodName.equals("XXX") || goodName.equals("全部")) {
 
 		} else {// 指定商品名稱
 			hql4 = "AND g.goodsName LIKE '%" + goodName + "%' ";

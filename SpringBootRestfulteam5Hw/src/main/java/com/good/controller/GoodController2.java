@@ -437,7 +437,7 @@ public class GoodController2 {
 	public String mangerGoodChart() {
 		return "good/jsp/mangerGoodChart";
 	}
-	// /good/goodqueryallpage.controller
+	// 管理者查詢全部
 	@GetMapping("/goodqueryallpage.controller")
 	public String goodqueryallpage(HttpServletRequest request) {// 需要做分頁查詢
 		HttpSession session2 = request.getSession();
@@ -445,7 +445,7 @@ public class GoodController2 {
 		session2.setAttribute("goodBasicInfo", allGood);
 		return "good/jsp/mangerGoodQueryAll";
 	}
-
+	// 管理者查詢全部(分頁查詢)
 	@GetMapping("/mangerqueryByPageStatus/{hidden}")
 	@ResponseBody
 	public GoodPageDto processQueryAllByPage(@PathVariable("hidden") String hidden) {
@@ -457,7 +457,7 @@ public class GoodController2 {
 		System.err.println("status = " + status);
 		String goodNameString = split[2];
 		System.err.println("goodNameString = "+goodNameString);
-		int pageSize = 1;
+		int pageSize = 10;
 		Pageable p1 = PageRequest.of(pageNo - 1, pageSize);
 		Page<GoodsBean2> page = null;
 		switch (status) {
@@ -519,7 +519,7 @@ public class GoodController2 {
 //		session.setAttribute("totalElements", totalElement);
 		//
 	}
-
+	// 管理者查詢全部->檢視商品詳細資訊
 	@GetMapping("/goodDetailReviewByManger.controller")
 	public String goodDetailReviewByManger(@RequestParam("GoodID") Integer goodID, Model m) {
 //		HttpSession session = request.getSession();

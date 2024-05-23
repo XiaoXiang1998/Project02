@@ -31,21 +31,21 @@ public class Orders {
 	@Column(name = "ORDER_ID")
 	private Integer orderId;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "FK_BUYERID")
 	private MemberBean buyerId;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "FK_SELLERID")
 	private MemberBean sellerId;
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "FK_FORMATGOODID")
 	private GoodFormat formatgoodId;
 	
-	@OneToOne(fetch = FetchType.LAZY, mappedBy = "orders",cascade = CascadeType.ALL)
+	@OneToOne(fetch = FetchType.EAGER, mappedBy = "orders",cascade = CascadeType.ALL)
 	private Post posts;
 	
-	@OneToMany(fetch = FetchType.LAZY,mappedBy = "orderId", cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+	@OneToMany(fetch = FetchType.EAGER,mappedBy = "orderId", cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     private List<Notifications> notifications;
 	
 	@Column(name = "QUANTITY")
@@ -75,7 +75,7 @@ public class Orders {
 	@Column(name = "TOTAL_PRICE")
 	private Integer totalPrice;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "FK_PAYMENT_ID")
 	private PaymentDetails paymentId;
 

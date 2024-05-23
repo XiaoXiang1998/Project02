@@ -4,6 +4,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
@@ -17,6 +19,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.net.URLEncoder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -28,17 +31,21 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import com.good.controller.GoodFormatService;
 import com.good.model.GoodFormat;
+import com.google.api.client.util.Value;
 import com.member.model.MemberBean;
 import com.member.model.MemberService;
 import com.sean.model.CarItem;
 import com.sean.model.CarItemService;
 import com.sean.model.Notifications;
 import com.sean.model.NotificationsService;
+import com.sean.model.OrderMail;
 import com.sean.model.Orders;
 import com.sean.model.OrdersService;
 import com.sean.model.PaymentDetails;
 import com.sean.model.PaymentDetailsService;
 
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
 import jakarta.servlet.http.HttpSession;
 
 @Controller
@@ -63,7 +70,14 @@ public class OrderController {
 
 	@Autowired
 	private HttpSession session;
-
+	
+	@Autowired
+	private JavaMailSender mailSender;
+	
+	@Autowired
+	private OrderMail orderMail;
+	
+	
 	@GetMapping("goindex.controller")
 	public String GoIndex(Model m) {
 		m.addAttribute("page", "index");
@@ -227,6 +241,7 @@ public class OrderController {
 		Date currentDate = new Date();
 		Optional<MemberBean> members = mService.findById(memberId);
 		MemberBean member = members.get();
+		String BuyerEmail = member.getEmail();
 		PaymentDetails p = new PaymentDetails();
 		p.setPayUserId(member);
 		p.setPaymentMethod(paymentMethod);
@@ -239,6 +254,7 @@ public class OrderController {
 
 			Optional<MemberBean> sellerId = mService.findById(sellerIds[i]);
 			MemberBean seller = sellerId.get();
+			String SellerEmail = seller.getEmail();
 			Optional<GoodFormat> products = gService.findById(productIds[i]);
 			GoodFormat product = products.get();
 			Orders order = new Orders();
@@ -249,6 +265,7 @@ public class OrderController {
 			order.setName(names[i]);
 			order.setAddress(addresses[i]);
 			order.setTel(tels[i]);
+			System.out.println(shippingMethods[i]);
 			order.setShippingMethod(shippingMethods[i]);
 			order.setShippingFee(shippingFees[i]);
 			order.setOriginalPrice(oringinalPrices[i]);
@@ -264,7 +281,7 @@ public class OrderController {
 			order.setModifiedAt(currentDate);
 			Orders o = oService.insertToOrder(order);
 			String goodsName = product.getGood().getGoodsName();
-			int orderId = o.getOrderId();
+			Integer orderId = o.getOrderId();
 			String buyerName = member.getName();
 			Notifications n = new Notifications();
 			String buyerMessage = "親愛的 <span style='color: blue;'>" + buyerName
@@ -275,6 +292,8 @@ public class OrderController {
 			n.setSendTime(currentDate);
 			n.setReads(0);
 			nService.sendMessage(n);
+			orderMail.sendBuyerMessage(BuyerEmail, buyerName, orderId, goodsName, oringinalPrices[i], quantities[i], totalPrices[i]);
+			
 			Notifications n2 = new Notifications();
 			String sellerMessgae = "用戶 <span style='color: blue;'>" + buyerName
 					+ "</span> 已向你的商品 <span style='color: green;'>" + goodsName
@@ -285,6 +304,19 @@ public class OrderController {
 			n2.setSendTime(currentDate);
 			n2.setReads(0);
 			nService.sendMessage(n2);
+			String Sellersubject = "您有一份訂單已成立";
+	        String SellertextContent = "測試郵件";
+	        MimeMessage Sllermessage = mailSender.createMimeMessage();
+	        try {
+	            MimeMessageHelper helper = new MimeMessageHelper(Sllermessage, true);
+	            helper.setFrom("ezbuycompany@gmail.com");
+	            helper.setTo(SellerEmail);
+	            helper.setSubject(Sellersubject);
+	            helper.setText(SellertextContent, true);
+	            mailSender.send(Sllermessage);
+	        } catch (MessagingException e) {
+	            throw new RuntimeException(e);
+	        }
 			if(itemIds.length > 0) {
 				cService.clearShopCarByMemberId(itemIds[i]);				
 			}
@@ -310,8 +342,10 @@ public class OrderController {
 			return "redirect:/ecpayCheckout?aioCheckOutALLForm="
 					+ URLEncoder.encode(aioCheckOutALLForm, StandardCharsets.UTF_8);
 		}
-		return "redirect:/goindex.controller";
+		
+		return "good/jsp/EZBuyindex";
 	}
+       
 
 	@GetMapping("OrderById")
 	public String OrderById(@RequestParam("orderId") Integer orderId, Model m) {

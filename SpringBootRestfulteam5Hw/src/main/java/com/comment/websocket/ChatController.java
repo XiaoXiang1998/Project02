@@ -27,7 +27,10 @@ public class ChatController {
 
         if (member != null) {
             String username = member.getName(); 
+            String photoSticker = member.getPhotoSticker();
             model.addAttribute("username", username);
+            model.addAttribute("photoSticker", photoSticker);
+
             return "comment/talk"; 
         }
         

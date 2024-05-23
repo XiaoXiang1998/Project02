@@ -19,6 +19,8 @@
 		rgba(213, 126, 235, 1));
 	background: linear-gradient(to bottom right, rgba(252, 203, 144, 1),
 		rgba(213, 126, 235, 1));
+		    padding-bottom: 20px; /* 为聊天框内容添加一些底部空间 */
+		
 }
 
 .mask-custom {
@@ -49,13 +51,17 @@
 
 .right-float {
 	align-self: flex-end;
-	color: #fff;
+    color: #000; /* 确保文字颜色在背景上可见 */
+        background-color: rgba(255, 255, 255, 0.8); /* 增加背景颜色以提高可读性 */
+    
 	text-align: right;
 }
 
 .left-float {
 	align-self: flex-start;
-	color: #fff;
+    color: #000; /* 确保文字颜色在背景上可见 */
+        background-color: rgba(255, 255, 255, 0.8); /* 增加背景颜色以提高可读性 */
+    
 	text-align: left;
 }
 
@@ -66,6 +72,8 @@
 
 .message-time {
 	display: inline;
+	  font-size: 0.8em;
+    color: #555; /* 时间戳颜色 */
 }
 
 .avatar-icon {
@@ -73,6 +81,12 @@
 	height: 30px;
 	border-radius: 50%;
 	margin-right: 10px;
+}
+
+.emoji {
+    cursor: pointer;
+    font-size: 1.5em;
+    margin: 5px;
 }
 </style>
 </head>

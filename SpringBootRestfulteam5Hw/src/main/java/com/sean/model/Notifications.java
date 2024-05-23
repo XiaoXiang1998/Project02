@@ -26,11 +26,11 @@ public class Notifications {
 	@Column(name = "ID")
 	private Integer id;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "ORDERID")
 	private Orders orderId;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "RECIPIENTID")
 	private MemberBean recipientId;
 	

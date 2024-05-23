@@ -218,7 +218,7 @@
 					<div class="tab-pane" id="nav-mission" role="tabpanel" aria-labelledby="nav-mission-tab">
 						<c:if test="${not empty posts}">
 							<div class="nav nav-tabs" id="nav-tab" role="tablist">
-								<button class="nav-link " id="all-tab" data-bs-toggle="tab" data-bs-target="#all" role="tab" aria-controls="all" aria-selected="true">全部(${txotalPostsCount})</button>
+								<button class="nav-link " id="all-tab" data-bs-toggle="tab" data-bs-target="#all" role="tab" aria-controls="all" aria-selected="true">全部(${totalPostsCount})</button>
 								<button class="nav-link" id="star5-tab" data-bs-toggle="tab" data-bs-target="#star5" role="tab" aria-controls="star5" aria-selected="false">5顆星(${rateCounts[0]})</button>
 								<button class="nav-link" id="star4-tab" data-bs-toggle="tab" data-bs-target="#star4" role="tab" aria-controls="star4" aria-selected="false">4顆星(${rateCounts[1]})</button>
 								<button class="nav-link" id="star3-tab" data-bs-toggle="tab" data-bs-target="#star3" role="tab" aria-controls="star3" aria-selected="false">3顆星(${rateCounts[2]})</button>
@@ -230,7 +230,7 @@
 							</div>
 							<c:forEach var="post" items="${posts}">
 								<div class="d-flex mb-4" id="comment-container">
-									<img src="" class="img-fluid rounded-circle p-3" style="width: 100px; height: 100px;" alt="">
+									<img src="${post.member.photoSticker}" class="img-fluid rounded-circle p-3" style="width: 100px; height: 100px;" alt="">
 									<!-- 評論用戶的大頭貼 -->
 									<div class="ml-3">
 										<h5 class="mb-1">
@@ -271,8 +271,7 @@
 								<div id="pagination-links">
 									<!-- 这里是您现有的分页链接 -->
 									<c:forEach var="i" begin="0" end="${totalPages - 1}">
-										<a href="#" class="pagination-link" data-page="${i}">${i +
-																1}</a>
+										<a href="#" class="pagination-link" data-page="${i}">${i+1}</a>
 									</c:forEach>
 								</div>
 							</div>
@@ -645,10 +644,7 @@
 		$(document)
 				.ready(
 						function() {
-							var goodId = $
-							{
-								Good.goodsID
-							}
+							var goodId = ${Good.goodsID};
 							; // 你的商品ID
 							var page = 0;
 							var currentRate = null; // 当前选定的星级
@@ -680,30 +676,8 @@
 								return firstChar + '***' + lastChar; // 將中間字符替換為星號
 							}
 
-<<<<<<< HEAD
-									// 將規格編號塞入form標籤內
-								}
-								let formatID = $(this).find('span[class="formatID"]').prop("innerHTML");//取得規格編號
-								$('#BuyNumber').prop("value", 1);
-								$('#orderformatID').prop("value", formatID);
-								$('#cartformatID').prop("value", formatID);
-								// 還需要取得大小
-								let goodstock = $(this).find('span[class="CategoryNumber"]').prop("innerHTML");
-								let formatprice = $(this).find('span[class="CategoryPrice"]').prop("innerHTML");
-								let formatSize = $(this).find('span[class="CategorySize"]').prop("innerHTML");//大小
-								let formatimagepathtarget = $(this).find('img').prop("src");//圖片
-								let ps = formatimagepathtarget.lastIndexOf("/");
-								let formatimagepath = "../../"+formatimagepathtarget.substring(ps+1);
-								console.log(formatimagepath);
-								//
-								$('#cartPrice').prop("value", formatprice);
-								$('#orderformatprice').prop("value", formatprice);
-								$('#remainingNumber').prop("innerHTML", goodstock);
-								$('#CategoryPrice').prop("innerHTML", formatprice);
-								$('#orderGoodSize').prop("value",formatSize);
-								$('#orderformatimagepath').prop("value",formatimagepath);
-							})
-=======
+
+							
 							// 定义一个函数用于加载评论
 							function loadComments(goodId, rate, content,
 									photos, page) {
@@ -723,7 +697,6 @@
 										$('#nav-mission').html(
 												$(data).find('#nav-mission')
 														.html());
->>>>>>> origin/main
 
 										maskNameFunction();
 
@@ -743,7 +716,7 @@
 							// 更新星级评估数量
 							function updateTabCounts(data) {
 								var rateCounts = data.rateCounts; // 确保服务器返回的数据包含rateCounts
-								$('#all-tab').text(`全部(${txotalPostsCount})`);
+								$('#all-tab').text(`全部(${totalPostsCount})`);
 								$('#star5-tab').text(`5顆星(${rateCounts[0]})`);
 								$('#star4-tab').text(`4顆星(${rateCounts[1]})`);
 								$('#star3-tab').text(`3顆星(${rateCounts[2]})`);

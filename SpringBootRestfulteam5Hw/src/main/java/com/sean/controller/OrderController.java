@@ -120,7 +120,7 @@ public class OrderController {
 
 	@PostMapping("inserttoshopcar.controller")
 	public String insertToShopCar(@RequestParam("productId") Integer productId,
-			@RequestParam("quantity") Integer quantity, @RequestParam("productPrice") Integer productPrice) {
+		@RequestParam("quantity") Integer quantity, @RequestParam("productPrice") Integer productPrice) {
 		MemberBean memberb = (MemberBean) session.getAttribute("member");
 		Integer memberId = memberb.getSid();
 		Optional<MemberBean> members = mService.findById(memberId);
@@ -206,17 +206,20 @@ public class OrderController {
 
 	@GetMapping("shopcar.controller")
 	public String ShopCar(Integer MemberId, Model m) {
+		
 		MemberBean member = (MemberBean) session.getAttribute("member");
-		Integer memberId = member.getSid();
-		List<CarItem> carItems = cService.findByMemberId(memberId);
-		m.addAttribute("page", "shopcar");
-		m.addAttribute("carItems", carItems);
-		List<Notifications> notifications = nService.findByRecipientIdOrderBySendTimeDesc(member);
-		Integer count = nService.noReadCounts(member);
-		session.setAttribute("count", count);
-		session.setAttribute("notifications", notifications);
-		Integer carItemCount = cService.carItemCount(member);
-		session.setAttribute("carItemCount", carItemCount);
+		if(member != null) {
+			Integer memberId = member.getSid();
+			List<CarItem> carItems = cService.findByMemberId(memberId);
+			m.addAttribute("page", "shopcar");
+			m.addAttribute("carItems", carItems);
+			List<Notifications> notifications = nService.findByRecipientIdOrderBySendTimeDesc(member);
+			Integer count = nService.noReadCounts(member);
+			session.setAttribute("count", count);
+			session.setAttribute("notifications", notifications);
+			Integer carItemCount = cService.carItemCount(member);
+			session.setAttribute("carItemCount", carItemCount);			
+		}
 		return "Order/jsp/ShopCar";
 	}
 

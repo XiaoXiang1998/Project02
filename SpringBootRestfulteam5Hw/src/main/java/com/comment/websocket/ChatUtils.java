@@ -47,14 +47,15 @@ import com.member.model.MemberBean;
 	        }
 	    }
 	
-	    public static void sendMessageToUser(String receiver, String sender, String message,String time) throws JSONException {
+	    public static void sendMessageToUser(String receiver, String sender, String message, String time, String avatar) throws JSONException {
 	        Session receiverSession = CLIENTS.get(receiver);
 	        if (receiverSession != null) {
 	            JSONObject jsonObject = new JSONObject();
 	            jsonObject.put("sender", sender);
 	            jsonObject.put("content", message);
-	            jsonObject.put("time", time); 
-	            
+	            jsonObject.put("time", time);
+	            jsonObject.put("avatar", avatar); // 将头像信息包含在消息中
+
 	            sendMessage(receiverSession, jsonObject.toString());
 	        } else {
 	            sendMessageToSender("System", "User " + receiver + " is not online.");

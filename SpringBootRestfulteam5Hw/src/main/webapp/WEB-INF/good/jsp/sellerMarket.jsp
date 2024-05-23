@@ -275,39 +275,43 @@
                                 </div>
                             </div>
                         </div>
+                        <img src="" alt="" style=>
                         <div class="col-lg-12">
-                            <h4 class="mb-3">暢銷商品</h4>
+                            <h1 class="mb-3 ms-5">暢銷商品</h1>
                             <!-- PopularGoodBasicInfo -->
-                            <div class="owl-carousel justify-content-center">
+                            <div class="vesitable">
+                                <div class="owl-carousel justify-content-center">
 
-                                <!--  -->
-                                <c:forEach var="j" begin="0" step="1" items="${PopularGoodBasicInfo}">
-                                    <form action="" class="popularGood">
-                                        <div class="align-items-center justify-content-start mb-3">
-                                            <div class="rounded me-4">
-                                                <img src="${j.titleImage}" class="img-fluid rounded w-100 h-100" alt="">
-                                            </div>
-                                            <div>
-                                                <h6 class="mb-2">${j.goodName}</h6>
-                                                <div class="d-flex mb-2">
-                                                    <c:forEach var="i" begin="1" end="5" step="1" varStatus="loop">
-                                                        <c:if test="${j.goodAVG>=loop.index}">
-                                                            <i class="fa fa-star text-secondary"></i>
-                                                        </c:if>
-                                                        <c:if test="${loop.index>j.goodAVG}">
-                                                            <i class="fa fa-star"></i>
-                                                        </c:if>
-                                                    </c:forEach>
+                                    <!--  -->
+                                    <c:forEach var="j" begin="0" step="1" items="${PopularGoodBasicInfo}">
+                                        <form action="" class="popularGood">
+                                            <div class="align-items-center justify-content-start mb-3">
+                                                <div class="rounded me-4" style="height: 400px;">
+                                                    <img src="${j.titleImage}" class="img-fluid rounded w-100 h-100"
+                                                        alt="">
                                                 </div>
-                                                <input type="text" name="GoodID" value="${j.goodsID}" hidden>
-                                                <div class="d-flex mb-2">
-                                                    <h5 class="fw-bold me-2">${j.minprice}-${j.maxprice} $</h5>
+                                                <div>
+                                                    <h6 class="mb-2">${j.goodName}</h6>
+                                                    <div class="d-flex mb-2">
+                                                        <c:forEach var="i" begin="1" end="5" step="1" varStatus="loop">
+                                                            <c:if test="${j.goodAVG>=loop.index}">
+                                                                <i class="fa fa-star text-secondary"></i>
+                                                            </c:if>
+                                                            <c:if test="${loop.index>j.goodAVG}">
+                                                                <i class="fa fa-star"></i>
+                                                            </c:if>
+                                                        </c:forEach>
+                                                    </div>
+                                                    <input type="text" name="GoodID" value="${j.goodsID}" hidden>
+                                                    <div class="d-flex mb-2">
+                                                        <h5 class="fw-bold me-2">${j.minprice}-${j.maxprice} $</h5>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </form>
-                                </c:forEach>
+                                        </form>
+                                    </c:forEach>
 
+                                </div>
                             </div>
                         </div>
                         <!-- Fruits Shop End-->
@@ -616,7 +620,13 @@
                                     orderItem = $('#fruits').val();
                                 }
                                 let goodName = $('#SearchGoodName').val();
-                                $('#GoodResultName').prop("innerHTML", `搜尋"` + goodName + "`的結果");
+                                if (goodName == "") {
+                                    $('#GoodResultName').prop("innerHTML", `搜尋"` + "全部" + "`的結果");
+                                    goodName = "XXX";
+                                }
+                                else {
+                                    $('#GoodResultName').prop("innerHTML", `搜尋"` + goodName + "`的結果");
+                                }
                                 let hiddenContent = sellerID + "_" + Category + "_" + price + "_" + orderItem + "_" + goodName;
                                 loadPage(1, hiddenContent);
                             })

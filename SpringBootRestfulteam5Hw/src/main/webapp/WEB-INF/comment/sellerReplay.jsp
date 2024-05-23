@@ -43,12 +43,20 @@ body {
 }
 
 .avatar {
-	width: 50px;
-	height: 50px;
-	background-color: #ccc;
-	border-radius: 50%;
-	display: inline-block;
-	margin-right: 20px;
+    width: 50px;
+    height: 50px;
+    background-color: #ccc;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 20px;
+    overflow: hidden; /* 确保图片不会超出边界 */
+    vertical-align: middle; /* 保持与文本的垂直对齐 */
+}
+
+.avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* 确保图片以覆盖方式填充头像 */
 }
 
 .info {
@@ -214,7 +222,7 @@ body {
 	<div class="container" id="commentContainer">
     <c:forEach items="${comments}" var="comment">
         <div class="item" data-comment-id="${comment.commentid}">
-            <i class="avatar"></i>
+		<i class="avatar"><img src="${comment.member.photoSticker}"/></i>
             <div class="info">
                 <p class="name">${comment.member.name}</p>                
                     <c:forEach begin="1" end="${comment.buyerrate}">

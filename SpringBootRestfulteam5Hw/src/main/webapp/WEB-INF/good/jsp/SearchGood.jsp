@@ -173,8 +173,8 @@
                     <% HttpSession MemberSession=request.getSession(); MemberBean member=(MemberBean)
                         MemberSession.getAttribute("member"); %>
                         <!-- Fruits Shop Start-->
-                        <div class="container-fluid fruite py-5">
-                            <div class="container py-5">
+                        <div class="container-fluid fruite">
+                            <div class="container">
                                 <div class="row mt-5">
                                     <div class="col mt-5">
                                         <h1 class="mb-4 mt-2" id="GoodNameResult">搜尋"${goodsName}"的結果</h1>
@@ -293,7 +293,7 @@
                                                             </c:forEach>
                                                         </div>
 
-                                                        <div class="d-flex justify-content-center my-4" id="borderLine">
+                                                        <div class="d-flex justify-content-start my-4" id="borderLine">
                                                             <!-- 點擊View More -->
                                                             <button class="btn btn-primary" type="button"
                                                                 id="ViewMore">View

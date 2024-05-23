@@ -123,6 +123,22 @@
     background-color: #e0e0e0; /* 设置背景颜色为浅灰色 */
     padding: 5px; /* 可选：添加一些内边距 */
 }
+.avatar {
+    width: 50px;
+    height: 50px;
+    background-color: #ccc;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 20px;
+    overflow: hidden; /* 确保图片不会超出边界 */
+    vertical-align: middle; /* 保持与文本的垂直对齐 */
+}
+
+.avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* 确保图片以覆盖方式填充头像 */
+}
 </style>
 </head>
 <body>
@@ -169,7 +185,8 @@
 	<div class="comments">
 		<c:forEach var="comment" items="${comments}">
 			<div class="comment">
-				<!-- 显示评论内容 -->
+					<i class="avatar"><img src="${comment.member.photoSticker}"/></i>
+			
 				<p class="name">${comment.member.name}</p>
 				<p>
 					<c:forEach begin="1" end="${comment.sellerrate}">

@@ -80,7 +80,7 @@
                         <div class="card mb-4">
                             <div class="card-header" id="goodstatus">
                                 <i class="fas fa-table me-1"></i>
-                                <span>全部商品</span>
+                                <span id="goodstatusmsg">全部商品</span>
                                 <button type="button" class="btn btn-sm btn-plus rounded-circle bg-light border"
                                     id="insertGood"><i class="fa fa-plus"></i></button>
                                 <span>新增商品</span>
@@ -140,18 +140,19 @@
                     //當點擊上下架分類時 直接觸發ajax
                     $('.goodstatuschoose').click(function () {
                         let status = $(this).prop("innerHTML");
-                        $('#goodstatus').find('span').prop("innerHTML", status);
+                        $('#goodstatus').find('span[id="goodstatusmsg"]').prop("innerHTML", status);
                         $('#searchName').prop("innerHTML", "");
                         $('#SearchGood').prop("value", "");
                         //取得sellerID
                         let sellerID = $('#sellerID').prop("innerHTML");
+                        console.log(status); console.log(sellerID);
                         loadPage(1, status, "XXX", sellerID);
                     })
                     //在賣家底下搜尋商品
                     $('#SearchGoodBtn').click(function () {
                         console.log("12313123");
                         let goodName = $('#SearchGood').val(); console.log(goodName);
-                        let status = $('#goodstatus').find('span').prop('innerHTML');
+                        let status = $('#goodstatus').find('span[id="goodstatusmsg"]').prop('innerHTML');
                         console.log(status);
                         let sellerID = $('#sellerID').prop("innerHTML");
                         if (goodName == "") {
@@ -211,7 +212,7 @@
 
                                         $.each(inputdata, function (i, n) {
                                             var statuscontent;
-                                            if(n.status == 0){
+                                            if (n.status == 0) {
                                                 statuscontent = `<div class="form-check">
                                                             <input class="form-check-input" type="radio" name="flexRadioDefault`+ i + `" value="YES">
                                                             <label class="form-check-label">
@@ -225,8 +226,8 @@
                                                             </label>
                                                         </div>`;
                                             }
-                                            else{
-                                                if(n.status == 1){
+                                            else {
+                                                if (n.status == 1) {
                                                     statuscontent = `<div class="form-check">
                                                             <input class="form-check-input" type="radio" name="flexRadioDefault`+ i + `" value="YES" checked>
                                                             <label class="form-check-label">
@@ -240,12 +241,12 @@
                                                             </label>
                                                         </div>`;
                                                 }
-                                                else{
-                                                    console.log("n.status = "+n.status);
+                                                else {
+                                                    console.log("n.status = " + n.status);
                                                 }
                                             }
                                             Basicinfo[i] = [n.goodsID, n.goodsName, `<img src="` + n.titleImage + `" alt="" class="w-100 img-fluid" style="width: 150px;height: 100px;">`, n.goodsType, n.launchDate, n.brand, n.shipmentPlace,
-                                            statuscontent,
+                                                statuscontent,
                                                 `<button type="button" class="btn btn-md rounded-circle bg-light border modifyGood"><i class="fa-solid fa-wrench"></i></button>`,
                                                 `<button type="button" class="btn btn-md rounded-circle bg-light border deleteGood"><i class="fa fa-times text-danger"></i></button>`];
                                         });
@@ -279,8 +280,8 @@
                                     })
                                     $.each(inputdata, function (i, n) {
                                         var statuscontent;
-                                            if(n.status == 0){
-                                                statuscontent = `<td><div class="form-check">
+                                        if (n.status == 0) {
+                                            statuscontent = `<td><div class="form-check">
                                                             <input class="form-check-input" type="radio" name="flexRadioDefault`+ i + `" value="YES">
                                                             <label class="form-check-label">
                                                                 上架
@@ -292,10 +293,10 @@
                                                                 下架
                                                             </label>
                                                         </div></td>`;
-                                            }
-                                            else{
-                                                if(n.status == 1){
-                                                    statuscontent = `<td><div class="form-check">
+                                        }
+                                        else {
+                                            if (n.status == 1) {
+                                                statuscontent = `<td><div class="form-check">
                                                             <input class="form-check-input" type="radio" name="flexRadioDefault`+ i + `" value="YES" checked>
                                                             <label class="form-check-label">
                                                                 上架
@@ -307,11 +308,11 @@
                                                                 下架
                                                             </label>
                                                         </div></td>`;
-                                                }
-                                                else{
-                                                    console.log("n.status = "+n.status);
-                                                }
                                             }
+                                            else {
+                                                console.log("n.status = " + n.status);
+                                            }
+                                        }
                                         //
                                         let insertcontent = `<td>` + n.goodsID + `</td><td>` + n.goodsName + `</td><td>` + `<img src="` + n.titleImage + `" alt="" class="w-100 img-fluid" style="width: 150px;height: 100px;">` +
                                             `</td><td>` + n.goodsType + `</td><td>` + n.launchDate + `</td><td>` + n.brand + `</td><td>` + n.shipmentPlace +
@@ -364,8 +365,23 @@
                             dataType: "json",
                             contentType: "application/json",
                             data: params,
-                            success: function (data) {
+                            success: function (data) {//假若點擊上架 出現上架分類；反之則出現下架分類
                                 console.log("更改成功");
+                                if (statusResult == "YES") { //上架商品
+                                    console.log($('#goodstatus').find('span[id="goodstatusmsg"]'));
+                                    $('#goodstatus').find('span[id="goodstatusmsg"]').prop("innerHTML", "上架商品");
+                                    let sellerID = $('#sellerID').prop("innerHTML");
+                                    loadPage(1, "上架商品", "XXX", sellerID);
+                                }
+                                else {
+                                    if (statusResult == "NO") {//下架商品
+                                        $('#goodstatus').find('span[id="goodstatusmsg"]').prop("innerHTML", "下架商品");
+                                        let sellerID = $('#sellerID').prop("innerHTML");
+                                        loadPage(1, "下架商品", "XXX", sellerID);
+                                    } else {
+                                        console.log(statusResult);
+                                    }
+                                }
                             }
                         })
                     })
@@ -398,21 +414,21 @@
                         form.submit();
                         console.log("你點到刪除了");
                     })
-                   //搜尋商品
+                    //搜尋商品
                     $('#GoToSearchGood').click(function () {
-							let searchGoodInput = $(this).closest('form').find('input');
-							console.log(searchGoodInput.prop('value'));
-							if (searchGoodInput.prop('value') == null) {
-								console.log(searchGoodInput);
-							}
-							else {
-								let form = $(this).closest('form');
-								form.attr("action", "/searchGood");
-								form.attr("method", "get");
-								// console.log(form.prop("innerHTML"));
-								form.submit();
-							}
-						})
+                        let searchGoodInput = $(this).closest('form').find('input');
+                        console.log(searchGoodInput.prop('value'));
+                        if (searchGoodInput.prop('value') == null) {
+                            console.log(searchGoodInput);
+                        }
+                        else {
+                            let form = $(this).closest('form');
+                            form.attr("action", "/searchGood");
+                            form.attr("method", "get");
+                            // console.log(form.prop("innerHTML"));
+                            form.submit();
+                        }
+                    })
                 </script>
         </body>
 

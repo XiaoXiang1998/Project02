@@ -14,5 +14,8 @@ public interface GoodFormatRepository extends JpaRepository<GoodFormat, Integer>
 	
 	@Query(value = "select distinct gf.goodImagePath from GOODFORMAT gf where gf.goodsID = ?", nativeQuery = true)//用標準SQL語法
 	public List<String> getDistinctFormatImage(Integer goodID);
+	//透過圖片路徑找資料
+	@Query(value = "from GoodFormat gf where gf.goodImagePath = ?1")//用標準SQL語法
+	public List<GoodFormat> getFormatByImage(String imagepath);
 	
 }

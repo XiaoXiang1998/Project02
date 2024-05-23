@@ -24,6 +24,10 @@ public class SecurityConfig {
         httpSecurity
             .authorizeHttpRequests(requests -> requests
         		.requestMatchers("/membercenter").authenticated() 
+        		.requestMatchers("/order.controller").authenticated() 
+        		.requestMatchers("/shopcar.controller").authenticated() 
+        		.requestMatchers("/payment.controller").authenticated() 
+        		.requestMatchers("/DirectlyBuy").authenticated() 
                 .anyRequest().permitAll()  // 其他所有请求都不需要身份验证
             )
             //一般登入

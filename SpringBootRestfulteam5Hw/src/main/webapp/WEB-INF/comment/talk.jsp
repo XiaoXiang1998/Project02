@@ -76,6 +76,9 @@
 }
 </style>
 </head>
+	<%@ include file="../FrontDeskNav.jsp"%>
+
+
 <body class="gradient-custom">
 	<div class="container py-5">
 		<div class="row">
@@ -112,6 +115,8 @@
 			</div>
 		</div>
 	</div>
+
+	<%@ include file="../FrontDeskFooter.jsp"%>
 
 	<script>
 		$(function() {

@@ -107,6 +107,8 @@
 						id="list-sellerMarket-list" href="sellerMarket" role="tab">我的賣場</a>
 					<a class="list-group-item list-group-item-action"
 						id="list-sellerGood-list" href="sellerGoodQueryAll" role="tab">我的商品</a>
+						<a class="list-group-item list-group-item-action"
+						id="list-talk-list" href="chat" role="tab">聊聊</a>
 				</div>
 			</div>
 			<div class="col-md-9">

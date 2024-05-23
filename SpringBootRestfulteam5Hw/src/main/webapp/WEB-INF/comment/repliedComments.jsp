@@ -82,6 +82,22 @@
 .reply-content {
     margin-top: 10px; /* 设置与上方内容的间距 */
 }
+.avatar {
+    width: 50px;
+    height: 50px;
+    background-color: #ccc;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 20px;
+    overflow: hidden; /* 确保图片不会超出边界 */
+    vertical-align: middle; /* 保持与文本的垂直对齐 */
+}
+
+.avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* 确保图片以覆盖方式填充头像 */
+}
 
 </style>
 </head>
@@ -112,7 +128,7 @@
 <!-- 遍历卖家回复的评论 -->
 <c:forEach items="${repliedComments}" var="seller">
     <div class="seller-reply">
-        <!-- 显示卖家回复内容 -->
+    <i class="avatar"><img src="${seller.member.photoSticker}"/></i>
         <p class="name">${seller.member.name}</p>
         <c:forEach begin="1" end="${seller.sellerrate}">
                 <img src="commentPicture/output.png" alt="star" width="20" height="20"  class="sellerrate">
@@ -131,6 +147,8 @@
             <!-- 如果买家评论与当前卖家回复匹配，则显示买家评论信息 -->
             <c:if test="${buyer.commentid eq seller.repliedcommentid}">
                 <div class="buyer-comment">
+                    <i class="avatar"><img src="${buyer.member.photoSticker}"/></i>
+                
                     <p class="name"> ${buyer.member.name}</p>
                     <p>
                         <c:forEach begin="1" end="${buyer.buyerrate}">

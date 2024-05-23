@@ -11,7 +11,7 @@ public class MemberLogoutHandler implements LogoutHandler {
 
 	 @Override
 	    public void logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
-	        HttpSession session = request.getSession(); // false 表示如果 session 不存在不創建新 session
+	        HttpSession session = request.getSession(false); // false 表示如果 session 不存在不創建新 session
 	        if (session != null) {
 	            session.invalidate(); // 刪除 session
 	        }

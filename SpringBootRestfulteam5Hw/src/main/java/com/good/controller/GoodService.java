@@ -91,4 +91,12 @@ public class GoodService{
 	public Page<GoodsBean2> findSellerGoodByPageAndNameAll(Pageable pageable,Integer sellerID,String goodNameString){
 		return goodRepos.findSellerGoodByPageAndNameAll(pageable, sellerID, goodNameString);
 	}
+	//管理者取七天前商品上架的數量
+	public Integer findNumberInsertGood(int day) {
+		return goodRepos.findNumberInsertGood(day);
+	}
+	//管理者取七天前商品上架的數量[要取訂單資料表][還沒寫完]
+		public Integer findNumberInsertSold(int day) {
+			return goodRepos.findNumberInsertSold(day);
+		}
 }

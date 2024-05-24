@@ -88,7 +88,7 @@
 												<div class="p-4 rounded-bottom">
 													<h4>${j.goodName}</h4>
 													<input type="text" name="GoodID" class="form-control"
-														value="${j.goodsID}">
+														value="${j.goodsID}" hidden>
 													<c:if test="${j.minprice==j.maxprice}">
 														<p>${j.minprice}$</p>
 													</c:if>

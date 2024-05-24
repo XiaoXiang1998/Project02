@@ -47,4 +47,9 @@ public interface OrderRepository extends JpaRepository<Orders, Integer> {
 	@Modifying
 	@Query(value = "update Orders set orderStatus = ?1 where orderId = ?2")
 	public void UpdateStatus(Integer orderStatus, Integer orderId);
+	
+	/*游能佑新增的程式*/
+	@Query(value = "SELECT ISNULL(sum(o.TOTAL_PRICE),0) from ORDERS o where DATEDIFF(day, o.CREATED_AT,GETDATE())= ?1 and o.ORDER_STATUS=3",nativeQuery = true)
+	public Integer GetSoldPerDay(int daylimit);
+	/*游能佑新增的程式*/
 }

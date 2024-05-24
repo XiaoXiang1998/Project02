@@ -85,8 +85,10 @@ public class OrdersService {
 		obj.setTotalAmount(totalAmount);
 		obj.setTradeDesc("test Description");
 		obj.setItemName(itemName);
-		obj.setReturnURL("http://localhost:8081/goindex.controller");
-		obj.setClientBackURL("http://localhost:8081/goindex.controller");
+//		obj.setReturnURL("http://localhost:8081/goindex.controller");
+//		obj.setClientBackURL("http://localhost:8081/goindex.controller");
+		obj.setReturnURL("http://localhost:8081/EZBuyIndex");
+		obj.setClientBackURL("http://localhost:8081/EZBuyIndex");
 		obj.setNeedExtraPaidInfo("N");
 		String form = all.aioCheckOut(obj, null);
 
@@ -101,6 +103,9 @@ public class OrdersService {
 		 
 		 return null;
 	}
-	
-	
+	/*游能佑新增的程式*/
+	public Integer GetSoldPerDay(int daylimit) {
+		return oRops.GetSoldPerDay(daylimit);
+	}
+	/*游能佑新增的程式*/
 }

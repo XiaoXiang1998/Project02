@@ -331,7 +331,7 @@ public class GoodController {
 
 	///////////////////////////////////////////////////// 查詢全部的頁面/////////////////////////////////////////////////
 
-	// 模糊化查詢
+	// 模糊化查詢(會跑版)
 	@GetMapping("/keywordsearch")
 	@ResponseBody
 	public List<GoodsBean2> keywordsearch(@RequestParam("inputresult") String keyinput) {
@@ -344,12 +344,10 @@ public class GoodController {
 	public String processGoodDetailAction(@RequestParam("GoodID") Integer goodID,
 			@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "2") Integer size,
 			@RequestParam(required = false) Integer rate, @RequestParam(required = false) Boolean content,
-			@RequestParam(required = false) Boolean photos, Model m,HttpSession session) {
+			@RequestParam(required = false) Boolean photos, Model m) {
 		MemberBean user = (MemberBean) session.getAttribute("member");
 		int buyerID = user.getSid();
 		session.setAttribute("buyerID", buyerID);
-//		HttpSession session = request.getSession();
-//		session.setAttribute("GoodID", goodID);\
 		// 商品詳細資料需要(商品名稱、商品種類、商品價格範圍、商品平均評分)
 		GoodsBean2 good = gService.getById(goodID); // 取得對應商品編號
 		// 取得對應商品的種類(related good) 只取商品編號

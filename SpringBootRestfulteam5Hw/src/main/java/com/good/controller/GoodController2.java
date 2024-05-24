@@ -29,13 +29,16 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.good.dto.GoodFormatImageDto;
+import com.good.dto.GoodLaunchDto;
 import com.good.dto.GoodPageDto;
 import com.good.dto.GoodPriceDetailDTO;
+import com.good.dto.GoodTypeDto;
 import com.good.model.GoodFormat;
 import com.good.model.GoodImageBean;
 import com.good.model.GoodsBean2;
 import com.member.model.MemberBean;
 import com.member.model.MemberService;
+import com.sean.model.OrdersService;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -61,6 +64,8 @@ public class GoodController2 {
 	private MemberService mService;
 	@Autowired
 	private GoodFormatService gfService;
+	@Autowired
+	private OrdersService oService;
 	@PersistenceContext
 	private EntityManager entityManager;
 //在跳脫視窗(商品圖片表)點擊新增圖片
@@ -433,17 +438,78 @@ public class GoodController2 {
 */
 
 	// 管理者製作的圓餅圖
-	@GetMapping("/mangerGoodChart")
-	public String mangerGoodChart() {
-		return "good/jsp/mangerGoodChart";
+		@GetMapping("/mangerGoodChart")
+		public String mangerGoodChart() {
+			return "good/jsp/mangerGoodChart";
+		}
+		//製作圓餅圖 "mangerGoodTypePie"
+		@GetMapping("mangerGoodTypePie") 
+		@ResponseBody
+		public List<GoodTypeDto> mangerGoodTypePie(){
+			List<GoodTypeDto> goodTypeNumber = new ArrayList();
+			Query<Object[]> resultList = (Query<Object[]>) entityManager.createQuery(
+					"select distinct g.goodsType AS goodsType,count(g.goodsType) AS goodsTypeNumber from GoodsBean2 g where g.status = 1 GROUP BY g.goodsType");// 在搜尋商品名稱後 取得對應種類的數量
+			List<Object[]> item = resultList.getResultList();
+			for (Object[] item1 : item) {
+				GoodTypeDto data = new GoodTypeDto();
+				data.setGoodsType((String) item1[0]);
+				data.setGoodsTypeNumber((Long) item1[1]);
+				goodTypeNumber.add(data);
+			}
+			return goodTypeNumber;
+		}
+		//製作柱狀圖
+		//select COUNT(*) from Goods g where DATEDIFF(DAY, GETDATE(), g.LaunchDate) = 0
+		@GetMapping("numberOfGoodInsert")
+		@ResponseBody
+		public List<GoodLaunchDto> numberOfGoodInsert() {
+			//(日期,數量)
+			List<GoodLaunchDto> itemdtolist = new ArrayList<GoodLaunchDto>();
+			SimpleDateFormat simpleDateFormat = new SimpleDateFormat("YYYY-MM-dd");
+			for(int i=6;i>=0;i--) {
+				Integer number = gService.findNumberInsertGood(i);
+				String date = simpleDateFormat.format(new Date());
+				System.err.println(date);
+				String[] split = date.split("-");
+				int dayoffset = Integer.parseInt(split[2]) - i;
+				String dateResult = split[0] + "-" + split[1] + "-" + dayoffset;
+				GoodLaunchDto itemdto = new GoodLaunchDto();
+				itemdto.setDate(dateResult);
+				itemdto.setGoodsNumber(number);
+				itemdtolist.add(itemdto);
+			}
+			return itemdtolist;
+		}
+	//製作曲線圖(每天的訂單金額)
+	@GetMapping("numberOfGoodSold")
+	@ResponseBody
+	public List<GoodLaunchDto> numberOfGoodSold() {
+		//SELECT * from ORDERS o where DATEDIFF(day, GETDATE(), o.CREATED_AT)=0 and o.ORDER_STATUS=3
+		List<GoodLaunchDto> itemdtolist = new ArrayList<GoodLaunchDto>();
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("YYYY-MM-dd");
+		for(int i=6;i>=0;i--) {
+//			Integer number = gService.findNumberInsertGood(i);
+			int benefit= (Integer) oService.GetSoldPerDay(i); //每天賺到的錢
+			String date = simpleDateFormat.format(new Date());
+			System.err.println(date);
+			String[] split = date.split("-");
+			int dayoffset = Integer.parseInt(split[2]) - i;
+			String dateResult = split[0] + "-" + split[1] + "-" + dayoffset;
+			GoodLaunchDto itemdto = new GoodLaunchDto();
+			itemdto.setDate(dateResult);
+			itemdto.setGoodsNumber(benefit);
+			itemdtolist.add(itemdto);
+		}
+		return itemdtolist;
 	}
+	
 	// 管理者查詢全部
 	@GetMapping("/goodqueryallpage.controller")
 	public String goodqueryallpage(HttpServletRequest request) {// 需要做分頁查詢
 		HttpSession session2 = request.getSession();
 		List<GoodsBean2> allGood = gService.getAll();
 		session2.setAttribute("goodBasicInfo", allGood);
-		return "good/jsp/mangerGoodQueryAll";
+		return "good/jsp/mangerGoodQueryAll1";
 	}
 	// 管理者查詢全部(分頁查詢)
 	@GetMapping("/mangerqueryByPageStatus/{hidden}")
@@ -480,23 +546,25 @@ public class GoodController2 {
 				page = gService.findAllByPage(p1);
 			} else {
 				page = gService.findGoodByPageAndNameAll(p1, goodNameString);
-				List<GoodsBean2> test = page.getContent();
-				for(GoodsBean2 item:test) {
-					System.err.println(item.getBrand() +","+item.getGoodsDirection() +","+item.getGoodsName() +","+item.getGoodsType() +","+
-				item.getShipmentPlace() +","+
-							item.getTitleImage() +","+item.getGoodsID() +","+item.getGoodsold() +","+item.getNumberRatings() +","+item.getRating() +
-							","+item.getLaunchDate() +","+
-							item.getGoodsSellerID() );
-				}
+
 			}
 			break;
 		default:
 			System.out.println("something wrong!!!!!!!!print hidden = " + hidden);
 			break;
 		}
+		List<GoodsBean2> test = page.getContent();
+		for(GoodsBean2 item:test) {
+			System.err.println(item.getBrand() +","+item.getGoodsDirection() +","+item.getGoodsName() +","+item.getGoodsType() +","+
+		item.getShipmentPlace() +","+
+					item.getTitleImage() +","+item.getGoodsID() +","+item.getGoodsold() +","+item.getNumberRatings() +","+item.getRating() +
+					","+item.getLaunchDate() +","+
+					item.getGoodsSellerID() );
+		}
 		int totalPages;
 		long totalElement;
 		if (page == null) {
+			System.err.println("page變數內沒有資料");
 			totalPages = 0;
 			GoodPageDto goodPagedto = new GoodPageDto();
 			List<GoodsBean2> good = null;
@@ -504,6 +572,7 @@ public class GoodController2 {
 			goodPagedto.setPage(totalPages);
 			return goodPagedto;
 		} else {
+			System.err.println("page變數內有資料");
 			totalPages = page.getTotalPages();
 			totalElement = page.getTotalElements();
 			List<GoodsBean2> good = page.getContent();
@@ -583,68 +652,6 @@ public class GoodController2 {
 		return "good/jsp/goodDetailReviewByManger";
 	}
 
-	// 分頁查詢
-//	@GetMapping("/queryByPage/{pageNo}")
-//	@ResponseBody
-//	public List<GoodsBean2> processQueryAllByPage(@PathVariable("pageNo") int pageNo, Model m,
-//			HttpServletRequest request) {
-//		int pageSize = 3;
-//		Pageable p1 = PageRequest.of(pageNo - 1, pageSize);
-//		Page<GoodsBean2> page = gService.findAllByPage(p1);
-//
-//		int totalPages = page.getTotalPages();
-//		long totalElement = page.getTotalElements();
-//
-//		HttpSession session = request.getSession();
-//		session.setAttribute("totalPages", totalPages);
-//		session.setAttribute("totalElements", totalElement);
-//
-//		return page.getContent();
-//	}
-	/*
-	@GetMapping("/getallgood.controller")
-	@ResponseBody
-	public List<GoodsBean2> processQueryAll() {
-		List<GoodsBean2> goods = gService.getAll();
-		for (GoodsBean2 item : goods) {
-			System.out.println(item.toString());
-			//
-			Set<GoodFormat> format = item.getFormat();
-			Set<GoodImageBean> images = item.getImages();
-			for (GoodFormat item2 : format) {
-				System.out.println(item2.toString());
-			}
+	
 
-			for (GoodImageBean item3 : images) {
-				System.out.println(item3.toString());
-			}
-		}
-		return goods;
-	}
-*/
-	/** 處理規格表 */
-	/*
-	@PostMapping("/goodformatdelete.controller")
-	public String processInsertGoodForamtAction(@RequestParam("GoodsID") Integer goodsID,
-			@RequestParam("GoodSize") String goodSize, @RequestParam("GoodPrice") Integer goodPrice,
-			@RequestParam("GoodImagePath") MultipartFile mf, @RequestParam("GoodsStock") Integer goodStock) {
-//		String patternPath = "../../goodImags/";		//透過商品編號取得基本商品資訊 然後透過get取得編號對應的圖片集合
-		String patternPath = "../../../../../../../../../../team5project/SpringBootRestfulteam5Hw/src/main/webapp/WEB-INF/goodImages/"; // 透過商品編號取得基本商品資訊
-
-		// 新寫的code 
-		GoodsBean2 good = gService.getById(goodsID);// 透過ID找出商品基本資訊
-		Set<GoodImageBean> images = good.getImages();// 找到連結的圖片,假如商品編號為1的圖片有三張,就會有3個images類別
-//將set裡的路徑資料取出來 並且將圖片刪掉
-		for (GoodImageBean item : images) {
-			String goodsImg = item.getImagePath();
-			int ps = goodsImg.lastIndexOf("/");
-			File file = new File(patternPath, goodsImg);
-			file.delete();
-		}
-//最後再將商品基本資訊表刪除
-		gService.deleteById(goodsID);// 當父表被刪除時，子表也會被刪除
-//		return "redirect:/good/goodqueryallpage.controller";
-		return "good/jsp/goodQueryAll2";
-	}
-*/
 }

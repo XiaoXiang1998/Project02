@@ -1,11 +1,17 @@
 package com.good.dto;
 
+import java.io.Serializable;
 import java.util.List;
 
 import com.good.model.GoodsBean2;
 
-public class GoodPageDto {
+public class GoodPageDto implements Serializable{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	private Integer page;
 	
 	private List<GoodsBean2> good;

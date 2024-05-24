@@ -83,6 +83,11 @@
 								商品詳情
 							</a>
 						</nav>
+						<nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
+							<a class="nav-link" href="mangerGoodChart">
+								商品??
+							</a>
+						</nav>
 					</div>
 				</div>
 			</div>

@@ -290,7 +290,8 @@
 													</div>
 													<c:forEach var="post" items="${posts}">
 														<div class="d-flex mb-4" id="comment-container">
-															<img src="${post.member.photoSticker}" class="img-fluid rounded-circle p-3"
+															<img src="${post.member.photoSticker}"
+																class="img-fluid rounded-circle p-3"
 																style="width: 100px; height: 100px;" alt="">
 															<!-- 評論用戶的大頭貼 -->
 															<div class="ml-3">
@@ -400,8 +401,7 @@
 
 								<!-- Single Product End -->
 
-
-								<!-- Footer Start -->
+								<!-- 
 								<div class="container-fluid bg-dark text-white-50 footer pt-5 mt-5">
 									<div class="container py-5">
 										<div class="pb-4 mb-4"
@@ -487,9 +487,7 @@
 										</div>
 									</div>
 								</div>
-								<!-- Footer End -->
 
-								<!-- Copyright Start -->
 								<div class="container-fluid copyright bg-dark py-4">
 									<div class="container">
 										<div class="row">
@@ -501,17 +499,15 @@
 												</span>
 											</div>
 											<div class="col-md-6 my-auto text-center text-md-end text-white">
-												<!--/*** This template is free as long as you keep the below author’s credit link/attribution link/backlink. ***/-->
-												<!--/*** If you'd like to use the template without the below author’s credit link/attribution link/backlink, ***/-->
-												<!--/*** you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal". ***/-->
+												
 												Designed By <a class="border-bottom" href="https://htmlcodex.com">HTML
 													Codex</a> Distributed By <a class="border-bottom"
 													href="https://themewagon.com">ThemeWagon</a>
 											</div>
 										</div>
 									</div>
-								</div>
-								<!-- Copyright End -->
+								</div> -->
+
 
 
 
@@ -521,410 +517,411 @@
 								</a>
 
 
-								<h1 id="limitbuyerID">買家編號:${buyerID}</h1>
-								<h1 id="limitsellerID">賣家編號:${sellerID}</h1>
+								<h1 id="limitbuyerID" hidden>買家編號:${buyerID}</h1>
+								<h1 id="limitsellerID" hidden>賣家編號:${sellerID}</h1>
 							</div>
 						</div>
-						<!-- JavaScript Libraries -->
-						<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-						<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.js"></script>
-						<script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.js"></script>
+						<%@ include file="../../FrontDeskFooter.jsp" %>
+							<!-- JavaScript Libraries -->
+							<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+							<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.js"></script>
+							<script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.js"></script>
 
-						<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"
-							integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ"
-							crossorigin="anonymous"></script>
-						<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script> -->
+							<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"
+								integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ"
+								crossorigin="anonymous"></script>
+							<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script> -->
 
-						<script src="../../frontlib/easing/easing.js"></script>
-						<script src="../../frontlib/waypoints/waypoints.min.js"></script>
-						<script src="../../frontlib/lightbox/js/lightbox.min.js"></script>
-						<script src="../../frontlib/owlcarousel/owl.carousel.min.js"></script>
-						<script src="../../frontjs/main.js"></script>
-						<script>
-							//前往賣家賣場
-							$('#GoToSellerMarket').click(function () {
-								let sellerID = $('#sellerIDHint').prop("innerHTML");
-								let form = document.createElement("form");
-								form.setAttribute("method", "get");
-								form.setAttribute("action", "sellerMarket");
-								let input1 = document.createElement("input");
-								input1.setAttribute("type", "text");
-								input1.setAttribute("name", "SellerID");
-								input1.setAttribute("value", sellerID);
-								form.append(input1);
-								$(document.body).append(form);
-								form.submit();
-							})
-
-							$('.CategoryItem')
-								.click(
-									function () {//取得對應規格編號[要顯示價格和數量]
-										if ($('#BuyItemNumber').prop("hidden") == true) {//假若欄位被影藏
-											$('#BuyItemNumber').prop("hidden",
-												false);//取消影藏
-											let targethidden = $('#BuyItemNumber')
-												.find(
-													'div[class="input-group-btn"]');
-											console.log(targethidden);
-											targethidden.prop("hidden", false);
-											let targethidden1 = $('#BuyItemNumber')
-												.find('input');
-											targethidden1.prop("hidden", false);
-										} else {
-											//假若從規格A按成規格B 數量直接回到1
-
-											// 將規格編號塞入form標籤內
-										}
-										let formatID = $(this).find(
-											'span[class="formatID"]').prop(
-												"innerHTML");//取得規格編號
-										$('#BuyNumber').prop("value", 1);
-										$('#orderformatID').prop("value", formatID);
-										$('#cartformatID').prop("value", formatID);
-										// 還需要取得大小
-										let goodstock = $(this).find(
-											'span[class="CategoryNumber"]')
-											.prop("innerHTML");
-										let formatprice = $(this).find(
-											'span[class="CategoryPrice"]')
-											.prop("innerHTML");
-										let formatSize = $(this).find(
-											'span[class="CategorySize"]').prop(
-												"innerHTML");//大小
-										let formatimagePathTarget = $(this).find(
-											'img').prop("src");//圖片
-										let ps = formatimagePathTarget
-											.lastIndexOf("/");
-										let formatimagePath = "../../goodImages/"
-											+ formatimagePathTarget
-												.substring(ps + 1);
-										console.log(formatimagePath);
-										//
-										$('#cartPrice').prop("value", formatprice);
-										$('#orderformatprice').prop("value",
-											formatprice);
-										$('#remainingNumber').prop("innerHTML",
-											goodstock);
-										$('#CategoryPrice').prop("innerHTML",
-											formatprice);
-										$('#orderGoodSize').prop("value",
-											formatSize);
-										$('#orderformatimagepath').prop("value",
-											formatimagePath);
-									})
-
-							//改變買入數量[有防呆機制]
-							$('#BuyNumber').change(
-								function () {
-									let InputNumber = $(this).prop("value");
-									let goodstock = $('#formatmsg').find(
-										'span[id="remainingNumber"]').prop(
-											"innerHTML");
-
-									if (Number(goodstock) > InputNumber
-										&& InputNumber >= 1) {
-										$('#errormsg').prop("innerHTML", "");
-									} else {
-										if (InputNumber > Number(goodstock)) {
-											$('#errormsg').prop("innerHTML", "操作不當");//最多只能購買剩餘的數量
-											$(this).closest('div').find(
-												'input[id="BuyNumber"]').prop(
-													"value", 1);//不讓數字增加
-										}
-										if (InputNumber < 1) {
-											$(this).closest('div').find(
-												'input[id="BuyNumber"]').prop(
-													"value", 1);//最少購買一筆
-										}
-									}
-
+							<script src="../../frontlib/easing/easing.js"></script>
+							<script src="../../frontlib/waypoints/waypoints.min.js"></script>
+							<script src="../../frontlib/lightbox/js/lightbox.min.js"></script>
+							<script src="../../frontlib/owlcarousel/owl.carousel.min.js"></script>
+							<script src="../../frontjs/main.js"></script>
+							<script>
+								//前往賣家賣場
+								$('#GoToSellerMarket').click(function () {
+									let sellerID = $('#sellerIDHint').prop("innerHTML");
+									let form = document.createElement("form");
+									form.setAttribute("method", "get");
+									form.setAttribute("action", "sellerMarket");
+									let input1 = document.createElement("input");
+									input1.setAttribute("type", "text");
+									input1.setAttribute("name", "SellerID");
+									input1.setAttribute("value", sellerID);
+									form.append(input1);
+									$(document.body).append(form);
+									form.submit();
 								})
 
-							//增加購買數量
-							$(
-								'button[class="btn btn-sm btn-plus rounded-circle bg-light border"]')
-								.click(
+								$('.CategoryItem')
+									.click(
+										function () {//取得對應規格編號[要顯示價格和數量]
+											if ($('#BuyItemNumber').prop("hidden") == true) {//假若欄位被影藏
+												$('#BuyItemNumber').prop("hidden",
+													false);//取消影藏
+												let targethidden = $('#BuyItemNumber')
+													.find(
+														'div[class="input-group-btn"]');
+												console.log(targethidden);
+												targethidden.prop("hidden", false);
+												let targethidden1 = $('#BuyItemNumber')
+													.find('input');
+												targethidden1.prop("hidden", false);
+											} else {
+												//假若從規格A按成規格B 數量直接回到1
+
+												// 將規格編號塞入form標籤內
+											}
+											let formatID = $(this).find(
+												'span[class="formatID"]').prop(
+													"innerHTML");//取得規格編號
+											$('#BuyNumber').prop("value", 1);
+											$('#orderformatID').prop("value", formatID);
+											$('#cartformatID').prop("value", formatID);
+											// 還需要取得大小
+											let goodstock = $(this).find(
+												'span[class="CategoryNumber"]')
+												.prop("innerHTML");
+											let formatprice = $(this).find(
+												'span[class="CategoryPrice"]')
+												.prop("innerHTML");
+											let formatSize = $(this).find(
+												'span[class="CategorySize"]').prop(
+													"innerHTML");//大小
+											let formatimagePathTarget = $(this).find(
+												'img').prop("src");//圖片
+											let ps = formatimagePathTarget
+												.lastIndexOf("/");
+											let formatimagePath = "../../goodImages/"
+												+ formatimagePathTarget
+													.substring(ps + 1);
+											console.log(formatimagePath);
+											//
+											$('#cartPrice').prop("value", formatprice);
+											$('#orderformatprice').prop("value",
+												formatprice);
+											$('#remainingNumber').prop("innerHTML",
+												goodstock);
+											$('#CategoryPrice').prop("innerHTML",
+												formatprice);
+											$('#orderGoodSize').prop("value",
+												formatSize);
+											$('#orderformatimagepath').prop("value",
+												formatimagePath);
+										})
+
+								//改變買入數量[有防呆機制]
+								$('#BuyNumber').change(
 									function () {
-										let InputNumber = $(this).closest(
-											'div[id="BuyItemNumber"]').find(
-												'input[id="BuyNumber"]').prop(
-													"value");
+										let InputNumber = $(this).prop("value");
 										let goodstock = $('#formatmsg').find(
 											'span[id="remainingNumber"]').prop(
 												"innerHTML");
 
-										if (InputNumber > Number(goodstock)) {
-											$('#errormsg')
-												.prop("innerHTML", "操作不當");//最多只能購買剩餘的數量
-											$(this).closest(
-												'div[id="BuyItemNumber"]')
-												.find('input[id="BuyNumber"]')
-												.prop("value",
-													Number(goodstock));//不讓數字增加
+										if (Number(goodstock) > InputNumber
+											&& InputNumber >= 1) {
+											$('#errormsg').prop("innerHTML", "");
+										} else {
+											if (InputNumber > Number(goodstock)) {
+												$('#errormsg').prop("innerHTML", "操作不當");//最多只能購買剩餘的數量
+												$(this).closest('div').find(
+													'input[id="BuyNumber"]').prop(
+														"value", 1);//不讓數字增加
+											}
+											if (InputNumber < 1) {
+												$(this).closest('div').find(
+													'input[id="BuyNumber"]').prop(
+														"value", 1);//最少購買一筆
+											}
 										}
+
 									})
 
-							//降低購買數量
-							$(
-								'button[class="btn btn-sm btn-minus rounded-circle bg-light border"]')
-								.click(
-									function () {
-										let InputNumber = $(this).closest(
-											'div[id="BuyItemNumber"]').find(
-												'input[id="BuyNumber"]').prop(
-													"value");
-										console.log(InputNumber);
-										let goodstock = $('#formatmsg').find(
-											'span[id="remainingNumber"]').prop(
-												"innerHTML");//
-										if (InputNumber <= Number(goodstock)) {
-											$('#errormsg').prop("innerHTML", "");//將錯誤訊息抹消
-										}
-										if (InputNumber < 1) {
-											$(this).closest(
-												'div[id="BuyItemNumber"]')
-												.find('input[id="BuyNumber"]')
-												.prop("value", 1);//最少購買一筆
-										}
-									})
+								//增加購買數量
+								$(
+									'button[class="btn btn-sm btn-plus rounded-circle bg-light border"]')
+									.click(
+										function () {
+											let InputNumber = $(this).closest(
+												'div[id="BuyItemNumber"]').find(
+													'input[id="BuyNumber"]').prop(
+														"value");
+											let goodstock = $('#formatmsg').find(
+												'span[id="remainingNumber"]').prop(
+													"innerHTML");
 
-							//加入購物車
-							$('#GoToCart').click(function () {
-								let limitbuyerID = $('#limitbuyerID').prop("innerHTML");
-								let limitsellerID = $('#limitsellerID').prop("innerHTML");
-								let BuyNumber = $('#BuyNumber').val();
-								$('#cartNumber').prop("value", BuyNumber);
-								buyerID = limitbuyerID.substring(5);
-								sellerID = limitsellerID.substring(5);
-								console.log(sellerID);
-								console.log(buyerID);
-								if (buyerID == sellerID) {
-									$('#errormsg').prop("innerHTML", "不能對自己操作");
-									setTimeout(function () {
-										$('#errormsg').prop("innerHTML", "");
-									}, 1000)
-								} else {
-									if ($('#orderformatID').prop("value") == "") {
-										$('#errormsg').prop("innerHTML", "要先按規格按鈕");
+											if (InputNumber > Number(goodstock)) {
+												$('#errormsg')
+													.prop("innerHTML", "操作不當");//最多只能購買剩餘的數量
+												$(this).closest(
+													'div[id="BuyItemNumber"]')
+													.find('input[id="BuyNumber"]')
+													.prop("value",
+														Number(goodstock));//不讓數字增加
+											}
+										})
+
+								//降低購買數量
+								$(
+									'button[class="btn btn-sm btn-minus rounded-circle bg-light border"]')
+									.click(
+										function () {
+											let InputNumber = $(this).closest(
+												'div[id="BuyItemNumber"]').find(
+													'input[id="BuyNumber"]').prop(
+														"value");
+											console.log(InputNumber);
+											let goodstock = $('#formatmsg').find(
+												'span[id="remainingNumber"]').prop(
+													"innerHTML");//
+											if (InputNumber <= Number(goodstock)) {
+												$('#errormsg').prop("innerHTML", "");//將錯誤訊息抹消
+											}
+											if (InputNumber < 1) {
+												$(this).closest(
+													'div[id="BuyItemNumber"]')
+													.find('input[id="BuyNumber"]')
+													.prop("value", 1);//最少購買一筆
+											}
+										})
+
+								//加入購物車
+								$('#GoToCart').click(function () {
+									let limitbuyerID = $('#limitbuyerID').prop("innerHTML");
+									let limitsellerID = $('#limitsellerID').prop("innerHTML");
+									let BuyNumber = $('#BuyNumber').val();
+									$('#cartNumber').prop("value", BuyNumber);
+									buyerID = limitbuyerID.substring(5);
+									sellerID = limitsellerID.substring(5);
+									console.log(sellerID);
+									console.log(buyerID);
+									if (buyerID == sellerID) {
+										$('#errormsg').prop("innerHTML", "不能對自己操作");
 										setTimeout(function () {
 											$('#errormsg').prop("innerHTML", "");
 										}, 1000)
 									} else {
-										let form = $(this).closest('form');
-										form.prop("method", "get");
-										form.prop("action", "inserttoshopcar.controller");
-										form.submit();
+										if ($('#orderformatID').prop("value") == "") {
+											$('#errormsg').prop("innerHTML", "要先按規格按鈕");
+											setTimeout(function () {
+												$('#errormsg').prop("innerHTML", "");
+											}, 1000)
+										} else {
+											let form = $(this).closest('form');
+											form.prop("method", "get");
+											form.prop("action", "inserttoshopcar.controller");
+											form.submit();
+										}
 									}
-								}
 
-							})
+								})
 
-							//加入訂單
-							$('#GoToOrder').click(function () {
-								//取得購買數量後插入$('#orderNumber')
-								let buynumber = $('#BuyNumber').val();
-								$('#orderNumber').prop("value", buynumber);
-								//
-								let limitbuyerID = $('#limitbuyerID').prop("innerHTML");
-								let limitsellerID = $('#limitsellerID').prop("innerHTML");
-								buyerID = limitbuyerID.substring(5);
-								sellerID = limitsellerID.substring(5);
-								if (buyerID == sellerID) {
-									$('#errormsg').prop("innerHTML", "不能對自己操作");
-									setTimeout(function () {
-										$('#errormsg').prop("innerHTML", "");
-									}, 1000)
-								} else {
-									if ($('#orderformatID').prop("value") == "") {
-										$('#errormsg').prop("innerHTML", "要先按規格按鈕");
+								//加入訂單
+								$('#GoToOrder').click(function () {
+									//取得購買數量後插入$('#orderNumber')
+									let buynumber = $('#BuyNumber').val();
+									$('#orderNumber').prop("value", buynumber);
+									//
+									let limitbuyerID = $('#limitbuyerID').prop("innerHTML");
+									let limitsellerID = $('#limitsellerID').prop("innerHTML");
+									buyerID = limitbuyerID.substring(5);
+									sellerID = limitsellerID.substring(5);
+									if (buyerID == sellerID) {
+										$('#errormsg').prop("innerHTML", "不能對自己操作");
 										setTimeout(function () {
 											$('#errormsg').prop("innerHTML", "");
-										}, 1000);
+										}, 1000)
 									} else {
-										let form = $(this).closest('form');
-										form.prop("method", "get");
-										form.prop("action", "DirectlyBuy");
-										form.submit();
+										if ($('#orderformatID').prop("value") == "") {
+											$('#errormsg').prop("innerHTML", "要先按規格按鈕");
+											setTimeout(function () {
+												$('#errormsg').prop("innerHTML", "");
+											}, 1000);
+										} else {
+											let form = $(this).closest('form');
+											form.prop("method", "get");
+											form.prop("action", "DirectlyBuy");
+											form.submit();
+										}
+
 									}
 
-								}
-
-							})
-							$('.your-class').slick();
-							//相關商品的輪播
-							$('.owl-carousel').owlCarousel({
-								loop: true,
-								margin: 10,
-								nav: true,
-								loop: false,
-								items: 1
-							})
-
-							$(document).on('click', 'div[class="col-3 card"]', function () {
-								console.log("你點到相關商品了");
-								let form = $(this).find("form");
-								console.log(form);
-								form.prop("action", "goodDetail.controller");
-								form.prop("method", "get");
-								form.submit();
-							})
-
-							//搜尋商品
-							$('#GoToSearchGood').click(
-								function () {
-									let searchGoodInput = $(this).closest('form').find(
-										'input');
-									console.log(searchGoodInput.prop('value'));
-									if (searchGoodInput.prop('value') == null) {
-										console.log(searchGoodInput);
-									} else {
-										let form = $(this).closest('form');
-										form.attr("action", "/searchGood");
-										form.attr("method", "get");
-										// console.log(form.prop("innerHTML"));
-										form.submit();
-									}
 								})
-						</script>
-						<!-- 下面是OK的  -->
-					<script>
-    $(document).ready(function() {
-        var goodId = ${Good.goodsID}; 
-        var page = 0;
-        var currentRate = null; 
-        var currentTabId = 'all-tab'; 
+								$('.your-class').slick();
+								//相關商品的輪播
+								$('.owl-carousel').owlCarousel({
+									loop: true,
+									margin: 10,
+									nav: true,
+									loop: false,
+									items: 1
+								})
 
-        
-        function maskNameFunction() {
-            document.querySelectorAll('.tab-pane#nav-mission .mb-1').forEach(function(nameElement) {
-                let name = nameElement.innerText;
-                if (name.length === 3) {
-                    let maskedName = maskName(name);
-                    nameElement.innerText = maskedName;
-                }
-            });
-        }
+								$(document).on('click', 'div[class="col-3 card"]', function () {
+									console.log("你點到相關商品了");
+									let form = $(this).find("form");
+									console.log(form);
+									form.prop("action", "goodDetail.controller");
+									form.prop("method", "get");
+									form.submit();
+								})
 
-        
-        function maskName(name) {
-            if (name.length !== 3) {
-                return name; 
-            }
-            let firstChar = name.charAt(0);
-            let lastChar = name.charAt(2);
-            return firstChar + '***' + lastChar; 
-        }
-        
-        
-        
-        function loadComments(goodId, rate, content, photos, page) {
-            $.ajax({
-                type: "GET",
-                url: "/goodDetail.controller",
-                data: {
-                    "GoodID": goodId,
-                    "rate": rate,
-                    "content": content,
-                    "photos": photos,
-                    "page": page // 传递当前页数
-                },
-                success: function(data) {
-                    $('#nav-mission').html($(data).find('#nav-mission').html());
-					
-                    
-                    maskNameFunction();
+								//搜尋商品
+								$('#GoToSearchGood').click(
+									function () {
+										let searchGoodInput = $(this).closest('form').find(
+											'input');
+										console.log(searchGoodInput.prop('value'));
+										if (searchGoodInput.prop('value') == null) {
+											console.log(searchGoodInput);
+										} else {
+											let form = $(this).closest('form');
+											form.attr("action", "/searchGood");
+											form.attr("method", "get");
+											// console.log(form.prop("innerHTML"));
+											form.submit();
+										}
+									})
+							</script>
+							<!-- 下面是OK的  -->
+							<script>
+								$(document).ready(function () {
+									var goodId = ${ Good.goodsID };
+									var page = 0;
+									var currentRate = null;
+									var currentTabId = 'all-tab';
 
-                    
-                    bindClickHandlers();
-                    bindPaginationClickHandlers(); 
-                    updateTabCounts(data);
-                },
-                error: function(xhr, status, error) {
-                    console.error("Error:", error);
-                }
-            });
-        }
-        
-       
-        
-        function updateTabCounts(data) {
-            var rateCounts = data.rateCounts; 
-            $('#all-tab').text(`全部(${totalPostsCount})`);
-            $('#star5-tab').text(`5顆星(${rateCounts[0]})`);
-            $('#star4-tab').text(`4顆星(${rateCounts[1]})`);
-            $('#star3-tab').text(`3顆星(${rateCounts[2]})`);
-            $('#star2-tab').text(`2顆星(${rateCounts[3]})`);
-            $('#star1-tab').text(`1顆星(${rateCounts[4]})`);
-            $('#photo-tab').text(`附上照片(${photosCount})`);
-            $('#comment-tab').text(`附上評論(${contentCount})`);
-        }
 
-        function handleClick(event) {
-            console.log("handleClick triggered");
-            page = 0;
-            currentRate = null; 
-            currentTabId = $(this).attr('id'); 
-            console.log("Clicked tabId:", currentTabId);
-            var rate = null;
-            var content = null;
-            var photos = null;
+									function maskNameFunction() {
+										document.querySelectorAll('.tab-pane#nav-mission .mb-1').forEach(function (nameElement) {
+											let name = nameElement.innerText;
+											if (name.length === 3) {
+												let maskedName = maskName(name);
+												nameElement.innerText = maskedName;
+											}
+										});
+									}
 
-            if (currentTabId === 'star5-tab') {
-                rate = 5;
-            } else if (currentTabId === 'star4-tab') {
-                rate = 4;
-            } else if (currentTabId === 'star3-tab') {
-                rate = 3;
-            } else if (currentTabId === 'star2-tab') {
-                rate = 2;
-            } else if (currentTabId === 'star1-tab') {
-                rate = 1;
-            } else if (currentTabId === 'photo-tab') {
-                photos = true;
-            } else if (currentTabId === 'comment-tab') {
-                content = true;
-            }
-            console.log("Selected rate:", rate);
-            currentRate = rate;
 
-            loadComments(goodId, rate, content, photos, page);
-            
-           
-        }
+									function maskName(name) {
+										if (name.length !== 3) {
+											return name;
+										}
+										let firstChar = name.charAt(0);
+										let lastChar = name.charAt(2);
+										return firstChar + '***' + lastChar;
+									}
 
-        function bindClickHandlers() {
-            console.log("Binding click handlers");
-            $('#nav-tab').off('click').on('click', '.nav-link', handleClick);
-        }
 
-        function handlePaginationClick(event) {
-            event.preventDefault(); 
-            var newPage = $(this).data('page');
-            console.log("Current active tabId:", currentTabId);
 
-            if (newPage !== page) { 
-                page = newPage;
-                if (currentRate !== null) {
-                    loadComments(goodId, currentRate, null, null, page); 
-                } else if (currentTabId === 'photo-tab') {
-                    loadComments(goodId, null, null, true, page); 
-                } else if (currentTabId === 'comment-tab') {
-                    loadComments(goodId, null, true, null, page); 
-                } else {
-                    loadComments(goodId, null, null, null, page); 
-                }
-            }
-        }
+									function loadComments(goodId, rate, content, photos, page) {
+										$.ajax({
+											type: "GET",
+											url: "/goodDetail.controller",
+											data: {
+												"GoodID": goodId,
+												"rate": rate,
+												"content": content,
+												"photos": photos,
+												"page": page // 传递当前页数
+											},
+											success: function (data) {
+												$('#nav-mission').html($(data).find('#nav-mission').html());
 
-        function bindPaginationClickHandlers() {
-            console.log("Binding pagination click handlers");
-            $('.pagination-link').off('click').on('click', handlePaginationClick);
-        }
 
-        bindClickHandlers();
-        bindPaginationClickHandlers();
-    });
-</script>
+												maskNameFunction();
+
+
+												bindClickHandlers();
+												bindPaginationClickHandlers();
+												updateTabCounts(data);
+											},
+											error: function (xhr, status, error) {
+												console.error("Error:", error);
+											}
+										});
+									}
+
+
+
+									function updateTabCounts(data) {
+										var rateCounts = data.rateCounts;
+										$('#all-tab').text(`全部(${totalPostsCount})`);
+										$('#star5-tab').text(`5顆星(${rateCounts[0]})`);
+										$('#star4-tab').text(`4顆星(${rateCounts[1]})`);
+										$('#star3-tab').text(`3顆星(${rateCounts[2]})`);
+										$('#star2-tab').text(`2顆星(${rateCounts[3]})`);
+										$('#star1-tab').text(`1顆星(${rateCounts[4]})`);
+										$('#photo-tab').text(`附上照片(${photosCount})`);
+										$('#comment-tab').text(`附上評論(${contentCount})`);
+									}
+
+									function handleClick(event) {
+										console.log("handleClick triggered");
+										page = 0;
+										currentRate = null;
+										currentTabId = $(this).attr('id');
+										console.log("Clicked tabId:", currentTabId);
+										var rate = null;
+										var content = null;
+										var photos = null;
+
+										if (currentTabId === 'star5-tab') {
+											rate = 5;
+										} else if (currentTabId === 'star4-tab') {
+											rate = 4;
+										} else if (currentTabId === 'star3-tab') {
+											rate = 3;
+										} else if (currentTabId === 'star2-tab') {
+											rate = 2;
+										} else if (currentTabId === 'star1-tab') {
+											rate = 1;
+										} else if (currentTabId === 'photo-tab') {
+											photos = true;
+										} else if (currentTabId === 'comment-tab') {
+											content = true;
+										}
+										console.log("Selected rate:", rate);
+										currentRate = rate;
+
+										loadComments(goodId, rate, content, photos, page);
+
+
+									}
+
+									function bindClickHandlers() {
+										console.log("Binding click handlers");
+										$('#nav-tab').off('click').on('click', '.nav-link', handleClick);
+									}
+
+									function handlePaginationClick(event) {
+										event.preventDefault();
+										var newPage = $(this).data('page');
+										console.log("Current active tabId:", currentTabId);
+
+										if (newPage !== page) {
+											page = newPage;
+											if (currentRate !== null) {
+												loadComments(goodId, currentRate, null, null, page);
+											} else if (currentTabId === 'photo-tab') {
+												loadComments(goodId, null, null, true, page);
+											} else if (currentTabId === 'comment-tab') {
+												loadComments(goodId, null, true, null, page);
+											} else {
+												loadComments(goodId, null, null, null, page);
+											}
+										}
+									}
+
+									function bindPaginationClickHandlers() {
+										console.log("Binding pagination click handlers");
+										$('.pagination-link').off('click').on('click', handlePaginationClick);
+									}
+
+									bindClickHandlers();
+									bindPaginationClickHandlers();
+								});
+							</script>
 			</body>
 
 			</html>

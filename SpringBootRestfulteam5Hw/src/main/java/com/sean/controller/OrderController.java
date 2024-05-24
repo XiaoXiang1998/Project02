@@ -97,7 +97,7 @@ public class OrderController {
 	@GetMapping("goquery.controller")
 	public String GoQuery(Model m) {
 		m.addAttribute("page", "query");
-		return "/Order/jsp/Query";
+		return "Order/jsp/Query";
 	}
 
 	@GetMapping("goui.controller")
@@ -560,7 +560,7 @@ public class OrderController {
 
 		m.addAttribute("monthOrdersMap", monthOrdersMap);
 		m.addAttribute("monthOrdersPrice", monthOrdersPrice);
-		return "/Order/jsp/Test";
+		return "Order/jsp/Test";
 
 	}
 

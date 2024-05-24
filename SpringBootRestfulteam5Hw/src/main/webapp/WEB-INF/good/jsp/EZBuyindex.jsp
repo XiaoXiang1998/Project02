@@ -89,7 +89,12 @@
 													<h4>${j.goodName}</h4>
 													<input type="text" name="GoodID" class="form-control"
 														value="${j.goodsID}">
-													<p>${j.minprice}-${j.maxprice}$</p>
+													<c:if test="${j.minprice==j.maxprice}">
+														<p>${j.minprice}$</p>
+													</c:if>
+													<c:if test="${j.minprice!=j.maxprice}">
+														<p>${j.minprice}-${j.maxprice}$</p>
+													</c:if>
 													<div class="d-flex justify-content-between flex-lg-wrap">
 														<div class="d-flex my-3">
 															<c:forEach var="k" begin="1" end="5" step="1">
@@ -365,10 +370,18 @@
 											contentType: 'application/json',
 											success: function (data) {
 												// console.log(data);
-												let content = [...data][0][0] + "-" + [...data][0][1] + "$";
-												let p = document.createElement('p'); p.classList.add("text-dark"); p.classList.add("fs-5"); p.classList.add("fw-bold");
-												p.classList.add("mb-0"); p.innerHTML = content;
-												div5.append(p);
+												if ([...data][0][0] == [...data][0][1]) {
+													let content = [...data][0][0] + "$";
+													let p = document.createElement('p'); p.classList.add("text-dark"); p.classList.add("fs-5"); p.classList.add("fw-bold");
+													p.classList.add("mb-0"); p.innerHTML = content;
+													div5.append(p);
+												}
+												else {
+													let content = [...data][0][0] + "-" + [...data][0][1] + "$";
+													let p = document.createElement('p'); p.classList.add("text-dark"); p.classList.add("fs-5"); p.classList.add("fw-bold");
+													p.classList.add("mb-0"); p.innerHTML = content;
+													div5.append(p);
+												}
 											}
 										})
 										//

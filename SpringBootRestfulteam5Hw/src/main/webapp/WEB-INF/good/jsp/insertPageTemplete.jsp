@@ -29,9 +29,9 @@
                     <% HttpSession MemberSession=request.getSession(); MemberBean member=(MemberBean)
                         MemberSession.getAttribute("member"); %>
                         <!-- Checkout Page Start -->
-                        <div class="container-fluid fruite">
+                        <div class="container-fluid fruite py-5">
                             <div class="container py-5">
-                                <h1 class="mb-4">新增頁面</h1>
+                                <h1 class="mb-4">新增商品</h1>
                                 <form id="GoodData" action="InsertPage.controller" method="post"
                                     enctype="multipart/form-data">
                                     <div class="row g-5">

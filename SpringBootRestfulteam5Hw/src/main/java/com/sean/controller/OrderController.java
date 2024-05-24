@@ -133,7 +133,7 @@ public class OrderController {
 		carItem.setPrice(productPrice);
 		carItem.setQuantity(quantity);
 		cService.insertToShopCar(carItem);
-		return "Order/jsp/Product";
+		return "good/jsp/EZBuyindex";
 	}
 
 	@PutMapping("updateQuantity.controller")
@@ -345,6 +345,13 @@ public class OrderController {
 			return "redirect:/ecpayCheckout?aioCheckOutALLForm="
 					+ URLEncoder.encode(aioCheckOutALLForm, StandardCharsets.UTF_8);
 		}
+		List<Notifications> notifications = nService.findByRecipientIdOrderBySendTimeDesc(member);
+		Integer count = nService.noReadCounts(member);
+		session.setAttribute("count", count);
+		session.setAttribute("notifications", notifications);
+		Integer carItemCount = cService.carItemCount(member);
+		session.setAttribute("carItemCount", carItemCount);	
+		m.addAttribute("memberId", memberId);
 		
 		return "good/jsp/EZBuyindex";
 	}

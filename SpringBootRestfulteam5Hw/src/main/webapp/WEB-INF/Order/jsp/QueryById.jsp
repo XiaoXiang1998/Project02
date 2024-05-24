@@ -203,7 +203,7 @@
 							<c:choose>
 								<c:when test="${order.orderStatus == 1 && member.sid == order.buyerId.sid}">
 									<a href="#" onclick="showEditForm('${order.orderId}','${order.name}','${order.tel}','${order.address}')" class="btn btn-outline-secondary  fs-4 me-3 mb-3" style="width: 200px; height: 50px">修改收件人資訊</a>
-									<a href="#" onclick="confirmDelete(${order.orderId}, '${queryType}')" class="btn btn-outline-secondary fs-4 me-3 mb-3" style="width: 200px; height: 50px">刪除</a>
+									<a href="#" onclick="confirmDelete(${order.orderId}, '${queryType}')" class="btn btn-outline-secondary fs-4 me-3 mb-3" style="width: 200px; height: 50px">取消訂單</a>
 									<a href="#" class="btn btn-outline-secondary fs-4 me-3 mb-3" style="width: 200px; height: 50px; pointer-events: none; opacity: 0.5;">待出貨</a>
 								</c:when>
 								<c:when test="${order.orderStatus == 2 && member.sid == order.buyerId.sid}">

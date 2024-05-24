@@ -63,11 +63,11 @@ public class GoodsBean2 implements java.io.Serializable {
 	@Column(name="STATUS")
 	private Integer status;
 	//
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "good", cascade = CascadeType.ALL)
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "good", cascade = CascadeType.ALL)
 	@JsonManagedReference
 	private Set<GoodImageBean> images = new LinkedHashSet<GoodImageBean>();
 
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "good", cascade = CascadeType.ALL)
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "good", cascade = CascadeType.ALL)
 	@JsonManagedReference
 	private Set<GoodFormat> format = new LinkedHashSet<GoodFormat>();
 

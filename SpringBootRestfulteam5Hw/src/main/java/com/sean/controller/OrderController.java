@@ -576,7 +576,7 @@ public class OrderController {
 		MemberBean member = members.get();
 		Optional<MemberBean> members2 = mService.findById(sellerId);
 		MemberBean seller = members2.get();
-
+		order.getOrderId();
 		Notifications n = new Notifications();
 		String buyerMessage = "親愛的" + buyerName + "您好，您的訂單編號為:" + orderId + "的訂單已成功取消";
 		n.setOrderId(order);

@@ -4,6 +4,7 @@ import java.util.Date;
 
 import org.springframework.stereotype.Component;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.member.model.MemberBean;
 
 import jakarta.persistence.Column;
@@ -25,12 +26,11 @@ public class Notifications {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "ID")
 	private Integer id;
-	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "ORDERID")
 	private Orders orderId;
 
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "RECIPIENTID")
 	private MemberBean recipientId;
 	

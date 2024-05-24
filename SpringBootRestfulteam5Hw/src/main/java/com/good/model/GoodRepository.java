@@ -1,6 +1,7 @@
 package com.good.model;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -57,4 +58,7 @@ public interface GoodRepository extends JpaRepository<GoodsBean2, Integer> {
 	//管理者取七天前商品每天銷售的數量(還沒寫完)
 	@Query(value = "select COUNT(*) from Goods g where DATEDIFF(DAY, GETDATE(), g.LaunchDate) = ?1",nativeQuery = true)	
 	public Integer findNumberInsertSold(int day);
+	//取熱門商品種類
+	@Query(value = "select distinct g.goodsType,COUNT(g.goodsType) AS Num from Goods g JOIN GoodFormat gf on g.GoodsID = gf.GoodsID JOIN ORDERS o on gf.FormatID = o.FK_FORMATGOODID where g.status = 1 group by g.goodsType order by Num DESC",nativeQuery = true)
+	public List<Object[]> findpopularCategory();
 }

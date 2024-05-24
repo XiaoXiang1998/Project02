@@ -68,68 +68,7 @@ public class GoodController2 {
 	private OrdersService oService;
 	@PersistenceContext
 	private EntityManager entityManager;
-//在跳脫視窗(商品圖片表)點擊新增圖片
 /*
-	@PostMapping("/goodImageinsert.controller")
-	public String processImageInsertAction(@RequestParam MultiValueMap<String, MultipartFile> files,
-			@RequestParam("GoodsID") Integer goodsID) {
-		
-		// 插入多張圖片 並且為上船的圖片重新命名 需要商品編號
-		 
-		// 建立命名方式和圖片路徑
-		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMddHHmmssSSS");
-		String dataPath = "../../goodImages/"; // 透過商品編號取得基本商品資訊 然後透過get取得編號對應的圖片集合
-//		String patternPath = "../../../../../../../../Documents/team5project/SpringBootRestfulteam5Hw/src/main/webapp/WEB-INF/goodImages/";		//透過商品編號取得基本商品資訊 然後透過get取得編號對應的圖片集合
-		String patternPath = "../../../../../../../../../../team5project/SpringBootRestfulteam5Hw/src/main/webapp/WEB-INF/goodImages/"; // 透過商品編號取得基本商品資訊
-
-		GoodsBean2 insertGood = gService.getById(goodsID);
-		Set<GoodImageBean> Imageset = insertGood.getImages();
-		GoodImageBean goodImage = null;
-		System.out.println("files.size() = " + files.size() + "??AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-		// 取得圖片的格式 並且換上新的名字
-		for (Map.Entry<String, List<MultipartFile>> entry : files.entrySet()) {
-			List<MultipartFile> fileList = entry.getValue();
-			for (MultipartFile multipartFile : fileList) {// 裡面迴圈處理圖片
-// entry.getKey():input標籤中的name屬性
-// multipartFile.getOriginalFilename():上傳檔案的名稱
-//1.取得圖片格式
-				String filename = multipartFile.getOriginalFilename();
-				int ps = filename.lastIndexOf(".");
-				String patternFormat = filename.substring(ps, filename.length());
-//2.給予新的名字
-				String timeStamp = simpleDateFormat.format(new Date());
-//				String ImgRoot = timeStamp + "" + patternFormat;
-				String ImgRoot = patternPath + timeStamp + "" + patternFormat;
-//3.將圖片上傳
-//				File file = new File(patternPath, ImgRoot);
-				File file = new File(ImgRoot);
-				try {
-					multipartFile.transferTo(file);
-				} catch (IllegalStateException e) {
-// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (IOException e) {
-// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-//4.把相對路徑丟進GoodImageBean
-				String goodsImg = dataPath + timeStamp + "" + patternFormat;
-				goodImage = new GoodImageBean();
-
-				goodImage.setImagePath(goodsImg);
-				goodImage.setGood(insertGood);// 將圖片表連結商品基本資訊表
-				giService.insert(goodImage);// 將圖片塞入圖片資料表
-				Imageset.add(goodImage);// 將類別寫入Set集合
-// Imageset.add(goodImage);
-			}
-		}
-		//
-		return "redirect:/goodqueryallpage.controller";
-	}
-	*/
-	/**/
-
-	/**/
 	// 新增基本商品資訊(裡面有新增圖片這個按鈕 點下去可以新增圖片)有上傳圖片
 	@PostMapping("/goodinsert2.controller")
 	public String processInsertAction2(@RequestParam MultiValueMap<String, MultipartFile> files,
@@ -226,6 +165,7 @@ public class GoodController2 {
 		return "redirect:/goodqueryallpage.controller";
 	}
 
+	*/
 //有三種刪除。1.刪除商品基本資訊(連帶刪掉其他兩張表的資訊)
 //2.單純刪掉圖片
 //3.刪掉某一規格

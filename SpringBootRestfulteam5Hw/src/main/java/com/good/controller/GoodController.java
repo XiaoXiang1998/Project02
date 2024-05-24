@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -299,7 +300,7 @@ public class GoodController {
 //multipartFile.getOriginalFilename():上傳檔案的名稱
 //1.取得圖片格式
 			String ImageFormatfilename = multipartFile.getOriginalFilename();
-			int pos = filename.lastIndexOf(".");
+			int pos = ImageFormatfilename.lastIndexOf(".");
 			String patternImage = ImageFormatfilename.substring(pos, ImageFormatfilename.length());
 //2.給予新的名字
 			String timeStampImage = simpleDateFormat.format(new Date());
@@ -331,7 +332,7 @@ public class GoodController {
 
 	///////////////////////////////////////////////////// 查詢全部的頁面/////////////////////////////////////////////////
 
-	// 模糊化查詢(會跑版)
+	// 模糊化查詢(會跑版 還是不要用好了)
 	@GetMapping("/keywordsearch")
 	@ResponseBody
 	public List<GoodsBean2> keywordsearch(@RequestParam("inputresult") String keyinput) {
@@ -1264,13 +1265,13 @@ public class GoodController {
 	//在首頁中(熱賣商品欄位) 透過訂單紀錄中找出最近熱賣的商品種類
 	@GetMapping("/indexpopulargoodtype")
 	@ResponseBody // 程式測試
-	public List<String> indexpopulargoodtype() {// @RequestParam("sellerIDforSearch") Integer
-															// sellerID,@RequestParam("searchGoodName") String goodName
-//		List<GoodTypeIndexDto> resultList = entityManager.createQuery("select g.goodsType AS goodsType from Orders o join GoodFormat gf on o.formatgoodId = gf.formatID join GoodsBean2 g on gf.good.goodsID = g.goodsID group by g.goodsType order by sum(o.quantity)").getResultList();
-		List<String> resultList = entityManager
-				.createQuery("select distinct g.goodsType AS goodsType from GoodsBean2 g where g.status = 1 group by g.goodsType")
-				.getResultList();// 因為訂單沒資料
-
+	public List<String> indexpopulargoodtype() {
+		System.err.println("來取熱門商品種類資料");
+		List<Object[]> reslist1 = gService.findpopularCategory();
+		List<String> resultList= new ArrayList<>();
+		for(Object[] item:reslist1) {
+			resultList.add((String) item[0]);
+		}		
 		Pageable p1 = PageRequest.of(0, 5);
 		int start = (int) p1.getOffset();
 		int end = Math.min((start + p1.getPageSize()), resultList.size());

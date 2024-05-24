@@ -48,7 +48,7 @@ public class AdminController {
 	public String adminInterface(@RequestParam("account") String accoun, @RequestParam("password") String password) {
 		if (adService.checkAdminLogin(accoun, password)) {
 			System.out.println("管理者登入成功");
-			return "/member/AdminIndex";
+			return "member/AdminIndex";
 		}
 		return null;
 	}
@@ -270,25 +270,25 @@ public class AdminController {
 	/*--------------------------------------------------導覽列跳轉頁面--------------------------------------------------*/
 	@GetMapping("/AdminIndex")
 	public String turnToMemberManagement() {
-		return "/member/AdminIndex";
+		return "member/AdminIndex";
 	}
 
 	@GetMapping("/AdminManagement")
 	public String turnToAdminManagement() {
-		return "/member/AdminManagement";
+		return "member/AdminManagement";
 	}
 
 	@GetMapping("/AdminInsert")
 	public String turnToAdminInsert() {
-		return "/member/AdminInsert";
+		return "member/AdminInsert";
 	}
 
 	@GetMapping("/MembershipLevelGuidelines")
 	public String turnToMembershipLevelGuidelines() {
-		return "/member/MembershipLevelGuidelines";
+		return "member/MembershipLevelGuidelines";
 	}
 	@GetMapping("/InsertMembershipLevel")
 	public String turnToInsertMembershipLevel() {
-		return "/member/InsertMembershipLevel";
+		return "member/InsertMembershipLevel";
 	}
 }

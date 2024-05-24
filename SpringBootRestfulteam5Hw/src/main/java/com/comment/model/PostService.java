@@ -50,7 +50,6 @@ public class PostService {
 	        if (post.getLastmodifiedtime() != null) {
 	            oldComment.setLastmodifiedtime(post.getLastmodifiedtime());
 	        } else {
-	            // 如果传入的 post 对象中的 lastmodifiedtime 为 null，则使用当前时间戳
 	            long currentTimeMillis = System.currentTimeMillis();
 	            java.sql.Timestamp currTimestamp = new java.sql.Timestamp(currentTimeMillis);
 	            oldComment.setLastmodifiedtime(currTimestamp);
@@ -186,15 +185,15 @@ public class PostService {
                 List<String> rowData = new ArrayList<>();
 
                 rowData.add(String.valueOf(post.getCommentid())); 
-                rowData.add(post.getCommentcontent() != null ? post.getCommentcontent() : "");
-                rowData.add(post.getProductphoto() != null ? post.getProductphoto() : "");
-                rowData.add(post.getCommenttime() != null ? post.getCommenttime().toString() : "");
-                rowData.add(post.getLastmodifiedtime() != null ? post.getLastmodifiedtime().toString() : "");
-                rowData.add(post.getBuyerrate() != null ? String.valueOf(post.getBuyerrate()) : "");
-                rowData.add(post.getReplayconetnt() != null ? post.getReplayconetnt() : "");
-                rowData.add(post.getReplaytime() != null ? post.getReplaytime().toString() : "");
-                rowData.add(post.getSellerrate() != null ? String.valueOf(post.getSellerrate()) : "");
-                rowData.add(post.getRepliedcommentid() != null ? String.valueOf(post.getRepliedcommentid()) : "");
+                rowData.add(post.getCommentcontent() != null ? post.getCommentcontent() : "NULL");
+                rowData.add(post.getProductphoto() != null ? post.getProductphoto() : "NULL");
+                rowData.add(post.getCommenttime() != null ? post.getCommenttime().toString() : "NULL");
+                rowData.add(post.getLastmodifiedtime() != null ? post.getLastmodifiedtime().toString() : "NULL");
+                rowData.add(post.getBuyerrate() != null ? String.valueOf(post.getBuyerrate()) : "NULL");
+                rowData.add(post.getReplayconetnt() != null ? post.getReplayconetnt() : "NULL");
+                rowData.add(post.getReplaytime() != null ? post.getReplaytime().toString() : "NULL");
+                rowData.add(post.getSellerrate() != null ? String.valueOf(post.getSellerrate()) : "NULL");
+                rowData.add(post.getRepliedcommentid() != null ? String.valueOf(post.getRepliedcommentid()) : "NULL");
 
                 csvWriter.println(String.join(",", rowData));
             }

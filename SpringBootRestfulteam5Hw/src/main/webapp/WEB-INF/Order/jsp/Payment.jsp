@@ -19,7 +19,7 @@
 			<div class="row justify-content-center mt-5">
 				<div class="col-md-10">
 					<h3 class="text-center mb-3">商品結帳</h3>
-					<div class="table border fs-5">
+					<div class="table border fs-5 shadow">
 						<table class="table text-center align-middle">
 							<thead class="thead-dark">
 								<tr>

@@ -118,8 +118,8 @@ public class OrderController {
 		return "Order/jsp/Product";
 	}
 
-	@PostMapping("inserttoshopcar.controller")
-	public String insertToShopCar(@RequestParam("productId") Integer productId,
+	@GetMapping("inserttoshopcar.controller")
+	public String insertToShopCar(@RequestParam("ProductId") Integer productId,
 		@RequestParam("quantity") Integer quantity, @RequestParam("productPrice") Integer productPrice) {
 		MemberBean memberb = (MemberBean) session.getAttribute("member");
 		Integer memberId = memberb.getSid();

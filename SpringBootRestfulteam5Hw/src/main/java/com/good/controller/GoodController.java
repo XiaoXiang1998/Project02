@@ -1935,23 +1935,6 @@ public class GoodController {
 		return "redirect:sellerGoodQueryAll";
 	}
 
-	//買家將商品放入購物車
-	@GetMapping("inserttoshopcar.controller")
-	public String inserttoshopcar(@RequestParam("ProductId") Integer productID,@RequestParam("quantity") Integer quantity,@RequestParam("productPrice") Integer productPrice) {
-		MemberBean memberb = (MemberBean)session.getAttribute("member");
-		Integer memberID= memberb.getSid();
-		Optional<MemberBean> members = mService.findById(memberID);
-		MemberBean member = members.get();
-		GoodFormat goodformat = gfService.getById(productID);
-		CarItem cartItem= new CarItem();
-		cartItem.setGood(goodformat);
-		cartItem.setMember(member);
-		cartItem.setPrice(productPrice);
-		cartItem.setQuantity(quantity);
-		cService.insertToShopCar(cartItem);
-		Integer carItemCount = cService.carItemCount(member);
-		session.setAttribute("carItemCount", carItemCount);	
-		return "good/jsp/EZBuyindex";
-	}
+
 	
 }

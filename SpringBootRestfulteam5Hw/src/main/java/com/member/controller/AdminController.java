@@ -294,6 +294,6 @@ public class AdminController {
 	
 	@GetMapping("/LogoutBackstage")
 	public String LogoutBackstage() {
-		return "member/AdminIndex";
+		return "BackStageLogin";
 	}
 }

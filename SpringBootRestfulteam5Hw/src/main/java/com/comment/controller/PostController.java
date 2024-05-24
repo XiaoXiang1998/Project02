@@ -1,7 +1,10 @@
 package com.comment.controller;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -28,7 +31,10 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.ContentDisposition;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -477,5 +483,40 @@ public class PostController {
 	    
 	    return ResponseEntity.ok(response);
 	}
+	
+	@GetMapping("/commentadmin/export")
+    public ResponseEntity<String> exportData(@RequestParam("format") String format) {
+        List<Post> posts = pService.getAll();
+        byte[] data;
+        String fileName;
+        String filePath = "C:/test/";
 
+        switch (format.toLowerCase()) {
+            case "csv":
+                data = pService.exportToCSV(posts);
+                fileName = "comments.csv";
+                break;
+            case "json":
+                data = pService.exportToJSON(posts);
+                fileName = "comments.json";
+                break;
+            case "xml":
+                data = pService.exportToXML(posts);
+                fileName = "comments.xml";
+                break;
+            default:
+                throw new IllegalArgumentException("Invalid format: " + format);
+        }
+
+        try {
+            Files.createDirectories(Paths.get(filePath));
+            File file = new File(filePath + fileName);
+            try (FileOutputStream fos = new FileOutputStream(file)) {
+                fos.write(data);
+            }
+            return new ResponseEntity<>("成功匯出到" + filePath + fileName, HttpStatus.OK);
+        } catch (IOException e) {
+            return new ResponseEntity<>("檔案匯出失敗: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

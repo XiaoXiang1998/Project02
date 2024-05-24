@@ -73,7 +73,7 @@
 	color: #555; /* 时间戳颜色 */
 }
 
-.avatar{
+.avatar {
 	width: 60px;
 	height: 60px;
 	border-radius: 50%;
@@ -93,8 +93,8 @@
 <body class="gradient-custom">
 	<div class="container py-5">
 		<div class="row">
-			<input type="hidden" id="username" value="${username}"> 
-			<input type="hidden" id="photoSticker" value="${photoSticker}">
+			<input type="hidden" id="username" value="${username}"> <input
+				type="hidden" id="photoSticker" value="${photoSticker}">
 
 			<div class="col-md-6 col-lg-5 col-xl-5 mb-4 mb-md-0">
 				<h5 class="font-weight-bold mb-3 text-center text-white">Member</h5>
@@ -132,258 +132,300 @@
 	<%@ include file="../FrontDeskFooter.jsp"%>
 
 	<script>
-$(function() {
-    var ws;
-    if ("WebSocket" in window) {
-        var baseUrl = 'ws://localhost:8081/websocket/';
-        var username = $('#username').val();
-        var photoSticker = $('#photoSticker').val(); 
+		$(function() {
+			var ws;
+			if ("WebSocket" in window) {
+				var baseUrl = 'ws://localhost:8081/websocket/';
+				var username = $('#username').val();
+				var photoSticker = $('#photoSticker').val();
 
-        ws = new WebSocket(baseUrl + username);
+				ws = new WebSocket(baseUrl + username);
 
-        ws.onopen = function() {
-            console.log("建立 websocket 连接......");
+				ws.onopen = function() {
+					console.log("建立 websocket 连接......");
 
-            loadChatHistory();
-            handleOnlineUsersUpdate([]);
-        };
+					loadChatHistory();
+					handleOnlineUsersUpdate([]);
+				};
 
-        ws.onmessage = function(event) {
-            var data = JSON.parse(event.data);
-            console.log("Received message:", data);
+				ws.onmessage = function(event) {
+					var data = JSON.parse(event.data);
+					console.log("Received message:", data);
 
-            if (data.onlineUsers !== undefined) {
-                handleOnlineUsersUpdate(data.onlineUsers);
-            } else if (data.offlineUser !== undefined) {
-                var offlineUser = data.offlineUser;
-                $('#content').append('[' + offlineUser + ']已離線');
+					if (data.onlineUsers !== undefined) {
+						handleOnlineUsersUpdate(data.onlineUsers);
+					} else if (data.offlineUser !== undefined) {
+						var offlineUser = data.offlineUser;
+						$('#content').append('[' + offlineUser + ']已離線');
 
-            } else if (data.onlineUser !== undefined) {
-                var onlineUser = data.onlineUser;
-                $('#content').append('[' + onlineUser + ']已進入聊天室');
+					} else if (data.onlineUser !== undefined) {
+						var onlineUser = data.onlineUser;
+						$('#content').append('[' + onlineUser + ']已進入聊天室');
 
-            } else {
-                var $content = $('#content');
-                var messageClass = data.sender === $('#username').val() ? 'right-float' : 'left-float';
-                var currentTime = getCurrentTime();
-                var avatar = (data.sender === $('#username').val()) ? $('#photoSticker').val() : data.avatar; 
-                var messageDiv = '<div class="message ' + messageClass + '">' +
-                    '<img class="avatar" src="' + avatar + '" alt="Avatar">' +
-                    data.sender + ': ' + data.content +
-                    '<span class="message-time">' + data.time + '</span>' +
-                    '</div>';
-                $content.append(messageDiv);
+					} else {
+						var $content = $('#content');
+						var messageClass = data.sender === $('#username').val() ? 'right-float'
+								: 'left-float';
+						var currentTime = getCurrentTime();
+						var avatar = (data.sender === $('#username').val()) ? $(
+								'#photoSticker').val()
+								: data.avatar;
+						var messageDiv = '<div class="message ' + messageClass + '">'
+								+ '<img class="avatar" src="' + avatar + '" alt="Avatar">'
+								+ data.sender
+								+ ': '
+								+ data.content
+								+ '<span class="message-time">'
+								+ data.time
+								+ '</span>' + '</div>';
+						$content.append(messageDiv);
 
-                var scrollHeight = $('#chat-content')[0].scrollHeight;
-                $('#chat-content').scrollTop(scrollHeight);
+						var scrollHeight = $('#chat-content')[0].scrollHeight;
+						$('#chat-content').scrollTop(scrollHeight);
 
-                storeMessage(data);
+						storeMessage(data);
 
-                updateLastMessageForUser(data.sender, data.content, data.time);
+						updateLastMessageForUser(data.sender, data.content,
+								data.time);
 
-            }
-        };
+					}
+				};
 
-        ws.onclose = function() {
-            console.log("關閉 websocket 連接......");
-        };
+				ws.onclose = function() {
+					console.log("關閉 websocket 連接......");
+				};
 
-        ws.onerror = function(event) {
-            console.log("websocket 發生錯誤......" + event + '\n');
-        };
+				ws.onerror = function(event) {
+					console.log("websocket 發生錯誤......" + event + '\n');
+				};
 
-        $('#toSend').click(function() {
-            sendMsg();
-        });
+				$('#toSend').click(function() {
+					sendMsg();
+				});
 
-        $(document).keyup(function(event) {
-            if (event.keyCode == 13) {
-                sendMsg();
-            }
-        });
+				$(document).keyup(function(event) {
+					if (event.keyCode == 13) {
+						sendMsg();
+					}
+				});
 
-        function handleOnlineUsersUpdate(onlineUsers) {
-            var onlineUsersList = document.getElementById("onlineUsersList");
-            onlineUsersList.innerHTML = "";
-            var currentUsername = $('#username').val(); 
-            var currentPhotoSticker = $('#photoSticker').val(); 
-            onlineUsers.forEach(function(user) {
-            	console.log(user);
-                if (user !== currentUsername) {
-                    var listItem = document.createElement("li");
-                    listItem.textContent = user;
-                    listItem.classList.add("user");
+				function handleOnlineUsersUpdate(onlineUsers) {
+					var onlineUsersList = document
+							.getElementById("onlineUsersList");
+					onlineUsersList.innerHTML = "";
+					var currentUsername = $('#username').val();
+					var currentPhotoSticker = $('#photoSticker').val();
+					onlineUsers
+							.forEach(function(user) {
+								console.log(user);
+								if (user !== currentUsername) {
+									var listItem = document.createElement("li");
+									listItem.textContent = user;
+									listItem.classList.add("user");
 
-                    listItem.setAttribute("data-username", user);
+									listItem
+											.setAttribute("data-username", user);
 
-                    // 添加一个容器来显示最后一条消息的内容
-                    var lastMessageContainer = document.createElement("div");
-                    lastMessageContainer.classList.add("last-message");
-                    listItem.appendChild(lastMessageContainer);
+									// 添加一个容器来显示最后一条消息的内容
+									var lastMessageContainer = document
+											.createElement("div");
+									lastMessageContainer.classList
+											.add("last-message");
+									listItem.appendChild(lastMessageContainer);
 
-                    // 获取用户的最后一条消息
-                    var lastMessage = getLastMessageForUser(user);
+									// 获取用户的最后一条消息
+									var lastMessage = getLastMessageForUser(user);
 
-                    if (lastMessage !== null) { 
-                        lastMessageContainer.textContent = lastMessage ? lastMessage.content : "";
-                    }
-                    
+									if (lastMessage !== null) {
+										lastMessageContainer.textContent = lastMessage ? lastMessage.content
+												: "";
+									}
 
-                    onlineUsersList.appendChild(listItem);
+									onlineUsersList.appendChild(listItem);
 
-                    listItem.addEventListener("click", function() {
-                        var receiver = user;
-                        onlineUsersList.querySelectorAll(".user").forEach(function(element) {
-                            element.classList.remove("selected-user");
-                        });
-                        listItem.classList.add("selected-user");
-                        window.selectedReceiver = receiver;
-                    });
-                }
-            });
-        }
+									listItem
+											.addEventListener(
+													"click",
+													function() {
+														var receiver = user;
+														onlineUsersList
+																.querySelectorAll(
+																		".user")
+																.forEach(
+																		function(
+																				element) {
+																			element.classList
+																					.remove("selected-user");
+																		});
+														listItem.classList
+																.add("selected-user");
+														window.selectedReceiver = receiver;
+													});
+								}
+							});
+				}
 
-        function getLastMessageForUser(username) {
-            var chatHistory = localStorage.getItem('chatHistory');
-            if (chatHistory) {
-                var messages = JSON.parse(chatHistory);
-                var userMessages = messages.filter(function(message) {
-                    return message.sender === username;
-                });
-                if (userMessages.length > 0) {
-                    return userMessages[userMessages.length - 1];
-                }
-            }
-            return null;
-        }
+				function getLastMessageForUser(username) {
+					var chatHistory = localStorage.getItem('chatHistory');
+					if (chatHistory) {
+						var messages = JSON.parse(chatHistory);
+						var userMessages = messages.filter(function(message) {
+							return message.sender === username;
+						});
+						if (userMessages.length > 0) {
+							return userMessages[userMessages.length - 1];
+						}
+					}
+					return null;
+				}
 
-        function updateLastMessageForUser(username, content, time) {
-            console.log("进步来是沙小");
+				function updateLastMessageForUser(username, content, time) {
+					console.log("进步来是沙小");
 
-            var onlineUsersList = document.getElementById("onlineUsersList");
-            var userItems = onlineUsersList.querySelectorAll(".user");
+					var onlineUsersList = document
+							.getElementById("onlineUsersList");
+					var userItems = onlineUsersList.querySelectorAll(".user");
 
-            userItems.forEach(function(userItem) {
-                var userItemUsername = userItem.getAttribute("data-username");
-                if (userItemUsername === username) {
-                    var lastMessageContainer = userItem.querySelector(".last-message");
-                    console.log(userItemUsername);
-                    lastMessageContainer.textContent = content;
-                    console.log(content);
-                }
-            });
-        }
+					userItems.forEach(function(userItem) {
+						var userItemUsername = userItem
+								.getAttribute("data-username");
+						if (userItemUsername === username) {
+							var lastMessageContainer = userItem
+									.querySelector(".last-message");
+							console.log(userItemUsername);
+							lastMessageContainer.textContent = content;
+							console.log(content);
+						}
+					});
+				}
 
-        function sendMsg(receiver) {
-            var message = $('#message').val();
-            var username = $('#username').val();
-            var receiver = window.selectedReceiver;
-            var sender = $('#message').val();
-            var currentTime = getCurrentTime();
-            var senderAvatar = $('#photoSticker').val();
+				function sendMsg(receiver) {
+					var message = $('#message').val();
+					var username = $('#username').val();
+					var receiver = window.selectedReceiver;
+					var sender = $('#message').val();
+					var currentTime = getCurrentTime();
+					var senderAvatar = $('#photoSticker').val();
 
-            var msgObj = {
-                "sender": username,
-                "receiver": receiver,
-                "content": message,
-                "time": currentTime,
-                "avatar": senderAvatar 
+					var msgObj = {
+						"sender" : username,
+						"receiver" : receiver,
+						"content" : message,
+						"time" : currentTime,
+						"avatar" : senderAvatar
 
-            };
-            var jsonString = JSON.stringify(msgObj);
-            var $content = $('#content');
-            $content.append('<div class="message right-float">' +
-                '<img class="avatar" src="' + senderAvatar  + '" alt="Avatar">' +
-                "我" + ': ' + message +
-                '<span class="message-time">' + currentTime + '</span>' +
-                '</div>');
+					};
+					var jsonString = JSON.stringify(msgObj);
+					var $content = $('#content');
+					$content
+							.append('<div class="message right-float">'
+									+ '<img class="avatar" src="' + senderAvatar  + '" alt="Avatar">'
+									+ "我" + ': ' + message
+									+ '<span class="message-time">'
+									+ currentTime + '</span>' + '</div>');
 
-            storeMessage(msgObj);
+					storeMessage(msgObj);
 
-            $('#message').val("");
+					$('#message').val("");
 
-            ws.send(jsonString);
+					ws.send(jsonString);
 
-            var scrollHeight = $('#chat-content')[0].scrollHeight;
-            $('#chat-content').scrollTop(scrollHeight);
+					var scrollHeight = $('#chat-content')[0].scrollHeight;
+					$('#chat-content').scrollTop(scrollHeight);
 
-        }
+				}
 
-        function getCurrentTime() {
-            var now = new Date();
-            var hours = now.getHours();
-            var minutes = now.getMinutes();
+				function getCurrentTime() {
+					var now = new Date();
+					var hours = now.getHours();
+					var minutes = now.getMinutes();
 
-            hours = hours < 10 ? '0' + hours : hours;
-            minutes = minutes < 10 ? '0' + minutes : minutes;
+					hours = hours < 10 ? '0' + hours : hours;
+					minutes = minutes < 10 ? '0' + minutes : minutes;
 
-            var period = hours >= 12 ? '下午' : '上午';
-            hours = hours > 12 ? hours - 12 : hours;
-            return period + ' ' + hours + '點' + ' ' + minutes + '分';
-        }
+					var period = hours >= 12 ? '下午' : '上午';
+					hours = hours > 12 ? hours - 12 : hours;
+					return period + ' ' + hours + '點' + ' ' + minutes + '分';
+				}
 
-        function storeMessage(message) {
-            var chatHistory = localStorage.getItem('chatHistory');
-            var messages = chatHistory ? JSON.parse(chatHistory) : [];
-            messages.push(message);
-            localStorage.setItem('chatHistory', JSON.stringify(messages));
-        }
+				function storeMessage(message) {
+					var chatHistory = localStorage.getItem('chatHistory');
+					var messages = chatHistory ? JSON.parse(chatHistory) : [];
+					messages.push(message);
+					localStorage.setItem('chatHistory', JSON
+							.stringify(messages));
+				}
 
-        function loadChatHistory() {
-            var chatHistory = localStorage.getItem('chatHistory');
-            if (chatHistory) {
-                var messages = JSON.parse(chatHistory);
-                messages.forEach(function(message) {
-                    var messageClass = message.sender === $('#username').val() ? 'right-float' : 'left-float';
-                    var senderName = message.sender === $('#username').val() ? '我' : message.sender;
-                    var avatar = (message.sender === $('#username').val()) ? $('#photoSticker').val() : message.avatar; // 使用对方的头像
+				function loadChatHistory() {
+					var chatHistory = localStorage.getItem('chatHistory');
+					if (chatHistory) {
+						var messages = JSON.parse(chatHistory);
+						messages
+								.forEach(function(message) {
+									var messageClass = message.sender === $(
+											'#username').val() ? 'right-float'
+											: 'left-float';
+									var senderName = message.sender === $(
+											'#username').val() ? '我'
+											: message.sender;
+									var avatar = (message.sender === $(
+											'#username').val()) ? $(
+											'#photoSticker').val()
+											: message.avatar; // 使用对方的头像
 
-                    var messageDiv = '<div class="message ' + messageClass + '">' +
-                        '<img class="avatar" src="' + avatar + '" alt="Avatar">' +
-                        senderName + ': ' + message.content +
-                        '<span class="message-time">' + message.time + '</span>' +
-                        '</div>';
-                    $('#content').append(messageDiv);
-                });
+									var messageDiv = '<div class="message ' + messageClass + '">'
+											+ '<img class="avatar" src="' + avatar + '" alt="Avatar">'
+											+ senderName
+											+ ': '
+											+ message.content
+											+ '<span class="message-time">'
+											+ message.time
+											+ '</span>'
+											+ '</div>';
+									$('#content').append(messageDiv);
+								});
 
-                var scrollHeight = $('#chat-content')[0].scrollHeight;
-                $('#chat-content').scrollTop(scrollHeight);
-            }
-        }
+						var scrollHeight = $('#chat-content')[0].scrollHeight;
+						$('#chat-content').scrollTop(scrollHeight);
+					}
+				}
 
-    } else {
-        alert("很抱歉，您的瀏覽器不支持 WebSocket！！！");
-    }
+			} else {
+				alert("很抱歉，您的瀏覽器不支持 WebSocket！！！");
+			}
 
-    // 表情符号功能
-    var emojis = ["😀", "😃", "😄", "😁", "😆", "😅", "🤣", "😂", "🙂", "🙃", "😎", "👍", "(●'◡'●)"];
-    var $emojiContainer = $('#emojiContainer');
+			// 表情符号功能
+			var emojis = [ "😀", "😃", "😄", "😁", "😆", "😅", "🤣", "😂",
+					"🙂", "🙃", "😎", "👍", "(●'◡'●)" ];
+			var $emojiContainer = $('#emojiContainer');
 
-    // Populate the emoji container with emojis
-    emojis.forEach(function(emoji) {
-        var $emoji = $('<span>').addClass('emoji').text(emoji);
-        $emojiContainer.append($emoji);
-    });
+			// Populate the emoji container with emojis
+			emojis.forEach(function(emoji) {
+				var $emoji = $('<span>').addClass('emoji').text(emoji);
+				$emojiContainer.append($emoji);
+			});
 
-    // Show/hide the emoji container when the button is clicked
-    $('#emojiButton').click(function() {
-        $emojiContainer.toggle();
-    });
+			// Show/hide the emoji container when the button is clicked
+			$('#emojiButton').click(function() {
+				$emojiContainer.toggle();
+			});
 
-    // Insert emoji into textarea
-    $emojiContainer.on('click', '.emoji', function() {
-        var emoji = $(this).text();
-        var $message = $('#message');
-        $message.val($message.val() + emoji);
-    });
+			// Insert emoji into textarea
+			$emojiContainer.on('click', '.emoji', function() {
+				var emoji = $(this).text();
+				var $message = $('#message');
+				$message.val($message.val() + emoji);
+			});
 
-    // Hide emoji container when clicking outside
-    $(document).click(function(event) {
-        if (!$(event.target).closest('#emojiButton, #emojiContainer').length) {
-            $emojiContainer.hide();
-        }
-    });
-});
-</script>
+			// Hide emoji container when clicking outside
+			$(document).click(
+					function(event) {
+						if (!$(event.target).closest(
+								'#emojiButton, #emojiContainer').length) {
+							$emojiContainer.hide();
+						}
+					});
+		});
+	</script>
 </body>
 </html>

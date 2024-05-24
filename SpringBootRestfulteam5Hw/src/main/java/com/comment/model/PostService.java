@@ -1,9 +1,12 @@
 package com.comment.model;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -19,7 +22,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.member.model.MemberBean;
-
+import com.fasterxml.jackson.databind.MappingIterator;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.csv.CsvMapper;
+import com.fasterxml.jackson.dataformat.csv.CsvSchema;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 @Service
 @Transactional
@@ -160,5 +168,60 @@ public class PostService {
     // 查询附带照片的评价
     public Page<Post> findPostsByGoodIdWithPhotos(Integer goodId, Pageable pageable) {
         return pRepository.productPostsByGoodIdWithPhotos(goodId, pageable);
+    }
+    
+
+    public byte[] exportToCSV(List<Post> posts) {
+        try {
+            CsvMapper mapper = new CsvMapper();
+            CsvSchema schema = mapper.schemaFor(Post.class).withHeader();
+
+            StringWriter writer = new StringWriter();
+            PrintWriter csvWriter = new PrintWriter(writer);
+
+            List<String> header = Arrays.asList("commentid", "commentcontent", "productphoto", "commenttime", "lastmodifiedtime", "buyerrate", "replayconetnt", "replaytime", "sellerrate", "repliedcommentid");
+            csvWriter.println(String.join(",", header));
+
+            for (Post post : posts) {
+                List<String> rowData = new ArrayList<>();
+
+                rowData.add(String.valueOf(post.getCommentid())); 
+                rowData.add(post.getCommentcontent() != null ? post.getCommentcontent() : "");
+                rowData.add(post.getProductphoto() != null ? post.getProductphoto() : "");
+                rowData.add(post.getCommenttime() != null ? post.getCommenttime().toString() : "");
+                rowData.add(post.getLastmodifiedtime() != null ? post.getLastmodifiedtime().toString() : "");
+                rowData.add(post.getBuyerrate() != null ? String.valueOf(post.getBuyerrate()) : "");
+                rowData.add(post.getReplayconetnt() != null ? post.getReplayconetnt() : "");
+                rowData.add(post.getReplaytime() != null ? post.getReplaytime().toString() : "");
+                rowData.add(post.getSellerrate() != null ? String.valueOf(post.getSellerrate()) : "");
+                rowData.add(post.getRepliedcommentid() != null ? String.valueOf(post.getRepliedcommentid()) : "");
+
+                csvWriter.println(String.join(",", rowData));
+            }
+
+            csvWriter.close();
+            return writer.toString().getBytes();
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to export data to CSV", e);
+        }
+    }
+
+    public byte[] exportToJSON(List<Post> posts) {
+        try {
+        	ObjectMapper mapper = new ObjectMapper();
+            mapper.registerModule(new JavaTimeModule()); 
+            return mapper.writeValueAsBytes(posts);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to export data to JSON", e);
+        }
+    }
+
+    public byte[] exportToXML(List<Post> posts) {
+        try {
+            XmlMapper mapper = new XmlMapper();
+            return mapper.writeValueAsBytes(posts);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to export data to XML", e);
+        }
     }
 }

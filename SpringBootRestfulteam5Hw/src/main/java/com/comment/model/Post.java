@@ -4,8 +4,9 @@ package com.comment.model;
 
 
 
-import org.springframework.stereotype.Component;	
+import org.springframework.stereotype.Component;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.member.model.MemberBean;
 import com.sean.model.Orders;
 
@@ -44,10 +45,12 @@ public class Post {
 	@Column(name = "repliedcommentid")
 	private Integer repliedcommentid;
 	
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name="fk_userid")
 	private MemberBean member;
 	
+	@JsonIgnore
 	@OneToOne
 	@JoinColumn(name="orderid")
 	private Orders orders;

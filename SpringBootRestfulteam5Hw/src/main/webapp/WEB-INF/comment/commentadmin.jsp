@@ -24,6 +24,27 @@
 	href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/css/lightbox.min.css">
 <script
 	src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/js/lightbox.min.js"></script>
+	<style>
+	.export-buttons {
+    margin-bottom: 20px;
+}
+
+.export-buttons button {
+    background-color: #007bff;
+    border: none;
+    color: #fff;
+    padding: 10px 20px;
+    margin-right: 10px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.export-buttons button:hover {
+    background-color: #0056b3;
+}
+	
+	</style>
 </head>
 <body class="sb-nav-fixed">
 <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
@@ -74,6 +95,11 @@
 							<i class="fas fa-table me-1"></i>評論表
 						</div>
 						<div class="card-body">
+						 <div class="export-buttons">
+                            <button onclick="exportData('csv');">匯出 CSV</button>
+                            <button onclick="exportData('json');">匯出 JSON</button>
+                            <button onclick="exportData('xml');">匯出 XML</button>
+                        </div>
 							<table id="datatablesSimple">
 								<thead>
 									<tr>
@@ -187,6 +213,11 @@
 	    });
 	}
 		
+	</script>
+	<script>
+	function exportData(format) {
+        window.location.href = `/commentadmin/export?format=` + format;
+    }
 	</script>
 </body>
 </html>

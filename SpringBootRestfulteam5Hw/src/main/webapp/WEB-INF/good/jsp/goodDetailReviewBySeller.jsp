@@ -39,7 +39,7 @@
                                 <div class="row g-4">
                                     <div class="col-lg-6">
                                         <!-- 圖片輪播功能 -->
-                                        <div class="your-class">
+                                        <div class="owl-carousel">
                                             <div>
                                                 <img class="img-fluid w-100" src="${Good.titleImage}"
                                                     alt="${Good.titleImage}" style="height: 400px;">
@@ -53,7 +53,7 @@
                                             </c:forEach>
                                             <c:forEach var="j" begin="0" end="${GoodFormatImagePathNumber}" step="1"
                                                 items="${GoodFormatImagePath}" varStatus="loop">
-                                                <div>
+                                                <div data-hash="${loop.index+1}">
                                                     <img class="img-fluid w-100" src="${j.goodImagePath}"
                                                         alt="${j.goodImagePath}" style="height: 400px;">
                                                 </div>
@@ -85,17 +85,20 @@
                                         </h5> <!-- 商品價格(以範圍表示) -->
                                         <div class="row row-cols-2">
                                             <c:forEach var="j" begin="0" end="${GoodFormatNumber}" step="1"
-                                                items="${GoodFormat}" varStatus="loop">
+                                                items="${GoodFormatCarouslDtoList}" varStatus="loop">
                                                 <div class="col">
-                                                    <button
-                                                        class="btn btn-outline-primary round-pill CategoryItem w-100 mb-1">
-                                                        <img src="${j.goodImagePath}" alt="${j.goodImagePath}"
-                                                            style="width: 20px;height: 20px;">
-                                                        <span>${j.goodSize}</span>
-                                                        <span hidden class="CategoryPrice">${j.goodPrice}</span>
-                                                        <span hidden class="CategoryNumber">${j.goodsStock}</span>
-                                                        <span hidden class="formatID">${j.good.goodsID}</span>
-                                                    </button>
+                                                    <!-- 點擊規格表按鈕影響輪播圖片 -->
+                                                    <a class="button secondary url" href="#${j.index}"><button
+                                                            class="btn btn-outline-primary round-pill CategoryItem w-100 mb-1">
+                                                            <img src="${j.formatImagePath}" alt="${j.formatImagePath}"
+                                                                style="width: 20px; height: 20px;">
+                                                            <span class="CategorySize">${j.formatSize}</span>
+                                                            <span hidden class="CategoryPrice">${j.formatPrice}</span>
+                                                            <span hidden class="CategoryNumber">${j.formatStock}</span>
+                                                            <span hidden class="formatID">${j.formatID}</span>
+
+                                                        </button></a>
+
                                                 </div>
                                             </c:forEach>
                                         </div>
@@ -252,7 +255,13 @@
                 <script src="../../frontjs/main.js"></script>
                 <script>
                     $('.your-class').slick();
-
+                    $('.owl-carousel').owlCarousel({
+                        loop: true,
+                        margin: 10,
+                        nav: true,
+                        loop: false,
+                        items: 1
+                    })
                     $('.CategoryItem').click(function () {//取得對應規格編號
                         if ($('#formatpriceremaining').prop("hidden", true)) {
                             $('#formatpriceremaining').prop("hidden", false)

@@ -569,7 +569,36 @@ public class GoodController {
 			goodformatimage.setGoodImagePath(item);
 			goodformatimagelist.add(goodformatimage);
 		}
-
+//
+		int count1 = 1;
+		List<GoodFormatICarouselDto> goodformatcarousldtolist = new ArrayList();
+		for (String item : distinctFormatImage) {
+			GoodFormatImageDto goodformatimage = new GoodFormatImageDto();
+			goodformatimage.setGoodImagePath(item);
+			goodformatimagelist.add(goodformatimage);
+			//透過圖片路徑找其他資料
+			List<GoodFormat> test= gfService.getFormatByImage(item);
+			for(GoodFormat testitem:test) {
+				String dtoformatimagepath = testitem.getGoodImagePath();
+				String dtoformatsize = testitem.getGoodSize();
+				Integer dtoformatprice = testitem.getGoodPrice();
+				Integer dtoformatstock = testitem.getGoodsStock();
+				Integer dtoformatID = testitem.getFormatID();
+				Integer index = count1;
+				//
+				GoodFormatICarouselDto goodformatcarousldto= new GoodFormatICarouselDto();
+				goodformatcarousldto.setFormatID(dtoformatID);
+				goodformatcarousldto.setFormatImagePath(dtoformatimagepath);
+				goodformatcarousldto.setFormatPrice(dtoformatprice);
+				goodformatcarousldto.setFormatSize(dtoformatsize);
+				goodformatcarousldto.setFormatStock(dtoformatstock);
+				goodformatcarousldto.setIndex(index);
+				goodformatcarousldtolist.add(goodformatcarousldto);
+			}
+			count1++;
+		}
+		//
+		m.addAttribute("GoodFormatCarouslDtoList", goodformatcarousldtolist);
 		m.addAttribute("Good", good);
 		m.addAttribute("GoodFormat", byIDOrderByFormatImage);
 		m.addAttribute("GoodFormatNumber", byIDOrderByFormatImage.size());

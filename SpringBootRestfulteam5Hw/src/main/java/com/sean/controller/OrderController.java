@@ -133,6 +133,8 @@ public class OrderController {
 		carItem.setPrice(productPrice);
 		carItem.setQuantity(quantity);
 		cService.insertToShopCar(carItem);
+		Integer carItemCount = cService.carItemCount(member);
+		session.setAttribute("carItemCount", carItemCount);	
 		return "good/jsp/EZBuyindex";
 	}
 

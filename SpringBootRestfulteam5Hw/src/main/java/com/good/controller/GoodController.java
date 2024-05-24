@@ -1949,7 +1949,9 @@ public class GoodController {
 		cartItem.setPrice(productPrice);
 		cartItem.setQuantity(quantity);
 		cService.insertToShopCar(cartItem);
-		return "Order/jsp/Product";
+		Integer carItemCount = cService.carItemCount(member);
+		session.setAttribute("carItemCount", carItemCount);	
+		return "good/jsp/EZBuyindex";
 	}
 	
 }

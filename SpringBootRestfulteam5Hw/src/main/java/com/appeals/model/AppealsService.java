@@ -46,9 +46,22 @@ public class AppealsService {
 		
 		return null;
 	}
+    
+    public Appeals selectOne1(int appealsId) {
+        Optional<Appeals> optionalAppeals = aRepos.findById(appealsId);
+        
+        if (optionalAppeals.isPresent()) {
+            return optionalAppeals.get();
+        }
+        
+        return null;
+    }
+
 
     // 查詢全部
     public List<Appeals> getAll() {
         return aRepos.findAll();
     }
+    
+    
 }

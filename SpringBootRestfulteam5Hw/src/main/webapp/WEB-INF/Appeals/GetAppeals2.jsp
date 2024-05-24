@@ -1,54 +1,46 @@
-<%@page import="com.appeals.model.Appeals"%>
+
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<!DOCTYPE html> 
-<html>
-
+	pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<meta charset="utf-8" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-        <meta name="description" content="" />
-        <meta name="author" content="" />
-<title>申訴資料</title>
-<link href="/css/styles.css" rel="stylesheet" />
-        <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
-<style>
-        #queryButton {
-            background-color: #007BFF; /* 按鈕的主色調 */
-            color: white; /* 按鈕文字顏色 */
-            border: none; /* 移除預設邊框 */
-            padding: 10px 20px; /* 內邊距 */
-            font-size: 16px; /* 字體大小 */
-            border-radius: 5px; /* 邊框圓角 */
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 陰影效果 */
-            cursor: pointer; /* 鼠標指針變成手狀 */
-            transition: background-color 0.3s, box-shadow 0.3s; /* 添加過渡效果 */
-        }
+    <meta charset="utf-8">
+    <title>申訴資料</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="" name="keywords">
+    <meta content="" name="description">
 
-        #queryButton:hover {
-            background-color: #0056b3; /* 懸停時的背景色 */
-            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15); /* 懸停時的陰影效果 */
-        }
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Raleway:wght@600;800&display=swap"
+        rel="stylesheet">
 
-        #queryButton:active {
-            background-color: #004085; /* 點擊時的背景色 */
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* 點擊時的陰影效果 */
-        }
-    </style>
+    <!-- Icon Font Stylesheet -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link href="/frontlib/lightbox/css/lightbox.min.css" rel="stylesheet">
+    <link href="/frontlib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="/frontcss/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Template Stylesheet -->
+    <link href="/frontcss/style1.css" rel="stylesheet">
 </head>
+<body>
+    				<%@ include file="../FrontDeskNav.jsp" %>
 
-<body class="bg-primary">
-        <div id="layoutAuthentication">
-            <div id="layoutAuthentication_content">
-                <main>
-                    <div class="container">
-                        <div class="row justify-content-center">
-                            <div class="col-lg-5">
-                                <div class="card shadow-lg border-0 rounded-lg mt-5">
-                                    <div class="card-header"><h2 class="text-center font-weight-light my-4">查詢單筆資料</h2></div>
-                                    <div class="card-body">
+
+    <div class="container-fluid py-5">
+        <div class="container py-5">
+            <h1 class="mb-4">申訴資料</h1>
                                         <form>
+                                        
                                             <div class="form-floating mb-3">
                                                 <input class="form-control" id="inputEmail" type="text" readonly  value="${appeal.appeals_id}" />
                                                 <label for="inputEmail">申訴編號</label>
@@ -90,38 +82,43 @@
 <!--                                                 <a class="btn btn-primary" href="index.html">Login</a> -->
 <!--                                             </div> -->
                                         </form>
-                                    </div>
-                                    <div class="card-footer text-center py-3">
-                                        <button id="queryButton">查詢所有申訴</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </main>
-            </div>
-            <div id="layoutAuthentication_footer">
-                <footer class="py-4 bg-light mt-auto">
-                    <div class="container-fluid px-4">
-                        <div class="d-flex align-items-center justify-content-between small">
-                            <div class="text-muted">Copyright &copy; Your Website 2023</div>
-                            <div>
-                                <a href="#">Privacy Policy</a>
-                                &middot;
-                                <a href="#">Terms &amp; Conditions</a>
-                            </div>
-                        </div>
-                    </div>
-                </footer>
-            </div>
-        </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-        <script src="/js/scripts.js"></script>
-     <script>
-    document.getElementById("queryButton").onclick = function() {
-        window.location.href = "/appeals/getAll";
-    }; 
-</script>
-</body>
+                                        
+              
+                                   <div class="row g-4 text-center align-items-center justify-content-center pt-4">
+                            <button id="queryButton" type="submit"
+                                class="btn border-secondary py-3 px-4 text-uppercase w-100 text-primary"  value="send">返回首頁</button>
+                                
 
+                        </div>
+    </div>
+    <!-- Checkout Page End -->
+ 
+
+	        				<%@ include file="../FrontDeskFooter.jsp" %>
+	 
+	 
+	<!-- Back to Top -->
+    <a href="#" class="btn btn-primary border-3 border-primary rounded-circle back-to-top"><i
+            class="fa fa-arrow-up"></i></a>
+
+
+    <!-- JavaScript Libraries -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+   <script src="/frontlib/easing/easing.min.js"></script>
+    <script src="/frontlib/waypoints/waypoints.min.js"></script>
+    <script src="/frontlib/lightbox/js/lightbox.min.js"></script>
+    <script src="/frontlib/owlcarousel/owl.carousel.min.js"></script>
+
+    <!-- Template Javascript -->
+    <script src="/frontjs/main.js"></script>
+
+	<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+	<script>
+	document.getElementById("queryButton").onclick = function() {
+        window.location.href = "/Crudindex";
+    }; 
+	</script>
+
+</body>
 </html>

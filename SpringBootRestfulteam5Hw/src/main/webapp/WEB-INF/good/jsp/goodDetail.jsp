@@ -203,7 +203,7 @@
 														</form>
 													</div>
 													<div class="col">
-														<form action="" id="cartDetail">
+														<form action="inserttoshopcar.controller" id="cartDetail">
 															<!-- 進入購物車(透過ajax將值傳到後端) -->
 															<input type="text" class="form-control" id="cartNumber"
 																name="quantity" hidden>

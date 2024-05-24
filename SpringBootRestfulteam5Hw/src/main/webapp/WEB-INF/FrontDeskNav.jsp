@@ -50,7 +50,7 @@
 							<i class="fas fa-search"></i>
 						</button>
 					</form>
-					<a href="shopcar.controller" class="position-relative me-4 my-auto ms-5"> <i class="fa fa-shopping-bag fa-2x text-secondary"></i> <span class="position-absolute bg-white rounded-circle d-flex align-items-center justify-content-center text-dark px-1 ${carItemCount == 0 ? 'd-none' : ''}" style="top: -5px; left: 15px; height: 20px; min-width: 20px;">${carItemCount}</span>
+					<a href="shopcar.controller" class="position-relative me-4 my-auto ms-5"> <i class="fa fa-shopping-bag fa-2x text-secondary"></i> <span class="position-absolute bg-white rounded-circle d-flex align-items-center justify-content-center text-dark px-1 ${carItemCount > 0 ? '' : 'd-none'}" style="top: -5px; left: 15px; height: 20px; min-width: 20px;">${carItemCount}</span>
 					</a>
 					<div class="my-auto nav-item dropdown">
 						<button class="btn dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false" style="color: #ffb524">
@@ -66,7 +66,7 @@
 					</div>
 					<div class="dropdown position-relative my-auto">
 						<button class="btn position-relative dropdown-toggle" type="button" id="notificationsDropdown" data-bs-toggle="dropdown" aria-expanded="false" style="color: #ffb524">
-							<i class="fa-solid fa-bell fa-2x"></i> <span class="position-absolute bg-white rounded-circle d-flex align-items-center justify-content-center text-dark px-1 ${count == 0 ? 'd-none' : ''}" style="top: 2px; left: 28px; height: 20px; min-width: 20px;">${count}</span>
+							<i class="fa-solid fa-bell fa-2x"></i> <span class="position-absolute bg-white rounded-circle d-flex align-items-center justify-content-center text-dark px-1 ${count > 0  ? '' : 'd-none'}" style="top: 2px; left: 28px; height: 20px; min-width: 20px;">${count}</span>
 						</button>
 						<div class="dropdown-menu dropdown-menu-end" aria-labelledby="notificationsDropdown">
 							<ul class="list-group" style="max-height: 615px; overflow-y: auto;">

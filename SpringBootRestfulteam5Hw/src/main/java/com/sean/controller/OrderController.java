@@ -118,8 +118,8 @@ public class OrderController {
 		return "Order/jsp/Product";
 	}
 
-	@PostMapping("inserttoshopcar.controller")
-	public String insertToShopCar(@RequestParam("productId") Integer productId,
+	@GetMapping("inserttoshopcar.controller")
+	public String insertToShopCar(@RequestParam("ProductId") Integer productId,
 		@RequestParam("quantity") Integer quantity, @RequestParam("productPrice") Integer productPrice) {
 		MemberBean memberb = (MemberBean) session.getAttribute("member");
 		Integer memberId = memberb.getSid();
@@ -133,7 +133,9 @@ public class OrderController {
 		carItem.setPrice(productPrice);
 		carItem.setQuantity(quantity);
 		cService.insertToShopCar(carItem);
-		return "Order/jsp/Product";
+		Integer carItemCount = cService.carItemCount(member);
+		session.setAttribute("carItemCount", carItemCount);	
+		return "good/jsp/EZBuyindex";
 	}
 
 	@PutMapping("updateQuantity.controller")
@@ -345,6 +347,13 @@ public class OrderController {
 			return "redirect:/ecpayCheckout?aioCheckOutALLForm="
 					+ URLEncoder.encode(aioCheckOutALLForm, StandardCharsets.UTF_8);
 		}
+		List<Notifications> notifications = nService.findByRecipientIdOrderBySendTimeDesc(member);
+		Integer count = nService.noReadCounts(member);
+		session.setAttribute("count", count);
+		session.setAttribute("notifications", notifications);
+		Integer carItemCount = cService.carItemCount(member);
+		session.setAttribute("carItemCount", carItemCount);	
+		m.addAttribute("memberId", memberId);
 		
 		return "good/jsp/EZBuyindex";
 	}

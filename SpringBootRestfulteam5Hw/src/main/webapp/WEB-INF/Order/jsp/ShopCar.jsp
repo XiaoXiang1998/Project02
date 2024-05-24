@@ -139,6 +139,7 @@ input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer
                             }).then((result) => {
                                 if (result.isConfirmed) {
                                     deleteCartItem(itemId);
+                                    location.reload();
                                 }
                             });
                         });
@@ -156,7 +157,7 @@ input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer
                                         showConfirmButton: true,
                                     }).then((result) => {
                                         if (result.isConfirmed) {
-                                            location.reload();
+                                            window.location.href="shoppcar.controller";
                                         }
                                     });
                                 },

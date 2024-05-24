@@ -73,7 +73,6 @@ public class GoodService {
 	public Page<GoodsBean2> findGoodByPageDiscontinue(Pageable pageable) {
 		return goodRepos.findGoodByPageDiscontinue(pageable);
 	}
-
 	//
 	public Page<GoodsBean2> findGoodByPageAndNameOnMarket(Pageable pageable, String goodName) {
 		return goodRepos.findGoodByPageAndNameOnMarket(pageable, goodName);
@@ -86,8 +85,13 @@ public class GoodService {
 	public Page<GoodsBean2> findGoodByPageAndNameAll(Pageable pageable, String goodName) {
 		return goodRepos.findGoodByPageAndNameAll(goodName, pageable);
 	}
-
-	// 從賣家中，從上架、下架、全部商品中查詢商品名稱
+	public Page<GoodsBean2> findGoodByPageBAN(Pageable pageable){
+		return goodRepos.findGoodByPageBAN(pageable);
+	}
+	public Page<GoodsBean2> findGoodByPageAndNameBAN(Pageable pageable,String goodName){
+		return goodRepos.findGoodByPageAndNameBAN(pageable, goodName);
+	}
+	// 從賣家中，從上架、下架、全部商品、違規商品中查詢商品名稱
 	public Page<GoodsBean2> findSellerGoodByPageOnMarket(Pageable pageable, Integer sellerID) {
 		return goodRepos.findSellerGoodByPageOnMarket(pageable, sellerID);
 	}
@@ -112,6 +116,15 @@ public class GoodService {
 
 	public Page<GoodsBean2> findSellerGoodByPageAndNameAll(Pageable pageable, Integer sellerID, String goodNameString) {
 		return goodRepos.findSellerGoodByPageAndNameAll(pageable, sellerID, goodNameString);
+	}
+
+	public Page<GoodsBean2> findSellerGoodByPageBAN(Pageable pageable, Integer sellerID) {
+		return goodRepos.findSellerGoodByPageBAN(pageable, sellerID);
+	}
+
+	public Page<GoodsBean2> findSellerGoodByPageAndNameBAN(Pageable pageable, Integer sellerID,
+			String goodNameString) {
+		return goodRepos.findSellerGoodByPageAndNameBAN(pageable, sellerID, goodNameString);
 	}
 
 	// 管理者取七天前商品上架的數量

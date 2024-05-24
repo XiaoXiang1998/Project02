@@ -46,29 +46,7 @@
                 <div class="container-fluid">
                     <span id="sellerID" hidden>${sellerID}</span>
                 </div>
-                <!-- Cart Page Start -->
 
-                <!-- <div class="table-responsive">
-                <div id="goodstatus">
-                    <i class="fas fa-table me-1"></i>
-                    <span>全部商品</span>
-                </div>
-                <button class="btn btn-outline-primary goodstatuschoose" type="button">上架商品</button>
-                <button class="btn btn-outline-primary goodstatuschoose" type="button">下架商品</button>
-                <button class="btn btn-outline-primary goodstatuschoose" type="button">全部商品</button>
-                <input type="text" name="SearchGood" class="ms-5" placeholder="搜尋商品" id="SearchGood">
-                <button class="btn btn-outline-primary" id="SearchGoodBtn" type="button"><i
-                        class="fas fa-search"></i></button>
-                <span id="errmsg" style="color: red;"></span>
-                <p id="searchName"></p>
-                <table id="mytable">
-
-                </table>
-                <div id="PageList">
-
-                </div>
-            </div> -->
-                <!--  -->
                 <div class="mt-5">
 
                     <div class="container-fluid px-4 mt-5">
@@ -86,8 +64,10 @@
                                 <span>新增商品</span>
                             </div>
                             <div class="card-body">
+                                <!-- 增加違規商品 -->
                                 <button class="btn btn-outline-primary goodstatuschoose" type="button">上架商品</button>
                                 <button class="btn btn-outline-primary goodstatuschoose" type="button">下架商品</button>
+                                <button class="btn btn-outline-primary goodstatuschoose" type="button">違規商品</button>
                                 <button class="btn btn-outline-primary goodstatuschoose" type="button">全部商品</button>
                                 <input type="text" name="SearchGood" class="ms-5" placeholder="搜尋商品" id="SearchGood">
                                 <button class="btn btn-outline-primary" id="SearchGoodBtn" type="button"><i
@@ -209,42 +189,73 @@
                                         $('#mytable').prepend('<tr><td>No Result</td></tr>');//將table內的資料清空
                                     }
                                     else {
-
                                         $.each(inputdata, function (i, n) {
-                                            var statuscontent;
-                                            if (n.status == 0) {
+                                            var statuscontent;console.log("n.status = "+n.status);
+                                            // 
+                                            switch (n.status) {
+                                                case 0:
                                                 statuscontent = `<div class="form-check">
-                                                            <input class="form-check-input" type="radio" name="flexRadioDefault`+ i + `" value="YES">
+                                                                    <input class="form-check-input" type="radio" name="flexRadioDefault`+ i + `" value="YES">
+                                                                    <label class="form-check-label">
+                                                                        上架
+                                                                    </label>
+                                                                </div>
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input" type="radio" name="flexRadioDefault`+ i + `" value="NO" checked>
+                                                                    <label class="form-check-label">
+                                                                        下架
+                                                                    </label>
+                                                                </div>
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input" type="radio" name="flexRadioDefault`+ i + `" value="BAD" disabled>
+                                                                    <label class="form-check-label">
+                                                                        違禁
+                                                                    </label>
+                                                                </div>`;
+                                                    break;
+                                                case 1:
+                                                statuscontent = `<div class="form-check">
+                                                                    <input class="form-check-input" type="radio" name="flexRadioDefault`+ i + `" value="YES" checked>
+                                                                    <label class="form-check-label">
+                                                                        上架
+                                                                    </label>
+                                                                </div>
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input" type="radio" name="flexRadioDefault`+ i + `" value="NO">
+                                                                    <label class="form-check-label">
+                                                                        下架
+                                                                    </label>
+                                                                </div>
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input" type="radio" name="flexRadioDefault`+ i + `" value="BAD" disabled>
+                                                                    <label class="form-check-label">
+                                                                        違禁
+                                                                    </label>
+                                                                </div>`;
+                                                    break;
+                                                case -1:
+                                                statuscontent = `<div class="form-check"> 
+                                                            <input class="form-check-input" type="radio" name="flexRadioDefault`+ i + `" value="YES" disabled>
                                                             <label class="form-check-label">
                                                                 上架
                                                             </label>
                                                         </div>
                                                         <div class="form-check">
-                                                            <input class="form-check-input" type="radio" name="flexRadioDefault`+ i + `" value="NO" checked>
+                                                            <input class="form-check-input" type="radio" name="flexRadioDefault`+ i + `" value="NO" disabled>
                                                             <label class="form-check-label">
                                                                 下架
                                                             </label>
-                                                        </div>`;
-                                            }
-                                            else {
-                                                if (n.status == 1) {
-                                                    statuscontent = `<div class="form-check">
-                                                            <input class="form-check-input" type="radio" name="flexRadioDefault`+ i + `" value="YES" checked>
+                                                        </div><div class="form-check">
+                                                            <input class="form-check-input" type="radio" name="flexRadioDefault`+ i + `" value="BAD" checked disabled>
                                                             <label class="form-check-label">
-                                                                上架
-                                                            </label>
-                                                        </div>
-                                                        <div class="form-check">
-                                                            <input class="form-check-input" type="radio" name="flexRadioDefault`+ i + `" value="NO">
-                                                            <label class="form-check-label">
-                                                                下架
+                                                                違禁
                                                             </label>
                                                         </div>`;
-                                                }
-                                                else {
-                                                    console.log("n.status = " + n.status);
-                                                }
+                                                    break;
+                                                default:
+                                                    console.log("n.status = "+n.status);
                                             }
+                                            // 
                                             Basicinfo[i] = [n.goodsID, n.goodsName, `<img src="` + n.titleImage + `" alt="" class="w-100 img-fluid" style="width: 150px;height: 100px;">`, n.goodsType, n.launchDate, n.brand, n.shipmentPlace,
                                                 statuscontent,
                                                 `<button type="button" class="btn btn-md rounded-circle bg-light border modifyGood"><i class="fa-solid fa-wrench"></i></button>`,
@@ -253,7 +264,7 @@
 
                                         console.log(Basicinfo);
                                         let newData = {
-                                            headings: ["商品編號", "商品名稱", "封面照", "商品種類", "上架日期", "品牌", "出發地", "上下架狀態", "修改商品", "刪除"],
+                                            headings: ["商品編號", "商品名稱", "封面照", "商品種類", "上架日期", "品牌", "出發地", "商品狀態", "修改商品", "刪除"],
                                             data: Basicinfo,
                                         };
                                         // let columns = tabledata.columns; console.log(columns);
@@ -279,9 +290,11 @@
                                         arrtarget[i].innerHTML = "";
                                     })
                                     $.each(inputdata, function (i, n) {
-                                        var statuscontent;
-                                        if (n.status == 0) {
-                                            statuscontent = `<td><div class="form-check">
+                                        var statuscontent;console.log("n.status = "+n.status);
+                                        // 
+                                        switch (n.status) {
+                                                case 0:
+                                                statuscontent = `<div class="form-check">
                                                             <input class="form-check-input" type="radio" name="flexRadioDefault`+ i + `" value="YES">
                                                             <label class="form-check-label">
                                                                 上架
@@ -292,33 +305,56 @@
                                                             <label class="form-check-label">
                                                                 下架
                                                             </label>
-                                                        </div></td>`;
-                                        }
-                                        else {
-                                            if (n.status == 1) {
-                                                statuscontent = `<td><div class="form-check">
-                                                            <input class="form-check-input" type="radio" name="flexRadioDefault`+ i + `" value="YES" checked>
+                                                        </div>
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="radio" name="flexRadioDefault`+ i + `" value="BAD" disabled>
+                                                            <label class="form-check-label">
+                                                                違禁
+                                                            </label>
+                                                        </div>`;
+                                                    break;
+                                                case 1:
+                                                statuscontent = `<div class="form-check">
+                                                                    <input class="form-check-input" type="radio" name="flexRadioDefault`+ i + `" value="YES" checked>
+                                                                    <label class="form-check-label">上架</label>
+                                                                </div>
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="radio" name="flexRadioDefault`+ i + `" value="NO">
+                                                            <label class="form-check-label">下架</label>
+                                                        </div>
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="radio" name="flexRadioDefault`+ i + `" value="BAD" disabled>
+                                                            <label class="form-check-label">違禁</label>
+                                                        </div>`;
+                                                    break;
+                                                case -1:
+                                                statuscontent = `<div class="form-check">
+                                                            <input class="form-check-input" type="radio" name="flexRadioDefault`+ i + `" value="YES" disabled>
                                                             <label class="form-check-label">
                                                                 上架
                                                             </label>
                                                         </div>
                                                         <div class="form-check">
-                                                            <input class="form-check-input" type="radio" name="flexRadioDefault`+ i + `" value="NO">
+                                                            <input class="form-check-input" type="radio" name="flexRadioDefault`+ i + `" value="NO" disabled>
                                                             <label class="form-check-label">
                                                                 下架
                                                             </label>
-                                                        </div></td>`;
+                                                        </div><div class="form-check">
+                                                            <input class="form-check-input" type="radio" name="flexRadioDefault`+ i + `" value="BAD" checked disabled>
+                                                            <label class="form-check-label">
+                                                                違禁
+                                                            </label>
+                                                        </div>`;
+                                                    break;
+                                                default:
+                                                    console.log("n.status = "+n.status);
                                             }
-                                            else {
-                                                console.log("n.status = " + n.status);
-                                            }
-                                        }
-                                        //
+                                        
                                         let insertcontent = `<td>` + n.goodsID + `</td><td>` + n.goodsName + `</td><td>` + `<img src="` + n.titleImage + `" alt="" class="w-100 img-fluid" style="width: 150px;height: 100px;">` +
                                             `</td><td>` + n.goodsType + `</td><td>` + n.launchDate + `</td><td>` + n.brand + `</td><td>` + n.shipmentPlace +
-                                            `</td>`;
+                                            `</td><td>`;
                                         insertcontent = insertcontent + statuscontent +
-                                            `<td>` +
+                                            `</td><td>` +
                                             `<button type="button" class="btn btn-md rounded-circle bg-light border modifyGood"><i class="fa-solid fa-wrench"></i></button>` +
                                             `</td><td>` +
                                             `<button type="button" class="btn btn-md rounded-circle bg-light border deleteGood"><i class="fa fa-times text-danger"></i></button></td>`;

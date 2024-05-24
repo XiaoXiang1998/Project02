@@ -233,9 +233,9 @@
 	var myLineChart = new Chart(ctx, {
 	  type: 'line',
 	  data: {
-	    labels: [<c:forEach var="monthLabel" items="${monthOrdersMap.keySet()}">${monthLabel},</c:forEach>],
+	    labels: [<c:forEach var="monthLabel" items="${monthOrdersMap.keySet()}">${monthLabel}+"月",</c:forEach>],
 	    datasets: [{
-	      label: "Orders Count",
+	      label: "訂單數量",
 	      lineTension: 0.3,
 	      backgroundColor: "rgba(2,117,216,0.2)",
 	      borderColor: "rgba(2,117,216,1)",
@@ -282,9 +282,9 @@
 	var myLineChart = new Chart(ctx, {
 	  type: 'bar',
 	  data: {
-	    labels: [<c:forEach var="monthLabel" items="${monthOrdersPrice.keySet()}">${monthLabel},</c:forEach>],
+	    labels: [<c:forEach var="monthLabel" items="${monthOrdersPrice.keySet()}">${monthLabel}+"月",</c:forEach>],
 	    datasets: [{
-	      label: "Revenue",
+	      label: "金額(NTD)",
 	      backgroundColor: "rgba(2,117,216,1)",
 	      borderColor: "rgba(2,117,216,1)",
 	      data: [<c:forEach var="ordersPrice" items="${monthOrdersPrice.values()}">${ordersPrice},</c:forEach>],

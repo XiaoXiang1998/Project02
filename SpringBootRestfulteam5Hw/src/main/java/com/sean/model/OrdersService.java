@@ -8,6 +8,7 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.jdbc.support.lob.AbstractLobHandler;
 import org.springframework.stereotype.Service;
 
 import com.member.model.MemberBean;
@@ -85,8 +86,7 @@ public class OrdersService {
 		obj.setTotalAmount(totalAmount);
 		obj.setTradeDesc("test Description");
 		obj.setItemName(itemName);
-//		obj.setReturnURL("http://localhost:8081/goindex.controller");
-//		obj.setClientBackURL("http://localhost:8081/goindex.controller");
+
 		obj.setReturnURL("http://localhost:8081/EZBuyIndex");
 		obj.setClientBackURL("http://localhost:8081/EZBuyIndex");
 		obj.setNeedExtraPaidInfo("N");

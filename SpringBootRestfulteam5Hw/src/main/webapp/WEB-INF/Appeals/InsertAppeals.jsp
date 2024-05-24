@@ -41,7 +41,7 @@
     <div class="container-fluid py-5">
         <div class="container py-5">
             <h1 class="mb-4">新增申訴</h1>
-            <form action="/insertcontroller" method="post">
+            <form action="insertcontroller" method="post">
             
 
                 <div class="row g-5">

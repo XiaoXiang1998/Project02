@@ -291,4 +291,9 @@ public class AdminController {
 	public String turnToInsertMembershipLevel() {
 		return "member/InsertMembershipLevel";
 	}
+	
+	@GetMapping("/LogoutBackstage")
+	public String LogoutBackstage() {
+		return "BackStageLogin";
+	}
 }

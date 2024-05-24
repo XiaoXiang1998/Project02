@@ -72,85 +72,85 @@
                         <li>
                             <hr class="dropdown-divider" />
                         </li>
-                        <li><a class="dropdown-item" href="#!">Logout</a></li>
+                        <li><a class="dropdown-item" href="LogoutBackstage">Logout</a></li>
                     </ul>
                 </li>
             </ul>
         </nav>
         <div id="layoutSidenav">
             <%@ include file="../AllNav.jsp" %>
-            <div id="layoutSidenav_content">
-                <main>
-                    <div class="container-fluid px-4">
-                        <h1 class="mt-4">人員數據</h1>
-                        <ol class="breadcrumb mb-4">
-                            <li class="breadcrumb-item active">員工總覽</li>
-                        </ol>
-                        <div class="card mb-4">
-                            <div class="card-header">
-                                <i class="fas fa-table me-1"></i>
-                                員工資料
-                            </div>
-                            <div class="card-body">
-                                <form id="editForm" method="post" action="InsertAdmin">
-                                    <div class="form-floating mb-3">
-                                        <input type="text" id="account" name="account" class="form-control">
-                                        <label for="account">帳號:</label>
-                                    </div>
-                                    <div class="form-floating mb-3">
-                                        <input type="text" id="password" name="password" class="form-control">
-                                        <label for="password">密碼:</label>
-                                    </div>
-                                    <div class="form-floating mb-3">
-                                        <input type="email" id="email" name="email" class="form-control">
-                                        <label for="email">信箱:</label>
-                                    </div>
-                                    <div class="form-floating mb-3">
-                                        <input type="tel" id="phone" name="phone" class="form-control">
-                                        <label for="phone">電話:</label>
-                                    </div>
-                                    <div class="form-floating mb-3">
-                                        <input type="text" id="name" name="name" class="form-control">
-                                        <label for="name">姓名:</label>
-                                    </div>
-                                    <div class="form-floating mb-3">
-                                        <select id="gender" name="gender" class="form-select">
-                                            <option value="">請選擇</option>
-                                            <option value="male">男性</option>
-                                            <option value="female">女性</option>
-                                        </select>
-                                        <label for="gender">性別:</label>
-                                    </div>
-                                    <div class="form-floating mb-3">
-                                        <input type="text" id="address" name="address" class="form-control">
-                                        <label for="address">住址:</label>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="photoSticker" class="form-label">頭貼:</label> <input type="file"
-                                            id="photoSticker" name="photoSticker" class="form-control">
-                                    </div>
-                                    <div class="d-flex justify-content-center">
-                                        <button type="button" class="btn btn-primary"
-                                            id="saveChangesBtn">確認</button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </main>
-                <footer class="py-4 bg-light mt-auto">
-                    <div class="container-fluid px-4">
-                        <div class="d-flex align-items-center justify-content-between small">
-                            <div class="text-muted">Copyright &copy; Your Website 2023</div>
-                            <div>
-                                <a href="#">Privacy Policy</a>
-                                &middot;
-                                <a href="#">Terms &amp; Conditions</a>
+                <div id="layoutSidenav_content">
+                    <main>
+                        <div class="container-fluid px-4">
+                            <h1 class="mt-4">人員數據</h1>
+                            <ol class="breadcrumb mb-4">
+                                <li class="breadcrumb-item active">員工總覽</li>
+                            </ol>
+                            <div class="card mb-4">
+                                <div class="card-header">
+                                    <i class="fas fa-table me-1"></i>
+                                    員工資料
+                                </div>
+                                <div class="card-body">
+                                    <form id="editForm" method="post" action="InsertAdmin">
+                                        <div class="form-floating mb-3">
+                                            <input type="text" id="account" name="account" class="form-control">
+                                            <label for="account">帳號:</label>
+                                        </div>
+                                        <div class="form-floating mb-3">
+                                            <input type="text" id="password" name="password" class="form-control">
+                                            <label for="password">密碼:</label>
+                                        </div>
+                                        <div class="form-floating mb-3">
+                                            <input type="email" id="email" name="email" class="form-control">
+                                            <label for="email">信箱:</label>
+                                        </div>
+                                        <div class="form-floating mb-3">
+                                            <input type="tel" id="phone" name="phone" class="form-control">
+                                            <label for="phone">電話:</label>
+                                        </div>
+                                        <div class="form-floating mb-3">
+                                            <input type="text" id="name" name="name" class="form-control">
+                                            <label for="name">姓名:</label>
+                                        </div>
+                                        <div class="form-floating mb-3">
+                                            <select id="gender" name="gender" class="form-select">
+                                                <option value="">請選擇</option>
+                                                <option value="male">男性</option>
+                                                <option value="female">女性</option>
+                                            </select>
+                                            <label for="gender">性別:</label>
+                                        </div>
+                                        <div class="form-floating mb-3">
+                                            <input type="text" id="address" name="address" class="form-control">
+                                            <label for="address">住址:</label>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="photoSticker" class="form-label">頭貼:</label> <input type="file"
+                                                id="photoSticker" name="photoSticker" class="form-control">
+                                        </div>
+                                        <div class="d-flex justify-content-center">
+                                            <button type="button" class="btn btn-primary"
+                                                id="saveChangesBtn">確認</button>
+                                        </div>
+                                    </form>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </footer>
-            </div>
+                    </main>
+                    <footer class="py-4 bg-light mt-auto">
+                        <div class="container-fluid px-4">
+                            <div class="d-flex align-items-center justify-content-between small">
+                                <div class="text-muted">Copyright &copy; Your Website 2023</div>
+                                <div>
+                                    <a href="#">Privacy Policy</a>
+                                    &middot;
+                                    <a href="#">Terms &amp; Conditions</a>
+                                </div>
+                            </div>
+                        </div>
+                    </footer>
+                </div>
         </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
             crossorigin="anonymous"></script>

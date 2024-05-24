@@ -50,7 +50,7 @@
     <div class="container">
         <h2>提交成功</h2>
         <p>您的申訴已成功提交，申訴編號為: ${appealsId}</p>
-        <a href="/appeals/Crudindex">返回首頁</a>
+        <a href="/Crudindex">返回首頁</a>
     </div>
 </body>
 </html>

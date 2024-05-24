@@ -230,8 +230,11 @@ public class AppealsController {
 	    model.addAttribute("appealsId", id);
 	    return "Appeals/success";
 	}
-	
-		
+	//游能佑的程式
+	@GetMapping("transferToJavaMail")
+	public String transferToJavaMail() {
+		return "Appeals/testmail";
+	}
     
 	}
 

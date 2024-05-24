@@ -346,9 +346,10 @@ public class GoodController {
 			@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "2") Integer size,
 			@RequestParam(required = false) Integer rate, @RequestParam(required = false) Boolean content,
 			@RequestParam(required = false) Boolean photos, Model m) {
-		MemberBean user = (MemberBean) session.getAttribute("member");
-		int buyerID = user.getSid();
-		session.setAttribute("buyerID", buyerID);
+//		單純檢閱商品不須登入
+//		MemberBean user = (MemberBean) session.getAttribute("member");
+//		int buyerID = user.getSid();
+//		session.setAttribute("buyerID", buyerID);
 		// 商品詳細資料需要(商品名稱、商品種類、商品價格範圍、商品平均評分)
 		GoodsBean2 good = gService.getById(goodID); // 取得對應商品編號
 		// 取得對應商品的種類(related good) 只取商品編號

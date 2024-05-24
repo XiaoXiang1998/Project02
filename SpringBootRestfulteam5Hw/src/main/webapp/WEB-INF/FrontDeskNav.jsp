@@ -35,12 +35,6 @@
 				<span class="fa fa-bars text-secondary"></span>
 			</button>
 			<div class="collapse navbar-collapse bg-info" id="navbarCollapse">
-				<!-- <div class="navbar-nav">
-                            <a href="#" class="nav-item nav-link">購物車</a>
-                            <a href="#" class="nav-item nav-link">訂單紀錄</a>
-                            <a href="#" class="nav-item nav-link">官方申訴</a>
-                        </div> -->
-				<!-- <div class="d-flex flex-row bd-highlight"> -->
 				<div class="d-flex m-3 me-0">
 					<form class="form-inline d-flex">
 						<div class="form-group mx-sm-3 mb-2">

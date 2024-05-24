@@ -517,8 +517,8 @@
 								</a>
 
 
-								<h1 id="limitbuyerID" hidden>買家編號:${buyerID}</h1>
-								<h1 id="limitsellerID" hidden>賣家編號:${sellerID}</h1>
+								<h1 id="limitbuyerID">買家編號:${buyerID}</h1>
+								<h1 id="limitsellerID">賣家編號:${sellerID}</h1>
 							</div>
 						</div>
 						<%@ include file="../../FrontDeskFooter.jsp" %>
@@ -553,137 +553,124 @@
 									form.submit();
 								})
 
-								$('.CategoryItem')
-									.click(
-										function () {//取得對應規格編號[要顯示價格和數量]
-											if ($('#BuyItemNumber').prop("hidden") == true) {//假若欄位被影藏
-												$('#BuyItemNumber').prop("hidden",
-													false);//取消影藏
-												let targethidden = $('#BuyItemNumber')
-													.find(
-														'div[class="input-group-btn"]');
-												console.log(targethidden);
-												targethidden.prop("hidden", false);
-												let targethidden1 = $('#BuyItemNumber')
-													.find('input');
-												targethidden1.prop("hidden", false);
-											} else {
-												//假若從規格A按成規格B 數量直接回到1
-
-												// 將規格編號塞入form標籤內
-											}
-											let formatID = $(this).find(
-												'span[class="formatID"]').prop(
-													"innerHTML");//取得規格編號
-											$('#BuyNumber').prop("value", 1);
-											$('#orderformatID').prop("value", formatID);
-											$('#cartformatID').prop("value", formatID);
-											// 還需要取得大小
-											let goodstock = $(this).find(
-												'span[class="CategoryNumber"]')
-												.prop("innerHTML");
-											let formatprice = $(this).find(
-												'span[class="CategoryPrice"]')
-												.prop("innerHTML");
-											let formatSize = $(this).find(
-												'span[class="CategorySize"]').prop(
-													"innerHTML");//大小
-											let formatimagePathTarget = $(this).find(
-												'img').prop("src");//圖片
-											let ps = formatimagePathTarget
-												.lastIndexOf("/");
-											let formatimagePath = "../../goodImages/"
-												+ formatimagePathTarget
-													.substring(ps + 1);
-											console.log(formatimagePath);
-											//
-											$('#cartPrice').prop("value", formatprice);
-											$('#orderformatprice').prop("value",
-												formatprice);
-											$('#remainingNumber').prop("innerHTML",
-												goodstock);
-											$('#CategoryPrice').prop("innerHTML",
-												formatprice);
-											$('#orderGoodSize').prop("value",
-												formatSize);
-											$('#orderformatimagepath').prop("value",
-												formatimagePath);
-										})
-
-								//改變買入數量[有防呆機制]
-								$('#BuyNumber').change(
-									function () {
-										let InputNumber = $(this).prop("value");
-										let goodstock = $('#formatmsg').find(
-											'span[id="remainingNumber"]').prop(
-												"innerHTML");
-
-										if (Number(goodstock) > InputNumber
-											&& InputNumber >= 1) {
-											$('#errormsg').prop("innerHTML", "");
+								$('.CategoryItem').click(
+									function () {//取得對應規格編號[要顯示價格和數量]
+										if ($('#BuyItemNumber').prop("hidden") == true) {//假若欄位被影藏
+											$('#BuyItemNumber').prop("hidden",
+												false);//取消影藏
+											let targethidden = $('#BuyItemNumber')
+												.find(
+													'div[class="input-group-btn"]');
+											console.log(targethidden);
+											targethidden.prop("hidden", false);
+											let targethidden1 = $('#BuyItemNumber')
+												.find('input');
+											targethidden1.prop("hidden", false);
 										} else {
-											if (InputNumber > Number(goodstock)) {
-												$('#errormsg').prop("innerHTML", "操作不當");//最多只能購買剩餘的數量
-												$(this).closest('div').find(
-													'input[id="BuyNumber"]').prop(
-														"value", 1);//不讓數字增加
-											}
-											if (InputNumber < 1) {
-												$(this).closest('div').find(
-													'input[id="BuyNumber"]').prop(
-														"value", 1);//最少購買一筆
-											}
-										}
+											//假若從規格A按成規格B 數量直接回到1
 
+											// 將規格編號塞入form標籤內
+										}
+										let formatID = $(this).find(
+											'span[class="formatID"]').prop(
+												"innerHTML");//取得規格編號
+										$('#BuyNumber').prop("value", 1);
+										$('#orderformatID').prop("value", formatID);
+										$('#cartformatID').prop("value", formatID);
+										// 還需要取得大小
+										let goodstock = $(this).find(
+											'span[class="CategoryNumber"]')
+											.prop("innerHTML");
+										let formatprice = $(this).find(
+											'span[class="CategoryPrice"]')
+											.prop("innerHTML");
+										let formatSize = $(this).find(
+											'span[class="CategorySize"]').prop(
+												"innerHTML");//大小
+										let formatimagePathTarget = $(this).find(
+											'img').prop("src");//圖片
+										let ps = formatimagePathTarget
+											.lastIndexOf("/");
+										let formatimagePath = "../../goodImages/"
+											+ formatimagePathTarget
+												.substring(ps + 1);
+										console.log(formatimagePath);
+										//
+										$('#cartPrice').prop("value", formatprice);
+										$('#orderformatprice').prop("value",
+											formatprice);
+										$('#remainingNumber').prop("innerHTML",
+											goodstock);
+										$('#CategoryPrice').prop("innerHTML",
+											formatprice);
+										$('#orderGoodSize').prop("value",
+											formatSize);
+										$('#orderformatimagepath').prop("value",
+											formatimagePath);
 									})
 
-								//增加購買數量
-								$(
-									'button[class="btn btn-sm btn-plus rounded-circle bg-light border"]')
-									.click(
-										function () {
-											let InputNumber = $(this).closest(
-												'div[id="BuyItemNumber"]').find(
-													'input[id="BuyNumber"]').prop(
-														"value");
-											let goodstock = $('#formatmsg').find(
-												'span[id="remainingNumber"]').prop(
-													"innerHTML");
+								//改變買入數量[有防呆機制]
+								$('#BuyNumber').change(function () {
+									let InputNumber = $(this).prop("value");
+									let goodstock = $('#formatmsg').find(
+										'span[id="remainingNumber"]').prop(
+											"innerHTML");
 
-											if (InputNumber > Number(goodstock)) {
-												$('#errormsg')
-													.prop("innerHTML", "操作不當");//最多只能購買剩餘的數量
-												$(this).closest(
-													'div[id="BuyItemNumber"]')
-													.find('input[id="BuyNumber"]')
-													.prop("value",
-														Number(goodstock));//不讓數字增加
-											}
-										})
+									if (Number(goodstock) > InputNumber
+										&& InputNumber >= 1) {
+										$('#errormsg').prop("innerHTML", "");
+									} else {
+										if (InputNumber > Number(goodstock)) {
+											$('#errormsg').prop("innerHTML", "操作不當");//最多只能購買剩餘的數量
+											$(this).closest('div').find(
+												'input[id="BuyNumber"]').prop(
+													"value", 1);//不讓數字增加
+										}
+										if (InputNumber < 1) {
+											$(this).closest('div').find(
+												'input[id="BuyNumber"]').prop(
+													"value", 1);//最少購買一筆
+										}
+									}
+
+								})
+
+								//增加購買數量
+								$('button[class="btn btn-sm btn-plus rounded-circle bg-light border"]').click(function () {
+									let InputNumber = $(this).closest('div[id="BuyItemNumber"]').find('input[id="BuyNumber"]').prop("value");
+									let goodstock = $('#formatmsg').find('span[id="remainingNumber"]').prop("innerHTML");
+
+									if (InputNumber > Number(goodstock)) {
+										$('#errormsg')
+											.prop("innerHTML", "操作不當");//最多只能購買剩餘的數量
+										$(this).closest(
+											'div[id="BuyItemNumber"]')
+											.find('input[id="BuyNumber"]')
+											.prop("value",
+												Number(goodstock));//不讓數字增加
+									}
+								})
 
 								//降低購買數量
-								$(
-									'button[class="btn btn-sm btn-minus rounded-circle bg-light border"]')
-									.click(
-										function () {
-											let InputNumber = $(this).closest(
-												'div[id="BuyItemNumber"]').find(
-													'input[id="BuyNumber"]').prop(
-														"value");
-											console.log(InputNumber);
-											let goodstock = $('#formatmsg').find(
-												'span[id="remainingNumber"]').prop(
-													"innerHTML");//
-											if (InputNumber <= Number(goodstock)) {
-												$('#errormsg').prop("innerHTML", "");//將錯誤訊息抹消
-											}
-											if (InputNumber < 1) {
-												$(this).closest(
-													'div[id="BuyItemNumber"]')
-													.find('input[id="BuyNumber"]')
-													.prop("value", 1);//最少購買一筆
-											}
-										})
+								$('button[class="btn btn-sm btn-minus rounded-circle bg-light border"]').click(function () {
+									let InputNumber = $(this).closest(
+										'div[id="BuyItemNumber"]').find(
+											'input[id="BuyNumber"]').prop(
+												"value");
+									console.log(InputNumber);
+									let goodstock = $('#formatmsg').find(
+										'span[id="remainingNumber"]').prop(
+											"innerHTML");//
+									if (InputNumber <= Number(goodstock)) {
+										$('#errormsg').prop("innerHTML", "");//將錯誤訊息抹消
+									}
+									if (InputNumber < 1) {
+										$(this).closest(
+											'div[id="BuyItemNumber"]')
+											.find('input[id="BuyNumber"]')
+											.prop("value", 1);//最少購買一筆
+									}
+								})
 
 								//加入購物車
 								$('#GoToCart').click(function () {
@@ -695,25 +682,32 @@
 									sellerID = limitsellerID.substring(5);
 									console.log(sellerID);
 									console.log(buyerID);
-									if (buyerID == sellerID) {
-										$('#errormsg').prop("innerHTML", "不能對自己操作");
-										setTimeout(function () {
-											$('#errormsg').prop("innerHTML", "");
-										}, 1000)
-									} else {
-										if ($('#orderformatID').prop("value") == "") {
-											$('#errormsg').prop("innerHTML", "要先按規格按鈕");
+									console.log(buyerID == "");
+									if (buyerID == "") {//買家沒登入
+										//前往登入頁面
+										alert('即將進入登入頁面');
+										setTimeout("location.href='ezbuy.com'", 1000);
+									}
+									else {
+										if (buyerID == sellerID) {
+											$('#errormsg').prop("innerHTML", "不能對自己操作");
 											setTimeout(function () {
 												$('#errormsg').prop("innerHTML", "");
 											}, 1000)
 										} else {
-											let form = $(this).closest('form');
-											form.prop("method", "get");
-											form.prop("action", "inserttoshopcar.controller");
-											form.submit();
+											if ($('#orderformatID').prop("value") == "") {
+												$('#errormsg').prop("innerHTML", "要先按規格按鈕");
+												setTimeout(function () {
+													$('#errormsg').prop("innerHTML", "");
+												}, 1000)
+											} else {
+												let form = $(this).closest('form');
+												form.prop("method", "get");
+												form.prop("action", "inserttoshopcar.controller");
+												form.submit();
+											}
 										}
 									}
-
 								})
 
 								//加入訂單
@@ -726,26 +720,32 @@
 									let limitsellerID = $('#limitsellerID').prop("innerHTML");
 									buyerID = limitbuyerID.substring(5);
 									sellerID = limitsellerID.substring(5);
-									if (buyerID == sellerID) {
-										$('#errormsg').prop("innerHTML", "不能對自己操作");
-										setTimeout(function () {
-											$('#errormsg').prop("innerHTML", "");
-										}, 1000)
-									} else {
-										if ($('#orderformatID').prop("value") == "") {
-											$('#errormsg').prop("innerHTML", "要先按規格按鈕");
+									if (buyerID == "") {//買家沒登入
+										//前往登入頁面
+										alert('即將進入登入頁面');
+										setTimeout("location.href='ezbuy.com'", 1000);
+									}
+									else {
+										if (buyerID == sellerID) {
+											$('#errormsg').prop("innerHTML", "不能對自己操作");
 											setTimeout(function () {
 												$('#errormsg').prop("innerHTML", "");
-											}, 1000);
+											}, 1000)
 										} else {
-											let form = $(this).closest('form');
-											form.prop("method", "get");
-											form.prop("action", "DirectlyBuy");
-											form.submit();
+											if ($('#orderformatID').prop("value") == "") {
+												$('#errormsg').prop("innerHTML", "要先按規格按鈕");
+												setTimeout(function () {
+													$('#errormsg').prop("innerHTML", "");
+												}, 1000);
+											} else {
+												let form = $(this).closest('form');
+												form.prop("method", "get");
+												form.prop("action", "DirectlyBuy");
+												form.submit();
+											}
+
 										}
-
 									}
-
 								})
 								$('.your-class').slick();
 								//相關商品的輪播

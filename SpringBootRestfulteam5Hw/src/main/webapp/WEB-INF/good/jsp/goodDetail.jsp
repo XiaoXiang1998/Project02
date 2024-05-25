@@ -686,7 +686,7 @@
 									if (buyerID == "") {//買家沒登入
 										//前往登入頁面
 										alert('即將進入登入頁面');
-										setTimeout("location.href='ezbuy.com'", 1000);
+										setTimeout("location.href='membercenter'", 1000);
 									}
 									else {
 										if (buyerID == sellerID) {
@@ -723,7 +723,7 @@
 									if (buyerID == "") {//買家沒登入
 										//前往登入頁面
 										alert('即將進入登入頁面');
-										setTimeout("location.href='ezbuy.com'", 1000);
+										setTimeout("location.href='membercenter'", 1000);
 									}
 									else {
 										if (buyerID == sellerID) {

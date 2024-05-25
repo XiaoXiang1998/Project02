@@ -135,7 +135,8 @@ public class OrderController {
 		cService.insertToShopCar(carItem);
 		Integer carItemCount = cService.carItemCount(member);
 		session.setAttribute("carItemCount", carItemCount);	
-		return "good/jsp/EZBuyindex";
+//		return "good/jsp/EZBuyindex";
+		return "redirect:EZBuyIndex";
 	}
 
 	@PutMapping("updateQuantity.controller")

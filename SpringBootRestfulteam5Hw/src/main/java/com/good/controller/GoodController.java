@@ -346,10 +346,14 @@ public class GoodController {
 			@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "2") Integer size,
 			@RequestParam(required = false) Integer rate, @RequestParam(required = false) Boolean content,
 			@RequestParam(required = false) Boolean photos, Model m) {
-//		單純檢閱商品不須登入
-//		MemberBean user = (MemberBean) session.getAttribute("member");
-//		int buyerID = user.getSid();
-//		session.setAttribute("buyerID", buyerID);
+		if(session.getAttribute("member")==null) {
+			//沒有登入
+		}
+		else {
+		MemberBean user = (MemberBean) session.getAttribute("member");
+		int buyerID = user.getSid();
+		session.setAttribute("buyerID", buyerID);			
+		}
 		// 商品詳細資料需要(商品名稱、商品種類、商品價格範圍、商品平均評分)
 		GoodsBean2 good = gService.getById(goodID); // 取得對應商品編號
 		// 取得對應商品的種類(related good) 只取商品編號
@@ -659,13 +663,6 @@ public class GoodController {
 				page = gService.findSellerGoodByPageAndNameDiscontinue(p1, Integer.parseInt(sellerID), goodNameString);
 			}
 			break;
-		case "違規商品":
-			if (goodNameString.equals("XXX")) {// 沒有輸入商品名稱
-				page = gService.findSellerGoodByPageBAN(p1, Integer.parseInt(sellerID));
-			} else {
-				page = gService.findSellerGoodByPageAndNameBAN(p1, Integer.parseInt(sellerID), goodNameString);
-			}
-			break;
 		case "全部商品":
 			if (goodNameString.equals("XXX")) {// 沒有輸入商品名稱
 				page = gService.findSellerAllByPage(p1, Integer.parseInt(sellerID));
@@ -928,7 +925,26 @@ public class GoodController {
 		return pricerangePage;
 	}
 
-	
+	// 分頁查詢
+//	@GetMapping("/frontqueryByPage/{pageNo}")
+//	@ResponseBody
+//	public List<GoodsBean2> processQueryAllByPage(@PathVariable("pageNo") int pageNo, Model m,
+//			HttpServletRequest request) {
+//		//
+//		int pageSize = 3;
+//		Pageable p1 = PageRequest.of(pageNo - 1, pageSize);
+//		System.err.println("pageNo = " + pageNo + ",pageSize = " + pageSize);
+//		Page<GoodsBean2> page = gService.findAllByPage(p1);
+//		System.err.println("page.getTotalPages()  =" + page.getTotalPages());
+//		int totalPages = page.getTotalPages();
+//		long totalElement = page.getTotalElements();
+//
+//		HttpSession session = request.getSession();
+//		session.setAttribute("totalPages", totalPages);
+//		session.setAttribute("totalElements", totalElement);
+//		System.out.println("totalPages = " + totalPages);
+//		return page.getContent();
+//	}
 
 	// 從首頁搜尋商品名稱
 	@GetMapping("/searchGood")
@@ -1312,7 +1328,35 @@ public class GoodController {
 		return resultList1;
 	}
 
-	
+	// 首頁(根據上架日期由大到小列出商品)
+//	@GetMapping("/indexgoodByLaunchDate")
+//	@ResponseBody // 程式測試
+//	public List<GoodsBean2> indexgoodByLaunchDate() {
+//		List<GoodsBean2> findGoodByLaunchDate = gService.findGoodByLaunchDate();
+//		return findGoodByLaunchDate;
+//	}
+
+	// 在賣家商品下搜尋商品
+//	@GetMapping("/searchSellerGood")
+//	public String searchSellerGood(HttpServletRequest request) {// @RequestParam("sellerIDforSearch") Integer
+//																// sellerID,@RequestParam("searchGoodName") String
+//																// goodName,
+//		List<GoodsBean2> findSellerGood = gService.findSellerGood("貼圖", 3);
+//		HttpSession session = request.getSession();
+//		session.setAttribute("good", findSellerGood);
+//		int resultNumber = findSellerGood.size();
+//		session.setAttribute("goodNumber", resultNumber);
+//		return "good/jsp/SellerGood";
+//	}
+
+//	@GetMapping("/frontsellergoodquery")
+//	@ResponseBody
+//	public List<GoodsBean2> searchSellerGood2() {// @RequestParam("sellerIDforSearch") Integer
+//													// sellerID,@RequestParam("searchGoodName") String goodName
+////		List<GoodsBean2> findSellerGood = gService.findSellerGood(goodName, sellerID);
+//		List<GoodsBean2> findSellerGood = gService.findSellerGood("貼圖", 3);
+//		return findSellerGood;
+//	}
 
 	// 透過商品編號 查詢商品基本資訊
 	// 在查詢全部的頁面中點擊其中一項商品的編輯按鈕
@@ -1889,12 +1933,7 @@ public class GoodController {
 				good.setStatus(0);
 			}
 			else {
-				if(status.equals("BAD")) {
-					good.setStatus(-1);
-				}
-				else {					
-					System.out.println("你輸入進去的是甚麼東西");
-				}
+				System.out.println("你輸入進去的是甚麼東西");
 			}
 		}
 		gService.update(good);
@@ -1902,7 +1941,6 @@ public class GoodController {
 	}
 	//////////////////////////////////////////////刪除頁面///////////////////////////////////////////////////////////////
 	//出現SQL刪除問題
-	//賣家刪除商品
 	@GetMapping("goodDelete")
 	public String processDeleteGoodAction(@RequestParam("GoodID") Integer goodsID) {
 		// 透過商品編號取得基本商品資訊 然後透過get取得編號對應的圖片集合

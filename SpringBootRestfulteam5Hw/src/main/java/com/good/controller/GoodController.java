@@ -796,66 +796,191 @@ public class GoodController {
 		String hql2 = "";
 		String hql3 = "";
 		String hql4 = "";
-//		select g.GoodsID
-//		from Goods g join GoodFormat gf on g.goodsID = gf.goodsID 
-//		where g.GoodsName LIKE '%鯊鯊貓%' AND gf.GoodPrice between 0 and 1500 AND g.GoodsType = '貼圖'
-//		order by gf.GoodPrice
-		System.out.println("sellerID=" + sellerID + ",category=" + category + ",price=" + price + ",orderItem="
-				+ orderItem + ",goodName=" + goodName);
-		// 另一個寫法
-		if (category.equals("XXX")) {
-
-		} else {// 指定種類
-			hql1 = "AND g.goodsType='" + category + "' ";
-		}
-		if (price.equals("XXX")) {
-
-		} else {// 指定價格
-			hql2 = "AND gf.goodPrice between 0 AND " + price + " ";
-		}
-		if (goodName.equals("XXX") || goodName.equals("全部")) {
-
-		} else {// 指定商品名稱
-			hql4 = "AND g.goodsName LIKE '%" + goodName + "%' ";
-		}
-		if (orderItem.equals("XXX")) {
-
-		} else {// 指定排序
-			switch (orderItem) {
-			case "price":
-				hql3 = "order by gf.goodPrice";
-				break;
-			case "score":
-//				hql3 = "";
-				break;
-			case "ID":
-				hql3 = "order by g.goodsID";
-				break;
-			case "NO":
-//				hql3 = "";
-				break;
-			default:
-//				hql3 = "";
-				System.out.println("something weird");
-			}
-		}
-
-		String hql = hql0 + hql1 + hql2 + hql4 + hql3;
-		System.out.println("要顯示價格喔!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-		System.out.println("hql = " + hql);
-		Query<Integer> resultList0 = (Query<Integer>) entityManager.createQuery(hql);
-		List<Integer> ListObject = resultList0.getResultList();
+		/*新的code*/
 		List<Integer> listID = new ArrayList<>();
-		for (Integer item : ListObject) { // 取得滿足要求的商品編號
-			if (listID.contains(item)) {
-				// 有重複元素 不要加進去
+
+		switch (orderItem) {
+		case "price":// [goodID,最小價格] Integer[]
+			hql0 = "select distinct g.goodsID,MIN(gf.goodPrice) from GoodsBean2 g join GoodFormat gf on g.goodsID = gf.good.goodsID where g.status = 1 AND g.goodsSellerID.sid = "+sellerID+" ";// 商品狀態 + 賣家編號
+			if (category.equals("XXX")) {
+				hql1 = "";
 			} else {
-				listID.add(item);
-				System.out.println("itemID=" + item);
+				hql1 = "AND g.goodsType='" + category + "' ";
+			}
+			if (price.equals("XXX")) {
+				hql2 = "";
+			} else {
+				hql2 = "AND gf.goodPrice between 0 AND " + price + " ";
+			}
+			if (goodName.equals("XXX")) {
+				hql3 = "";
+			} else {
+				hql3 = "AND g.goodsName LIKE '%" + goodName + "%' ";
+			}
+			hql4 = "group by g.goodsID order by MIN(gf.goodPrice)";// 按價格排序
+			break;
+		case "score":// [goodID,評分] []Integer
+//			  select distinct g.GoodsID,(ISNULL(g.rating,0)/ISNULL(g.NumberRatings,1))  from Goods g JOIN GoodFormat gf on g.GoodsID = gf.GoodsID JOIN ORDERS o on gf.FormatID = o.FK_FORMATGOODID where g.status = 1 order by (ISNULL(g.rating,0)/ISNULL(g.NumberRatings,1)) /*根據評分排序*/
+			hql0 = "select distinct g.goodsID,CAST(ISNULL(g.rating,0) AS Integer)/CAST(ISNULL(g.numberRatings,1) AS Integer) from GoodsBean2 g join GoodFormat gf on g.goodsID = gf.good.goodsID where g.status = 1 AND g.goodsSellerID.sid = " + sellerID + " ";// 商品狀態 + 賣家編號
+			if (category.equals("XXX")) {
+				hql1 = "";
+			} else {
+				hql1 = "AND g.goodsType='" + category + "' ";
+			}
+			if (price.equals("XXX")) {
+				hql2 = "";
+			} else {
+				hql2 = "AND gf.goodPrice between 0 AND " + price + " ";
+			}
+			if (goodName.equals("XXX")) {
+				hql3 = "";
+			} else {
+				hql3 = "AND g.goodsName LIKE '%" + goodName + "%' ";
+			}
+			hql4 = "order by CAST(ISNULL(g.rating,0) AS Integer)/CAST(ISNULL(g.numberRatings,1) AS Integer)";// 按照評分排序
+
+			break;
+		case "ID":// [goodID,總銷售量] Integer[]
+//					select distinct g.GoodsID,sum(o.TOTAL_PRICE) from Goods g JOIN GoodFormat gf on g.GoodsID = gf.GoodsID JOIN ORDERS o on gf.FormatID = o.FK_FORMATGOODID where g.status = 1 group by g.GoodsID order by sum(o.TOTAL_PRICE)/*根據訂單多寡排序*/
+			hql0 = "select distinct g.goodsID,sum(o.totalPrice) from GoodsBean2 g join GoodFormat gf on g.goodsID = gf.good.goodsID join Orders o on gf.good.goodsID = o.formatgoodId.formatID where g.status = 1 AND g.goodsSellerID.sid = "+ sellerID + " ";// 商品狀態 + 賣家編號
+			if (category.equals("XXX")) {
+				hql1 = "";
+			} else {
+				hql1 = "AND g.goodsType='" + category + "' ";
+			}
+			if (price.equals("XXX")) {
+				hql2 = "";
+			} else {
+				hql2 = "AND gf.goodPrice between 0 AND " + price + " ";
+			}
+			if (goodName.equals("XXX")) {
+				hql3 = "";
+			} else {
+				hql3 = "AND g.goodsName LIKE '%" + goodName + "%' ";
+			}
+			hql4 = "group by g.goodsID order by sum(o.totalPrice)";
+
+			break;
+		case "NO":
+			hql0 = "select distinct g.goodsID from GoodsBean2 g join GoodFormat gf on g.goodsID = gf.good.goodsID join Orders o on gf.good.goodsID = o.formatgoodId.formatID where g.status = 1 AND g.goodsSellerID.sid = "+ sellerID +" ";// 商品狀態 + 賣家編號
+			if (category.equals("XXX")) {
+				hql1 = "";
+			} else {
+				hql1 = "AND g.goodsType='" + category + "' ";
+			}
+			if (price.equals("XXX")) {
+				hql2 = "";
+			} else {
+				hql2 = "AND gf.goodPrice between 0 AND " + price + " ";
+			}
+			if (goodName.equals("XXX")) {
+				hql3 = "";
+			} else {
+				hql3 = "AND g.goodsName LIKE '%" + goodName + "%' ";
+			}
+			hql4 = "";
+			break;
+		case "XXX":// 單純查詢姓名
+			hql0 = "select distinct g.goodsID from GoodsBean2 g join GoodFormat gf on g.goodsID = gf.good.goodsID where g.status = 1 AND g.goodsSellerID.sid = " + sellerID + " ";// 商品狀態 + 賣家編號
+			if (category.equals("XXX")) {
+				hql1 = "";
+			} else {
+				hql1 = "AND g.goodsType='" + category + "' ";
+			}
+			if (price.equals("XXX")) {
+				hql2 = "";
+			} else {
+				hql2 = "AND gf.goodPrice between 0 AND " + price + " ";
+			}
+			if (goodName.equals("XXX")) {
+				hql3 = "";
+			} else {
+				hql3 = "AND g.goodsName LIKE '%" + goodName + "%' ";
+			}
+			hql4 = "";
+
+			break;
+		default:
+			hql0 = "";
+			hql1 = "";
+			hql2 = "";
+			hql3 = "";
+			hql4 = "";
+		}
+		String hql = hql0 + hql1 + hql2 + hql3 + hql4;
+		if (orderItem.equals("XXX") || orderItem.equals("NO")) {
+			System.err.println("hql = " + hql);
+			Query<Integer> resultList0 = (Query<Integer>) entityManager.createQuery(hql);
+			List<Integer> ListObject = resultList0.getResultList();
+			for (Integer item : ListObject) { // 取得滿足要求的商品編號
+				if (listID.contains(item)) {
+					// 有重複元素 不要加進去
+				} else {
+					listID.add(item);
+					System.out.println("itemID=" + item);
+				}
+			}
+		} else {
+
+			switch (orderItem) {
+			case "price": {
+				Query<Object[]> resultList0 = (Query<Object[]>) entityManager.createQuery(hql);
+				List<Object[]> ListObject = resultList0.getResultList();
+				for (Object[] item : ListObject) { // 取得滿足要求的商品編號
+					if (listID.contains(item)) {
+						// 有重複元素 不要加進去
+					} else {
+						listID.add((Integer) item[0]);
+						System.out.println("itemID=" + item[0]);
+					}
+				}
+				break;
+			}
+			case "score": {
+				System.err.println("進入score案例");
+				Query<Object[]> resultList0 = (Query<Object[]>) entityManager.createQuery(hql);
+				List<Object[]> ListObject = resultList0.getResultList();
+				for (Object[] item : ListObject) { // 取得滿足要求的商品編號
+					if (listID.contains(item)) {
+						// 有重複元素 不要加進去
+					} else {
+						
+						listID.add((Integer)item[0]);
+						System.out.println("itemID=" + item[0]);
+					}
+				}
+				break;
+			}
+			case "ID": {
+				System.err.println("進入ID案例");
+				Query<Object[]> resultList0 = (Query<Object[]>) entityManager.createQuery(hql);
+				List<Object[]> ListObject = resultList0.getResultList();
+				for (Object[] item : ListObject) { // 取得滿足要求的商品編號
+					if (listID.contains(item)) {
+						// 有重複元素 不要加進去
+					} else {
+						
+						listID.add((Integer)item[0]);
+						System.out.println("itemID=" + item[0]);
+					}
+				}
+				break;
+			}
+			default:
+				Query<Integer[]> resultList0 = (Query<Integer[]>) entityManager.createQuery(hql);
+				List<Integer[]> ListObject = resultList0.getResultList();
+				for (Integer[] item : ListObject) { // 取得滿足要求的商品編號
+					if (listID.contains(item)) {
+						// 有重複元素 不要加進去
+					} else {
+						listID.add((Integer) item[0]);
+						System.out.println("itemID=" + item[0]);
+					}
+				}
 			}
 		}
-		// @RequestParam("GoodName") String goodsName,@PathVariable("pageNO") Integer
-		// pageNo, HttpServletRequest request
+		/*新的code*/
+
 		int pageSize = 3;
 
 		List<GoodPriceDTO> pricerange = new ArrayList();
@@ -924,28 +1049,6 @@ public class GoodController {
 
 		return pricerangePage;
 	}
-
-	// 分頁查詢
-//	@GetMapping("/frontqueryByPage/{pageNo}")
-//	@ResponseBody
-//	public List<GoodsBean2> processQueryAllByPage(@PathVariable("pageNo") int pageNo, Model m,
-//			HttpServletRequest request) {
-//		//
-//		int pageSize = 3;
-//		Pageable p1 = PageRequest.of(pageNo - 1, pageSize);
-//		System.err.println("pageNo = " + pageNo + ",pageSize = " + pageSize);
-//		Page<GoodsBean2> page = gService.findAllByPage(p1);
-//		System.err.println("page.getTotalPages()  =" + page.getTotalPages());
-//		int totalPages = page.getTotalPages();
-//		long totalElement = page.getTotalElements();
-//
-//		HttpSession session = request.getSession();
-//		session.setAttribute("totalPages", totalPages);
-//		session.setAttribute("totalElements", totalElement);
-//		System.out.println("totalPages = " + totalPages);
-//		return page.getContent();
-//	}
-
 	// 從首頁搜尋商品名稱
 	@GetMapping("/searchGood")
 	public String searchGood(@RequestParam("GoodName") String goodsName, HttpSession session, Model m) {

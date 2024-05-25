@@ -72,7 +72,12 @@ button {
 	<script>
 		$(document).ready(function() {
 			var rating = 0;
-
+	
+		    var commentContent = $('#CommentContent').val();
+		    commentContent = commentContent.replace(/[\r\n]+/g, ' ').trim();
+		    $('#CommentContent').val(commentContent);
+			
+			
 			$('.bit-com .bit').on('click', function() {
 				$('.bit-com .bit').removeClass('on');
 				var index = $(this).index();

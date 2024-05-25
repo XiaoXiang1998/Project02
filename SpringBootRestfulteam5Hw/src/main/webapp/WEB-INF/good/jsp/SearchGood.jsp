@@ -188,7 +188,7 @@
                                                     <option value="NO">Nothing</option>
                                                     <option value="price">價格</option>
                                                     <option value="score">評價</option>
-                                                    <option value="ID">商品編號</option>
+                                                    <option value="ID">近期熱銷</option>
                                                 </select>
                                             </form>
                                         </div>

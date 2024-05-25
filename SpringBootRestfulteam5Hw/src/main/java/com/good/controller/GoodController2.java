@@ -114,7 +114,7 @@ public class GoodController2 {
 		List<GoodLaunchDto> itemdtolist = new ArrayList<GoodLaunchDto>();
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("YYYY-MM-dd");
 		for (int i = 6; i >= 0; i--) {
-			Integer number = gService.findNumberInsertGood(i);
+			Integer number = gService.findNumberInsertGood(i*(-1));
 			String date = simpleDateFormat.format(new Date());
 			System.err.println(date);
 			String[] split = date.split("-");

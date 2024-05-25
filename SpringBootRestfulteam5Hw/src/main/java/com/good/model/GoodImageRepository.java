@@ -13,6 +13,7 @@ public interface GoodImageRepository extends JpaRepository<GoodImageBean, Intege
 	public GoodImageBean findImages(String imagepath);
 	@Query(value = "select * from GoodImage gi where gi.GoodsID = ?",nativeQuery = true)
 	public List<GoodImageBean> findImagesByID(Integer goodID);
+	public List<GoodImageBean> findAll();
 
 // 老師的範例	
 //	@Query(value = "from Users where name like concat('%',?1,'%1')")

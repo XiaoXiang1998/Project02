@@ -55,11 +55,8 @@
                     <div id="layoutSidenav_content">
                         <main>
                             <div class="container-fluid px-4">
-                                <h1 class="mt-4">商品資料庫</h1>
-                                <ol class="breadcrumb mb-4">
-                                    <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
-                                    <li class="breadcrumb-item active">Tables</li>
-                                </ol>
+                                <h1 class="mt-4 mb-4">商品資料庫</h1>
+
                                 <!-- table標籤 -->
                                 <div class="card mb-4">
                                     <div class="card-header" id="goodstatus">
@@ -75,6 +72,9 @@
                                             type="button">違規商品</button>
                                         <button class="btn btn-outline-primary goodstatuschoose"
                                             type="button">全部商品</button>
+                                        <button class="btn btn-outline-primary prodeuceCsvAndImage"
+                                            type="button">輸出檔案和圖片</button>
+
                                         <input type="text" name="SearchGood" class="ms-5" placeholder="搜尋商品"
                                             id="SearchGood">
                                         <button class="btn btn-outline-primary" id="SearchGoodBtn" type="button"><i
@@ -413,7 +413,15 @@
 
                 })
 
+                $('.prodeuceCsvAndImage').click(function(){
+                    $.ajax({
+                        type:"get",
+                        url:"produceCSVAndCopiedImage",
+                        success:function(data){
 
+                        }
+                    })
+                })
             </script>
         </body>
 

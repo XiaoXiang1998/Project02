@@ -10,12 +10,15 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.good.model.GoodImageBean;
 import com.good.model.GoodImageRepository;
+import com.good.model.GoodsBean2;
 @Service
 @Transactional
 public class GoodImageService {
 	@Autowired
 	private GoodImageRepository goodimageRepos;
-
+	public List<GoodImageBean> getAll() {
+		return goodimageRepos.findAll();
+	}
 	public GoodImageBean insert(GoodImageBean goodimage) {
 		return goodimageRepos.save(goodimage);
 	}

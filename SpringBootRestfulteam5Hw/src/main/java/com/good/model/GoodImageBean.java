@@ -89,4 +89,10 @@ public class GoodImageBean {
 		return "GoodImageBean [goodImageID=" + goodImageID + ", imagePath=" + imagePath + ", good=" + good + "]";
 	}
 	
+	public String csvoutput() {
+		//"," + goodsDirection +
+		String rowdataString = goodImageID + "," + imagePath + "," + good.getGoodsID() +"\r\n";
+		return rowdataString;
+	}
+	
 }

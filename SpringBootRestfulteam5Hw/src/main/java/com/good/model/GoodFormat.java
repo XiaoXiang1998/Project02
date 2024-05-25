@@ -114,6 +114,12 @@ public class GoodFormat {
 				+ goodPrice + ", goodImagePath=" + goodImagePath + ", goodsStock=" + goodsStock + "]";
 	}
 	
+	public String csvoutput() {
+		//"," + goodsDirection +
+		String rowdataString = formatID + "," + goodSize + "," + goodPrice +"," + goodImagePath + "," + goodsStock + "," + good.getGoodsID() +"\r\n";
+		return rowdataString;
+	}
+	
 	
 	
 }

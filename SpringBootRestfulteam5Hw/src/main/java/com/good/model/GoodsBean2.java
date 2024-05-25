@@ -228,6 +228,11 @@ public class GoodsBean2 implements java.io.Serializable {
 				+ shipmentPlace + ", numberRatings=" + numberRatings + ", rating=" + rating + ", goodsSellerID="
 				+ goodsSellerID.getSid() + ", titleImage=" + titleImage + ", goodsold=" + goodsold +", status=" + status+ "]";
 	}
+	public String csvoutput() {
+		//"," + goodsDirection +
+		String rowdataString = goodsID + "," + goodsName + "," + goodsDirection + ","+ goodsType +","+ launchDate +","+ brand + ","+ shipmentPlace +"," + numberRatings + "," + rating + ","+ goodsSellerID.getSid() + "," + titleImage + "," + goodsold +"," + status +"\r\n";
+		return rowdataString;
+	}
 
 	
 

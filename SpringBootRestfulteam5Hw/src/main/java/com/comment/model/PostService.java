@@ -179,7 +179,9 @@ public class PostService {
             for (Post post : posts) {
                 List<String> rowData = new ArrayList<>();
                 rowData.add(String.valueOf(post.getCommentid())); 
-                rowData.add(post.getCommentcontent() != null ? (post.getCommentcontent().isEmpty() ? "NULL" : post.getCommentcontent()) : "NULL");
+                // 處理評論內容，將其中的換行符替換為空格，保持在同一行
+                String commentContent = post.getCommentcontent() != null ? (post.getCommentcontent().isEmpty() ? "NULL" : post.getCommentcontent().replace("\n", " ")) : "NULL";
+                rowData.add(commentContent);
                 rowData.add(post.getProductphoto() != null ? post.getProductphoto() : "NULL");
                 rowData.add(post.getCommenttime() != null ? post.getCommenttime().toString() : "NULL");
                 rowData.add(post.getLastmodifiedtime() != null ? post.getLastmodifiedtime().toString() : "NULL");

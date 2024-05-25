@@ -28,7 +28,6 @@ import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-
 @Service
 @Transactional
 public class PostService {
@@ -172,20 +171,15 @@ public class PostService {
 
     public byte[] exportToCSV(List<Post> posts) {
         try {
-            CsvMapper mapper = new CsvMapper();
-            CsvSchema schema = mapper.schemaFor(Post.class).withHeader();
-
             StringWriter writer = new StringWriter();
-            PrintWriter csvWriter = new PrintWriter(writer);
-
+            List<String> lines = new ArrayList<>();
             List<String> header = Arrays.asList("commentid", "commentcontent", "productphoto", "commenttime", "lastmodifiedtime", "buyerrate", "replayconetnt", "replaytime", "sellerrate", "repliedcommentid");
-            csvWriter.println(String.join(",", header));
+            lines.add(String.join(",", header));
 
             for (Post post : posts) {
                 List<String> rowData = new ArrayList<>();
-
                 rowData.add(String.valueOf(post.getCommentid())); 
-                rowData.add(post.getCommentcontent() != null ? post.getCommentcontent() : "NULL");
+                rowData.add(post.getCommentcontent() != null ? (post.getCommentcontent().isEmpty() ? "NULL" : post.getCommentcontent()) : "NULL");
                 rowData.add(post.getProductphoto() != null ? post.getProductphoto() : "NULL");
                 rowData.add(post.getCommenttime() != null ? post.getCommenttime().toString() : "NULL");
                 rowData.add(post.getLastmodifiedtime() != null ? post.getLastmodifiedtime().toString() : "NULL");
@@ -194,11 +188,10 @@ public class PostService {
                 rowData.add(post.getReplaytime() != null ? post.getReplaytime().toString() : "NULL");
                 rowData.add(post.getSellerrate() != null ? String.valueOf(post.getSellerrate()) : "NULL");
                 rowData.add(post.getRepliedcommentid() != null ? String.valueOf(post.getRepliedcommentid()) : "NULL");
-
-                csvWriter.println(String.join(",", rowData));
+                lines.add(String.join(",", rowData));
             }
 
-            csvWriter.close();
+            writer.write(String.join("\n", lines));
             return writer.toString().getBytes();
         } catch (Exception e) {
             throw new RuntimeException("Failed to export data to CSV", e);

@@ -157,7 +157,7 @@ input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer
                                         showConfirmButton: true,
                                     }).then((result) => {
                                         if (result.isConfirmed) {
-                                            window.location.href="shoppcar.controller";
+                                        	window.location.href = "shoppcar.controller?cache=" + new Date().getTime();
                                         }
                                     });
                                 },

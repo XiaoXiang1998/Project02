@@ -85,7 +85,7 @@
 						</nav>
 						<nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
 							<a class="nav-link" href="mangerGoodChart">
-								商品??
+								商品數據
 							</a>
 						</nav>
 					</div>

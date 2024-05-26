@@ -87,7 +87,7 @@
 												role="tab">買家評價</a>
 											<% } %>
 												<a class="list-group-item list-group-item-action"
-													id="list-sellerMarket-list" href="sellerMarket" role="tab">我的賣場</a>
+													id="list-sellerMarket-list" href="sellerMarketFromMemberCenter" role="tab">我的賣場</a>
 												<a class="list-group-item list-group-item-action"
 													id="list-sellerGood-list" href="sellerGoodQueryAll"
 													role="tab">我的商品</a>

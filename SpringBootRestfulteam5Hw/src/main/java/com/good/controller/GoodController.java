@@ -702,7 +702,74 @@ public class GoodController {
 		}
 
 	}
+	//從個人中心進入我的賣場
+	@GetMapping("/sellerMarketFromMemberCenter")
+	public String sellerMarketFromMemberCenter(HttpServletRequest request, HttpSession session) {
+		MemberBean user = (MemberBean) session.getAttribute("member");
+		int sellerID = user.getSid();
+		// 取得賣家所擁有的商品編號
+		Query<Integer> popularListID = (Query<Integer>) entityManager.createQuery(
+				"select g.goodsID from GoodsBean2 g where g.status = 1 AND g.goodsSellerID.sid = ?1 ORDER BY g.rating/g.numberRatings")
+				.setParameter(1, sellerID);// 在搜尋商品名稱後 取得對應種類的數量
+//		Query<Integer> resultList0 = (Query<Integer>) entityManager.createQuery(hql);
+		List<Integer> ListObject = popularListID.getResultList();
+		List<GoodPriceDTO> pricerange = new ArrayList();
 
+		for (Integer item : ListObject) { // 取得滿足要求的商品編號
+			// 先取得編號
+			GoodsBean2 good = gService.getById(item);
+			Query<Object[]> resultList = (Query<Object[]>) entityManager.createQuery(
+					"select min(gf.goodPrice) AS minprice,max(gf.goodPrice) AS maxprice, g.goodsID AS goodsID from GoodsBean2 g join GoodFormat gf on g.goodsID = gf.good.goodsID where g.goodsID = ?1 group by g.goodsID")
+					.setParameter(1, item);// 在特定賣家下查詢商品，並取得不同編號下的最大和最小價格
+			List<Object[]> item2 = resultList.getResultList();
+			for (Object[] item3 : item2) {
+				GoodPriceDTO result = new GoodPriceDTO();
+				System.out.println(good.getNumberRatings());
+				if (good.getNumberRatings() == null) {// 沒人評分
+					result.setGoodAVG(0);
+				} else {
+					int AVG = good.getRating() / good.getNumberRatings();
+					result.setGoodAVG(AVG);
+				}
+				result.setGoodType(good.getGoodsType());
+				result.setGoodName(good.getGoodsName());
+				result.setTitleImage(good.getTitleImage());
+				result.setGoodsID((Integer) item3[2]);
+				result.setMaxprice((Integer) item3[1]);
+				result.setMinprice((Integer) item3[0]);
+				System.out.println(result.toString());
+				pricerange.add(result);
+			}
+		}
+		// 取得商品種類對應的數量
+		HttpSession session2 = request.getSession();
+		Optional<MemberBean> sellerOpt = mService.findById(sellerID);
+		MemberBean seller = sellerOpt.get();
+		String sellerName = seller.getName();
+		session2.setAttribute("sellerID", sellerID);
+		session2.setAttribute("sellerName", sellerName);// 取得賣家名稱
+		// 查詢該賣家所擁有的商品種類和對應數量
+		List<GoodTypeDto> goodTypeNumber = new ArrayList();
+		Query<Object[]> resultList = (Query<Object[]>) entityManager.createQuery(
+				"select distinct g.goodsType AS goodsType,count(g.goodsType) AS goodsTypeNumber from GoodsBean2 g where g.status = 1 AND g.goodsSellerID.sid = ?1 GROUP BY g.goodsType")
+				.setParameter(1, sellerID);// 在搜尋商品名稱後 取得對應種類的數量
+		List<Object[]> item = resultList.getResultList();
+		for (Object[] item1 : item) {
+			GoodTypeDto data = new GoodTypeDto();
+			data.setGoodsType((String) item1[0]);
+			data.setGoodsTypeNumber((Long) item1[1]);
+			goodTypeNumber.add(data);
+		}
+
+		for (GoodPriceDTO item2 : pricerange) {
+			System.err.println(item2.toString());
+		}
+		System.out.println("goodTypeNumber.size() = " + goodTypeNumber.size());
+		session2.setAttribute("CategoryNumberList", goodTypeNumber);
+		session2.setAttribute("CategoryNumber", goodTypeNumber.size());
+		session2.setAttribute("PopularGoodBasicInfo", pricerange);
+		return "good/jsp/sellerMarket";
+	}
 	// 買家進入賣家的賣場 展示賣家所有上架的商品
 	@GetMapping("/sellerMarket")
 	public String sellerMarket(HttpServletRequest request, HttpSession session,

@@ -253,7 +253,7 @@
 					formData.append('seller', isSeller);
 
 
-					fetch('UpdateMember', { // 發送fetch請求
+					fetch('BackUpdateMember', { // 發送fetch請求
 						method: 'PUT',
 						body: formData
 					})

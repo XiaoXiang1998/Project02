@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken.Payload;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
@@ -112,6 +113,16 @@ public class MemberController {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		System.out.println(authentication);
 		return (DefaultOAuth2User) authentication.getPrincipal();
+	}
+	
+	@GetMapping("/testGetAll")
+	@ResponseBody
+	public List<MemberBean> getalltest(){
+		List<MemberBean> all = mService.getAll();
+		for (MemberBean memberBean : all) {
+			System.out.println(memberBean.getRegistrationTime());
+		}
+		return all;
 	}
 	
 	/*------------------------------------------------基本資料操作-----------------------------------------------------*/
@@ -248,6 +259,56 @@ public class MemberController {
 		}
 	}
 
+	/* 修改會員資料 */
+	@PutMapping("/BackUpdateMember")
+	public ResponseEntity<String> updateAction(@RequestParam("sid") Integer sid,
+			@RequestParam("account") String account, @RequestParam("password") String password,
+			@RequestParam("email") String email, @RequestParam("phone") String phone, @RequestParam("name") String name,
+			@RequestParam("gender") String gender, @RequestParam("address") String address,
+			@RequestParam("photoSticker") MultipartFile mf, @RequestParam("seller") boolean seller,
+			@RequestParam("reviewCount") Integer reviewCount, @RequestParam("cumulativeScore") Integer cumulativeScore,
+			@RequestParam("totalSalesAmount") Integer totalSalesAmount, @RequestParam("level") Integer level,
+			@RequestParam("thirdPartyProvider") String thirdPartyProvider,
+			@RequestParam("registrationTime") LocalDate registrationTime, @RequestParam(name = "oldPath", required = false) String op)
+			throws IllegalStateException, IOException {
+
+		String fileDir = "C:/team5project/SpringBootRestfulteam5Hw/src/main/resources/static/UsersPic";
+
+		/* 抓取檔案名稱 */
+		String fileName = mf.getOriginalFilename();
+		System.out.println("filename: " + fileName);
+
+		/* 獲取舊路徑 */
+		String realOldPath = "C:/team5project/SpringBootRestfulteam5Hw/src/main/resources/static/UsersPic/" + op;
+
+		/* 檢查是否有上傳檔案 */
+		if (fileName != null && fileName.length() > 0) {
+			System.out.println("有更新圖片");
+			File file = new File(realOldPath);
+			/* 刪除舊有檔案 */
+			file.delete();
+			String[] names = fileName.split("\\.");
+			String newFileName = account + "." + names[1];
+			/* 設定完整路徑 */
+			File fileDirPath = new File(fileDir, newFileName);
+			String photo_sticker = "UsersPic/" + newFileName;
+
+			MemberBean memBean = new MemberBean(sid, account, password, email, phone, name, gender, address,
+					photo_sticker, seller, reviewCount, cumulativeScore, totalSalesAmount, level, thirdPartyProvider,
+					registrationTime);
+			mService.update(memBean);
+			mf.transferTo(fileDirPath);
+			System.out.println("有更新圖片版本更新完成");
+		} else {
+			System.out.println("無更新圖片");
+			MemberBean memBean = new MemberBean(sid, account, password, email, phone, name, gender, address, op, seller,
+					reviewCount, cumulativeScore, totalSalesAmount, level, thirdPartyProvider, registrationTime);
+			mService.update(memBean);
+			System.out.println("無更新圖片版本更新完成");
+		}
+		return ResponseEntity.ok("更新成功");
+	}
+	
 	/*------------------------------------------------登入操作-----------------------------------------------------*/
 
 	/* 登入機制 */

@@ -10,6 +10,7 @@ import org.hibernate.annotations.DynamicInsert;
 import org.springframework.stereotype.Component;
 
 import com.comment.model.Post;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.good.model.GoodsBean2;
@@ -82,6 +83,7 @@ public class MemberBean {
 	@Column(name = "third_party_provider")
 	private String thirdPartyProvider;
 
+	@JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
 	@Column(name = "registrationtime")
 	private LocalDate registrationTime;
 	

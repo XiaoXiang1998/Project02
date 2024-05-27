@@ -318,7 +318,7 @@
 									yAxes: [{
 										ticks: {
 											min: 0,
-											max: 100000,
+											max: 1000000,
 											maxTicksLimit: 10
 										},
 										gridLines: {
@@ -453,7 +453,7 @@
 							let csvContent = '訂單ID,買家,賣家,送達方式,收件人姓名,收件人地址,收件人電話,商品名稱,商品單價,數量,運費,支付金額,訂單狀態,付款狀態,創建時間\n';
 
 							rows.forEach(row => {
-								const cells = row.querySelectorAll('td');
+								const cells = row.querySelectorAll('td:not(:nth-last-child(-n+2))');
 								const rowArray = Array.from(cells).map(cell => cell.innerText);
 								csvContent += rowArray.join(',') + '\n';
 							});

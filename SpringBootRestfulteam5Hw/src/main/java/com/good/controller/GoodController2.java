@@ -343,6 +343,9 @@ public class GoodController2 {
 			try (FileOutputStream fos = new FileOutputStream(fileGoodBasic);
 					BufferedOutputStream bos = new BufferedOutputStream(fos);
 					OutputStreamWriter osw = new OutputStreamWriter(bos, "UTF-8");) {
+				   fos.write(0xef);
+		            fos.write(0xbb);
+		            fos.write(0xbf);
 				osw.write(content);
 			} catch (UnsupportedEncodingException e) {
 				// TODO Auto-generated catch block
@@ -359,6 +362,9 @@ public class GoodController2 {
 			try (FileOutputStream fos = new FileOutputStream(fileGoodImage);
 					BufferedOutputStream bos = new BufferedOutputStream(fos);
 					OutputStreamWriter osw = new OutputStreamWriter(bos, "UTF-8");) {
+				   fos.write(0xef);
+		            fos.write(0xbb);
+		            fos.write(0xbf);
 				osw.write(content1);
 			} catch (UnsupportedEncodingException e) {
 				// TODO Auto-generated catch block
@@ -375,6 +381,9 @@ public class GoodController2 {
 			try (FileOutputStream fos = new FileOutputStream(fileGoodFormat);
 					BufferedOutputStream bos = new BufferedOutputStream(fos);
 					OutputStreamWriter osw = new OutputStreamWriter(bos, "UTF-8");) {
+				   fos.write(0xef);
+		            fos.write(0xbb);
+		            fos.write(0xbf);
 				osw.write(content2);
 			} catch (UnsupportedEncodingException e) {
 				// TODO Auto-generated catch block

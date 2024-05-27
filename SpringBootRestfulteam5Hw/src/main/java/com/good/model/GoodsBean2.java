@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.member.model.MemberBean;
 
@@ -53,7 +54,7 @@ public class GoodsBean2 implements java.io.Serializable {
 	
 	@ManyToOne
 	@JoinColumn(name = "GOODSSELLERID")
-//	@JsonBackReference
+	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 	private MemberBean goodsSellerID;
 	//
 	@Column(name="TITLEIMAGE")

@@ -78,7 +78,7 @@
                         <div class="row g-4 text-center align-items-center justify-content-center pt-4">
                             <button type="submit"
                                 class="btn border-secondary py-3 px-4 text-uppercase w-100 text-primary"  value="send">提交申請</button>
-                                <button type="button" class="submit-button" onclick="fillFormWithDummyData()">輸入</button>
+                                <button type="button" class="btn border-secondary py-3 px-4 text-uppercase w-100 text-primary" onclick="fillFormWithDummyData()">輸入</button>
                                
                         </div>
                     </div>

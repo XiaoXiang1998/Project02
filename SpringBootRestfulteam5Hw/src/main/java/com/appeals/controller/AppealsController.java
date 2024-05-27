@@ -235,7 +235,68 @@ public class AppealsController {
 	public String transferToJavaMail() {
 		return "Appeals/testmail";
 	}
-    
+    //---------------------------------------------------------------
+	// -----------------------------------
+		@GetMapping("/searchById")
+		public String searchById(@RequestParam("id") int id, Model model) {
+			System.out.println("123");
+			Appeals appeal = appealsService.selectOne(id);
+			model.addAttribute("appeal", appeal);
+			return "Appeals/showAppeal"; // 显示页面的模板名称，比如 showAppeal.html
+		}
+
+		@GetMapping("/searchByIdForm")
+		public String showSearchByIdForm() {
+			System.out.println("33333");
+			return "Appeals/searchById";
+		}
+		
+		@PostMapping("/updateAppeal")
+	    public String updateAppeal(@RequestParam("id") int id,
+	                               @RequestParam("name") String name,
+	                               @RequestParam("content") String content,
+	                               @RequestParam("reason") String reason,
+	                               @RequestParam("order") String order,
+	                               @RequestParam("date") String date,
+	                               @RequestParam("other") String other,
+	                               @RequestParam("state") String state,
+	                               Model model) {
+	        // 根据ID查询申诉信息，这里假设使用appealsService.selectOne(id)方法来获取申诉信息
+	        Appeals appeal = appealsService.selectOne(id);
+	        
+	        // 更新申诉信息的属性值
+	        
+	        appeal.setAppeals_name(name);
+	        appeal.setAppeals_content(content);
+	        appeal.setAppeals_reason(reason);
+	        appeal.setAppeals_order(order);
+	        appeal.setAppeals_date(date);
+	        appeal.setAppeals_other(other);
+	        appeal.setAppeals_state(state);
+
+	        // 进行更新操作，这里假设使用appealsService.update(appeal)方法来更新申诉信息
+	        appealsService.updateAppeals(appeal);
+
+	        // 重定向到显示申诉信息的页面
+	        return "Appeals/update-success";
+	    }
+		
+
+		 @PostMapping("/deleteAppeal")
+		    public String deleteAppeal(@RequestParam("id") int id) {
+		        // 在这里执行删除操作，你可以调用你的服务类来处理删除逻辑
+		        // 假设你有一个名为appealsService的服务类，其中包含删除申诉的方法
+		        appealsService.deleteById(id);
+		        
+		        // 重定向到首页或其他页面
+		        return "Appeals/delete-success";
+		    }
+		
+		
+		@GetMapping("/deleteAppealPage")
+	    public String showDeleteAppealButtonPage() {
+	        return "Appeals/deleteAppealPage";
+	    }
 	}
 
 

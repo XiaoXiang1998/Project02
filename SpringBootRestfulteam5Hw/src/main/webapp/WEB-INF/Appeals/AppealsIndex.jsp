@@ -81,7 +81,7 @@
                                 <!--                                 <i class="fas fa-car-side fa-3x text-white"></i> -->
                                 <i class="fa-regular fa-keyboard  fa-3x text-white"></i>
                             </div>
-                            <form method="Get" action="update2">
+                            <form method="Get" action="searchByIdForm">
                                 <div class="featurs-content text-center">
                                     <button class="no-border-button">
                                         <h5>查詢及修改</h5>
@@ -112,7 +112,7 @@
                             <i class="fa-solid fa-box-archive fa-3x text-white"></i>
 
                         </div>
-                        <form method="get" action="delete">
+                        <form method="get" action="deleteAppealPage">
                             <div class="featurs-content text-center">
                                 <button class="no-border-button">
                                     <h5>刪除申訴</h5>

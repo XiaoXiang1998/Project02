@@ -102,6 +102,7 @@ input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer
                                 input.val(newValue);
                                 updateQuantity(itemId, newValue);
                             }
+                                calculateTotalPrice();
                         });
                         
 						
@@ -109,6 +110,7 @@ input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer
                             let itemId = $(this).attr('id').split('_')[1];
                             let quantity = $(this).val();
                             updateQuantity(itemId, quantity);
+                            calculateTotalPrice();
                         });
                         
                         
@@ -139,7 +141,6 @@ input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer
                             }).then((result) => {
                                 if (result.isConfirmed) {
                                     deleteCartItem(itemId);
-                                    location.reload();
                                 }
                             });
                         });
@@ -150,14 +151,13 @@ input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer
                                 url: "deleteCartItem.controller?itemId=" + itemId,
                                 data: { itemId: itemId },
                                 success: function (data) {
-                                    console.log("DeleteCartItem response:", data);
                                     Swal.fire({
                                         title: '刪除成功!',
                                         icon: 'success',
                                         showConfirmButton: true,
                                     }).then((result) => {
                                         if (result.isConfirmed) {
-                                        	window.location.href = "shoppcar.controller?cache=" + new Date().getTime();
+                                        	location.reload();
                                         }
                                     });
                                 },
@@ -195,8 +195,7 @@ input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer
                                 let itemTotalPrice = price * quantity;
                                 totalPrice += itemTotalPrice;
                                 row.find('td:eq(5)').text(itemTotalPrice);
-                                console.log(price);
-                                console.log(totalPrice);
+ 
                             });
                            $('#totalPrice').text('總共金額: $' + totalPrice);
                            let allChecked = $('input[name="selectedItems"]').length === $('input[name="selectedItems"]:checked').length;

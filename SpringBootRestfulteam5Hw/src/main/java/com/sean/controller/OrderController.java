@@ -157,7 +157,7 @@ public class OrderController {
 		cService.deleteCarItemById(cartItemId);
 		List<CarItem> carItems = cService.findByMemberId(memberId);
 		m.addAttribute("carItems", carItems);
-		return "Order/jsformatIDp/ShopCar";
+		return "Order/jsp/ShopCar";
 	}
 	
 	@GetMapping("DirectlyBuy")

@@ -325,8 +325,8 @@
 	                cancelButtonText: '取消'
 	            }).then((result) => {
 	                if (result.isConfirmed) {
-	                    Swal.fire("新增訂單成功", "", "success").then(() => {
 	                        $("#orderForm").submit();
+	                    Swal.fire("新增訂單成功", "", "success").then(() => {
 	                    });
 	                }
 	            });

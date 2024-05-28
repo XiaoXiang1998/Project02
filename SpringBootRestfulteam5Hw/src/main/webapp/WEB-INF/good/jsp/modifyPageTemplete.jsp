@@ -177,7 +177,7 @@
                             </form>
                         </div>
                     </div>
-                    <button id="onebuttonalldatashow" type="button">一件輸入</button>
+                    <button id="onebuttonalldatashow" type="button">一鍵輸入</button>
 
                     <!-- Footer Start -->
                     <div class="container-fluid bg-dark text-white-50 footer pt-5 mt-5">
@@ -1328,13 +1328,13 @@
                         $(document).on('change', 'input[type="checkbox"][name="GoodDelete"]', function () {
 
                         })
-                        $('#onebuttonalldatashow').click(function(){
-                            $('#GoodsName').prop("value","鯊鯊貓吊飾");
-                                $('#GoodsType').prop("value","生活小物");
-                                $('#Brand').prop("value","ㄠ了個菁");
-                                $('#ShipmentPlace').prop("value","中國北京");
-                      
-                            })
+                        $('#onebuttonalldatashow').click(function () {
+                            $('#GoodsName').prop("value", "鯊鯊貓吊飾");
+                            $('#GoodsType').prop("value", "生活小物");
+                            $('#Brand').prop("value", "ㄠ了個菁");
+                            $('#ShipmentPlace').prop("value", "中國北京");
+
+                        })
                     </script>
         </body>
 

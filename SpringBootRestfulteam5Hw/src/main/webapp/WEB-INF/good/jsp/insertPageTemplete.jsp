@@ -103,7 +103,7 @@
                                 </form>
                             </div>
                         </div>
-                        <button id="onebuttonalldatashow" type="button">一件輸入</button>
+                        <button id="onebuttonalldatashow" type="button">一鍵輸入</button>
                         <!-- Checkout Page End -->
 
                         <!-- Footer Start -->
@@ -749,12 +749,12 @@
                             })
 
                             //一鍵輸入
-                            $('#onebuttonalldatashow').click(function(){
-                       
-                                $('#GoodsName').prop("value","鯊鯊貓手機殼");
-                                $('#GoodsType').prop("value","3C配件");
-                                $('#Brand').prop("value","ㄠ了個菁");
-                                $('#ShipmentPlace').prop("value","中國北京");
+                            $('#onebuttonalldatashow').click(function () {
+
+                                $('#GoodsName').prop("value", "鯊鯊貓手機殼");
+                                $('#GoodsType').prop("value", "3C配件");
+                                $('#Brand').prop("value", "ㄠ了個菁");
+                                $('#ShipmentPlace').prop("value", "中國北京");
                             })
                         </script>
             </body>

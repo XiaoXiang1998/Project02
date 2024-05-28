@@ -670,6 +670,15 @@ public class GoodController {
 				page = gService.findSellerGoodByPageAndNameAll(p1, Integer.parseInt(sellerID), goodNameString);
 			}
 			break;
+		case "違規商品":
+			if (goodNameString.equals("XXX")) {// 沒有輸入商品名稱
+				page = gService.findSellerGoodByPageBAN(p1, Integer.parseInt(sellerID));
+
+			} else {
+				page = gService.findSellerGoodByPageAndNameBAN(p1, Integer.parseInt(sellerID), goodNameString);
+			}
+			break;
+
 		default:
 			System.out.println("something wrong!!!!!!!!print hidden = " + hidden);
 			break;
@@ -2172,7 +2181,12 @@ public class GoodController {
 			if (status.equals("NO")) {// 商品下架
 				good.setStatus(0);
 			} else {
-				System.out.println("你輸入進去的是甚麼東西");
+				if(status.equals("BAD")) {
+					good.setStatus(-1);
+				}
+				else {
+					System.out.println("你輸入進去的是甚麼東西");					
+				}
 			}
 		}
 		gService.update(good);

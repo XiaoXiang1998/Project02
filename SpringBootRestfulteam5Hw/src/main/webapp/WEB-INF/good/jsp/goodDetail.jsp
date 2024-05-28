@@ -517,8 +517,8 @@
 								</a>
 
 
-								<h1 id="limitbuyerID">買家編號:${buyerID}</h1>
-								<h1 id="limitsellerID">賣家編號:${sellerID}</h1>
+								<h1 id="limitbuyerID" hidden>買家編號:${buyerID}</h1>
+								<h1 id="limitsellerID" hidden>賣家編號:${sellerID}</h1>
 							</div>
 						</div>
 						<%@ include file="../../FrontDeskFooter.jsp" %>
@@ -782,6 +782,8 @@
 											form.submit();
 										}
 									})
+								$(document).find('.owl-nav').prop("hidden", true);
+
 							</script>
 							<!-- 下面是OK的  -->
 							<script>

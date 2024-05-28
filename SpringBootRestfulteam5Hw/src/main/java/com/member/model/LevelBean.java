@@ -22,6 +22,7 @@ import jakarta.persistence.Table;
 public class LevelBean {
 
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "level")
 	private Integer level;
 

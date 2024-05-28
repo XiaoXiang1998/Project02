@@ -187,7 +187,7 @@
                                         console.log(n.status);
                                         // 
                                         switch (n.status) {
-                                                case 0:
+                                            case 0:
                                                 statuscontent = `<div class="form-check">
                                                                     <input class="form-check-input" type="radio" name="flexRadioDefault`+ i + `" value="YES">
                                                                     <label class="form-check-label">
@@ -206,8 +206,8 @@
                                                                         違禁
                                                                     </label>
                                                                 </div>`;
-                                                    break;
-                                                case 1:
+                                                break;
+                                            case 1:
                                                 statuscontent = `<div class="form-check">
                                                                     <input class="form-check-input" type="radio" name="flexRadioDefault`+ i + `" value="YES" checked>
                                                                     <label class="form-check-label">
@@ -226,8 +226,8 @@
                                                                         違禁
                                                                     </label>
                                                                 </div>`;
-                                                    break;
-                                                case -1:
+                                                break;
+                                            case -1:
                                                 statuscontent = `<div class="form-check"> 
                                                             <input class="form-check-input" type="radio" name="flexRadioDefault`+ i + `" value="YES" >
                                                             <label class="form-check-label">
@@ -245,10 +245,10 @@
                                                                 違禁
                                                             </label>
                                                         </div>`;
-                                                    break;
-                                                default:
-                                                    console.log("n.status = "+n.status);
-                                            }
+                                                break;
+                                            default:
+                                                console.log("n.status = " + n.status);
+                                        }
                                         // 
                                         Basicinfo[i] = [n.goodsID, n.goodsName, `<img src="` + n.titleImage + `" alt="" class="w-100 img-fluid" style="width: 150px;height: 100px;">`, n.goodsType, n.launchDate, n.brand, n.shipmentPlace, n.goodsSellerID.sid, statuscontent
                                         ];
@@ -287,8 +287,8 @@
                                         `</td><td>` + n.shipmentPlace + `</td><td>` + n.goodsSellerID.sid + `</td>`;
                                     // 
                                     switch (n.status) {
-                                                case 0:
-                                                statuscontent = `<td><div class="form-check">
+                                        case 0:
+                                            statuscontent = `<td><div class="form-check">
                                                             <input class="form-check-input" type="radio" name="flexRadioDefault`+ i + `" value="YES">
                                                             <label class="form-check-label">
                                                                 上架
@@ -306,10 +306,10 @@
                                                                 違禁
                                                             </label>
                                                         </div></td>`;
-                                                        insertcontent = insertcontent+statuscontent;
-                                                    break;
-                                                case 1:
-                                                statuscontent = `<td><div class="form-check">
+                                            insertcontent = insertcontent + statuscontent;
+                                            break;
+                                        case 1:
+                                            statuscontent = `<td><div class="form-check">
                                                                     <input class="form-check-input" type="radio" name="flexRadioDefault`+ i + `" value="YES" checked>
                                                                     <label class="form-check-label">上架</label>
                                                                 </div>
@@ -321,10 +321,10 @@
                                                             <input class="form-check-input" type="radio" name="flexRadioDefault`+ i + `" value="BAD" >
                                                             <label class="form-check-label">違禁</label>
                                                         </div></td>`;
-                                                        insertcontent = insertcontent+statuscontent;
-                                                    break;
-                                                case -1:
-                                                statuscontent = `<td><div class="form-check">
+                                            insertcontent = insertcontent + statuscontent;
+                                            break;
+                                        case -1:
+                                            statuscontent = `<td><div class="form-check">
                                                             <input class="form-check-input" type="radio" name="flexRadioDefault`+ i + `" value="YES" >
                                                             <label class="form-check-label">
                                                                 上架
@@ -341,11 +341,11 @@
                                                                 違禁
                                                             </label>
                                                         </div></td>`;
-                                                        insertcontent = insertcontent+statuscontent;
-                                                    break;
-                                                default:
-                                                    console.log("n.status = "+n.status);
-                                            }
+                                            insertcontent = insertcontent + statuscontent;
+                                            break;
+                                        default:
+                                            console.log("n.status = " + n.status);
+                                    }
                                     // 
                                     arrtarget[i].innerHTML = insertcontent;
                                 });
@@ -413,11 +413,11 @@
 
                 })
 
-                $('.prodeuceCsvAndImage').click(function(){
+                $('.prodeuceCsvAndImage').click(function () {
                     $.ajax({
-                        type:"get",
-                        url:"produceCSVAndCopiedImage",
-                        success:function(data){
+                        type: "get",
+                        url: "produceCSVAndCopiedImage",
+                        success: function (data) {
 
                         }
                     })

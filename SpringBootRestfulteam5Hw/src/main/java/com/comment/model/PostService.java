@@ -56,8 +56,6 @@ public class PostService {
 
 	        return pRepository.save(oldComment);
 	    } else {
-	        // 如果找不到該評論，則可能需要處理此情況
-	        // 例如拋出異常或返回null
 	        return null;
 	    }
 	}
@@ -107,7 +105,6 @@ public class PostService {
 	}
 	
 	public List<Integer> findRepliedCommentIdsBySellerId(Integer sellerId) {
-        // 根据卖家ID查询已回复的评论ID列表
         return pRepository.findRepliedCommentIdsBySellerId(sellerId);
     }
 	
@@ -115,7 +112,6 @@ public class PostService {
         return pRepository.countCommentsBySellerIdAndBuyerrate(sellerId, buyerrate);
     }
 
-    // 根据商品的卖家ID获取相关评论的数量
     public long countCommentsBySellerId(int sellerId) {
         return pRepository.countPostsBySellerId(sellerId);
     }
@@ -158,12 +154,10 @@ public class PostService {
         return pRepository.productPostsByGoodIdAndRate(goodId, rate, pageable);
     }
     
-    // 查询有留言内容的评价
     public Page<Post> findPostsByGoodIdWithContent(Integer goodId, Pageable pageable) {
         return pRepository.productPostsByGoodIdWithContent(goodId, pageable);
     }
 
-    // 查询附带照片的评价
     public Page<Post> findPostsByGoodIdWithPhotos(Integer goodId, Pageable pageable) {
         return pRepository.productPostsByGoodIdWithPhotos(goodId, pageable);
     }

@@ -11,37 +11,36 @@
 <title>買家評價</title>
 <style>
 	.time-and-details {
-        flex-grow: 1; /* 彈性增長，以填滿可用空間 */
+        flex-grow: 1; 
         display: flex;
         flex-direction: row;
     }
     .order-details {
-        margin-right: 10px; /* 增加右邊距，使得各項目之間有一定間距 */
+        margin-right: 10px; 
     }
     
     .time{
-	    margin-right: 5px; /* 調整時間和 | 之間的間距 */
+	    margin-right: 5px;
 	
 }
 .separator {
-    margin-right: 5px; /* 調整右側間距 */
-    margin-left: 5px; /* 調整左側間距 */
+    margin-right: 5px; 
+    margin-left: 5px;
 }
    .comment-container {
-    width: 80%; /* 设置评论容器的宽度 */
-    margin: 20px auto; /* 将评论容器水平居中显示，并添加上下间距 */
-    border: 3px solid #ccc; /* 添加边框 */
-        border-radius: 10px; /* 设置圆角 */
+    width: 80%; 
+    margin: 20px auto; 
+    border: 3px solid #ccc; 
+        border-radius: 10px; 
     
-    padding: 10px; /* 添加内边距 */
-    background-color: #f9f9f9; /* 设置背景颜色 */
+    padding: 10px; 
+    background-color: #f9f9f9; 
 }
 
 .comment-container + .comment-container {
-    margin-top: 20px; /* 设置相邻评论容器之间的上间距 */
+    margin-top: 20px; 
 }
 
-/* 标签按钮样式 */
   .tab {
     text-align: center;
   }
@@ -112,7 +111,6 @@
 
 
 <script>
-    // 根据评分级别过滤评论
     function filterComments(rating) {
         var comments = document.getElementsByClassName('comment-container');
         if (rating === 'all') {
@@ -122,7 +120,7 @@
         } else {
             for (var i = 0; i < comments.length; i++) {
                 var comment = comments[i];
-                var commentRating = parseInt(comment.classList[1].substring(6)); // 获取评论的评分级别
+                var commentRating = parseInt(comment.classList[1].substring(6)); 
                 if (commentRating === rating) {
                     comment.style.display = 'block';
                 } else {
@@ -132,24 +130,19 @@
         }
     }
 
-    // 页面加载后重新显示评论内容
     window.onload = function() {
         filterComments('all');
     }
 </script>
 
 <script>
-  // 获取所有按钮元素
   var btns = document.querySelectorAll('.tab button');
 
-  // 为每个按钮添加点击事件监听器
   btns.forEach(function(btn) {
     btn.addEventListener('click', function() {
-      // 移除所有按钮的 active 类
       btns.forEach(function(b) {
         b.classList.remove('active');
       });
-      // 将当前点击的按钮添加 active 类
       this.classList.add('active');
     });
   });

@@ -17,10 +17,9 @@
 	padding: 15px;
 	margin-bottom: 15px;
 }
-/* 添加评论框之间的分隔线 */
 .comment:not(:last-child) {
-	border-bottom: 1px solid #ccc; /* 添加分隔线 */
-	margin-bottom: 15px; /* 调整间距 */
+	border-bottom: 1px solid #ccc; 
+	margin-bottom: 15px; 
 }
 
 .comment p {
@@ -88,12 +87,12 @@
 }
 
 .star-img {
-	display: inline-block; /* 將圖片設置為 inline-block */
-	margin: auto; /* 使圖片水平置中 */
+	display: inline-block;
+	margin: auto; 
 }
 
 #replayconetnt {
-	font-size: 16px; /* 放大字体 */
+	font-size: 16px; 
 }
 
 .name {
@@ -104,7 +103,7 @@
 }
 
 .nav-link.active {
-	background-color: #007bff; /* 高亮時背景顏色 */
+	background-color: #007bff;
 }
 .goods-container {
     display: flex;
@@ -114,14 +113,14 @@
 
 .goods-container img {
     margin-right: 10px;
-    border: 1px solid #ccc; /* 边框颜色 */
+    border: 1px solid #ccc; 
 }
 
 .goods-container span {
-    font-size: 1.1em; /* 设置字体大小，根据实际情况调整 */
-    color: black; /* 设置文字颜色为黑色 */
-    background-color: #e0e0e0; /* 设置背景颜色为浅灰色 */
-    padding: 5px; /* 可选：添加一些内边距 */
+    font-size: 1.1em;
+    color: black; 
+    background-color: #e0e0e0; 
+    padding: 5px; 
 }
 .avatar {
     width: 50px;
@@ -130,14 +129,14 @@
     border-radius: 50%;
     display: inline-block;
     margin-right: 20px;
-    overflow: hidden; /* 确保图片不会超出边界 */
-    vertical-align: middle; /* 保持与文本的垂直对齐 */
+    overflow: hidden; 
+    vertical-align: middle; 
 }
 
 .avatar img {
     width: 100%;
     height: 100%;
-    object-fit: cover; /* 确保图片以覆盖方式填充头像 */
+    object-fit: cover; 
 }
 </style>
 </head>
@@ -149,10 +148,9 @@
 	<div class="row">
 		<div class="col">
 			<ul class="nav nav-tabs">
-				<!-- 平均分數和星星圖示 -->
 				<li class="nav-item"><span class="nav-link"
 					style="font-weight: bold; color: black; font-size: 22px;">
-						${averageScore} </span> <!-- 顯示星星圖示 --> <span class="nav-link"> <c:forEach
+						${averageScore} </span>  <span class="nav-link"> <c:forEach
 							begin="1" end="${averageScore}">
 							<img src="commentPicture/output.png" alt="star" class="star-img"
 								width="20" height="20">
@@ -181,7 +179,6 @@
 		</div>
 	</div>
 
-	<!-- 显示当前评分级别的评论数据 -->
 	<div class="comments">
 		<c:forEach var="comment" items="${comments}">
 			<div class="comment">
@@ -251,11 +248,11 @@
 
 		function maskName(name) {
 			if (name.length !== 3) {
-				return name; // 如果名字不是三個字，直接返回名字
+				return name; 
 			}
 			let firstChar = name.charAt(0);
 			let lastChar = name.charAt(2);
-			return firstChar + '***' + lastChar; // 將中間字符替換為星號
+			return firstChar + '***' + lastChar;
 		}
 	</script>
 

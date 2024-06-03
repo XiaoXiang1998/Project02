@@ -31,7 +31,7 @@ body {
 
 .container {
 	margin: 10 auto;
-	padding: 20px; /* 增加内边距 */
+	padding: 20px;
 }
 
 .item {
@@ -50,14 +50,14 @@ body {
     border-radius: 50%;
     display: inline-block;
     margin-right: 20px;
-    overflow: hidden; /* 确保图片不会超出边界 */
-    vertical-align: middle; /* 保持与文本的垂直对齐 */
+    overflow: hidden; 
+    vertical-align: middle; 
 }
 
 .avatar img {
     width: 100%;
     height: 100%;
-    object-fit: cover; /* 确保图片以覆盖方式填充头像 */
+    object-fit: cover; 
 }
 
 .name {
@@ -98,12 +98,12 @@ body {
  position: absolute;
     top: 0;
     right: 0;
-    padding: 10px; /* 可以根據需要調整間距 */
+    padding: 10px; 
 }
 
 .dropdown-content {
 	display: none;
-	position: relative; /* 将下拉菜单设置为相对定位 */
+	position: relative; 
 	background-color: #fff;
 	min-width: 120px;
 	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -151,15 +151,13 @@ body {
 	font-size: 14px; /* 字體大小 */
 	line-height: 1.5; /* 行高 */
 }
-/* 擴展 textarea 在 hover 狀態下的樣式 */
 .edit-window textarea:hover {
 	border-color: #999;
 }
-/* 擴展 textarea 在 focus 狀態下的樣式 */
 .edit-window textarea:focus {
 	outline: none;
-	border-color: #007bff; /* 更改 focus 狀態下的邊框顏色 */
-	box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* 添加 focus 狀態下的陰影效果 */
+	border-color: #007bff;
+	box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); 
 }
 
 .close-btn {
@@ -170,11 +168,11 @@ body {
 }
 
 .page-separator {
-	margin: 0 5px; /* 調整分頁連結之間的間距 */
+	margin: 0 5px; 
 }
 
 .custom-pagination-container {
-	margin-top: 20px; /* 调整分页组件与数据之间的间距 */
+	margin-top: 20px; 
 	display: flex;
 	justify-content: center;
 }
@@ -186,7 +184,7 @@ body {
 }
 
 .custom-page-item {
-	margin-right: 10px; /* 调整分页链接之间的间距 */
+	margin-right: 10px; 
 }
 
 .custom-page-link {
@@ -211,22 +209,22 @@ body {
 }
 
 .time-and-details {
-	flex-grow: 1; /* 彈性增長，以填滿可用空間 */
+	flex-grow: 1;
 	display: flex;
 	flex-direction: row;
 }
 
 .order-details {
-	margin-right: 10px; /* 增加右邊距，使得各項目之間有一定間距 */
+	margin-right: 10px; 
 }
 
 .time {
-	margin-right: 5px; /* 調整時間和 | 之間的間距 */
+	margin-right: 5px; 
 }
 
 .separator {
-	margin-right: 5px; /* 調整右側間距 */
-	margin-left: 5px; /* 調整左側間距 */
+	margin-right: 5px; 
+	margin-left: 5px; 
 }
 
 .reply {
@@ -240,27 +238,27 @@ body {
 .goods-container {
     display: flex;
     align-items: center;
-    margin-bottom: 10px; /* 可选：为每个商品间添加一些间距 */
+    margin-bottom: 10px;
 }
 
 .goods-container img {
-    width: 100px; /* 调整图片宽度 */
-    height: 100px; /* 调整图片高度 */
-    margin-right: 30px; /* 图片和描述之间的间距 */
+    width: 100px;
+    height: 100px; 
+    margin-right: 30px; 
 }
 
 .goods-details {
-    flex-grow: 1; /* 让描述文本占据剩余空间 */
-    max-width: 200px; /* 设置描述文本的最大宽度，根据实际情况调整 */
-    white-space: nowrap; /* 防止文字换行 */
-    overflow: hidden; /* 超出部分隐藏 */
-    text-overflow: ellipsis; /* 超出部分以省略号显示 */
+    flex-grow: 1; 
+    max-width: 200px; 
+    white-space: nowrap; 
+    overflow: hidden; 
+    text-overflow: ellipsis; 
 }
 
 .goods-details span {
-    font-weight: bold; /* 设置字体加粗 */
-    font-size: 1.1em; /* 设置字体大小，根据实际情况调整 */
-    color: black; /* 设置文字颜色为黑色 */
+    font-weight: bold; 
+    font-size: 1.1em; 
+    color: black; 
 }
 </style>
 </head>
@@ -438,13 +436,11 @@ function closeEditWindow(commentId) {
 }
 
 function updateComment(commentId) {
-    // 隱藏文本域和按鈕
     var editForm = document.getElementById('editForm' + commentId);
     editForm.style.display = 'none';
 
     var commentContent = document.getElementById("commentContent_" + commentId).value;
 
-    // 使用 SweetAlert 顯示確認訊息
     Swal.fire({
         title: '你確定要修改評論嗎？',
         icon: 'question',
@@ -453,22 +449,21 @@ function updateComment(commentId) {
         cancelButtonText: '取消',
     }).then((result) => {
         if (result.isConfirmed) {
-            // 使用 AJAX 將更新後的評論內容發送到後端
             $.ajax({
-                url: 'post/' + commentId, // 使用 PUT 請求的路由
-                type: 'POST', // 使用 POST 方法
+                url: 'post/' + commentId, 
+                type: 'POST', 
                 data: {
-                    _method: 'PUT', // 以 PUT 方式提交表單
-                    commentContent: commentContent // 要更新的評論內容
+                    _method: 'PUT', 
+                    commentContent: commentContent
                 },
                 success: function(result) {
-                    // 顯示修改成功的提示訊息
+                    
                     Swal.fire({
                         title: '修改成功',
                         icon: 'success',
                         confirmButtonText: '確認'
                     }).then(() => {
-                        window.location.reload(); // 修改成功後重新加載頁面
+                        window.location.reload();
                     });
                 },
                 error: function(xhr, status, error) {
@@ -476,7 +471,6 @@ function updateComment(commentId) {
                 }
             });
         } else {
-            // 如果取消，則重新顯示文本域和按鈕
             editForm.style.display = 'block';
         }
     });
@@ -491,8 +485,8 @@ document.querySelectorAll('.item').forEach(item => {
         const editForm = document.getElementById('editForm' + commentId);
         const rect = item.getBoundingClientRect();
         const containerRect = document.querySelector('.container').getBoundingClientRect();
-        const top = containerRect.top - window.scrollY; // 使用容器顶部位置
-        const left = containerRect.right - editForm.offsetWidth - window.scrollX; // 使用容器右侧位置减去编辑表单宽度
+        const top = containerRect.top - window.scrollY; 
+        const left = containerRect.right - editForm.offsetWidth - window.scrollX; 
         editForm.style.display = 'block';
         editForm.style.top = `${top}px`;
         editForm.style.left = `${left}px`;
@@ -512,11 +506,11 @@ document.addEventListener("DOMContentLoaded", function() {
 
 function maskName(name) {
     if (name.length !== 3) {
-        return name; // 如果名字不是三個字，直接返回名字
+        return name; 
     }
     let firstChar = name.charAt(0);
     let lastChar = name.charAt(2);
-    return firstChar + '***' + lastChar; // 將中間字符替換為星號
+    return firstChar + '***' + lastChar; 
 }
 
 </script>

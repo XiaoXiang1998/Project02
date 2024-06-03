@@ -15,27 +15,23 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/js/lightbox.min.js"></script>
 
 	<style>
-	/* 卖家回复内容 */
 	.seller-reply {
 	    background-color: #f9f9f9;
 	    padding: 20px;
 	    margin-bottom: 20px;
 	}
 	
-	/* 买家评论内容 */
 	.buyer-comment {
 	    background-color: #e3f2fd;
 	    padding: 10px;
 	    margin-bottom: 20px;
 	}
 	
-	/* 分页按钮容器 */
 	.pagination-container {
 	    text-align: center;
 	    margin-top: 20px;
 	}
 	
-	/* 分页按钮样式 */
 	.pagination-container a {
 	    display: inline-block;
 	    padding: 5px 10px;
@@ -52,22 +48,22 @@
 	}
 	
 	.time-and-details {
-	        flex-grow: 1; /* 彈性增長，以填滿可用空間 */
+	        flex-grow: 1; 
 	        display: flex;
 	        flex-direction: row;
 	    }
 	    .order-details {
-	        margin-right: 10px; /* 增加右邊距，使得各項目之間有一定間距 */
+	        margin-right: 10px;
 	    }
 	    
 	    .time{
-		    margin-right: 5px; /* 調整時間和 | 之間的間距 */
+		    margin-right: 5px; 
 		
 	}
 	
 	.separator {
-	    margin-right: 5px; /* 調整右側間距 */
-	    margin-left: 5px; /* 調整左側間距 */
+	    margin-right: 5px; 
+	    margin-left: 5px; 
 	}
 	.name {
 		color: #FB7299;
@@ -77,10 +73,10 @@
 	}
 
 .sellerrate {
-    margin: 10px 0; /* 设置上下间距 */
+    margin: 10px 0;
 }
 .reply-content {
-    margin-top: 10px; /* 设置与上方内容的间距 */
+    margin-top: 10px; 
 }
 .avatar {
     width: 50px;
@@ -89,14 +85,14 @@
     border-radius: 50%;
     display: inline-block;
     margin-right: 20px;
-    overflow: hidden; /* 确保图片不会超出边界 */
-    vertical-align: middle; /* 保持与文本的垂直对齐 */
+    overflow: hidden; 
+    vertical-align: middle; 
 }
 
 .avatar img {
     width: 100%;
     height: 100%;
-    object-fit: cover; /* 确保图片以覆盖方式填充头像 */
+    object-fit: cover; 
 }
 
 </style>
@@ -108,12 +104,10 @@
 <div class="row">
 	<div class="col">
 		<ul class="nav nav-tabs">
-			<!-- 平均分數和星星圖示 -->
 			<li class="nav-item">
 				<span class="nav-link" style="font-weight: bold; color: black; font-size: 22px; position: relative; top: 10px;">
 					${averageScore}
 				</span>
-				<!-- 顯示星星圖示 -->
 				<span class="nav-link" style="position: relative; top: -5px;">
 					<c:forEach begin="1" end="${averageScore}">
 						<img src="commentPicture/output.png" alt="star" class="star-img" width="20" height="20">
@@ -125,7 +119,6 @@
 </div>
 	
 	
-<!-- 遍历卖家回复的评论 -->
 <c:forEach items="${repliedComments}" var="seller">
     <div class="seller-reply">
     <i class="avatar"><img src="${seller.member.photoSticker}"/></i>
@@ -142,9 +135,7 @@
                         <p class="time">${formattedCommentTime}</p>
                     </c:if>
 
-        <!-- 遍历对应的买家评论 -->
         <c:forEach items="${sellerCommentsForUser}" var="buyer">
-            <!-- 如果买家评论与当前卖家回复匹配，则显示买家评论信息 -->
             <c:if test="${buyer.commentid eq seller.repliedcommentid}">
                 <div class="buyer-comment">
                     <i class="avatar"><img src="${buyer.member.photoSticker}"/></i>
@@ -165,7 +156,6 @@
                     <p class="order-details">規格尺寸: ${buyer.orders.formatgoodId.goodSize}</p>
                     <p class="order-details">商品名稱: ${buyer.orders.formatgoodId.good.goodsName}</p>
                 </div>
-                    <!-- 如果存在产品图片，则显示 -->
                      <c:choose>
                     <c:when test="${not empty buyer.productphoto}">
                         <a href="${pageContext.request.contextPath}/${buyer.productphoto}" data-lightbox="product-images-${buyer.commentid}">
@@ -175,16 +165,13 @@
                     <c:otherwise>
                         <div class="no-image"></div>
                     </c:otherwise>
-                </c:choose>
-                    <!-- 显示买家评分 -->
-                    
+                </c:choose>                    
                 </div>
             </c:if>
         </c:forEach>
     </div>
 </c:forEach>
 
-    <!-- 显示分页按钮 -->
     <c:if test="${totalPages > 1}">
         <div  class="pagination-container">
             <c:forEach begin="0" end="${totalPages - 1}" var="i">

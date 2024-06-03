@@ -9,12 +9,11 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>    
       <style>
-        /* 聊天按钮样式 */
         .chat-button {
             position: fixed;
             bottom: 20px;
             right: 20px;
-            z-index: 9999; /* 确保按钮在其他内容上方 */
+            z-index: 9999; 
             padding: 10px 20px;
             background-color: #007bff;
             color: #fff;
@@ -50,7 +49,7 @@
           <a class="nav-link" href="returnToControlUI">返回管理介面</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">歡迎 ${member.name}</a> <!-- 在這裡顯示使用者名稱 -->
+          <a class="nav-link" href="#">歡迎 ${member.name}</a>
         </li>
         <li class="nav-item"><a class="nav-link" href="chat">聊聊</a> 
 		</li>

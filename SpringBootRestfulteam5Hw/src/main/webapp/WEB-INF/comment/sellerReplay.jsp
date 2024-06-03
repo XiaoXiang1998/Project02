@@ -26,7 +26,7 @@ body {
 }
 
 .container {
-    position: relative; /* 让容器相对定位 */
+    position: relative;
 
 	max-width: 800px;
 	margin: 0 auto;
@@ -49,14 +49,14 @@ body {
     border-radius: 50%;
     display: inline-block;
     margin-right: 20px;
-    overflow: hidden; /* 确保图片不会超出边界 */
-    vertical-align: middle; /* 保持与文本的垂直对齐 */
+    overflow: hidden; 
+    vertical-align: middle;
 }
 
 .avatar img {
     width: 100%;
     height: 100%;
-    object-fit: cover; /* 确保图片以覆盖方式填充头像 */
+    object-fit: cover; 
 }
 
 .info {
@@ -68,12 +68,12 @@ body {
 }
 
 .time-and-details {
-        flex-grow: 1; /* 彈性增長，以填滿可用空間 */
+        flex-grow: 1; 
         display: flex;
         flex-direction: row;
     }
     .order-details {
-        margin-right: 10px; /* 增加右邊距，使得各項目之間有一定間距 */
+        margin-right: 10px; 
     }
 
 .name {
@@ -90,13 +90,13 @@ body {
 }
 
 .time{
-	    margin-right: 5px; /* 調整時間和 | 之間的間距 */
+	    margin-right: 5px; 
 	
 }
 
 .separator {
-    margin-right: 5px; /* 調整右側間距 */
-    margin-left: 5px; /* 調整左側間距 */
+    margin-right: 5px; 
+    margin-left: 5px; 
 }
 
 .bit-com .bit {
@@ -112,7 +112,6 @@ body {
 	background: url(commentPicture/output.png) no-repeat;
 	background-size: 24px 24px;
 }
-  /* 星级筛选按钮 */
 .rating-tab .btn {
     border: 1px solid rgba(0, 0, 0, 0.2);
     border-radius: 5px;
@@ -121,33 +120,33 @@ body {
     cursor: pointer;
     padding: 10px 15px;
     transition: background-color 0.3s;
-    margin: 0 5px; /* 调整按钮之间的间距 */
+    margin: 0 5px; 
     text-align: center;
 }
 
 .rating-tab .btn.active {
-    background-color: #007bff; /* 选中状态的背景色 */
-    color: #fff; /* 选中状态的文本颜色 */
+    background-color: #007bff; 
+    color: #fff; 
 }
 
 .rating-tab .btn:hover {
-    background-color: rgba(0, 0, 0, 0.1); /* 鼠标悬停时的背景色 */
+    background-color: rgba(0, 0, 0, 0.1); 
 }
 
 /.custom-pagination-container {
-    text-align: center; /* 将分页组件置中 */
+    text-align: center;
     margin-top: 20px;
 }
 
 .custom-pagination {
     list-style: none;
     padding: 0;
-    display: inline-block; /* 让分页链接水平排列 */
+    display: inline-block; 
 }
 
 .custom-page-item {
     display: inline-block;
-    margin-right: 5px; /* 调整分页链接之间的间距 */
+    margin-right: 5px; 
 }
 
 .custom-page-link {
@@ -205,7 +204,6 @@ body {
     </div>
 </div>
 	
-<!-- 星級篩選按鈕 -->
 <div class="rating-tab" style="text-align: center; margin-top: 20px;">
     <ul class="nav nav-pills justify-content-center">
         <li class="nav-item">
@@ -234,11 +232,8 @@ body {
                         <fmt:formatDate value="${comment.commenttime}" pattern="yyyy-MM-dd HH:mm" var="formattedCommentTime" />
                         <p class="time">${formattedCommentTime}</p>
                     </c:if>
-                    <!-- 顯示訂單的ID -->
                     <p class="order-details"><span class="separator">|</span>訂單編號: ${comment.orders.orderId}</p>
-                    <!-- 顯示規格的尺寸 -->
                     <p class="order-details">規格尺寸: ${comment.orders.formatgoodId.goodSize}</p>
-                    <!-- 顯示商品的名稱 -->
                     <p class="order-details">商品名稱: ${comment.orders.formatgoodId.good.goodsName}</p>
                 </div>
                 <c:choose>
@@ -322,29 +317,21 @@ body {
 </script>
 
 <script>
-// 定義變數 rating，初始值為 0
 var rating = 0;
 
-// 當點擊星星時觸發事件
 $('body').on('click', '.bit-com .bit', function() {
-    // 移除同級元素的 on 類，並為當前元素及其前面的所有元素添加 on 類
     $(this).siblings().removeClass('on');
     $(this).prevAll().addBack().addClass('on');
     
-    // 獲取星星的索引位置，並將索引值加一賦值給 rating
     var index = $(this).index() + 1;
     rating = index;
 });
 
-// 當提交表單時觸發事件
 $('body').on('submit', '.bootstrap-frm', function() {
-    // 獲取評論的 commentid
     var commentId = $(this).attr('id').replace('replyForm', '');
     
-    // 將評分值設置到相應的 hidden input 中
     $('#replyRate' + commentId).val(rating);
 
-    // 如果評分小於 1，則彈出提示框並返回 false
     if (rating < 1) {
         alert('請選擇服務1~5顆星之間的評分值');
         return false;
@@ -387,81 +374,69 @@ $('body').on(
 </script>
 
 <script>
-//定义变量 rating，初始值为 0
 var rating = 0;
-var currentPage = 1; // 默认选中第一页
+var currentPage = 1; 
 var lastSearch = {}; // 保存上一次搜索的条件
 
-// 筛选评分等级
 function filterByRating(ratingValue) {
     rating = ratingValue; 
-    currentPage = 1; // 每次切换评分都回到第一页
-    console.log("Rating: " + rating); // 添加调试信息
+    currentPage = 1; 
+    console.log("Rating: " + rating); 
     
-    // 更新选项卡样式
-    $('.nav-pills .btn').removeClass('active'); // 移除所有选项卡的活动状态
-    $('.nav-pills .btn').eq(ratingValue).addClass('active'); // 添加选中选项卡的活动状态
+    $('.nav-pills .btn').removeClass('active'); 
+    $('.nav-pills .btn').eq(ratingValue).addClass('active'); 
 
-    // 默认选中第一页的分页按钮
-    $('.pagination .page-item').removeClass('active'); // 移除所有分页链接的活动状态
-    $('.pagination .page-btn[data-page="1"]').parent().addClass('active'); // 添加选中分页按钮的活动状态
+    $('.pagination .page-item').removeClass('active'); 
+    $('.pagination .page-btn[data-page="1"]').parent().addClass('active'); 
 	
- 	// 清空搜索条件的输入框内容
     $('#productName').val('');
     $('#productSpec').val('');
     $('#userName').val('');
     $('#commentTime').val('');
-    lastSearch = {}; // 清空上次搜索的条件
+    lastSearch = {}; 
 
     
     
     
-    filterComments(); // 调用 filterComments 函数
+    filterComments(); 
 }
 
 // 分页链接
 function filterByPage(pageNumber) {
-    console.log("Clicked page " + pageNumber); // 检查是否被调用
+    console.log("Clicked page " + pageNumber); 
     currentPage = pageNumber;
     
-    // 更新分页按钮样式
-    $('.pagination .page-item').removeClass('active'); // 移除所有分页链接的活动状态
-    $('.pagination .page-btn[data-page="' + pageNumber + '"]').parent().addClass('active'); // 添加选中分页按钮的活动状态
+    $('.pagination .page-item').removeClass('active'); 
+    $('.pagination .page-btn[data-page="' + pageNumber + '"]').parent().addClass('active'); 
     
-    filterComments(); // 调用 filterComments 函数
+    filterComments(); 
 }
 
-// 查看全部按钮点击事件
 function viewAllComments() {
-    rating = 0; // 设置评分为 0，表示查看全部
-    currentPage = 1; // 每次点击查看全部都回到第一页
+    rating = 0; 
+    currentPage = 1; 
 
-    // 更新选项卡样式
-    $('.nav-pills .btn').removeClass('active'); // 移除所有选项卡的活动状态
-    $('.nav-pills .btn').eq(0).addClass('active'); // 添加全部选项卡的活动状态
+    $('.nav-pills .btn').removeClass('active'); 
+    $('.nav-pills .btn').eq(0).addClass('active'); 
 
-    // 更新分页按钮样式
-    $('.pagination .page-item').removeClass('active'); // 移除所有分页链接的活动状态
+    $('.pagination .page-item').removeClass('active'); 
     
-    // 清空搜索条件的输入框内容
     $('#productName').val('');
     $('#productSpec').val('');
     $('#userName').val('');
     $('#commentTime').val('');
 
-    lastSearch = {}; // 清空上次搜索的条件
+    lastSearch = {}; 
     
-    filterComments(); // 调用 filterComments 函数
+    filterComments(); 
 }
 
-// 模糊搜索按钮点击事件
 function searchComments() {
-    currentPage = 1; // 每次搜索都回到第一页
+    currentPage = 1; 
 
-    // 清除所有选项卡的活动状态
     $('.nav-pills .btn').removeClass('active');
     
-    lastSearch = { // 保存搜索条件
+    lastSearch = { 
         rating: rating,
         productName: $('#productName').val(),
         productSpec: $('#productSpec').val(),
@@ -469,28 +444,26 @@ function searchComments() {
         commentTime: $('#commentTime').val()
     };
     
-    filterComments(); // 调用 filterComments 函数
+    filterComments(); 
     
- // 清空搜索条件的输入框内容
     $('#productName').val('');
     $('#productSpec').val('');
     $('#userName').val('');
     $('#commentTime').val('');
 }
 
-// 筛选评论
 function filterComments() {
     var productName = lastSearch.productName || $('#productName').val();
     var productSpec = lastSearch.productSpec || $('#productSpec').val();
     var userName = lastSearch.userName || $('#userName').val();
-    console.log("User Name: " + userName); // 新增这行来检查传递的 userName 参数
+    console.log("User Name: " + userName); 
     var commentTime = lastSearch.commentTime || $('#commentTime').val();
 
     $.ajax({
         type: "GET",
         url: "/sellerComments",
         data: {
-            page: currentPage - 1, // 当前页码
+            page: currentPage - 1, 
             rating: lastSearch.rating || rating,
             productName: productName,
             productSpec: productSpec,
@@ -501,7 +474,6 @@ function filterComments() {
             $('#commentContainer').html($(data).find('#commentContainer').html());
             $('#pagination').html($(data).find('#pagination').html());
             
-            // 在成功回调中调用 maskNameFunction
             maskNameFunction();
         },
         error: function() {
@@ -509,7 +481,6 @@ function filterComments() {
     });
 }
 
-// 初始化时调用 maskNameFunction
 document.addEventListener("DOMContentLoaded", function() {
     maskNameFunction();
     setDefaultReplyValues();
@@ -536,7 +507,6 @@ function resetForm() {
     $('#commentTime').val('');
 }
 
-//定义函数 maskNameFunction
 function maskNameFunction() {
     document.querySelectorAll('.name').forEach(function(nameElement) {
         let name = nameElement.innerText;
@@ -549,11 +519,11 @@ function maskNameFunction() {
 
 function maskName(name) {
     if (name.length !== 3) {
-        return name; // 如果名字不是三個字，直接返回名字
+        return name; 
     }
     let firstChar = name.charAt(0);
     let lastChar = name.charAt(2);
-    return firstChar + '***' + lastChar; // 將中間字符替換為星號
+    return firstChar + '***' + lastChar; 
 }
 
 </script>

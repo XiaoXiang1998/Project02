@@ -825,7 +825,7 @@
 												"rate": rate,
 												"content": content,
 												"photos": photos,
-												"page": page // 传递当前页数
+												"page": page 
 											},
 											success: function (data) {
 												$('#nav-mission').html($(data).find('#nav-mission').html());

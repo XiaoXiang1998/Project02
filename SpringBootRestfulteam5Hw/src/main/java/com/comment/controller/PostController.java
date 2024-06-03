@@ -378,12 +378,10 @@ public class PostController {
 			totalElements = sellerComments.getTotalElements();
 		}
 		
-		 // 計算平均分數
 	    double averageScore = 0.0;
 	    if (user.getReviewCount() != null && user.getReviewCount() != 0) {
 	        averageScore = (double) user.getCumulativeScore() / user.getReviewCount();
 	    }
-	    // 四捨五入到小數點第一位
 	    averageScore = Math.round(averageScore * 10.0) / 10.0;
 
 		model.addAttribute("comments", sellerComments.getContent());
@@ -402,13 +400,11 @@ public class PostController {
 		MemberBean seller = (MemberBean) session.getAttribute("member");
 		
 		
-		 // 計算平均分數
 	    double averageScore = 0.0;
 	    if (seller.getReviewCount() != null && seller.getReviewCount() != 0) {
 	        averageScore = (double) seller.getCumulativeScore() / seller.getReviewCount();
 	    }
 	    
-	 // 四捨五入到小數點第一位
 	    averageScore = Math.round(averageScore * 10.0) / 10.0;
 		
 		int sellerId = seller.getSid();
@@ -443,7 +439,6 @@ public class PostController {
 	    Pageable pageable = PageRequest.of(page, size);
 	    Page<Post> resultPage;
 
-	    // 查詢所有評分對應的數量
 	    List<Long> rateCounts = new ArrayList<>();
 	    if (rate == null) {
 	        for (int i = 5; i >= 1; i--) {
@@ -452,16 +447,12 @@ public class PostController {
 	        }
 	    }
 
-	    // 查詢有留言內容的數量
 	    long contentCount = pService.findPostsByGoodIdWithContent(goodID, Pageable.unpaged()).getTotalElements();
 
-	    // 查詢附上照片的數量
 	    long photosCount = pService.findPostsByGoodIdWithPhotos(goodID, Pageable.unpaged()).getTotalElements();
 
-	    // 查詢全部評價的數量
 	    long totalPostsCount = pService.getPostsByGoodId(goodID, Pageable.unpaged()).getTotalElements();
 
-	    // 根據條件篩選評論
 	    if (rate != null) {
 	        resultPage = pService.getPostsByGoodIdAndRate(goodID, rate, pageable);
 	    } else if (content != null && content) {

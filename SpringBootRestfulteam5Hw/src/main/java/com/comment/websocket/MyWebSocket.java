@@ -63,7 +63,7 @@ public class MyWebSocket {
             String receiver = jsonObject.getString("receiver");
             String content = jsonObject.getString("content");
             String time = jsonObject.getString("time"); 
-            String avatar = jsonObject.getString("avatar"); // 从消息中提取头像信息
+            String avatar = jsonObject.getString("avatar"); 
 
             System.out.println(sender);
             System.out.println(receiver);

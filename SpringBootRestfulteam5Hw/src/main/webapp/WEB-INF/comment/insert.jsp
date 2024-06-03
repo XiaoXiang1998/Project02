@@ -29,8 +29,8 @@
 
 button {
 	display: block;
-	margin: 20px auto; /* 垂直居中并且与表单上方有 20px 的距离 */
-	text-align: center; /* 水平居中 */
+	margin: 20px auto; 
+	text-align: center; 
 }
 
 .charCount {
@@ -101,7 +101,6 @@ button {
 				var charCount = text.length;
 				$('#charCount').text(charCount + ' / 100');
 
-				// 如果字數超過 200，則截斷文本
 				if (charCount > 100) {
 					$(this).val(text.slice(0, 100));
 					$('#charCount').text('100 / 100');

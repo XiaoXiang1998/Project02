@@ -53,7 +53,6 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
                                             @Param("rating") Integer rating,
                                             Pageable pageable);
     
-    // 根据卖家ID查询已回复的评论ID列表
     @Query("SELECT p.repliedcommentid FROM Post p WHERE p.member.sid = :sellerId")
     List<Integer> findRepliedCommentIdsBySellerId(@Param("sellerId") Integer sellerId);
     
@@ -63,7 +62,6 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
     void deleteByCommentId(@Param("commentId") Integer commentId);
     
     
- // 根據賣家ID和買家評分星級查詢相關的評論數量
     @Query("SELECT COUNT(p) FROM Post p " +
            "INNER JOIN p.orders o " +
            "INNER JOIN o.formatgoodId f " +
